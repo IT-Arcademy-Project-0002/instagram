@@ -9,7 +9,10 @@ import com.instargram.instargram.Community.Comment.Comment_Like_Map;
 import com.instargram.instargram.Community.Recomment.ReComment_Like_Map;
 import com.instargram.instargram.DM.Message.Message_Member_Map;
 import com.instargram.instargram.DM.Message.Message_Request_Map;
+import com.instargram.instargram.DM.Room.Room_Member_Map;
 import com.instargram.instargram.Notice.Notice;
+import com.instargram.instargram.Story.Story_Data_Map;
+import com.instargram.instargram.Story.Story_Highlight_Map;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -68,4 +71,32 @@ public class Member {
     //Recomment
     @OneToMany(cascade = CascadeType.REMOVE)
     private List<ReComment_Like_Map> reCommentLikeMapList;
+
+    //Member
+    @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
+    private  List<Hate_Member_Map> hateMemberMaps;
+    @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
+    private  List<Love_Member_Map> loveMemberMaps;
+    @OneToMany(mappedBy = "following_member", cascade = CascadeType.REMOVE)
+    private List<Follow_Map> followingMemberList;
+    @OneToMany(mappedBy = "follower_member", cascade = CascadeType.REMOVE)
+    private List<Follow_Map> followerMemberList;
+
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.REMOVE)
+    private List<Follow_Request_Map> requestFollowMemberList;
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.REMOVE)
+    private List<Interest_Member_Map> interestMemberList;
+
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.REMOVE)
+    private List<Bookmark_Member_Map> bookmarkMemberList;
+
+    @OneToMany(mappedBy = "member")
+    private List<Room_Member_Map> roomMemberList;
+
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.REMOVE)
+    private List<Story_Data_Map> storyDataMaps;
+
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.REMOVE)
+    private List<Story_Highlight_Map> storyHighlightMaps;
+
 }

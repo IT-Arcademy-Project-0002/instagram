@@ -10,6 +10,8 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
+
+// 스토리 데이터 매핑 테이블
 public class Story_Data_Map {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -27,6 +29,6 @@ public class Story_Data_Map {
     private Member owner;
 
     // 스토리를 좋아요 한 사람들 목록
-    @OneToMany(mappedBy = "storyDataMap", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "storyData", cascade = CascadeType.REMOVE)
     private List<Story_LikeMember_Map> storyLikeMembers;
 }

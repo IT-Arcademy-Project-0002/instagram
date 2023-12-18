@@ -8,16 +8,20 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
+
+// 스토리와 스토리를 좋아요 한 회원을 매핑해주는 테이블
 public class Story_LikeMember_Map {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    // 스토리를 좋아요 한 회원
     @ManyToOne
-    @JoinColumn(name="member_id")
-    private Member member;
+    @JoinColumn(name="like_member_id")
+    private Member like_member;
 
+    // 스토리 데이터
     @ManyToOne
     @JoinColumn(name="story_id")
-    private Story_Data_Map storyDataMap;
+    private Story_Data_Map storyData;
 }

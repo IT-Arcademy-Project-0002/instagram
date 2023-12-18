@@ -10,10 +10,13 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
+
+// 디엠 텍스트 메세지 데이타 테이블
 public class Message {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    // 메세지 내용
     private String content;
 }

@@ -55,7 +55,7 @@ public class Board {
     private List<Comment> commentList;
 
     // 게시글에 언급된 회원 목록
-    @OneToMany(mappedBy = "tag_member", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private List<Board_TagMember_Map> boardTagMembers;
 
     // 게시글에 입력된 해시태그 목록
@@ -63,7 +63,7 @@ public class Board {
     private List<Board_HashTag_Map> boardHashTagMaps;
 
     // 게시글에 좋아요 한 회원 목록
-    @OneToMany(mappedBy = "like_member", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private List<Board_Like_Member_Map> boardLikeMemberMaps;
 
     // 게시글에 작성되 이미지 혹은 비디오 목록

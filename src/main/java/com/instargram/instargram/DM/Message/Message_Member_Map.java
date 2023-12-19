@@ -1,6 +1,6 @@
 package com.instargram.instargram.DM.Message;
 
-import com.instargram.instargram.Member.Member;
+import com.instargram.instargram.Member.Model.Entity.Member;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;

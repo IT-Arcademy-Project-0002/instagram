@@ -1,7 +1,6 @@
 package com.instargram.instargram.Community.Board.Model.Entity;
 
-import com.instargram.instargram.Community.HashTag.HashTag;
-import com.instargram.instargram.Member.Member;
+import com.instargram.instargram.Member.Model.Entity.Member;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;

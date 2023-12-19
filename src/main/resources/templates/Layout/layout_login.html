@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" type="text/css" th:href="@{/style/bootstrap.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/style/layout.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/style/style_juhyeon.css}">
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+
+    <title>layout_feed</title>
+</head>
+
+<body>
+<div>
+    <div class="login-content">
+        <th:block layout:fragment="content"></th:block>
+    </div>
+    <div class="footer">
+        <th:block layout:fragment="footer"></th:block>
+    </div>
+</div>
+
+<script th:src="@{/style/bootstrap.min.js}"></script>
+
+<!-- 자바스크립트 Start -->
+<th:block layout:fragment="script"></th:block>
+<!-- 자바스크립트 End -->
+
+</body>
+</html>

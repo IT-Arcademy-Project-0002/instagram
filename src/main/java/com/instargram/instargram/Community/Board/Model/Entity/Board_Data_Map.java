@@ -1,4 +1,4 @@
-package com.instargram.instargram.Community.Board;
+package com.instargram.instargram.Community.Board.Model.Entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;

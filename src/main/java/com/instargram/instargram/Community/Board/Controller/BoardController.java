@@ -1,4 +1,4 @@
-package com.instargram.instargram.Community.Board;
+package com.instargram.instargram.Community.Board.Controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

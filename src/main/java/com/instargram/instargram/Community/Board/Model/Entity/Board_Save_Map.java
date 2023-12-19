@@ -1,4 +1,4 @@
-package com.instargram.instargram.Community.Board;
+package com.instargram.instargram.Community.Board.Model.Entity;
 
 import com.instargram.instargram.Community.SaveGroup.SaveGroup;
 import com.instargram.instargram.Member.Member;

@@ -1,6 +1,7 @@
-package com.instargram.instargram.Community.Board;
+package com.instargram.instargram.Community.Board.Model.Entity;
 
 import com.instargram.instargram.Community.HashTag.HashTag;
+import com.instargram.instargram.Member.Member;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -9,8 +10,8 @@ import lombok.Setter;
 @Setter
 @Entity
 
-// 게시글에 입력된 해시태그 매핑 테이블
-public class Board_HashTag_Map {
+// 게시글을 좋아요한 회원 매핑 테이블
+public class Board_Like_Member_Map {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -19,7 +20,8 @@ public class Board_HashTag_Map {
     @ManyToOne
     private Board board;
 
-    // 해시 태그
+    // 게시글을 좋아요 한 회원
     @ManyToOne
-    private HashTag tag;
+    @JoinColumn(name="like_member_id")
+    private Member like_member;
 }

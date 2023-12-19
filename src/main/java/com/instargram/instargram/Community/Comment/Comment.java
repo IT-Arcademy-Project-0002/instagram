@@ -1,6 +1,6 @@
 package com.instargram.instargram.Community.Comment;
 
-import com.instargram.instargram.Community.Board.Board;
+import com.instargram.instargram.Community.Board.Model.Entity.Board;
 import com.instargram.instargram.Community.Recomment.Recomment;
 import jakarta.persistence.*;
 import lombok.Getter;

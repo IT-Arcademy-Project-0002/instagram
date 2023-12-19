@@ -7,3 +7,20 @@
 {
     width: 80%;
 }
+
+.btn
+{
+    text-decoration:none;
+    color:inherit;
+}
+
+body, ul, li{
+    margin:0;
+    list-style:none;
+    padding:0;
+}
+
+a{
+    text-decoration:none;
+    color:inherit;
+}

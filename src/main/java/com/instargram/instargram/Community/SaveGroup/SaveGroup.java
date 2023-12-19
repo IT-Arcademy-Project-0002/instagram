@@ -1,6 +1,6 @@
 package com.instargram.instargram.Community.SaveGroup;
 
-import com.instargram.instargram.Community.Board.Board_Save_Map;
+import com.instargram.instargram.Community.Board.Model.Entity.Board_Save_Map;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;

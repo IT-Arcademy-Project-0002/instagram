@@ -1,9 +1,11 @@
 package com.instargram.instargram.Member.Model.Entity;
 
-import com.instargram.instargram.Community.Board.Board;
-import com.instargram.instargram.Community.Board.Board_Like_Member_Map;
-import com.instargram.instargram.Community.Board.Board_Save_Map;
-import com.instargram.instargram.Community.Board.Board_TagMember_Map;
+
+import com.instargram.instargram.Community.Board.Model.Entity.Board;
+import com.instargram.instargram.Community.Board.Model.Entity.Board_Like_Member_Map;
+import com.instargram.instargram.Community.Board.Model.Entity.Board_Save_Map;
+import com.instargram.instargram.Community.Board.Model.Entity.Board_TagMember_Map;
+
 import com.instargram.instargram.Community.Comment.Comment_Like_Map;
 import com.instargram.instargram.Community.Recomment.ReComment_Like_Map;
 import com.instargram.instargram.DM.Message.Message_Member_Map;

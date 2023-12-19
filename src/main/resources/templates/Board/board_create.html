@@ -10,6 +10,7 @@
             </svg>
                 만들기
         </button>
+        <a href="/member/logout">로그아웃</a>
     </div>
     <!--이미지 선택 모달-->
     <div class="modal fade" id="Board_Create_Modal" tabindex="-1" aria-labelledby="Board_Create_ModalLabel" aria-hidden="true">
@@ -44,10 +45,37 @@
                         </svg>
                     </button>
                     <h1 class="modal-title fs-5" id="Board_Create_ModalLabel2">자르기</h1>
-                    <button type="button" class="btn btn-link">다음</button>
+                    <button type="button" class="btn btn-link" data-bs-toggle="modal" data-bs-target="#Board_Create_Modal3" onclick="changeModel()">다음</button>
                 </div>
-                <div class="modal-body w-100 h-80">
-                    <img class="w-100 h-100" src="" alt="이미지 미리보기" id="image-preview" style="aspect-ratio: 16/9;">
+                <div class="modal-body p-0" style="display:flex; justify-content:center; align-items: center; height: 80%; background-color: black;">
+                    <img id="image-preview" alt="이미지 미리보기">
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 게시글 등록 모달-->
+    <div class="modal fade" id="Board_Create_Modal3" aria-hidden="true" aria-labelledby="Board_Create_ModalLabel3" tabindex="-1">
+        <div class="modal-dialog modal-xl modal-dialog-centered" style="height: 80%;">
+            <div class="modal-content" style="height: 80%; min-height: 80%;">
+                <div class="modal-header d-flex justify-content-between">
+                    <button type="button" class="btn btn-link">
+                        <svg fill="currentColor" height="24" role="img" viewBox="0 0 24 24" width="24">
+                            <line fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" x1="2.909" x2="22.001" y1="12.004" y2="12.004"></line>
+                            <polyline fill="none" points="9.276 4.726 2.001 12.004 9.276 19.274" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></polyline>
+                        </svg>
+                    </button>
+                    <h1 class="modal-title fs-5" id="Board_Create_ModalLabel3">새 게시물 등록</h1>
+                    <button type="button" class="btn btn-link">등록하기</button>
+                </div>
+                <div class="modal-body p-0" style="display:flex; justify-content:center; align-items: center; height: 80%;">
+                    <div class="d-flex w-100">
+                        <div class="w-60">
+                            <img id="image-preview-2" alt="이미지 미리보기">
+                        </div>
+                        <div class="w-40">
+                            <div style="background:red;"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -63,15 +91,34 @@
             $(firstModal).modal('hide'); // 첫 번째 모달 닫기
 
             var selectedImage = upload.files[0];
-            console.log(selectedImage);
 
             var secondModal = document.getElementById("Board_Create_Modal2");
             $(secondModal).on('shown.bs.modal', function () {
                 var imagePreview = document.getElementById("image-preview");
-                imagePreview.src = URL.createObjectURL(selectedImage);
+                imagePreview.src = URL.createObjectURL(selectedImage); // 자른 이미지 프리뷰로 표시
             });
             $(secondModal).modal('show');  // 두 번째 모달 활성화
         });
     }
+
+    function changeModel() {
+        // 2번째 모달 숨기기
+        var secondModal = document.getElementById('Board_Create_Modal2');
+        var modal2 = bootstrap.Modal.getInstance(secondModal);
+        modal2.hide();
+
+        // 이미지 가져오기
+        var imageSrc = document.getElementById('image-preview').src;
+
+        // 3번째 모달 이미지 엘리먼트에 이미지 소스 설정
+        var thirdModal = document.getElementById('Board_Create_Modal3');
+        var modal3Image = thirdModal.querySelector('#image-preview-2'); // 새로운 이미지를 표시할 엘리먼트 ID로 변경
+        modal3Image.src = imageSrc;
+
+        // 3번째 모달 보이기
+        var modal3 = bootstrap.Modal.getInstance(thirdModal);
+        modal3.show();
+    }
+
 </script>
 </html>

@@ -30,6 +30,12 @@ public class SecurityConfig {
                 .formLogin((formLogin) -> formLogin
                         .loginPage("/member/login")
                         .defaultSuccessUrl("/"))
+                .oauth2Login((oauth2Login) -> oauth2Login
+                        .loginPage("/member/login")
+                        .defaultSuccessUrl("/")
+                        .failureUrl("/member/signup/social")
+                        .userInfoEndpoint((userInfoEndpointConfig) -> userInfoEndpointConfig.userService(principalOauth2UserService))
+                )
                 .logout((logout) -> logout
                         .logoutRequestMatcher(new AntPathRequestMatcher("/member/logout"))
                         .logoutSuccessUrl("/member/login"));

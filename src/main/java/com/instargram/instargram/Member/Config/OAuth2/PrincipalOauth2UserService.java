@@ -1,9 +1,6 @@
 package com.instargram.instargram.Member.Config.OAuth2;
 
-import com.instargram.instargram.Member.Config.OAuth2.Model.GoogleUserInfo;
-import com.instargram.instargram.Member.Config.OAuth2.Model.KakaoUserInfo;
-import com.instargram.instargram.Member.Config.OAuth2.Model.NaverUserInfo;
-import com.instargram.instargram.Member.Config.OAuth2.Model.OAuth2UserInfo;
+import com.instargram.instargram.Member.Config.OAuth2.Model.*;
 import com.instargram.instargram.Member.Config.SpringSecurity.PrincipalDetails;
 import com.instargram.instargram.Member.Model.Entity.Member;
 import com.instargram.instargram.Member.Service.MemberService;
@@ -59,11 +56,14 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
         else if(userRequest.getClientRegistration().getRegistrationId().equals("naver")) {
             oAuth2UserInfo = new NaverUserInfo((Map)oAuth2User.getAttributes().get("response"));
         }
+        else if(userRequest.getClientRegistration().getRegistrationId().equals("facebook")){
+            oAuth2UserInfo = new FacebookUserInfo(oAuth2User.getAttributes());
+        }
         else{
             System.out.println("지원하지 않은 로그인 서비스 입니다.");
         }
 
-        String provider = oAuth2UserInfo.getProvider(); //google , naver, facebook etc
+        String provider = oAuth2UserInfo.getProvider();
         String providerId = oAuth2UserInfo.getProviderId();
         String username = provider + "_" + providerId;
 

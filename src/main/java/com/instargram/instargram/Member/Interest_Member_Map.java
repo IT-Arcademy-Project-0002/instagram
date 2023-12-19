@@ -12,7 +12,7 @@ import lombok.Setter;
 // 계정주와 관신 계정을 매핑해주는 테이블
 public class Interest_Member_Map {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
     // 계정주

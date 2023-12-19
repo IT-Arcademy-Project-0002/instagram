@@ -12,7 +12,7 @@ import lombok.Setter;
 // 디엠 방과 방에 참여한 회원을 매핑하는 테이블
 public class Room_Member_Map {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
     // 디엠 방

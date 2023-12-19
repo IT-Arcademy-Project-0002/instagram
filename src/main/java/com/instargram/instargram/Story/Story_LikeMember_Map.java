@@ -12,7 +12,7 @@ import lombok.Setter;
 // 스토리와 스토리를 좋아요 한 회원을 매핑해주는 테이블
 public class Story_LikeMember_Map {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     // 스토리를 좋아요 한 회원

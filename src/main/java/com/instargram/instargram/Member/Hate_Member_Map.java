@@ -11,7 +11,7 @@ import lombok.Setter;
 // 계정주와 차단 당한 계정을 매핑해주는 테이블
 public class Hate_Member_Map {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     // 계정주

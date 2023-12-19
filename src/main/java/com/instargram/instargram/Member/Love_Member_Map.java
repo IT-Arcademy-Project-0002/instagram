@@ -12,7 +12,7 @@ import lombok.Setter;
 // 스토리 혹은 게시글에서 공개범위를 친한 친구 공개로 했을 때 활용
 public class Love_Member_Map {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
     // 계정주

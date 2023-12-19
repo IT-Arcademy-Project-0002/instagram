@@ -14,7 +14,7 @@ import java.util.List;
 // 스토리 데이터 매핑 테이블
 public class Story_Data_Map {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     // 데이터 타입 (1: 텍스트, 2:이미지, 3: 비디오)

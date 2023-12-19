@@ -13,7 +13,7 @@ import lombok.Setter;
 // 올린 스토리 중 하이라이트를 추출하여 그룹으로 게시할 수 있는 기능
 public class Story_Highlight_Map {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
     // 계정주

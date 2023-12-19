@@ -12,7 +12,7 @@ import lombok.Setter;
 // 요청 수락 시 해당 테이블에선 데이터를 삭제하고 Follow_Map에 save 해줘야함
 public class Follow_Request_Map {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
     // 계정주

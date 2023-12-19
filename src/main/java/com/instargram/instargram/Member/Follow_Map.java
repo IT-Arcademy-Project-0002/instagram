@@ -11,7 +11,7 @@ import lombok.Setter;
 // 회원간 팔로워 팔로잉 관계 매핑 테이블
 public class Follow_Map {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
     // 팔로우 당한 회원

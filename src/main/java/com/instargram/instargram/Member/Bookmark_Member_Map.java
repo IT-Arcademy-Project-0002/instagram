@@ -13,7 +13,7 @@ import lombok.Setter;
 // 즐겨찾기 한 회원과 즐겨찾기 당한 회원 매핑 테이블
 public class Bookmark_Member_Map {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     // 계정주

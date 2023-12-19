@@ -8,29 +8,20 @@
     width: 80%;
 }
 
-.login-content {
+.login-content
+{
     min-height:calc(100vh - 100px);
     height:calc(100vh - 100px);
     padding: 32px 0;
 }
 
-.footer {
+.footer
+{
     height: 100px;
 }
 
 .btn
 {
-    text-decoration:none;
-    color:inherit;
-}
-
-body, ul, li{
-    margin:0;
-    list-style:none;
-    padding:0;
-}
-
-a{
     text-decoration:none;
     color:inherit;
 }

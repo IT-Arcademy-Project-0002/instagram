@@ -9,13 +9,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 public class mainController {
 
-    @GetMapping("/test")
-    public String test(){
-        return "Member/Login_form";
-    }
-
     @GetMapping("/")
     public String mainUrl(){
-        return "Member/Login_form";
+        return "redirect:/board/create";
     }
 }

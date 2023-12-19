@@ -25,25 +25,16 @@ public class SecurityConfig {
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests((authorizeHttpRequests) -> authorizeHttpRequests
-                        .requestMatchers(new AntPathRequestMatcher("/**")).permitAll())
+                        .requestMatchers("/member/login", "/css/**", "/error/**").permitAll()
+                        .anyRequest().authenticated())
                 .formLogin((formLogin) -> formLogin
                         .loginPage("/member/login")
                         .defaultSuccessUrl("/"))
-//                .oauth2Login((oauth2Login) -> oauth2Login
-//                        .loginPage("/member/login")
-//                        .defaultSuccessUrl("/")
-//                        .failureUrl("/member/signup/social")
-//                        .userInfoEndpoint((userInfoEndpointConfig) -> userInfoEndpointConfig.userService(principalOauth2UserService))
-//                )
-                .logout((logout)->logout
+                .logout((logout) -> logout
                         .logoutRequestMatcher(new AntPathRequestMatcher("/member/logout"))
-                        .logoutSuccessUrl("/")
-                        .invalidateHttpSession(true))
-
-        ;
+                        .logoutSuccessUrl("/member/login"));
         return http.build();
     }
-
 
 
     @Bean

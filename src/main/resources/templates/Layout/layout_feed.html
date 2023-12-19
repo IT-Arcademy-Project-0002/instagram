@@ -5,8 +5,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" type="text/css" th:href="@{../static/style/bootstrap.min.css}">
-    <link rel="stylesheet" type="text/css" th:href="@{../static/style/layout.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/style/bootstrap.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/style/layout.css}">
 
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
@@ -15,13 +15,25 @@
 </head>
 
 <body>
-<div class="d-flex container w-100">
-    <div class="side-menu">
+<div class="d-flex w-100">
+    <div class="side-menu" style="height: 200rem; background: #0dcaf0">
         <th:block layout:fragment="side-menu"></th:block>
     </div>
 
-    <div class="main-content" style="height: 200vh">
-        <th:block layout:fragment="content"></th:block>
+    <div class="main-content d-flex justify-content-center" style="height: 200rem; background: #0f5132">
+        <div class="d-flex" style="height: 200rem; background: #6f42c1">
+            <div style="background: coral; width: 630px">
+                <div class="mt-4" style="margin-top:16px; margin-right: 64px; padding:16px 0; height: 66px; background: #bb2d3b;">
+                    <th:block layout:fragment="content"></th:block>
+                </div>
+                <div class="mt-4" style="margin-top:16px; margin-right: 64px; padding:16px 0; height: 190rem; background: #86b7fe;">
+                    <th:block layout:fragment="content"></th:block>
+                </div>
+            </div>
+            <div style="width: 319px; background: #c5d7f2">
+
+            </div>
+        </div>
     </div>
 </div>
 

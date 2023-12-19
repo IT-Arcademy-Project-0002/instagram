@@ -1,10 +1,9 @@
-package com.instargram.instargram.Member;
+package com.instargram.instargram.Member.Model.Entity;
 
 import com.instargram.instargram.Community.Board.Board;
 import com.instargram.instargram.Community.Board.Board_Like_Member_Map;
 import com.instargram.instargram.Community.Board.Board_Save_Map;
 import com.instargram.instargram.Community.Board.Board_TagMember_Map;
-import com.instargram.instargram.Community.Comment.Comment;
 import com.instargram.instargram.Community.Comment.Comment_Like_Map;
 import com.instargram.instargram.Community.Recomment.ReComment_Like_Map;
 import com.instargram.instargram.DM.Message.Message_Member_Map;
@@ -13,6 +12,7 @@ import com.instargram.instargram.DM.Room.Room_Member_Map;
 import com.instargram.instargram.Notice.Notice;
 import com.instargram.instargram.Story.Story_Data_Map;
 import com.instargram.instargram.Story.Story_Highlight_Map;
+import groovyjarjarantlr4.v4.runtime.misc.NotNull;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -32,18 +32,23 @@ public class Member {
     private Long id;
 
     // 회원 아이디
-    private String member_id;
+    @NotNull
+    private String username;
 
     // 회원 비밀번호
-    private String member_password;
+    @NotNull
+    private String password;
 
     // 회원 생성 날짜
+    @NotNull
     private LocalDateTime create_date;
 
     // 회원 닉네임
+    @NotNull
     private String nickname;
 
     // 회원 이메일
+    @NotNull
     private String email;
 
     // 회원 생년월일

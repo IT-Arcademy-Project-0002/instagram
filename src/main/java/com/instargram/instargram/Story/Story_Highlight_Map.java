@@ -1,7 +1,7 @@
 package com.instargram.instargram.Story;
 
 import com.instargram.instargram.Community.SaveGroup.SaveGroup;
-import com.instargram.instargram.Member.Member;
+import com.instargram.instargram.Member.Model.Entity.Member;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;

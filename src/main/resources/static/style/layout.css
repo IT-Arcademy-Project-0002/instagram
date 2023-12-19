@@ -17,3 +17,20 @@
 .footer {
     height: 100px;
 }
+
+.btn
+{
+    text-decoration:none;
+    color:inherit;
+}
+
+body, ul, li{
+    margin:0;
+    list-style:none;
+    padding:0;
+}
+
+a{
+    text-decoration:none;
+    color:inherit;
+}

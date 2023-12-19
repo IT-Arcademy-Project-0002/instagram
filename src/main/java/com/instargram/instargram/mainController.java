@@ -13,4 +13,9 @@ public class mainController {
     public String test(){
         return "Member/Login_form";
     }
+
+    @GetMapping("/")
+    public String mainUrl(){
+        return "Member/Login_form";
+    }
 }

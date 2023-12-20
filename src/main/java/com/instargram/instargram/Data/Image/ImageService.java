@@ -39,4 +39,10 @@ public class ImageService {
 
         return create(name, filePath);  // 이미지 생성에 대한 로직을 호출합니다.
     }
+
+    public Image getImgaeByID(Long id)
+    {
+        return this.imageRepository.findById(id).orElse(null);
+    }
+
 }

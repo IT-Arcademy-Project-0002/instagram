@@ -7,6 +7,7 @@
     top: 100px;
 }
 .login_phone_img {
+    width: 400px;
     margin-bottom: 12px;
     margin-right: 32px;
 }
@@ -31,4 +32,35 @@
 }
 .btn_login:hover {
     background-color: #1877f2;
+}
+
+/* styleJuHyeon.css */
+
+.line {
+    display:flex;
+    flex-basis:100%;
+    align-items:center;
+    color:rgba(0,0,0,0.8);
+    font-size:14px;
+    margin:8px 0;
+}
+
+.line::before{
+    content:"";
+    flex-grow:1;
+    margin-right: 10px;
+    background:rgba(0,0,0,0.2);
+    height:1px;
+    font-size:0;
+    line-height:0;
+}
+
+.line::after {
+    content:"";
+    flex-grow:1;
+    margin-left: 10px;
+    background:rgba(0,0,0,0.2);
+    height:1px;
+    font-size:0;
+    line-height:0;
 }

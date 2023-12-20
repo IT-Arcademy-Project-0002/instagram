@@ -1,35 +1,10 @@
 <!DOCTYPE html>
-<html lang="ko">
-<head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}">
-    <!-- Style CSS(layout.css) -->
-    <link rel="stylesheet" type="text/css" th:href="@{/css/layout.css}">
-    <!-- jQuery -->
-    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-
-    <title>layout_search</title>
-</head>
-
-<body>
-<div class="d-flex">
-    <!-- 사이드 메뉴바 -->
-    <div th:replace="~{Layout/sidebar :: sidebarFragment}"></div>
-    <!-- 메인 콘텐츠 -->
-    <div class="main-content d-flex justify-content-center">
-        DM 페이지입니다
+<html layout:decorate="~{Layout/layout_main}">
+<div layout:fragment="content">
+    <div class="d-flex justify-content-center">
+        <div class="mt-5">
+            DM페이지 입니다
+        </div>
     </div>
 </div>
-
-<!-- Bootstrap JS -->
-<script th:src="@{/css/bootstrap.min.js}"></script>
-<!-- Bootstrap Bundle-->
-<script th:src="@{/css/bootstrap.bundle.js}"></script>
-<!-- 자바스크립트 Start -->
-<th:block layout:fragment="script"></th:block>
-<!-- 자바스크립트 End -->
-</body>
 </html>

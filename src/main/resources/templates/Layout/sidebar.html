@@ -92,7 +92,6 @@
 <!--                                        </button>-->
 <!--                                    </div>-->
                                 </div>
-<!--                                <img id="name" alt="이미지 미리보기" style="object-fit: cover;">-->
                                 <div class="d-flex flex-column">
                                     <div th:if="${#authorization.expression('isAuthenticated()')}" th:text="${#authentication.principal.username}"></div>
                                     <input type="text" name="content" id="content" class="form-control">

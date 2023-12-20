@@ -25,11 +25,14 @@ public class SecurityConfig {
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests((authorizeHttpRequests) -> authorizeHttpRequests
-                        .requestMatchers("/css/**", "/error/**", "/files/**").permitAll()
-                        .requestMatchers("/member/login").permitAll()
-                        .requestMatchers("/member/signup").permitAll()
-                        .requestMatchers("/member/signup/social").permitAll()
-                        .anyRequest().authenticated())
+                        .requestMatchers(new AntPathRequestMatcher("/**"))
+                        .permitAll())
+//                        .requestMatchers("/board/**","/css/**", "/member/**", "/error/**", "/files/**").permitAll()
+//                        .requestMatchers("/**").permitAll()
+//                        .requestMatchers("/member/login").permitAll()
+//                        .requestMatchers("/member/signup").permitAll()
+//                        .requestMatchers("/member/signup/social").permitAll()
+//                        .anyRequest().authenticated())
                 .formLogin((formLogin) -> formLogin
                         .loginPage("/member/login")
                         .defaultSuccessUrl("/")

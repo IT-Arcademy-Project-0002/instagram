@@ -7,29 +7,22 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}">
     <!-- Style CSS(layout.css) -->
-    <link rel="stylesheet" type="text/css" th:href="@{/css/layout.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/sidemenu.css}">
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-
-    <title>layout_search</title>
 </head>
 
 <body>
-<div class="d-flex">
-    <!-- 사이드 메뉴바 -->
-    <div th:replace="~{Layout/sidebar :: sidebarFragment}"></div>
-    <!-- 메인 콘텐츠 -->
-    <div class="main-content d-flex justify-content-center">
-        탐색 페이지입니다
-    </div>
-</div>
-
+<!-- 사이드 메뉴바 -->
+<div th:replace="~{Layout/sidebar :: sidebarFragment}"></div>
+<!-- 전역 만들기 모달창 -->
+<div th:replace="~{Layout/createmodal :: createmodalFragment}"></div>
+<!-- 기본 템플릿 안에 삽입될 콘텐츠 Start -->
+<th:block layout:fragment="content"></th:block>
+<!-- 기본 템플릿 안에 삽입될 콘텐츠 End -->
 <!-- Bootstrap JS -->
 <script th:src="@{/css/bootstrap.min.js}"></script>
 <!-- Bootstrap Bundle-->
 <script th:src="@{/css/bootstrap.bundle.js}"></script>
-<!-- 자바스크립트 Start -->
-<th:block layout:fragment="script"></th:block>
-<!-- 자바스크립트 End -->
 </body>
 </html>

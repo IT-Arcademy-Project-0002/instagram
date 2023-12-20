@@ -1,0 +1,17 @@
+.side-menu
+{
+    width: 350px;
+    background: #0dcaf0;
+    position: fixed;
+}
+
+.frag-side {
+    height: 100vh;
+    background: #5fb47a;
+}
+
+.btn-create
+{
+    text-decoration:none;
+    color:inherit;
+}

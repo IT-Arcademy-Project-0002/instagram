@@ -1,12 +1,14 @@
-<html layout:decorate="~{Layout/layout_feed}">
-<div layout:fragment="board" class="container">
+<html layout:decorate="~{Layout/layout_main}">
+<div layout:fragment="content">
     <div th:each="board : ${boardList}">
         <div th:text="${board.member.username}"></div>
         <div th:text="${board.content}"></div>
         <br>
     </div>
 </div>
-<script layout:fragment="script" type="text/javascript">
+<div layout:fragment="footer">
+</div>
+<script>
     function clickFileUpload() {
         var upload = document.getElementById("image-upload");
         upload.click();
@@ -33,6 +35,5 @@
         });
     }
     // ajax
-
 </script>
 </html>

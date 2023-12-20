@@ -11,6 +11,6 @@ public class mainController {
 
     @GetMapping("/")
     public String mainUrl(){
-        return "redirect:/main";
+        return "redirect:/board/detail";
     }
 }

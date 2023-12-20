@@ -24,6 +24,7 @@ public class BoardService {
     }
     public List<Board> getBoard() {
         return this.boardRepository.findAll();
+//        return this.boardRepository.findAllByCreateDateDesc();
     }
 
 }

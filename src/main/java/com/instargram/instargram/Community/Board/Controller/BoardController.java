@@ -43,7 +43,6 @@ public class BoardController {
         Member member = this.memberService.getMember(principal.getName());
 
         Board board =  this.boardService.create(member, boardCreateForm.getContent());
-        Image image = new Image();
 
         String currName = multipartFile.getOriginalFilename();
         assert currName != null;
@@ -54,13 +53,13 @@ public class BoardController {
         if (lastDotIndex != -1) {
             nameWithoutExtension = currName.substring(0, lastDotIndex);
         }
-
+        Image image = new Image();
         String[] type = Objects.requireNonNull(multipartFile.getContentType()).split("/");
         if (!type[type.length - 1].equals("octet-stream")) {
             String fileExtension = type[type.length - 1];
-            imageService.saveImage(multipartFile, nameWithoutExtension, fileExtension);
+            image = this.imageService.saveImage(multipartFile, nameWithoutExtension, fileExtension);
         }
-        this.boardDataMapService.create(board,image,2);
+        this.boardDataMapService.create(board, image, 2);
         return "redirect:/main";
     }
 

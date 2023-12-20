@@ -20,7 +20,7 @@ public class ImageService {
         return this.imageRepository.save(image);
     }
 
-    public void saveImage(MultipartFile multipartFile, String nameWithoutExtension, String fileExtension) throws IOException, IOException {
+    public Image saveImage(MultipartFile multipartFile, String nameWithoutExtension, String fileExtension) throws IOException, IOException {
         UUID uuid = UUID.randomUUID();
         String name = uuid + "_" + nameWithoutExtension + "." + fileExtension;
 
@@ -37,6 +37,6 @@ public class ImageService {
         File origFile = new File(filePath);
         multipartFile.transferTo(origFile);
 
-        create(name, filePath); // 이미지 생성에 대한 로직을 호출합니다.
+        return create(name, filePath);  // 이미지 생성에 대한 로직을 호출합니다.
     }
 }

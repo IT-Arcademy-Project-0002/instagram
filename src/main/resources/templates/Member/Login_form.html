@@ -1,12 +1,12 @@
 <html layout:decorate="~{Layout/layout_login}">
 
 
-<div layout:fragment="content" class="d-flex justify-content-center" style="height: 100%">
+<div layout:fragment="content" class="d-flex justify-content-center" style="height: 100%; width: 100%">
     <div class="login_phone_img" style="width: 400px">
         <div class="login_phone"></div>
     </div>
-    <div style="width: 350px">
-        <div class="border border-1 w-100 my-2" style="border: rgba(152,152,152,0.45)">
+    <div class="login" style="width: 350px">
+        <div class="w-100 my-2" style="border: 1px solid #dbdbdb">
             <div class="py-5">
                 <h1 class="text-center mb-5">LOGO</h1>
                 <form th:action="@{/member/login}" method="post">
@@ -48,7 +48,7 @@
             </div>
         </div>
 
-        <div class="border border-1 w-100 my-2" style="border: rgba(152,152,152,0.45)">
+        <div class=" w-100 my-2" style="border: 1px solid #dbdbdb">
             <div class="d-flex justify-content-center my-3">
                 <span>계정이 없으신가요?</span>
                 <a class="ms-2" href="/member/signup">가입하기</a>

@@ -1,12 +1,25 @@
 .login_phone {
     background-image: url(../files/designImg/home-phones.png);
-    align-self: center;
     flex-basis: 380.32px;
     height: 581.15px;
-    background-position: -46px 0;
+    background-position: -28px 0;
+    position: relative;
+    top: 100px;
 }
-
 .login_phone_img {
     margin-bottom: 12px;
     margin-right: 32px;
+}
+
+.login {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    justify-content: center;
+    max-width: 350px;
+}
+
+.login_box {
+    position: fixed;
+
 }

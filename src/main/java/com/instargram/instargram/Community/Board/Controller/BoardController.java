@@ -5,6 +5,7 @@ import com.instargram.instargram.Community.Board.Model.Entity.Board;
 import com.instargram.instargram.Community.Board.Service.BoardService;
 import com.instargram.instargram.Community.Board.Service.Board_Data_MapService;
 import com.instargram.instargram.Config.AppConfig;
+import com.instargram.instargram.Data.Image.Image;
 import com.instargram.instargram.Data.Image.ImageService;
 import com.instargram.instargram.Member.Model.Entity.Member;
 import com.instargram.instargram.Member.Service.MemberService;
@@ -32,7 +33,6 @@ public class BoardController {
     private final BoardService boardService;
     private final ImageService imageService;
     private final Board_Data_MapService boardDataMapService;
-    private final AppConfig appConfig;
 
     @PostMapping("/board/create")
     public String create(@RequestParam("image-upload") MultipartFile multipartFile, BoardCreateForm boardCreateForm, BindingResult bindingResult,
@@ -42,7 +42,8 @@ public class BoardController {
         }
         Member member = this.memberService.getMember(principal.getName());
 
-        this.boardService.create(member, boardCreateForm.getContent());
+        Board board =  this.boardService.create(member, boardCreateForm.getContent());
+        Image image = new Image();
 
         String currName = multipartFile.getOriginalFilename();
         assert currName != null;
@@ -59,7 +60,7 @@ public class BoardController {
             String fileExtension = type[type.length - 1];
             imageService.saveImage(multipartFile, nameWithoutExtension, fileExtension);
         }
-//        this.boardDataMapService.create();
+        this.boardDataMapService.create(board,image,2);
         return "redirect:/main";
     }
 

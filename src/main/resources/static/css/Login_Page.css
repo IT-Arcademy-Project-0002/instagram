@@ -21,5 +21,14 @@
 
 .login_box {
     position: fixed;
+}
 
+.btn_login {
+    background-color: #0095f6;
+    font-weight: bold;
+    color: white;
+    height: 35px;
+}
+.btn_login:hover {
+    background-color: #1877f2;
 }

@@ -13,14 +13,14 @@ public class AppConfig {
     }
 
     @Bean
-    static String getImageFileDirPath()
+    public static String getImageFileDirPath()
     {
         // 원하는 경로로 지정해주세요
         return System.getProperty("user.dir") + "\\src\\main\\resources\\static\\files\\img\\";
     }
 
     @Bean
-    static String getVideoFileDirPath()
+    public static String getVideoFileDirPath()
     {
         // 원하는 경로로 지정해주세요
         return System.getProperty("user.dir") + "\\src\\main\\resources\\static\\files\\video\\";

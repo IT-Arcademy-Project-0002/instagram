@@ -1,7 +1,8 @@
-package com.instargram.instargram.Community.Board.Form;
+package com.instargram.instargram.Community.Board.Model.Form;
 
 import lombok.Getter;
 import lombok.Setter;
+
 
 @Getter
 @Setter

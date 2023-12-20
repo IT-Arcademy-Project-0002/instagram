@@ -18,6 +18,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.util.Map;
+import java.util.Objects;
 
 @Service
 @Builder
@@ -63,11 +64,9 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
             System.out.println("지원하지 않은 로그인 서비스 입니다.");
         }
 
-        String provider = oAuth2UserInfo.getProvider();
+        String provider = Objects.requireNonNull(oAuth2UserInfo).getProvider();
         String providerId = oAuth2UserInfo.getProviderId();
-        String username = provider + "_" + providerId;
-
-        Member member = memberService.getMember(username);
+        Member member = memberService.getMemberByProvider(provider, providerId);
 
         //처음 서비스를 이용한 회원일 경우
         if(member == null) {

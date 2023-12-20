@@ -16,17 +16,23 @@ import java.time.LocalDateTime;
 public class MemberCreateForm {
     // 회원 아이디
     @NotEmpty
-    private String member_id;
+    private String username;
 
     // 회원 비밀번호
     @NotEmpty
-    private String member_password;
+    private String password;
 
-    // 회원 닉네임
+    // 회원 성명
     @NotEmpty
-    private String nickname;
+    private String name;
 
     // 회원 이메일
     @NotEmpty
     private String email;
+
+
+    // sns 연동 계정만 사용
+    private String provider;
+
+    private String providerID;
 }

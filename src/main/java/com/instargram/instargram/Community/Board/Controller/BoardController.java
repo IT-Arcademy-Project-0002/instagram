@@ -36,7 +36,7 @@ public class BoardController {
 
     @PostMapping("/board/create")
     public String create(@RequestParam("image-upload") MultipartFile multipartFile, BoardCreateForm boardCreateForm, BindingResult bindingResult,
-                         Principal principal) throws IOException, NoSuchAlgorithmException {
+                         Principal principal) throws IOException {
         if (bindingResult.hasErrors()) {
             return "Board/board_main";
         }
@@ -46,27 +46,20 @@ public class BoardController {
 
         String currName = multipartFile.getOriginalFilename();
         assert currName != null;
+
+        int lastDotIndex = currName.lastIndexOf('.');
+        String nameWithoutExtension = currName;
+
+        if (lastDotIndex != -1) {
+            nameWithoutExtension = currName.substring(0, lastDotIndex);
+        }
+
         String[] type = Objects.requireNonNull(multipartFile.getContentType()).split("/");
         if (!type[type.length - 1].equals("octet-stream")) {
-            UUID uuid = UUID.randomUUID();
-            String name = uuid + "_" + currName + "." + type[type.length - 1];
-
-            String savePath = AppConfig.getImageFileDirPath();
-
-            if (!new File(savePath).exists()) {
-                try {
-                    new File(savePath).mkdir();
-                } catch (Exception e) {
-                    e.getStackTrace();
-                }
-            }
-            String filePath = savePath + "\\" + name;
-            File origFile = new File(filePath);
-            multipartFile.transferTo(origFile);
-
-            this.imageService.create(name, multipartFile);
+            String fileExtension = type[type.length - 1];
+            imageService.saveImage(multipartFile, nameWithoutExtension, fileExtension);
         }
-        //        this.boardDataMapService.create();
+//        this.boardDataMapService.create();
         return "redirect:/main";
     }
 

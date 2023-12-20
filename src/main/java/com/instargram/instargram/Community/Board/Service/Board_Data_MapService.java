@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 public class Board_Data_MapService {
     private final Board_Data_MapRepository boardDataMapRepository;
 
-//    public Board_Data_Map create(Board board, Image image) {
+//    public Board_Data_Map create(Board board,  Image image) {
 //        Board_Data_Map boardDataMap = new Board_Data_Map();
 //        boardDataMap.setData_id(image.getId());
 //        boardDataMap.setData_type();

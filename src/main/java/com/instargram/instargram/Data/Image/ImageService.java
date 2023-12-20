@@ -3,17 +3,40 @@ package com.instargram.instargram.Data.Image;
 import com.instargram.instargram.Config.AppConfig;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 public class ImageService {
     private final ImageRepository imageRepository;
-    public Image create(String name, MultipartFile multipartFile) {
+    public Image create(String name, String path) {
         Image image = new Image();
         image.setName(name);
-        image.setPath(String.valueOf(multipartFile));
+        image.setPath(path);
         return this.imageRepository.save(image);
+    }
+
+    public void saveImage(MultipartFile multipartFile, String nameWithoutExtension, String fileExtension) throws IOException, IOException {
+        UUID uuid = UUID.randomUUID();
+        String name = uuid + "_" + nameWithoutExtension + "." + fileExtension;
+
+        String savePath = AppConfig.getImageFileDirPath();
+
+        if (!new File(savePath).exists()) {
+            try {
+                new File(savePath).mkdir();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        String filePath = savePath + "\\" + name;
+        File origFile = new File(filePath);
+        multipartFile.transferTo(origFile);
+
+        create(name, filePath); // 이미지 생성에 대한 로직을 호출합니다.
     }
 }

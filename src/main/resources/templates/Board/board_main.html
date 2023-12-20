@@ -37,19 +37,20 @@
     <div class="modal fade" id="Board_Create_Modal2" aria-hidden="true" aria-labelledby="Board_Create_ModalLabel2" tabindex="-1">
         <div class="modal-dialog modal-xl modal-dialog-centered">
             <div class="modal-content">
-                <div class="modal-header d-flex justify-content-between">
-                    <button type="button" class="btn btn-link" data-bs-toggle="modal" data-bs-target="#Back_Board_Create_Modal"><<</button>
-                    <h1 class="modal-title fs-5" id="Board_Create_ModalLabel2">새 게시물 등록</h1>
-                    <button type="button" class="btn btn-link">등록하기</button>
-                </div>
-                <div class="modal-body p-0" style="display: flex;">
-                    <img id="image-preview" alt="이미지 미리보기" style="object-fit: cover;">
-                    <label for="exampleFormControlTextarea1" class="form-label"></label>
-                    <div class="d-flex flex-column">
-                        <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
-                        <input tpye="text">
+                <form th:action="@{/board/create}" method="post">
+                    <div class="modal-header d-flex justify-content-between">
+                        <button type="button" class="btn btn-link" data-bs-toggle="modal" data-bs-target="#Back_Board_Create_Modal"><<</button>
+                        <h1 class="modal-title fs-5" id="Board_Create_ModalLabel2">새 게시물 등록</h1>
+                        <button type="submit" class="btn btn-link">등록하기</button>
                     </div>
-                </div>
+                    <div class="modal-body p-0" style="display: flex;">
+                        <img id="image-preview" alt="이미지 미리보기" style="object-fit: cover;">
+                        <label class="d-flex justify-content-center my-3">
+                            <input type="text" name="content" id="content"
+                                   class="form-control">
+                        </label>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -69,6 +70,13 @@
                 </div>
             </div>
         </div>
+    </div>
+</div>
+<div layout:fragment="board" class="container">
+    <div th:each="board : ${boardList}">
+        <div th:text="${board.member.username}"></div>
+        <div th:text="${board.content}"></div>
+        <br>
     </div>
 </div>
 <script layout:fragment="script" type="text/javascript">
@@ -96,6 +104,7 @@
             });
         });
     }
+    // ajax
 
 </script>
 </html>

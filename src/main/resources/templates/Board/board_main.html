@@ -1,7 +1,4 @@
 <html layout:decorate="~{Layout/layout_feed}">
-<head>
-    <title> board_main </title>
-</head>
 <div layout:fragment="board" class="container">
     <div th:each="feed : ${feedList}">
         <div th:text="${feed.board.member.username}"></div>

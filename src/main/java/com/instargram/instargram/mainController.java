@@ -18,4 +18,9 @@ public class mainController {
     public String mainUrl(){
         return "Member/Login_form";
     }
+    
+    @GetMapping("/main")
+    public String create(){
+        return "Board/board_create";
+    }
 }

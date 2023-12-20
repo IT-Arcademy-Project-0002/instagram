@@ -81,23 +81,23 @@ public class Member {
 
     // Community board
     // 알림 목록
-    @OneToMany(cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
     private List<Notice> NoticeList;
 
     // 게시글 목록
-    @OneToMany(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private List<Board> boardList;
 
     // 게시글에 언급된 회원 목록
-    @OneToMany(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "tag_member",cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private List<Board_TagMember_Map> boardTagMembers;
 
     // 회원이 저장한 게시글 목록
-    @OneToMany(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private List<Board_Save_Map> boardSaveMaps;
 
     // 회원이 좋아요를 한 게시글 매핑 목록
-    @OneToMany(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "like_member", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private List<Board_Like_Member_Map> boardLikeMembers;
 
 
@@ -106,7 +106,7 @@ public class Member {
 
     // DM Message
     // 회원이 보낸 디엠 목록
-    @OneToMany(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private List<Message_Member_Map> messageMemberMaps;
 
     // 회원이 요청한 디엠 목록
@@ -123,12 +123,12 @@ public class Member {
 
     //Comment
     // 회원이 좋아요를 단 댓글 목록
-    @OneToMany(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private List<Comment_Like_Map> commentLikeMapList;
 
     //Recomment
     // 회원이 좋아요를 단 대댓글 목록
-    @OneToMany(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private List<ReComment_Like_Map> reCommentLikeMapList;
 
     //Member

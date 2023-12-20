@@ -1,12 +1,9 @@
 <html layout:decorate="~{Layout/layout_feed}">
-<head>
-    <title> board_main </title>
-</head>
 <div layout:fragment="board" class="container">
-    <div th:each="board : ${boardList}">
-        <div th:text="${board.member.username}"></div>
-        <div th:text="${board.content}"></div>
-        <br>
+    <div th:each="feed : ${feedList}">
+        <div th:text="${feed.board.member.username}"></div>
+        <img th:src="@{|/resources/${feed.image.name}|}" alt="..." style="width: 100%; height:100%;">
+        <div th:text="${feed.board.content}"></div>
     </div>
 </div>
 </html>

@@ -1,0 +1,38 @@
+<html layout:decorate="~{Layout/layout_feed}">
+<div layout:fragment="board" class="container">
+    <div th:each="board : ${boardList}">
+        <div th:text="${board.member.username}"></div>
+        <div th:text="${board.content}"></div>
+        <br>
+    </div>
+</div>
+<script layout:fragment="script" type="text/javascript">
+    function clickFileUpload() {
+        var upload = document.getElementById("image-upload");
+        upload.click();
+
+        upload.addEventListener('change', function () {
+            var firstModal = document.getElementById("Board_Create_Modal");
+            $(firstModal).modal('hide'); // 첫 번째 모달 닫기
+
+            var selectedImage = upload.files[0];
+            console.log(selectedImage);
+
+            var secondModal = document.getElementById("Board_Create_Modal2");
+            $(firstModal).on('hidden.bs.modal', function () {
+                $(firstModal).modal('dispose'); // 첫 번째 모달 삭제
+
+                var modalBackdrop = document.querySelector('.modal-backdrop');
+                modalBackdrop.parentNode.removeChild(modalBackdrop); // 모달 배경 제거
+
+                var imagePreview = document.getElementById("name");
+                imagePreview.src = URL.createObjectURL(selectedImage); // 이미지 미리보기에 선택한 이미지 표시
+
+                $(secondModal).modal('show'); // 두 번째 모달 활성화
+            });
+        });
+    }
+    // ajax
+
+</script>
+</html>

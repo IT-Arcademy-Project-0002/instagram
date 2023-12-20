@@ -67,4 +67,8 @@ public class MemberService {
         member.setProviderId(memberCreateForm.getProviderID());
         memberRepository.save(member);
     }
+
+    public Member getMember(String username) {
+        return this.memberRepository.findByUsername(username);
+    }
 }

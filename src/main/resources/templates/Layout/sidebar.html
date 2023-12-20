@@ -54,7 +54,7 @@
                                 <h3 class="my-3">사진과 동영상을 선택하세요</h3>
                                 <button type="button" class="btn btn-primary my-3 text-white" onclick="clickFileUpload()">컴퓨터에서 선택</button>
                                 <div class="visually-hidden">
-                                    <input type="file" name="image-upload" id="image-upload">
+                                    <input type="file" name="image-upload" id="image-upload" multiple>
                                 </div>
                             </div>
                         </div>
@@ -70,7 +70,25 @@
                                 <button type="submit" class="btn btn-link">등록하기</button>
                             </div>
                             <div class="modal-body p-0" style="display: flex;">
-                                <img id="name" alt="이미지 미리보기" style="object-fit: cover;">
+                                <div class="d-flex">
+<!--                                    <div style="position: relative; width: 50rem; height: 50rem;" id="image_container">-->
+<!--                                        <img id="name" class="shadow text-center" style="position: absolute; top: 0; left: 0; transform: translate(50,50); width: 100%; height: 100%; object-fit: cover; margin: auto">-->
+<!--                                    </div>-->
+                                    <div id="carouselExample" class="carousel slide">
+                                        <div class="carousel-inner">
+                                            <div id="img-container">
+                                            </div>
+                                        </div>
+                                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+                                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                            <span class="visually-hidden">Previous</span>
+                                        </button>
+                                        <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+                                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                            <span class="visually-hidden">Next</span>
+                                        </button>
+                                    </div>
+                                </div>
                                 <div class="d-flex flex-column">
                                     <div th:if="${#authorization.expression('isAuthenticated()')}" th:text="${#authentication.principal.username}"></div>
                                     <input type="text" name="content" id="content" class="form-control">
@@ -99,34 +117,7 @@
             </div>
         </div>
     </div>
-    <script layout:fragment="script" type="text/javascript">
-        function clickFileUpload() {
-            var upload = document.getElementById("image-upload");
-            upload.click();
-
-            upload.addEventListener('change', function () {
-                var firstModal = document.getElementById("Board_Create_Modal");
-                $(firstModal).modal('hide'); // 첫 번째 모달 닫기
-
-                var selectedImage = upload.files[0];
-                console.log(selectedImage);
-
-                var secondModal = document.getElementById("Board_Create_Modal2");
-                $(firstModal).on('hidden.bs.modal', function () {
-                    $(firstModal).modal('dispose'); // 첫 번째 모달 삭제
-
-                    var modalBackdrop = document.querySelector('.modal-backdrop');
-                    modalBackdrop.parentNode.removeChild(modalBackdrop); // 모달 배경 제거
-
-                    var imagePreview = document.getElementById("name");
-                    imagePreview.src = URL.createObjectURL(selectedImage); // 이미지 미리보기에 선택한 이미지 표시
-
-                    $(secondModal).modal('show'); // 두 번째 모달 활성화
-                });
-            });
-        }
-        // ajax
-    </script>
+    <script th:src="@{/board/js/board_js.js}"></script>
 </div>
 </body>
 </html>

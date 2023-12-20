@@ -5,6 +5,7 @@ import com.instargram.instargram.Community.Board.Model.Entity.Board;
 import com.instargram.instargram.Community.Board.Service.BoardService;
 import com.instargram.instargram.Community.Board.Service.Board_Data_MapService;
 import com.instargram.instargram.Config.AppConfig;
+import com.instargram.instargram.Data.Image.Image;
 import com.instargram.instargram.Data.Image.ImageService;
 import com.instargram.instargram.Member.Model.Entity.Member;
 import com.instargram.instargram.Member.Service.MemberService;
@@ -32,41 +33,33 @@ public class BoardController {
     private final BoardService boardService;
     private final ImageService imageService;
     private final Board_Data_MapService boardDataMapService;
-    private final AppConfig appConfig;
 
     @PostMapping("/board/create")
     public String create(@RequestParam("image-upload") MultipartFile multipartFile, BoardCreateForm boardCreateForm, BindingResult bindingResult,
-                         Principal principal) throws IOException, NoSuchAlgorithmException {
+                         Principal principal) throws IOException {
         if (bindingResult.hasErrors()) {
             return "Board/board_main";
         }
-        Member member = this.memberService.getMember(principal.getName());
+        Member member = this.memberService.getMemberByUsername(principal.getName());
 
-        this.boardService.create(member, boardCreateForm.getContent());
+        Board board =  this.boardService.create(member, boardCreateForm.getContent());
 
         String currName = multipartFile.getOriginalFilename();
         assert currName != null;
+
+        int lastDotIndex = currName.lastIndexOf('.');
+        String nameWithoutExtension = currName;
+
+        if (lastDotIndex != -1) {
+            nameWithoutExtension = currName.substring(0, lastDotIndex);
+        }
+        Image image = new Image();
         String[] type = Objects.requireNonNull(multipartFile.getContentType()).split("/");
         if (!type[type.length - 1].equals("octet-stream")) {
-            UUID uuid = UUID.randomUUID();
-            String name = uuid + "_" + currName + "." + type[type.length - 1];
-
-            String savePath = AppConfig.getImageFileDirPath();
-
-            if (!new File(savePath).exists()) {
-                try {
-                    new File(savePath).mkdir();
-                } catch (Exception e) {
-                    e.getStackTrace();
-                }
-            }
-            String filePath = savePath + "\\" + name;
-            File origFile = new File(filePath);
-            multipartFile.transferTo(origFile);
-
-            this.imageService.create(name, multipartFile);
+            String fileExtension = type[type.length - 1];
+            image = this.imageService.saveImage(multipartFile, nameWithoutExtension, fileExtension);
         }
-        //        this.boardDataMapService.create();
+        this.boardDataMapService.create(board, image, 2);
         return "redirect:/main";
     }
 

@@ -46,6 +46,7 @@ public class BoardController {
             return "redirect:/main";
         }
         Member member = this.memberService.getMember(principal.getName());
+
         Board board = this.boardService.create(member, boardCreateForm.getContent());
 
         for (MultipartFile multipartFile : multipartFiles) {

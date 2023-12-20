@@ -54,7 +54,7 @@
                                 <h3 class="my-3">사진과 동영상을 선택하세요</h3>
                                 <button type="button" class="btn btn-primary my-3 text-white" onclick="clickFileUpload()">컴퓨터에서 선택</button>
                                 <div class="visually-hidden">
-                                    <input type="file" name="image-upload" id="image-upload">
+                                    <input type="file" name="image-upload" id="image-upload" multiple>
                                 </div>
                             </div>
                         </div>
@@ -70,7 +70,12 @@
                                 <button type="submit" class="btn btn-link">등록하기</button>
                             </div>
                             <div class="modal-body p-0" style="display: flex;">
-                                <img id="name" alt="이미지 미리보기" style="object-fit: cover;">
+                                <div class="d-flex">
+                                    <div style="position: relative; width: 50rem; height: 50rem;" id="image_container">
+                                        <img id="name" class="shadow text-center" style="position: absolute; top: 0; left: 0; transform: translate(50,50); width: 100%; height: 100%; object-fit: cover; margin: auto">
+                                    </div>
+                                </div>
+<!--                                <img id="name" alt="이미지 미리보기" style="object-fit: cover;">-->
                                 <div class="d-flex flex-column">
                                     <div th:if="${#authorization.expression('isAuthenticated()')}" th:text="${#authentication.principal.username}"></div>
                                     <input type="text" name="content" id="content" class="form-control">
@@ -108,8 +113,13 @@
                 var firstModal = document.getElementById("Board_Create_Modal");
                 $(firstModal).modal('hide'); // 첫 번째 모달 닫기
 
-                var selectedImage = upload.files[0];
-                console.log(selectedImage);
+                var selectedFiles  =  event.target.files;
+                let filesArray = [];
+                // 선택된 각 파일을 배열에 추가하기
+                for (let i = 0; i < selectedFiles.length; i++) {
+                    filesArray.push(selectedFiles[i]);
+                }
+                console.log(filesArray);
 
                 var secondModal = document.getElementById("Board_Create_Modal2");
                 $(firstModal).on('hidden.bs.modal', function () {
@@ -118,14 +128,17 @@
                     var modalBackdrop = document.querySelector('.modal-backdrop');
                     modalBackdrop.parentNode.removeChild(modalBackdrop); // 모달 배경 제거
 
-                    var imagePreview = document.getElementById("name");
-                    imagePreview.src = URL.createObjectURL(selectedImage); // 이미지 미리보기에 선택한 이미지 표시
+                    let imagePreviewArray = [];
 
+                    var imagePreview = document.getElementById("name");
+                    for (let i = 0; i < filesArray.length; i++) {
+                        imagePreview.src = URL.createObjectURL(filesArray[i]);
+                        imagePreviewArray.push(imagePreview.src)
+                    }
                     $(secondModal).modal('show'); // 두 번째 모달 활성화
                 });
             });
         }
-        // ajax
     </script>
 </div>
 </body>

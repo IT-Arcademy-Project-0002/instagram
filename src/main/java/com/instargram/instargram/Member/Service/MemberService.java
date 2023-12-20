@@ -17,7 +17,7 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public Member getMember(String id)
+    public Member getMemberByUsername(String id)
     {
         return memberRepository.findByUsername(id);
     }
@@ -27,6 +27,16 @@ public class MemberService {
         return memberRepository.findByProviderAndProviderId(provider, provider_id);
     }
 
+
+    public Member getMemberByEmail(String email)
+    {
+        return memberRepository.findByEmail(email);
+    }
+
+    public Member getMemberByPhoneNumber(String num)
+    {
+        return memberRepository.findByPhoneNumber(num);
+    }
 
     @PostConstruct
     public void init() {

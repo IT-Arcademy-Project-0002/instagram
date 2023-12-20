@@ -23,7 +23,7 @@ public class BoardController {
 
     @PostMapping("/board/create")
     public String create(BoardCreateForm boardCreateForm, BindingResult bindingResult, Principal principal) {
-        Member member = this.memberService.getMember(principal.getName());
+        Member member = this.memberService.getMemberByUsername(principal.getName());
 
         if (bindingResult.hasErrors()) {
             return "Board/board_main";

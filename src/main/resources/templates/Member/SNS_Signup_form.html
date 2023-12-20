@@ -6,27 +6,15 @@
         <div class="border border-1 w-100 my-2" style="border: rgba(152,152,152,0.45)">
             <div class="py-5">
                 <h1 class="text-center mb-5">LOGO</h1>
-                <div class="d-flex justify-content-center">
-                    <a href="/oauth2/authorization/facebook" class="d-flex align-items-center">
-                        <svg style="color: #0a58ca" class="me-2" xmlns="http://www.w3.org/2000/svg"
-                             fill="currentColor"
-                             stroke="currentColor"
-                             stroke-width="0.8"
-                             x="0px" y="0px" width="28" height="28" viewBox="0 0 30 30">
-                            <path d="M15,3C8.373,3,3,8.373,3,15c0,6.016,4.432,10.984,10.206,11.852V18.18h-2.969v-3.154h2.969v-2.099c0-3.475,1.693-5,4.581-5 c1.383,0,2.115,0.103,2.461,0.149v2.753h-1.97c-1.226,0-1.654,1.163-1.654,2.473v1.724h3.593L19.73,18.18h-3.106v8.697 C22.481,26.083,27,21.075,27,15C27,8.373,21.627,3,15,3z"></path>
-                        </svg>
-                        <span>
-                            Facebook으로 로그인
-                        </span>
-                    </a>
-                </div>
-
-                <div class="line m-3">
-                    또는
-                </div>
-
-                <form th:action="@{/member/signup}" method="post" th:object="${memberCreateForm}">
-                    <label class="d-flex justify-content-center my-3">
+                <form th:action="@{/member/signup/social}" method="post" th:object="${memberCreateForm}">
+                    <div class="d-flex justify-content-center">
+                        <div style="position: relative; width: 6rem; height: 6rem;" id="image_container">
+                            <img id="none_user_img" src="/files/designImg/noneuser.png"
+                                 class="shadow rounded-circle text-center"
+                                 style="position: absolute; top: 0; left: 0; transform: translate(50,50); width: 100%; height: 100%; object-fit: cover; margin: auto">
+                        </div>
+                    </div>
+                    <label class="d-flex justify-content-center my-3 mt-5">
                         <input type="text" name="email" id="email" th:field="*{email}"
                                class="form-control w-75" placeholder="휴대폰 번호 또는 이메일">
                     </label>
@@ -42,8 +30,13 @@
                         <input type="password" name="password" id="password" th:field="*{password}"
                                class="form-control w-75" placeholder="비밀번호">
                     </label>
+
+                    <input type="hidden" name="provider" id="provider" th:field="*{provider}">
+                    <input type="hidden" name="providerID" id="providerID" th:field="*{providerID}">
+
                     <div class="d-flex justify-content-center my-3">
-                        <input type="submit" class="btn btn-primary w-75" style="background: #4cb5f9; border: #4cb5f9" th:value="가입">
+                        <input type="submit" class="btn btn-primary w-75" style="background: #4cb5f9; border: #4cb5f9"
+                               th:value="가입">
                     </div>
                 </form>
 

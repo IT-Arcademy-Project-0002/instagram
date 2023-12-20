@@ -23,18 +23,27 @@ public class MemberSecurityService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Member member = this.memberService.getMember(username);
+        Member member = null;
+        if (username.matches("[0-9]+")) {
+            member = this.memberService.getMemberByPhoneNumber(username);
+        } else if (username.contains("@")) {
+            member = this.memberService.getMemberByEmail(username);
+        } else {
+            member = this.memberService.getMemberByUsername(username);
+        }
+
+        if(member == null)
+        {
+            throw new UsernameNotFoundException("입력한 정보의 유저가 없습니다.");
+        }
 
         List<GrantedAuthority> authorities = new ArrayList<>();
-            if ("admin".equals(username)) {
-                authorities.add(new SimpleGrantedAuthority(UserRole.ADMIN.getValue()));
+        if ("admin".equals(username)) {
+            authorities.add(new SimpleGrantedAuthority(UserRole.ADMIN.getValue()));
+        } else {
+            authorities.add(new SimpleGrantedAuthority(UserRole.USER.getValue()));
         }
-//            else if(member.getRole().equals(UserRole.MANAGER.getValue())){
-//                authorities.add(new SimpleGrantedAuthority(UserRole.MANAGER.getValue()));
-//        }
-            else {
-                authorities.add(new SimpleGrantedAuthority(UserRole.USER.getValue()));
-            }
+
         return new User(member.getUsername(), member.getPassword(), authorities);
     }
 }

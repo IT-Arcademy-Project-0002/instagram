@@ -43,7 +43,7 @@ public class Member {
 
     // 회원 생성 날짜
     @NotNull
-    private LocalDateTime create_date;
+    private LocalDateTime createDate;
 
     // 회원 닉네임
     @NotNull
@@ -57,7 +57,7 @@ public class Member {
     private LocalDate birthday;
 
     // 회원 핸드폰 번호
-    private String phone_number;
+    private String phoneNumber;
 
     // 회원 소개 속 소개글
     private String introduction;
@@ -76,6 +76,11 @@ public class Member {
 
 
 
+    // sns 연동 로그인에 사용되는 provider 종류(GOOGLE, NAVER, KAKAO)
+    private String provider;
+
+    // sns 연동 로그인에 사용되는 provider ID
+    private String providerId;
 
 
 

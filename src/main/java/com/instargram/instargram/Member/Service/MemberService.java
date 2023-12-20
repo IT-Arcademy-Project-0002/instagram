@@ -17,11 +17,26 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public Member getMember(String id)
+    public Member getMemberByUsername(String id)
     {
         return memberRepository.findByUsername(id);
     }
 
+    public Member getMemberByProvider(String provider, String provider_id)
+    {
+        return memberRepository.findByProviderAndProviderId(provider, provider_id);
+    }
+
+
+    public Member getMemberByEmail(String email)
+    {
+        return memberRepository.findByEmail(email);
+    }
+
+    public Member getMemberByPhoneNumber(String num)
+    {
+        return memberRepository.findByPhoneNumber(num);
+    }
 
     @PostConstruct
     public void init() {
@@ -34,6 +49,7 @@ public class MemberService {
             member.setUsername("test1");
             member.setPassword(passwordEncoder.encode("test123!"));
             member.setEmail("test1@gmail.com");
+            member.setNickname("테스트유저");
 
             memberRepository.save(member);
         }
@@ -43,11 +59,12 @@ public class MemberService {
     public void create(MemberCreateForm memberCreateForm)
     {
         Member member = new Member();
-        member.setUsername(memberCreateForm.getMember_id());
-        member.setPassword(memberCreateForm.getMember_password());
-        member.setNickname(memberCreateForm.getNickname());
+        member.setUsername(memberCreateForm.getUsername());
+        member.setPassword(passwordEncoder.encode(memberCreateForm.getPassword()));
+        member.setNickname(memberCreateForm.getName());
         member.setEmail(memberCreateForm.getEmail());
-
+        member.setProvider(memberCreateForm.getProvider());
+        member.setProviderId(memberCreateForm.getProviderID());
         memberRepository.save(member);
     }
 }

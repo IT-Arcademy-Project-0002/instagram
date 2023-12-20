@@ -10,7 +10,6 @@ import org.springframework.web.multipart.MultipartFile;
 @RequiredArgsConstructor
 public class ImageService {
     private final ImageRepository imageRepository;
-    private final AppConfig appConfig;
     public Image create(String name, MultipartFile multipartFile) {
         Image image = new Image();
         image.setName(name);

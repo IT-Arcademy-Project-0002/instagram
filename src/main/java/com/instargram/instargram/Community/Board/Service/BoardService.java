@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -21,4 +22,8 @@ public class BoardService {
         board.setCreate_date(LocalDateTime.now());
         return this.boardRepository.save(board);
     }
+    public List<Board> getBoard() {
+        return this.boardRepository.findAll();
+    }
+
 }

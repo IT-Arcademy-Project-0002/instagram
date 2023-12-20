@@ -11,11 +11,6 @@ public class mainController {
 
     @GetMapping("/")
     public String mainUrl(){
-        return "redirect:/board/create";
-    }
-    
-    @GetMapping("/main")
-    public String create(){
-        return "Board/board_create";
+        return "redirect:/main";
     }
 }

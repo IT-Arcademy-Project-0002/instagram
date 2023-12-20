@@ -21,6 +21,6 @@ public class SaveGroup {
     private String name;
 
     // 회원이 저장한 게시글 매핑 테이블 목록
-    @OneToMany(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "saveGroup", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private List<Board_Save_Map> boardSaveMaps;
 }

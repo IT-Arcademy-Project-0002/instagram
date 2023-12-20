@@ -31,10 +31,10 @@ public class Comment {
     private Board board;
 
     // 댓글의 대댓글 목록
-    @OneToMany(cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "comment", cascade = CascadeType.REMOVE)
     private List<Recomment> recommentList;
 
     // 댓글의 좋아요 한 사람 목록
-    @OneToMany(cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "comment", cascade = CascadeType.REMOVE)
     private List<Comment_Like_Map> commentLikeMembers;
 }

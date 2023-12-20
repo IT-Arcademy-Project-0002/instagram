@@ -31,6 +31,6 @@ public class Recomment {
     private Comment comment;
 
     // 해당 대댓글에 좋아요 한 회원 목록
-    @OneToMany(cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "recomment", cascade = CascadeType.REMOVE)
     private List<ReComment_Like_Map> reCommentLikeMembers;
 }

@@ -5,16 +5,15 @@ import com.instargram.instargram.Member.Model.Form.MemberCreateForm;
 import com.instargram.instargram.Member.Service.MemberService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
-import jakarta.validation.Valid;
+
 import lombok.Builder;
-import org.springframework.dao.DataIntegrityViolationException;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @Builder
@@ -55,6 +54,13 @@ public class MemberController {
             memberCreateForm.setProviderID(socialLogin.getProviderId());
         }
 
-        return "Member/Signup_form";
+        return "Member/SNS_Signup_form";
+    }
+
+    @PostMapping("/signup/social")
+    public String signup(MemberCreateForm memberCreateForm, BindingResult bindingResult) {
+
+        memberService.create(memberCreateForm);
+        return "redirect:/member/login";
     }
 }

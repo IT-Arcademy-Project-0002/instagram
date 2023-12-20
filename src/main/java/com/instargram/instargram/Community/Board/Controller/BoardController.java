@@ -40,7 +40,7 @@ public class BoardController {
         if (bindingResult.hasErrors()) {
             return "Board/board_main";
         }
-        Member member = this.memberService.getMember(principal.getName());
+        Member member = this.memberService.getMemberByUsername(principal.getName());
 
         Board board =  this.boardService.create(member, boardCreateForm.getContent());
 

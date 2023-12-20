@@ -11,7 +11,7 @@
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 
-    <title>layout_feed</title>
+    <title>layout_search</title>
 </head>
 
 <body>
@@ -20,19 +20,7 @@
     <div th:replace="~{Layout/sidebar :: sidebarFragment}"></div>
     <!-- 메인 콘텐츠 -->
     <div class="main-content d-flex justify-content-center">
-        <div class="frag-main d-flex h-100">
-            <div class="content-background">
-                <div class="frag-story mt-4">
-                    <th:block layout:fragment="story"></th:block>
-                </div>
-                <div class="frag-board mt-4">
-                    <th:block layout:fragment="board"></th:block>
-                </div>
-            </div>
-                <div class="frag-profile">
-                    <th:block layout:fragment="profile"></th:block>
-                </div>
-        </div>
+        DM 페이지입니다
     </div>
 </div>
 

@@ -19,19 +19,22 @@ public class SecurityConfig {
 
     private static final String SOCIAL_LOGIN = "social_login";
 
-    private PrincipalOauth2UserService principalOauth2UserService;
+    private final PrincipalOauth2UserService principalOauth2UserService;
 
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests((authorizeHttpRequests) -> authorizeHttpRequests
-                        .requestMatchers("/member/login", "/css/**", "/error/**", "/files/**").permitAll()
-                        .requestMatchers("/member/signup", "/css/**", "/error/**").permitAll()
-                        .requestMatchers("/member/signup/social", "/css/**", "/error/**").permitAll()
+                        .requestMatchers("/css/**", "/error/**", "/files/**").permitAll()
+                        .requestMatchers("/member/login").permitAll()
+                        .requestMatchers("/member/signup").permitAll()
+                        .requestMatchers("/member/signup/social").permitAll()
                         .anyRequest().authenticated())
                 .formLogin((formLogin) -> formLogin
                         .loginPage("/member/login")
-                        .defaultSuccessUrl("/"))
+                        .defaultSuccessUrl("/")
+                        .permitAll()
+                )
                 .oauth2Login((oauth2Login) -> oauth2Login
                         .loginPage("/member/login")
                         .defaultSuccessUrl("/")

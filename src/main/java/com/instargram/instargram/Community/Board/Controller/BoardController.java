@@ -7,30 +7,36 @@ import com.instargram.instargram.Member.Model.Entity.Member;
 import com.instargram.instargram.Member.Service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.security.Principal;
+import java.util.List;
 
 @Controller
-@RequestMapping("/board")
 @RequiredArgsConstructor
 public class BoardController {
     private final MemberService memberService;
     private final BoardService boardService;
 
-    @PostMapping("/create")
+    @PostMapping("/board/create")
     public String create(BoardCreateForm boardCreateForm, BindingResult bindingResult, Principal principal) {
         Member member = this.memberService.getMember(principal.getName());
 
         if (bindingResult.hasErrors()) {
-            return "Board/board_create";
+            return "Board/board_main";
         }
 
         this.boardService.create(member, boardCreateForm.getContent());
-        return "redirect:/";
+        return "redirect:/main";
     }
 
+    @GetMapping("/main")
+    public String create(Model model){
+        List<Board> boardList = this.boardService.getBoard();
+        model.addAttribute("boardList", boardList);
+        return "Board/board_main";
+    }
 }

@@ -4,6 +4,7 @@ import com.instargram.instargram.Community.Board.Model.Form.BoardCreateForm;
 import com.instargram.instargram.Community.Board.Model.Entity.Board;
 import com.instargram.instargram.Community.Board.Service.BoardService;
 import com.instargram.instargram.Community.Board.Service.Board_Data_MapService;
+import com.instargram.instargram.Config.AppConfig;
 import com.instargram.instargram.Data.Image.ImageService;
 import com.instargram.instargram.Member.Model.Entity.Member;
 import com.instargram.instargram.Member.Service.MemberService;
@@ -31,6 +32,7 @@ public class BoardController {
     private final BoardService boardService;
     private final ImageService imageService;
     private final Board_Data_MapService boardDataMapService;
+    private final AppConfig appConfig;
 
     @PostMapping("/board/create")
     public String create(@RequestParam("image-upload") MultipartFile multipartFile, BoardCreateForm boardCreateForm, BindingResult bindingResult,
@@ -49,7 +51,7 @@ public class BoardController {
             UUID uuid = UUID.randomUUID();
             String name = uuid + "_" + currName + "." + type[type.length - 1];
 
-            String savePath = System.getProperty("user.dir") + "\\src\\main\\resources\\static\\files";
+            String savePath = AppConfig.getImageFileDirPath();
 
             if (!new File(savePath).exists()) {
                 try {

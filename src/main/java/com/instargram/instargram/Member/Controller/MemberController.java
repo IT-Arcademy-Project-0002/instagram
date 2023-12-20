@@ -15,5 +15,10 @@ public class MemberController {
         return "Member/Login_form";
     }
 
+    @GetMapping("/signup")
+    public String signup()
+    {
+        return "Member/Signup_form";
+    }
 
 }

@@ -23,10 +23,33 @@ function clickFileUpload() {
 
             let imagePreviewArray = [];
 
-            var imagePreview = document.getElementById("name");
+            var files = document.getElementById("img-container");
+            //var imagePreview = document.getElementById("name");
             for (let i = 0; i < filesArray.length; i++) {
-                imagePreview.src = URL.createObjectURL(filesArray[i]);
-                imagePreviewArray.push(imagePreview.src)
+                //imagePreview.src = URL.createObjectURL(filesArray[i]);
+                //imagePreviewArray.push(imagePreview.src);
+
+                var div = document.createElement("div");
+                div.id="image_container" + i;
+                div.style.position="relative";
+                div.style.width="50rem";
+                div.style.height="50rem";
+
+                var img = document.createElement("img");
+                img.id="name"+i;
+                img.classList="shadow text-center";
+                img.style.position="absolute";
+                img.style.top="0";
+                img.style.left="0";
+                img.style.transform="translate(50,50";
+                img.style.width="100%";
+                img.style.height="100%";
+                img.style.objectFit="cover";
+                img.style.margin="auto";
+                img.src = URL.createObjectURL(filesArray[i]);
+
+                div.appendChild(img);
+                files.appendChild(div);
             }
             console.log(imagePreviewArray)
             $(secondModal).modal('show'); // 두 번째 모달 활성화

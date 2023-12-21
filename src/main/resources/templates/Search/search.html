@@ -5,15 +5,17 @@
 </head>
 <div layout:fragment="content">
     <div class = "search-content">
-        <div class = "search-box border">
+        <div class = "search-box border mb-3">
             <div class="input-group mb-2">
                 <input type="text" class="form-control" placeholder="검색어를 입력해주세요" aria-describedby="basic-addon2" id="keyword" name="keyword" size="15">
             </div>
-            <div class="search-list" id="searchList">
-            </div>
-            <div>
-                현재는 닉네임의 와일드카드(%키워드%) 형태로 <br>
-                검색어 입력시 Local값에 맞게 보여줍니다.(개발중) <br>
+            <div class = "border" style="height:80vh;">
+                <div class="search-list" id="searchList">
+                </div>
+                <div>
+                    현재는 회원아이디의 와일드카드(%키워드%) 형태로 <br>
+                    검색어 입력시 Local값에 맞게 보여줍니다.(개발중) <br>
+                </div>
             </div>
         </div>
     </div>
@@ -71,16 +73,26 @@
             }
 
             function displaySearchResults(data) {
-                var newList = $('<ul></ul>');
+                var newList = $('<div></div>');
 
                 if (data.length > 0) {
                     data.forEach(searchResult => {
-                        var listItem = $('<li></li>');
-                        listItem.text(searchResult.nickname);
+                        var listItem = $(
+
+                            '<div class="row p-3">' +
+                            '<div class="col-sm-2">' +
+                            '<img src="/files/designImg/noneuser.png" class="img-fluid rounded float-start" style="height: 3rem;">' +
+                            '</div>' +
+                            '<div class="col-sm-10">' +
+                            '<div class="fw-bold mb-3"><a href="/member/page/'+ searchResult.username + '" target="_blank" class="link">' + searchResult.username + '</a></div>' +
+                            '</div>' +
+                            '</div>'
+
+                        );
                         newList.append(listItem);
                     });
                 } else {
-                    var listItem = $('<li></li>');
+                    var listItem = $('<div></div>');
                     listItem.text('검색 결과가 없습니다.');
                     newList.append(listItem);
                 }

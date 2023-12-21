@@ -23,7 +23,8 @@ public class SearchService {
 
 
         List<Member> memberList = this.memberRepository.findByNicknameContaining(keyword);
-
+        List<Member> memberList2 = this.memberRepository.findByUsernameContaining(keyword);
+        List<Member> memberList3 = this.memberRepository.findByIntroductionContaining(keyword);
 
         // 모든 검색결과를 담기 위한 배열 (이 검색결과는 종류가 달라도, 리스트에 들어가는 정보를 의미한다.)
         // data-order 개념 적용? 데이터를 배열에 저장할 때 식별번호로 전체 카테고리를 포함하여 전달
@@ -33,8 +34,24 @@ public class SearchService {
         for (Member member : memberList) {
             // 각 Member의 nickname을 추출하여 SearchDTO에 추가
             SearchDTO sd = new SearchDTO();
-            sd.setNickname(member.getNickname());
-            System.out.println(member.getNickname());
+            sd.setUsername(member.getUsername());
+            sd.setIntroduction(member.getIntroduction());
+            searchDTOList.add(sd);
+        }
+
+        for (Member member : memberList2) {
+            // 각 Member의 nickname을 추출하여 SearchDTO에 추가
+            SearchDTO sd = new SearchDTO();
+            sd.setUsername(member.getUsername());
+            sd.setIntroduction(member.getIntroduction());
+            searchDTOList.add(sd);
+        }
+
+        for (Member member : memberList3) {
+            // 각 Member의 nickname을 추출하여 SearchDTO에 추가
+            SearchDTO sd = new SearchDTO();
+            sd.setUsername(member.getUsername());
+            sd.setIntroduction(member.getIntroduction());
             searchDTOList.add(sd);
         }
 

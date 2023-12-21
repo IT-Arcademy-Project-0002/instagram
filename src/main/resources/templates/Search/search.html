@@ -73,16 +73,26 @@
             }
 
             function displaySearchResults(data) {
-                var newList = $('<ul></ul>');
+                var newList = $('<div></div>');
 
                 if (data.length > 0) {
                     data.forEach(searchResult => {
-                        var listItem = $('<li></li>');
-                        listItem.text(searchResult.nickname);
+                        var listItem = $(
+
+                            '<div class="p-3 border">' +
+                            '<div class="col-sm-4">' +
+                            '<img src="" class="img-fluid rounded float-start" style="height: 5rem;">' +
+                            '</div>' +
+                            '<div class="col-sm-8">' +
+                            '<div class="fw-bold mb-3"><a href="http://www.naver.com" target="_blank" class="link">' + searchResult.nickname + '</a></div>' +
+                            '</div>' +
+                            '</div>'
+
+                        );
                         newList.append(listItem);
                     });
                 } else {
-                    var listItem = $('<li></li>');
+                    var listItem = $('<div></div>');
                     listItem.text('검색 결과가 없습니다.');
                     newList.append(listItem);
                 }

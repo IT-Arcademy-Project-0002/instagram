@@ -30,26 +30,30 @@
                         <h1 class="modal-title fs-5" id="Board_Create_ModalLabel2">새 게시물 등록</h1>
                         <button type="submit" class="btn btn-link">등록하기</button>
                     </div>
-                    <div class="modal-body p-0" style="display: flex;">
+                    <div class="modal-body p-0" style="width: 1138px;">
                         <div class="d-flex">
-                            <div id="carouselExample" class="carousel slide" data-interval="false">
-                                <div class="carousel-inner">
-                                    <div id="img-container">
+                            <div style="width: 838px;">
+                                <div id="carouselExampleControlsNoTouching" class="carousel slide" data-interval="false">
+                                    <div class="carousel-inner">
+                                        <div id="img-container">
+                                        </div>
                                     </div>
+                                    <button class="carousel-control-prev" type="button"
+                                            data-bs-target="#carouselExampleControlsNoTouching" data-bs-slide="prev">
+                                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                        <span class="visually-hidden">Previous</span>
+                                    </button>
+                                    <button class="carousel-control-next" type="button"
+                                            data-bs-target="#carouselExampleControlsNoTouching" data-bs-slide="next">
+                                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                        <span class="visually-hidden">Next</span>
+                                    </button>
                                 </div>
-                                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
-                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                    <span class="visually-hidden">Previous</span>
-                                </button>
-                                <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
-                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                    <span class="visually-hidden">Next</span>
-                                </button>
                             </div>
-                        </div>
-                        <div class="d-flex flex-column p-3">
-                            <div th:if="${#authorization.expression('isAuthenticated()')}" th:text="${#authentication.principal.username}"></div>
-                            <input type="text" name="content" id="content" class="form-control">
+                            <div class="d-flex flex-column p-3" style="width: 300px;">
+                                <div th:if="${#authorization.expression('isAuthenticated()')}" th:text="${#authentication.principal.username}"></div>
+                                <input type="text" name="content" id="content" class="form-control">
+                            </div>
                         </div>
                     </div>
                 </div>

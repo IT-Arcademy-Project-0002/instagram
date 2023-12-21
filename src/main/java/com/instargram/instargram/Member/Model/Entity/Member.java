@@ -12,8 +12,8 @@ import com.instargram.instargram.DM.Message.Message_Member_Map;
 import com.instargram.instargram.DM.Message.Message_Request_Map;
 import com.instargram.instargram.DM.Room.Room_Member_Map;
 import com.instargram.instargram.Notice.Notice;
-import com.instargram.instargram.Story.Story_Data_Map;
-import com.instargram.instargram.Story.Story_Highlight_Map;
+import com.instargram.instargram.Story.Model.Entity.Story_Data_Map;
+import com.instargram.instargram.Story.Model.Entity.Story_Highlight_Map;
 import groovyjarjarantlr4.v4.runtime.misc.NotNull;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -146,11 +146,11 @@ public class Member {
     private  List<Love_Member_Map> loveMemberMaps;
 
     // 회원의 팔로워 목록
-    @OneToMany(mappedBy = "following_member", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "followingMember", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private List<Follow_Map> followerMemberList;
 
     // 회원이 팔로잉한 회원 목록
-    @OneToMany(mappedBy = "follower_member", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "followerMember", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private List<Follow_Map> followingMemberList;
 
     // 계정주가 팔로우하길 원해서 요청한 회원 목록

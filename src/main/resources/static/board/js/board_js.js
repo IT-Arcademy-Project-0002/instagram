@@ -30,7 +30,7 @@ function clickFileUpload() {
                 var imageContainer  = document.createElement("div");
                 imageContainer.id="image_container" + i;
                 imageContainer.style.position="relative";
-                imageContainer.style.width="50rem";
+                imageContainer.style.width="60rem";
                 imageContainer.style.height="50rem";
 
                 var img = document.createElement("img");
@@ -39,9 +39,9 @@ function clickFileUpload() {
                 img.style.position="absolute";
                 img.style.top="0";
                 img.style.left="0";
-                img.style.transform="translate(50,50";
-                img.style.width="100%";
-                img.style.height="100%";
+                img.style.transform="translate(50,50)";
+                img.style.width="60rem";
+                img.style.height="50rem";
                 img.style.objectFit="cover";
                 img.style.margin="auto";
                 img.src = URL.createObjectURL(filesArray[i]);
@@ -51,6 +51,14 @@ function clickFileUpload() {
                 imageContainer.appendChild(img);
                 carouselItem.appendChild(imageContainer);
                 files.appendChild(carouselItem);
+            }
+            var carousel = document.getElementById("carouselExampleControlsNoTouching");
+            var prevButton = carousel.querySelector(".carousel-control-prev");
+            var nextButton = carousel.querySelector(".carousel-control-next");
+
+            if (imagePreviewArray.length === 1){
+                prevButton.classList.add("visually-hidden")
+                nextButton.classList.add("visually-hidden")
             }
             carouselItem.classList.add('active');
             console.log(imagePreviewArray)

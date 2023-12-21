@@ -32,10 +32,7 @@
                     </div>
                     <div class="modal-body p-0" style="display: flex;">
                         <div class="d-flex">
-                            <!-- <div style="position: relative; width: 50rem; height: 50rem;" id="image_container">-->
-                            <!-- <img id="name" class="shadow text-center" style="position: absolute; top: 0; left: 0; transform: translate(50,50); width: 100%; height: 100%; object-fit: cover; margin: auto">-->
-                            <!-- </div>-->
-                            <div id="carouselExample" class="carousel slide">
+                            <div id="carouselExample" class="carousel slide" data-interval="false">
                                 <div class="carousel-inner">
                                     <div id="img-container">
                                     </div>
@@ -50,7 +47,7 @@
                                 </button>
                             </div>
                         </div>
-                        <div class="d-flex flex-column">
+                        <div class="d-flex flex-column p-3">
                             <div th:if="${#authorization.expression('isAuthenticated()')}" th:text="${#authentication.principal.username}"></div>
                             <input type="text" name="content" id="content" class="form-control">
                         </div>
@@ -58,20 +55,18 @@
                 </div>
             </div>
         </div>
-
         <!-- Modal -->
         <div class="modal fade" id="Back_Board_Create_Modal" tabindex="-1" aria-labelledby="Back_Board_Create_ModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
+            <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
-                    <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="Back_Board_Create_ModalLabel">Modal title</h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <div class="modal-header d-flex flex-column justify-content-center align-items-center">
+                        <h3 class="modal-title" id="Back_Board_Create_ModalLabel">게시글을 삭제하시겠어요?</h3>
+                        <h5>지금 나가면 내용이 저장되지 않습니다.</h5>
                     </div>
-                    <div class="modal-body">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-primary">Save changes</button>
+                    <div class="modal-body d-flex flex-column align-items-center justify-content-center px-0 py-2">
+                        <button type="button" class="btn btn-light text-danger w-100 mb-2">삭제</button>
+                        <hr class="w-100 my-2"> <!-- 구분선 -->
+                        <button type="button" onclick="removeModal()" class="btn btn-light text-black w-100">취소</button>
                     </div>
                 </div>
             </div>

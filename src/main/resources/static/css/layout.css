@@ -1,0 +1,9 @@
+.login-content {
+    min-height:calc(100vh - 100px);
+    height:calc(100vh - 100px);
+    padding: 32px 0;
+}
+
+.footer {
+    height: 100px;
+}

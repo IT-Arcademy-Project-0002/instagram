@@ -72,12 +72,11 @@ public class BoardController {
 
     // 좋아요
     @GetMapping("/board/like/{id}")
-    public String like(@PathVariable("id") Long id, Principal principal) {
+    public String like(@PathVariable("id") Long id, Principal principal, Model model) {
         Board board = this.boardService.getBoardById(id);
         Member member = this.memberService.getMember(principal.getName());
 
         Board_Like_Member_Map isBoardMemberLiked = this.boardLikeMemberMapService.exists(board, member);
-
         if (isBoardMemberLiked == null) {
             this.boardLikeMemberMapService.create(board, member);
         }else{

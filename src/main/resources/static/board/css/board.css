@@ -1,0 +1,23 @@
+/*.unliked-svg {*/
+/*    display: none;*/
+/*}*/
+
+/*.liked-svg {*/
+/*    display: inline-block;*/
+/*}*/
+
+/*.like-button.unliked .unliked-svg {*/
+/*    display: inline-block;*/
+/*}*/
+
+/*.like-button.unliked .liked-svg {*/
+/*    display: none;*/
+/*}*/
+
+/*.like-button.liked .liked-svg {*/
+/*    display: inline-block;*/
+/*}*/
+
+/*.like-button.liked .unliked-svg {*/
+/*    display: none;*/
+/*}*/

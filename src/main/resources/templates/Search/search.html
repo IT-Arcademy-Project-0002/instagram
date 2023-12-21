@@ -5,15 +5,17 @@
 </head>
 <div layout:fragment="content">
     <div class = "search-content">
-        <div class = "search-box border">
+        <div class = "search-box border mb-3">
             <div class="input-group mb-2">
                 <input type="text" class="form-control" placeholder="검색어를 입력해주세요" aria-describedby="basic-addon2" id="keyword" name="keyword" size="15">
             </div>
-            <div class="search-list" id="searchList">
-            </div>
-            <div>
-                현재는 닉네임의 와일드카드(%키워드%) 형태로 <br>
-                검색어 입력시 Local값에 맞게 보여줍니다.(개발중) <br>
+            <div class = "border" style="height:80vh;">
+                <div class="search-list" id="searchList">
+                </div>
+                <div>
+                    현재는 닉네임의 와일드카드(%키워드%) 형태로 <br>
+                    검색어 입력시 Local값에 맞게 보여줍니다.(개발중) <br>
+                </div>
             </div>
         </div>
     </div>

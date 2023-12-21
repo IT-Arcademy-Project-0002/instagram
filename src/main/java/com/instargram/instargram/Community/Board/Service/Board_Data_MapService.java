@@ -7,6 +7,7 @@ import com.instargram.instargram.Community.Board.Model.Repository.Board_Data_Map
 import com.instargram.instargram.Data.Image.Image;
 import com.instargram.instargram.Data.Image.ImageService;
 import com.instargram.instargram.Enum_Data;
+import com.instargram.instargram.Member.Model.Entity.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -42,7 +43,7 @@ public class Board_Data_MapService {
             for(Board_Data_Map map : maps)
             {
                 if (Objects.equals(map.getDataType(), Enum_Data.IMAGE.getNumber())) {
-                    Image image = imageService.getImgaeByID(map.getDataId());
+                    Image image = imageService.getImageByID(map.getDataId());
                     images.add(image);
                 }
             }

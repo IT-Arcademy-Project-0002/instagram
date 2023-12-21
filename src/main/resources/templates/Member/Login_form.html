@@ -5,26 +5,26 @@
             <img src="../../files/designImg/phones-photo.png" alt class="login_phone_photo">
         </div>
     </div>
+
     <div class="login">
-        <div class="w-100 my-2" style="border: 1px solid #dbdbdb">
+        <div class="w-100 my-2 login_line">
             <div class="login_box">
                 <div class="text-center mb-3 logo_img"></div>
                 <form th:action="@{/member/login}" method="post" >
-                    <label class="d-flex justify-content-center my-2" style="font-size: 12px">
+                    <label class="d-flex justify-content-center my-2">
                         <input type="text" name="username" id="username"
                                class="login_input" placeholder="전화번호, 사용자 이름 또는 이메일">
                     </label>
-                    <label class="d-flex justify-content-center my-2" style="font-size: 12px">
+                    <label class="d-flex justify-content-center my-2">
                         <input type="password" name="password" id="password"
                                class="login_input" placeholder="비밀번호">
                     </label>
                     <div class="d-flex justify-content-center my-3 ">
-                        <input type="submit" value="로그인" class="btn btn-primary w-75 btn_login"
-                               style=" border: #4cb5f9">
+                        <input type="submit" value="로그인" class="btn btn-primary w-75 btn_login">
                     </div>
                 </form>
 
-                <div class="line login_line">
+                <div class="line login_or_line">
                     또는
                 </div>
 

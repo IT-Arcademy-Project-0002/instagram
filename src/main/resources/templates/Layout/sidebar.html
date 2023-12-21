@@ -1,27 +1,27 @@
 <div th:fragment="sidebarFragment" class="side-menu d-flex">
-    <div class="frag-side">
-        <div class="container">
-            <div class="d-flex mb-3">
-                로고
+    <div class="frag-side w-75">
+        <div class="container flex-column">
+            <div class="d-flex side-link">
+                <h1>LOGO</h1>
             </div>
-            <div class="d-flex">
+            <div class="d-flex side-link">
                 <a href="/main"> 홈 </a>
             </div>
-            <div class="d-flex">
+            <div class="d-flex side-link">
                 검색
             </div>
-            <div class="d-flex">
+            <div class="d-flex side-link">
                 <a href="/explorer"> 탐색 </a>
             </div>
-            <div class="d-flex">
+            <div class="d-flex side-link">
                 <a href="/dm"> 메시지 </a>
             </div>
-            <div class="d-flex">
+            <div class="d-flex side-link">
                 알림
             </div>
             <!-- Button trigger modal -->
-            <div class="d-flex w-100">
-                <button type="button" class="btn btn-create btn-link w-100" data-bs-toggle="modal" data-bs-target="#Board_Create_Modal">
+            <div class="d-flex side-link">
+                <button type="button" class="btn btn-create btn-link px-0" data-bs-toggle="modal" data-bs-target="#Board_Create_Modal">
                     <svg fill="currentColor" height="24" role="img" viewBox="0 0 24 24" width="24">
                         <path d="M2 12v3.45c0 2.849.698 4.005 1.606 4.944.94.909 2.098 1.608 4.946 1.608h6.896c2.848 0 4.006-.7 4.946-1.608C21.302 19.455 22 18.3 22 15.45V8.552c0-2.849-.698-4.006-1.606-4.945C19.454 2.7 18.296 2 15.448 2H8.552c-2.848 0-4.006.699-4.946 1.607C2.698 4.547 2 5.703 2 8.552Z" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
                         <line fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" x1="6.545" x2="17.455" y1="12.001" y2="12.001"></line>
@@ -29,7 +29,22 @@
                     </svg>
                     만들기
                 </button>
+            </div>
+
+            <div class="side-link">
                 <a href="/member/logout">로그아웃</a>
+            </div>
+            <div class="side-link">
+                <a th:href="@{|/member/page/${loginMember.username}|}" class="d-flex align-items-center">
+                    <div class="me-2" style="position: relative; width: 2rem; height: 2rem;" id="image_container">
+                        <img id="none_user_img" src="/files/designImg/noneuser.png"
+                             class="shadow rounded-circle text-center"
+                             style="position: absolute; top: 0; left: 0; transform: translate(50,50); width: 100%; height: 100%; object-fit: cover; margin: auto">
+                    </div>
+                    <span>
+                        프로필
+                    </span>
+                </a>
             </div>
         </div>
     </div>

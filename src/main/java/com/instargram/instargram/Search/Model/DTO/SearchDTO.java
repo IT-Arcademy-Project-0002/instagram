@@ -7,7 +7,7 @@ import lombok.Setter;
 @Setter
 public class SearchDTO {
 
-   private String nickname; // 유저 닉네임
+   private String username; // 유저 닉네임
    private String profileimage; // 프로필 이미지
    private String introduction; // 상세 정보
 

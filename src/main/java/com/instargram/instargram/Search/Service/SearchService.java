@@ -34,9 +34,24 @@ public class SearchService {
         for (Member member : memberList) {
             // 각 Member의 nickname을 추출하여 SearchDTO에 추가
             SearchDTO sd = new SearchDTO();
-            sd.setNickname(member.getNickname());
+            sd.setUsername(member.getUsername());
             sd.setIntroduction(member.getIntroduction());
+            searchDTOList.add(sd);
+        }
 
+        for (Member member : memberList2) {
+            // 각 Member의 nickname을 추출하여 SearchDTO에 추가
+            SearchDTO sd = new SearchDTO();
+            sd.setUsername(member.getUsername());
+            sd.setIntroduction(member.getIntroduction());
+            searchDTOList.add(sd);
+        }
+
+        for (Member member : memberList3) {
+            // 각 Member의 nickname을 추출하여 SearchDTO에 추가
+            SearchDTO sd = new SearchDTO();
+            sd.setUsername(member.getUsername());
+            sd.setIntroduction(member.getIntroduction());
             searchDTOList.add(sd);
         }
 

@@ -1,3 +1,4 @@
+/*  로그인 페이지 img  */
 .login_phone {
     background-image: url(../../files/designImg/login-phones.png);
     flex-basis: 380.32px;
@@ -13,6 +14,23 @@
     margin-right: 32px;
 }
 
+.login_phone_photo {
+    position: absolute;
+    top: 27px;
+    left: 128px;
+    height: 538.84px;
+    width: 250px;
+}
+
+.logo_img {
+    background-image: url(../../files/designImg/Logo.png);
+    background-position: 0px -52px;
+    width: 175px;
+    height: 51px;
+    display: inline-block;
+}
+/*  로그인 페이지 img 끝 */
+
 .login {
     display: flex;
     flex-direction: column;
@@ -23,14 +41,30 @@
 }
 
 .login_box {
-    position: fixed;
+    /*position: fixed;*/
+    padding-top: 3rem !important;
+    padding-bottom: 1rem !important;
+    text-align: center;
+
+}
+
+.login_input {
+    border: 1px solid #dbdbdb;
+    width: 260px;
+    height: 37px;
+    border-radius: 3px;
+}
+.login_input:focus {
+    border-color: #a8a8a8;
 }
 
 .btn_login {
     background-color: #0095f6;
     font-weight: bold;
     color: white;
-    height: 35px;
+    height: 32px;
+    border-radius: 8px;
+    font-size: 14px;
 }
 .btn_login:hover {
     background-color: #1877f2;
@@ -63,4 +97,17 @@
     height:1px;
     font-size:0;
     line-height:0;
+}
+
+.login_text {
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: bold;
+    color: #0095f6;
+}
+
+.login_line {
+    color: #787878;
+    font-weight: bold;
+    margin: 1rem 43px 1rem 43px;
 }

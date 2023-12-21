@@ -26,6 +26,7 @@ public class Board_Data_MapService {
         boardDataMap.setData_id(image.getId());
         boardDataMap.setData_type(data_type);
         boardDataMap.setBoard(board);
+
         return this.boardDataMapRepository.save(boardDataMap);
     }
 

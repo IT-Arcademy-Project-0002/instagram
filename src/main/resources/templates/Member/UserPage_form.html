@@ -56,7 +56,7 @@
                             <div class="d-flex" style="min-height:18px; height: 18px; margin-bottom: 20px">
                                 <div class="me-5">
                                     <span>게시물</span>
-                                    <span th:text="${#lists.size(userPageDTO.boards)}"></span>
+                                    <span th:text="${#lists.size(userPageDTO.feeds)}"></span>
                                 </div>
                                 <div class="me-5">
                                     <span>팔로워</span>
@@ -68,7 +68,8 @@
                                 </div>
                             </div>
                             <!--user info interest-->
-                            <div style="min-height:48px; height: 48px;" class="d-flex flex-column justify-content-between">
+                            <div style="min-height:48px; height: 48px;"
+                                 class="d-flex flex-column justify-content-between">
                                 <div>
                                     <span th:text="${member.nickname}"></span>
                                 </div>
@@ -80,12 +81,14 @@
                     </div>
 
                     <!--story highlight-->
-                    <div th:classappend="${#maps.isEmpty(userPageDTO.stories)} ? 'visually-hidden'" style="background: white; height: 130px; margin-bottom: 44px">
+                    <div th:classappend="${#maps.isEmpty(userPageDTO.stories)} ? 'visually-hidden'"
+                         style="background: white; height: 130px; margin-bottom: 44px">
 
                     </div>
 
                     <!--board list menu-->
-                    <div class="d-flex justify-content-center align-items-center" style="background: white; height: 55px; margin-bottom: 44px">
+                    <div class="d-flex justify-content-center align-items-center"
+                         style="background: white; height: 55px; margin-bottom: 44px">
                         <div class="d-flex">
                             <a class="btn" href="">게시물</a>
                             <a class="btn" href="">저장됨</a>
@@ -95,7 +98,11 @@
 
                     <!--board list-->
                     <div style="background: white; height: calc(100vh - 497px);">
-
+                        <div class="row row-cols-3">
+                            <div th:each="feed : ${userPageDTO.feeds}" class="col" style="width: 5rem; height: 5rem;">
+                                <img th:src="@{|/resources/${feed.images().get(0).name}|}" alt="">
+                            </div>
+                        </div>
                     </div>
 
                 </div>

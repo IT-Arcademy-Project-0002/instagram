@@ -75,7 +75,7 @@ public class BoardController {
     public String like(@PathVariable("id") Long id, Principal principal) {
         Board board = this.boardService.getBoardById(id);
         Member member = this.memberService.getMember(principal.getName());
-
+        
         this.boardLikeMemberMapService.addLike(board, member);
         return "redirect:/main";
     }

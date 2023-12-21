@@ -30,12 +30,13 @@ public class BoardService {
 //        return this.boardRepository.findAllByCreateDateDesc();
     }
     public Board getBoardById(Long id) {
-        Optional<Board> store = this.boardRepository.findById(id);
-        if (store.isPresent()) {
-            return store.get();
+        Optional<Board> board = this.boardRepository.findById(id);
+        if (board.isPresent()) {
+            return board.get();
         } else {
-            throw new DataNotFoundException("store not found");
+            throw new DataNotFoundException("board not found");
         }
+    }
     public List<Board> getBoardByMember(Member member) {
         return this.boardRepository.findByMember(member);
     }

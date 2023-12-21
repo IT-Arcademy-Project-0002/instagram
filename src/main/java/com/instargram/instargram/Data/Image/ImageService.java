@@ -7,6 +7,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -40,8 +42,7 @@ public class ImageService {
         return create(name, filePath);  // 이미지 생성에 대한 로직을 호출합니다.
     }
 
-    public Image getImgaeByID(Long id)
-    {
+    public Image getImgaeByID(Long id) {
         return this.imageRepository.findById(id).orElse(null);
     }
 

@@ -12,10 +12,14 @@ import org.springframework.stereotype.Service;
 public class Board_Like_Member_MapService {
     private final Board_Like_Member_MapRepository boardLikeMemberMapRepository;
 
-    public void addLike(Board board, Member username) {
+    public void create(Board board, Member username) {
         Board_Like_Member_Map boardLikeMemberMap = new Board_Like_Member_Map();
         boardLikeMemberMap.setBoard(board);
         boardLikeMemberMap.setLike_member(username);
         this.boardLikeMemberMapRepository.save(boardLikeMemberMap);
+    }
+
+    public boolean exists(Board board, Member member) {
+        return this.boardLikeMemberMapRepository.existsByBoardAndMember(board, member);
     }
 }

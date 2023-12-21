@@ -11,13 +11,4 @@ public class mainController {
         return "redirect:/main";
     }
 
-    @GetMapping("/search")
-    public String searchUrl(){
-        return "Search/search";
-    }
-
-    @GetMapping("/dm")
-    public String dmUrl(){
-        return "Dm/dm";
-    }
 }

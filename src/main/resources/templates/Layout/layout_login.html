@@ -5,31 +5,27 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}"/>
-    <link rel="stylesheet" type="text/css" th:href="@{/css/layout.css}"/>
-    <link rel="stylesheet" type="text/css" th:href="@{/css/styleJuHyeon.css}"/>
-    <link rel="stylesheet" type="text/css" th:href="@{/css/Login_Page.css}"/>
-
+    <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/member/css/LoginPage.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/layout.css}">
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-
-    <title>layout_login</title>
 </head>
 
 <body>
-<div>
-    <div class="login-content">
-        <th:block layout:fragment="content"></th:block>
-    </div>
-    <div class="footer">
-        <th:block layout:fragment="footer"></th:block>
-    </div>
+<!-- 기본 템플릿 안에 삽입될 콘텐츠 Start -->
+<div class="login-content">
+    <th:block layout:fragment="content"></th:block>
 </div>
 
-<script th:src="@{/css/bootstrap.min.js}"></script>
-<!-- 자바스크립트 Start -->
-<th:block layout:fragment="script"></th:block>
-<!-- 자바스크립트 End -->
+<div class="footer">
+    <th:block layout:fragment="footer"></th:block>
+</div>
 
+<!-- 기본 템플릿 안에 삽입될 콘텐츠 End -->
+<!-- Bootstrap JS -->
+<script th:src="@{/css/bootstrap.min.js}"></script>
+<!-- Bootstrap Bundle-->
+<script th:src="@{/css/bootstrap.bundle.js}"></script>
 </body>
 </html>

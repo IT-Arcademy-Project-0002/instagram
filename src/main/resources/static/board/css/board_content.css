@@ -1,0 +1,48 @@
+.main-content
+{
+    margin-left: 350px;
+    width: 100%;
+    background: #a0d7bd;
+}
+
+.frag-main {
+    height: 100vh;
+    background: #6f42c1;
+}
+
+.content-background {
+    width: 750px;
+    background: coral;
+}
+
+.frag-story {
+    margin-top: 16px;
+    margin-right: 64px;
+    padding: 16px 0;
+    height: 66px;
+    background: #bb2d3b;
+}
+
+.frag-board {
+    margin-top:16px;
+    margin-right: 64px;
+    padding: 16px 0;
+    background: #86b7fe;
+}
+
+.frag-profile {
+    width: 25%;
+    background: #c5d7f2;
+}
+
+.login-content
+{
+    min-height:calc(100vh - 100px);
+    height:calc(100vh - 100px);
+    padding: 32px 0;
+}
+
+.footer
+{
+    height: 100px;
+}

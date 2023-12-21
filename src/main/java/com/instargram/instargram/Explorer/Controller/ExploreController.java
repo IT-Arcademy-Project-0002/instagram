@@ -7,12 +7,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @Builder
-@RequestMapping("/explorer")
+@RequestMapping("/explore")
 public class ExploreController {
 
     @GetMapping("")
     public String searchUrl(){
-        return "Explorer/explorer";
+        return "Explore/explore";
     }
 
 }

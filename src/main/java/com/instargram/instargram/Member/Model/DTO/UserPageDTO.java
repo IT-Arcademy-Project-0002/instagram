@@ -1,7 +1,9 @@
 package com.instargram.instargram.Member.Model.DTO;
 
+import com.instargram.instargram.Community.Board.Model.DTO.FeedListDTO;
 import com.instargram.instargram.Community.Board.Model.Entity.Board;
 import com.instargram.instargram.Community.Board.Service.BoardService;
+import com.instargram.instargram.Community.Board.Service.Board_Data_MapService;
 import com.instargram.instargram.Member.Model.Entity.Member;
 import com.instargram.instargram.Member.Service.FollowMapService;
 import com.instargram.instargram.Story.Model.Entity.Story_Data_Map;
@@ -17,14 +19,16 @@ import java.util.Map;
 @Setter
 public class UserPageDTO {
 
-    private List<Board> boards;
+    private List<FeedListDTO> feeds;
     private List<Member> followers;
     private List<Member> followings;
     private Map<String, List<Story_Data_Map>> stories;
 
-    public UserPageDTO(Member member, BoardService boardService, FollowMapService followMapService, StoryHighlightMapService storyHighlightMapService)
+    public UserPageDTO(Member member, BoardService boardService, FollowMapService followMapService,
+                       StoryHighlightMapService storyHighlightMapService,
+                       Board_Data_MapService boardDataMapService)
     {
-        boards = boardService.getBoardByMember(member);
+        feeds = boardDataMapService.getFeed(boardService.getBoardByMember(member));
 
         followers = followMapService.getFollowers(member);
 

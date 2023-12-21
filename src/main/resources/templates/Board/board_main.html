@@ -44,6 +44,9 @@
                                     <span class="visually-hidden">Next</span>
                                 </button>
                             </div>
+
+                            <div th:text="${feed.board.content}"></div>
+
                             <div class="d-flex">
                                 <!--좋아요-->
                                 <div class="p-2" role="button" tabindex="0">
@@ -77,6 +80,7 @@
                             </div>
                             <div class="p-2" th:text="'좋아요 ' + ${#lists.size(feed.board.boardLikeMemberMaps)} + '개'"></div>
                             <div class="p-2" th:text="${feed.board.member.username} + ${feed.board.content}"></div>
+
                         </div>
                     </div>
                 </div>

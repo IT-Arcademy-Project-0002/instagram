@@ -24,5 +24,5 @@ public class Interest_Member_Map {
     // 관심 계정
     @ManyToOne
     @JoinColumn(name="interest_member_id")
-    Member interest_member_id;
+    Member interestMemberId;
 }

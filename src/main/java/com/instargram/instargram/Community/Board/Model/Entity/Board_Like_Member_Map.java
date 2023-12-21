@@ -22,5 +22,5 @@ public class Board_Like_Member_Map {
     // 게시글을 좋아요 한 회원
     @ManyToOne
     @JoinColumn(name="like_member_id")
-    private Member like_member;
+    private Member likeMember;
 }

@@ -22,5 +22,5 @@ public class Hate_Member_Map {
     // 차단 당한 회원
     @ManyToOne
     @JoinColumn(name="hate_member_id")
-    private Member hate_member;
+    private Member hateMember;
 }

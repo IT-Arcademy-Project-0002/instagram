@@ -3,6 +3,8 @@
     margin-left: 350px;
     width: 100%;
     background: #a0d7bd;
+    min-height:100vh;
+    height:100vh;
 }
 
 .frag-main {

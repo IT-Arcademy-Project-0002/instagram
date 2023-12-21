@@ -26,21 +26,28 @@ public class Board_Data_MapService {
         boardDataMap.setData_id(image.getId());
         boardDataMap.setData_type(data_type);
         boardDataMap.setBoard(board);
+
         return this.boardDataMapRepository.save(boardDataMap);
     }
 
-    public Board_Data_Map getMapByBoard(Board board) {
+    public List<Board_Data_Map> getMapByBoard(Board board) {
         return this.boardDataMapRepository.findByBoard(board);
     }
 
     public List<FeedListDTO> getFeed(List<Board> boardList) {
         List<FeedListDTO> feedListDTOS = new ArrayList<>();
         for (Board board : boardList) {
-            Board_Data_Map map = getMapByBoard(board);
-            if (Objects.equals(map.getData_type(), Enum_Data.IMAGE.getNumber())) {
-                Image image = imageService.getImgaeByID(map.getData_id());
-                feedListDTOS.add(new FeedListDTO(board, image));
+            List<Board_Data_Map> maps = getMapByBoard(board);
+            List<Image> images = new ArrayList<>();
+            for(Board_Data_Map map : maps)
+            {
+                if (Objects.equals(map.getData_type(), Enum_Data.IMAGE.getNumber())) {
+                    Image image = imageService.getImgaeByID(map.getData_id());
+                    images.add(image);
+                }
             }
+
+            feedListDTOS.add(new FeedListDTO(board, images));
         }
         return feedListDTOS;
     }

@@ -17,10 +17,10 @@ public class Follow_Map {
     // 팔로우 당한 회원
     @ManyToOne
     @JoinColumn(name="following_member_id")
-    Member following_member;
+    Member followingMember;
 
     // 팔로우 한 회원
     @ManyToOne
     @JoinColumn(name="follower_member_id")
-    Member follower_member;
+    Member followerMember;
 }

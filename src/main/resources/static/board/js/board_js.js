@@ -22,37 +22,52 @@ function clickFileUpload() {
             modalBackdrop.parentNode.removeChild(modalBackdrop); // 모달 배경 제거
 
             let imagePreviewArray = [];
-
             var files = document.getElementById("img-container");
-            //var imagePreview = document.getElementById("name");
             for (let i = 0; i < filesArray.length; i++) {
-                //imagePreview.src = URL.createObjectURL(filesArray[i]);
-                //imagePreviewArray.push(imagePreview.src);
+                var carouselItem = document.createElement("div");
+                carouselItem.classList.add("carousel-item");
 
-                var div = document.createElement("div");
-                div.id="image_container" + i;
-                div.style.position="relative";
-                div.style.width="50rem";
-                div.style.height="50rem";
+                var imageContainer  = document.createElement("div");
+                imageContainer.id="image_container" + i;
+                imageContainer.style.position="relative";
+                imageContainer.style.width="60rem";
+                imageContainer.style.height="50rem";
 
                 var img = document.createElement("img");
                 img.id="name"+i;
-                img.classList="shadow text-center";
+                img.classList.add("shadow", "text-center");
                 img.style.position="absolute";
                 img.style.top="0";
                 img.style.left="0";
-                img.style.transform="translate(50,50";
-                img.style.width="100%";
-                img.style.height="100%";
+                img.style.transform="translate(50,50)";
+                img.style.width="60rem";
+                img.style.height="50rem";
                 img.style.objectFit="cover";
                 img.style.margin="auto";
                 img.src = URL.createObjectURL(filesArray[i]);
 
-                div.appendChild(img);
-                files.appendChild(div);
+                imagePreviewArray.push(img.src);
+
+                imageContainer.appendChild(img);
+                carouselItem.appendChild(imageContainer);
+                files.appendChild(carouselItem);
             }
+            var carousel = document.getElementById("carouselExampleControlsNoTouching");
+            var prevButton = carousel.querySelector(".carousel-control-prev");
+            var nextButton = carousel.querySelector(".carousel-control-next");
+
+            if (imagePreviewArray.length === 1){
+                prevButton.classList.add("visually-hidden")
+                nextButton.classList.add("visually-hidden")
+            }
+            carouselItem.classList.add('active');
             console.log(imagePreviewArray)
             $(secondModal).modal('show'); // 두 번째 모달 활성화
         });
     });
+}
+
+function removeModal() {
+    var modal = document.getElementById('Back_Board_Create_Modal');
+    modal.remove();
 }

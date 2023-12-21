@@ -46,6 +46,8 @@ function clickFileUpload() {
                 img.style.margin="auto";
                 img.src = URL.createObjectURL(filesArray[i]);
 
+                imagePreviewArray.push(img.src);
+
                 imageContainer.appendChild(img);
                 carouselItem.appendChild(imageContainer);
                 files.appendChild(carouselItem);

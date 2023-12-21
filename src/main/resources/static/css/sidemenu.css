@@ -10,6 +10,17 @@
     background: #5fb47a;
 }
 
+.side-link
+{
+    margin: 8px 0;
+}
+
+.side-link:hover
+{
+    background: rgba(76,181,249,0.8);
+}
+
+
 .btn-create
 {
     text-decoration:none;

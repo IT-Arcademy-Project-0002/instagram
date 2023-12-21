@@ -2,6 +2,7 @@ package com.instargram.instargram.Community.Board.Service;
 
 import com.instargram.instargram.Community.Board.Model.Entity.Board;
 import com.instargram.instargram.Community.Board.Model.Repository.BoardRepository;
+import com.instargram.instargram.Member.Model.DTO.UserPageDTO;
 import com.instargram.instargram.Member.Model.Entity.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -27,4 +28,11 @@ public class BoardService {
 //        return this.boardRepository.findAllByCreateDateDesc();
     }
 
+
+
+
+
+    public List<Board> getBoardByMember(Member member) {
+        return this.boardRepository.findByMember(member);
+    }
 }

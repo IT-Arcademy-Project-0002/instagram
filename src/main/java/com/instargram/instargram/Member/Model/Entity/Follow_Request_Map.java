@@ -23,5 +23,5 @@ public class Follow_Request_Map {
     // 팔로우를 요청한 사람
     @ManyToOne
     @JoinColumn(name="request_member_id")
-    Member request_member;
+    Member requestMember;
 }

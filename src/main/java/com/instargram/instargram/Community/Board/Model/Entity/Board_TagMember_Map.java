@@ -23,5 +23,5 @@ public class Board_TagMember_Map {
     // 언급된 회원
     @ManyToOne
     @JoinColumn(name="tag_member_id")
-    private Member tag_member;
+    private Member tagMember;
 }

@@ -20,8 +20,8 @@ public class Recomment {
     private Long id;
 
     // 생성날짜 및 수정날짜
-    private LocalDateTime create_date;
-    private LocalDateTime update_date;
+    private LocalDateTime CreateDate;
+    private LocalDateTime updateDate;
 
     // 대댓글 내용
     private String content;

@@ -6,4 +6,7 @@ import com.instargram.instargram.Member.Model.Entity.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface Board_Like_Member_MapRepository extends JpaRepository<Board_Like_Member_Map, Long> {
+    Board_Like_Member_Map findByBoardAndLikeMember(Board board, Member member);
+
+    void deleteByBoardAndLikeMember(Board board, Member member);
 }

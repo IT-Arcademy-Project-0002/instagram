@@ -18,7 +18,7 @@ public class Story_LikeMember_Map {
     // 스토리를 좋아요 한 회원
     @ManyToOne
     @JoinColumn(name="like_member_id")
-    private Member like_member;
+    private Member likeMember;
 
     // 스토리 데이터
     @ManyToOne

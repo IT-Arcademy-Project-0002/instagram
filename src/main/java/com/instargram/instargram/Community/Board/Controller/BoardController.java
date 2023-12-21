@@ -75,8 +75,14 @@ public class BoardController {
     public String like(@PathVariable("id") Long id, Principal principal) {
         Board board = this.boardService.getBoardById(id);
         Member member = this.memberService.getMember(principal.getName());
-        
-        this.boardLikeMemberMapService.addLike(board, member);
+
+        Board_Like_Member_Map isBoardMemberLiked = this.boardLikeMemberMapService.exists(board, member);
+
+        if (isBoardMemberLiked == null) {
+            this.boardLikeMemberMapService.create(board, member);
+        }else{
+            this.boardLikeMemberMapService.delete(isBoardMemberLiked);
+        }
         return "redirect:/main";
     }
 

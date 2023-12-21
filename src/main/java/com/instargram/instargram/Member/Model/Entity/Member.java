@@ -94,7 +94,7 @@ public class Member {
     private List<Board> boardList;
 
     // 게시글에 언급된 회원 목록
-    @OneToMany(mappedBy = "tag_member",cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "tagMember",cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private List<Board_TagMember_Map> boardTagMembers;
 
     // 회원이 저장한 게시글 목록
@@ -102,7 +102,7 @@ public class Member {
     private List<Board_Save_Map> boardSaveMaps;
 
     // 회원이 좋아요를 한 게시글 매핑 목록
-    @OneToMany(mappedBy = "like_member", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "likeMember", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private List<Board_Like_Member_Map> boardLikeMembers;
 
 
@@ -115,11 +115,11 @@ public class Member {
     private List<Message_Member_Map> messageMemberMaps;
 
     // 회원이 요청한 디엠 목록
-    @OneToMany(mappedBy = "request_member_id", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "requestMemberId", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private List<Message_Request_Map> messageRequests;
 
     // 회원에게 요청된 디엠 목록
-    @OneToMany(mappedBy = "response_member_id", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "responseMemberId", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private List<Message_Request_Map> messageResponses;
 
     // 회원이 참여 중인 디엠 방 목록
@@ -158,7 +158,7 @@ public class Member {
     private List<Follow_Request_Map> requestFollowMembers;
 
     // 계정주에게 팔로우를 요청한 회원 목록
-    @OneToMany(mappedBy = "request_member", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "requestMember", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private List<Follow_Request_Map> responseFollowMembers;
 
     // 계정주가 관심계정으로 등록한 회원 목록

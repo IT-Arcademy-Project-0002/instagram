@@ -19,7 +19,7 @@ public class Notice {
     private Long id;
 
     // 생성 날짜
-    private LocalDateTime create_date;
+    private LocalDateTime CreateDate;
 
     // 알림 타입
     //    게시글 좋아요 : 1

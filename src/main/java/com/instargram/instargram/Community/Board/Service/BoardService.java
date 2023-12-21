@@ -22,7 +22,7 @@ public class BoardService {
         Board board = new Board();
         board.setMember(member);
         board.setContent(content);
-        board.setCreate_date(LocalDateTime.now());
+        board.setCreateDate(LocalDateTime.now());
         return this.boardRepository.save(board);
     }
     public List<Board> getBoard() {
@@ -38,6 +38,6 @@ public class BoardService {
         }
     }
     public List<Board> getBoardByMember(Member member) {
-        return this.boardRepository.findByMember(member);
+        return this.boardRepository.findByMemberOrderByCreateDateDesc(member);
     }
 }

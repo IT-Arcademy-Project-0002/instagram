@@ -1,6 +1,7 @@
 package com.instargram.instargram.Member.Controller;
 
 import com.instargram.instargram.Community.Board.Service.BoardService;
+import com.instargram.instargram.Community.Board.Service.Board_Data_MapService;
 import com.instargram.instargram.Member.Config.OAuth2.Model.OAuth2UserInfo;
 import com.instargram.instargram.Member.Model.DTO.UserPageDTO;
 import com.instargram.instargram.Member.Model.Entity.Member;
@@ -30,6 +31,7 @@ public class MemberController {
     private final BoardService boardService;
     private final FollowMapService followMapService;
     private final StoryHighlightMapService storyHighlightMapService;
+    private final Board_Data_MapService dataMapService;
 
     @GetMapping("/login")
     public String login()
@@ -78,7 +80,7 @@ public class MemberController {
     {
         Member member = memberService.getMember(username);
 
-        UserPageDTO userPageDTO = new UserPageDTO(member, boardService, followMapService, storyHighlightMapService);
+        UserPageDTO userPageDTO = new UserPageDTO(member, boardService, followMapService, storyHighlightMapService, dataMapService);
 
         model.addAttribute("member", member);
         model.addAttribute("userPageDTO", userPageDTO);

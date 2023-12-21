@@ -16,10 +16,10 @@ public class Message_Request_Map {
     // 디엠을 요청한 회원
     @ManyToOne
     @JoinColumn(name="request_member_id")
-    private Member request_member_id;
+    private Member requestMemberId;
 
     // 디엠을 요청 받은 회원
     @ManyToOne
     @JoinColumn(name="response_member_id")
-    private Member response_member_id;
+    private Member responseMemberId;
 }

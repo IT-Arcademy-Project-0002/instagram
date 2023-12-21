@@ -15,7 +15,7 @@ public class Board_Like_Member_MapService {
     public void create(Board board, Member username) {
         Board_Like_Member_Map boardLikeMemberMap = new Board_Like_Member_Map();
         boardLikeMemberMap.setBoard(board);
-        boardLikeMemberMap.setLike_member(username);
+        boardLikeMemberMap.setLikeMember(username);
         this.boardLikeMemberMapRepository.save(boardLikeMemberMap);
     }
 

@@ -24,5 +24,5 @@ public class Bookmark_Member_Map {
     // 즐겨찾기 한 계정
     @ManyToOne
     @JoinColumn(name="bookmark_member_id")
-    Member bookmark_member;
+    Member bookmarkMember;
 }

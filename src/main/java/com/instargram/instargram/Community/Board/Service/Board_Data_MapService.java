@@ -24,8 +24,8 @@ public class Board_Data_MapService {
 
     public Board_Data_Map create(Board board, Image image, Integer data_type) {
         Board_Data_Map boardDataMap = new Board_Data_Map();
-        boardDataMap.setData_id(image.getId());
-        boardDataMap.setData_type(data_type);
+        boardDataMap.setDataId(image.getId());
+        boardDataMap.setDataType(data_type);
         boardDataMap.setBoard(board);
 
         return this.boardDataMapRepository.save(boardDataMap);
@@ -42,8 +42,8 @@ public class Board_Data_MapService {
             List<Image> images = new ArrayList<>();
             for(Board_Data_Map map : maps)
             {
-                if (Objects.equals(map.getData_type(), Enum_Data.IMAGE.getNumber())) {
-                    Image image = imageService.getImageByID(map.getData_id());
+                if (Objects.equals(map.getDataType(), Enum_Data.IMAGE.getNumber())) {
+                    Image image = imageService.getImageByID(map.getDataId());
                     images.add(image);
                 }
             }

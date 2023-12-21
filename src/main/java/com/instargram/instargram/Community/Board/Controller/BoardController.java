@@ -76,10 +76,12 @@ public class BoardController {
         Board board = this.boardService.getBoardById(id);
         Member member = this.memberService.getMember(principal.getName());
 
-        boolean isBoardMemberLiked = this.boardLikeMemberMapService.exists(board, member);
+        Board_Like_Member_Map isBoardMemberLiked = this.boardLikeMemberMapService.exists(board, member);
 
-        if (!isBoardMemberLiked) {
+        if (isBoardMemberLiked == null) {
             this.boardLikeMemberMapService.create(board, member);
+        }else{
+            this.boardLikeMemberMapService.delete(isBoardMemberLiked);
         }
         return "redirect:/main";
     }

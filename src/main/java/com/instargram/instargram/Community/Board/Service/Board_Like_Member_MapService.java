@@ -19,7 +19,11 @@ public class Board_Like_Member_MapService {
         this.boardLikeMemberMapRepository.save(boardLikeMemberMap);
     }
 
-    public boolean exists(Board board, Member member) {
-        return this.boardLikeMemberMapRepository.existsByBoardAndMember(board, member);
+    public Board_Like_Member_Map exists(Board board, Member member) {
+        return this.boardLikeMemberMapRepository.findByBoardAndLikeMember(board, member);
+    }
+
+    public void delete(Board_Like_Member_Map map) {
+        this.boardLikeMemberMapRepository.delete(map);
     }
 }

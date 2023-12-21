@@ -23,5 +23,5 @@ public class Love_Member_Map {
     // 친한 친구
     @ManyToOne
     @JoinColumn(name="love_member_id")
-    Member love_member;
+    Member loveMember;
 }

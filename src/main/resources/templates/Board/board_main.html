@@ -16,7 +16,7 @@
                             <div class="d-flex">
                                 <h5 th:text="${feed.board.member.username}"></h5>
                                 <span class="text-sm-center"
-                                      th:text="${#temporals.format(feed.board.create_date, 'yyyy-MM-dd HH:mm:ss')}"></span>
+                                      th:text="${#temporals.format(feed.board.CreateDate, 'yyyy-MM-dd HH:mm:ss')}"></span>
                             </div>
                             <div th:id="@{|carouselExampleControlsNoTouching${idx.index}|}" class="carousel slide"
                                  data-interval="false">

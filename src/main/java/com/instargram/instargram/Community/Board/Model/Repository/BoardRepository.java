@@ -10,5 +10,5 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
 
 
 
-    List<Board> findByMember(Member member);
+    List<Board> findByMemberOrderByCreateDateDesc(Member member);
 }

@@ -24,8 +24,8 @@ public class Board {
     private String content;
 
     // 생성 날짜, 수정 날짜
-    private LocalDateTime create_date;
-    private LocalDateTime update_date;
+    private LocalDateTime createDate;
+    private LocalDateTime updateDate;
 
     // 공개 범위(true : 전체 공개, false : 친한 친구 공개)
     private boolean scope;
@@ -37,10 +37,10 @@ public class Board {
     private boolean keep;
 
     // 좋아요 숨기기 여부(true : 좋아요 숨기기, false : 일반 게시글)
-    private boolean like_hide;
+    private boolean likeHide;
 
     // 댓글 비활성화 여부(true : 댓글 비활성화, false : 일반 게시글)
-    private boolean comment_disable;
+    private boolean commentDisable;
 
     // 게시글 작성자
     @ManyToOne

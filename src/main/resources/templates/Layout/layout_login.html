@@ -6,14 +6,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/member/css/LoginPage.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/layout.css}">
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 </head>
 
 <body>
 <!-- 기본 템플릿 안에 삽입될 콘텐츠 Start -->
-<th:block layout:fragment="content"></th:block>
-<th:block layout:fragment="footer"></th:block>
+<div class="login-content">
+    <th:block layout:fragment="content"></th:block>
+</div>
+
+<div class="footer">
+    <th:block layout:fragment="footer"></th:block>
+</div>
+
 <!-- 기본 템플릿 안에 삽입될 콘텐츠 End -->
 <!-- Bootstrap JS -->
 <script th:src="@{/css/bootstrap.min.js}"></script>

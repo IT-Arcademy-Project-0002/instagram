@@ -3,6 +3,7 @@ package com.instargram.instargram.Community.Board.Service;
 import com.instargram.instargram.Community.Board.Model.Entity.Board;
 import com.instargram.instargram.Community.Board.Model.Repository.BoardRepository;
 import com.instargram.instargram.DataNotFoundException;
+import com.instargram.instargram.Member.Model.DTO.UserPageDTO;
 import com.instargram.instargram.Member.Model.Entity.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -28,7 +29,6 @@ public class BoardService {
         return this.boardRepository.findAll();
 //        return this.boardRepository.findAllByCreateDateDesc();
     }
-
     public Board getBoardById(Long id) {
         Optional<Board> store = this.boardRepository.findById(id);
         if (store.isPresent()) {
@@ -36,5 +36,7 @@ public class BoardService {
         } else {
             throw new DataNotFoundException("store not found");
         }
+    public List<Board> getBoardByMember(Member member) {
+        return this.boardRepository.findByMember(member);
     }
 }

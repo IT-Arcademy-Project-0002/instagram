@@ -1,6 +1,6 @@
 /*  로그인 페이지 img  */
 .login_phone {
-    background-image: url(../../files/designImg/login-phones.png);
+    background-image: url(../../files/designImg/loginPhones.png);
     flex-basis: 380.32px;
     height: 581.15px;
     background-position: -28px 0;
@@ -14,7 +14,7 @@
     margin-right: 32px;
 }
 
-.login_phone_photo {
+.preload-images {
     position: absolute;
     top: 27px;
     left: 128px;
@@ -22,9 +22,26 @@
     width: 250px;
 }
 
+.login_phone_photo {
+    position: absolute;
+    top: 27px;
+    left: 128px;
+    height: 538.84px;
+    width: 250px;
+
+    animation: photoChange 20s ease-in-out infinite;
+}
+
+@keyframes photoChange {
+    0%, 100% { background-image: url(../../files/designImg/phonesPhoto4.png); }
+    25% { background-image: url(../../files/designImg/phonesPhoto3.png); }
+    50% { background-image: url(../../files/designImg/phonesPhoto1.png); }
+    75% { background-image: url(../../files/designImg/phonesPhoto2.png); }
+}
+
 .logo_img {
     background-image: url(../../files/designImg/Logo.png);
-    background-position: 0px -52px;
+    background-position: 0 -52px;
     width: 175px;
     height: 51px;
     display: inline-block;

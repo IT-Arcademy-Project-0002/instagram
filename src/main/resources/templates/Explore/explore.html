@@ -1,10 +1,22 @@
 <!DOCTYPE html>
 <html layout:decorate="~{Layout/layout_main}">
-<div layout:fragment="content">
-       <div class="d-flex justify-content-center">
-              <div class="mt-5">
-                    탐색페이지 입니다
-              </div>
-       </div>
+<head>
+    <link rel="stylesheet" type="text/css" th:href="@{/Explore/explore_content.css}">
+</head>
+<div class="explore-content" layout:fragment="content">
+    <div class="border border-primary w-75 mx-auto">
+        <div class="container text-center mt-4">
+            <div class="row row-cols-3">
+                <div th:each="exploreList : ${ExploreList}"  class="col-4 border border-danger p-1">
+                    <a href="http://www.naver.com" target="_blank">
+                        <img th:src="@{|/resources/${exploreList.images().get(0).name}|}" style="width:100%; height:100%;" class="border border-dark">
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="w-75 mx-auto">
+        테두리는 마진 확인용임 (추후 삭제)
+    </div>
 </div>
 </html>

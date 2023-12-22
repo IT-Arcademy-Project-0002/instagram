@@ -1,28 +1,49 @@
-.side-menu
-{
+.side_menu {
     width: 350px;
     background: #0dcaf0;
     position: fixed;
 }
 
-.frag-side {
+.side_bar {
+    width: 245px;
     height: 100vh;
     background: #5fb47a;
+    padding: 8px 12px 20px 12px
 }
-
-.side-link
-{
-    margin: 8px 0;
-}
-
-.side-link:hover
-{
-    background: rgba(76,181,249,0.8);
-}
-
 
 .btn-create
 {
     text-decoration:none;
     color:inherit;
+}
+
+/*   da_hee_css   */
+
+.sm_logo {
+    padding-top: 25px;
+    padding-bottom: 16px;
+    margin-bottom: 19px;
+}
+
+.sm_logo_img {
+    background-image: url(../files/designImg/Logo.png);
+    background-position: 0 -52px;
+    background-repeat: no-repeat; /* 이미지 반복 없이 설정 */
+    width: 200px;
+    height: 52px;
+    display: inline-block;
+}
+
+.menu_list {
+    margin: 4px 0 4px 0;
+    padding: 12px;
+}
+
+.menu_list_text {
+    color: black;
+    text-decoration: none;
+}
+.menu_list_text:hover {
+    color: black;
+    font-weight: bold;
 }

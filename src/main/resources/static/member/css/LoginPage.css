@@ -39,7 +39,7 @@
     75% { background-image: url(../../files/designImg/phonesPhoto2.png); }
 }
 
-.logo_img {
+.logo_img, .sm_logo_img {
     background-image: url(../../files/designImg/Logo.png);
     background-position: 0 -52px;
     width: 175px;

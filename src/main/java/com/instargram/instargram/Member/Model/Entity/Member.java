@@ -11,6 +11,7 @@ import com.instargram.instargram.Community.Recomment.ReComment_Like_Map;
 import com.instargram.instargram.DM.Message.Message_Member_Map;
 import com.instargram.instargram.DM.Message.Message_Request_Map;
 import com.instargram.instargram.DM.Room.Room_Member_Map;
+import com.instargram.instargram.Data.Image.Image;
 import com.instargram.instargram.Notice.Notice;
 import com.instargram.instargram.Story.Model.Entity.Story_Data_Map;
 import com.instargram.instargram.Story.Model.Entity.Story_Highlight_Map;
@@ -52,6 +53,10 @@ public class Member {
     // 회원 이메일
     @NotNull
     private String email;
+
+    @ManyToOne
+    @JoinColumn(name="image_id")
+    private Image image;
 
     // 회원 생년월일
     private LocalDate birthday;

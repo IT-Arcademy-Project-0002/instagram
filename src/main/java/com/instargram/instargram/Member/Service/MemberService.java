@@ -1,5 +1,6 @@
 package com.instargram.instargram.Member.Service;
 
+import com.instargram.instargram.Data.Image.Image;
 import com.instargram.instargram.Member.Model.Entity.Member;
 import com.instargram.instargram.Member.Model.Form.MemberCreateForm;
 import com.instargram.instargram.Member.Model.Repository.MemberRepository;
@@ -70,5 +71,13 @@ public class MemberService {
 
     public Member getMember(String username) {
         return this.memberRepository.findByUsername(username);
+    }
+
+    public void ProfileImageUpload(String username, Image image)
+    {
+        Member member = getMember(username);
+        member.setImage(image);
+
+        this.memberRepository.save(member);
     }
 }

@@ -2,6 +2,9 @@ package com.instargram.instargram.Member.Controller;
 
 import com.instargram.instargram.Community.Board.Service.BoardService;
 import com.instargram.instargram.Community.Board.Service.Board_Data_MapService;
+import com.instargram.instargram.Data.Image.Image;
+import com.instargram.instargram.Data.Image.ImageService;
+import com.instargram.instargram.Enum_Data;
 import com.instargram.instargram.Member.Config.OAuth2.Model.OAuth2UserInfo;
 import com.instargram.instargram.Member.Model.DTO.UserPageDTO;
 import com.instargram.instargram.Member.Model.Entity.Member;
@@ -17,10 +20,14 @@ import lombok.Builder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+import java.security.Principal;
+import java.util.List;
+import java.util.Objects;
 
 @Controller
 @Builder
@@ -32,6 +39,7 @@ public class MemberController {
     private final FollowMapService followMapService;
     private final StoryHighlightMapService storyHighlightMapService;
     private final Board_Data_MapService dataMapService;
+    private final ImageService imageService;
 
     @GetMapping("/login")
     public String login()
@@ -86,5 +94,35 @@ public class MemberController {
         model.addAttribute("userPageDTO", userPageDTO);
 
         return "Member/UserPage_form";
+    }
+
+    @PostMapping("/profile/upload")
+    public String ProfileImageUpload(@RequestParam("profile-photo-input") MultipartFile multipartFile,
+                                     Principal principal) throws IOException, NoSuchAlgorithmException {
+
+        if (!multipartFile.isEmpty()) {
+            String currName = multipartFile.getOriginalFilename();
+            assert currName != null;
+
+            int lastDotIndex = currName.lastIndexOf('.');
+            String nameWithoutExtension = currName;
+
+            if (lastDotIndex != -1) {
+                nameWithoutExtension = currName.substring(0, lastDotIndex);
+            }
+
+            String[] type = Objects.requireNonNull(multipartFile.getContentType()).split("/");
+            if (!type[type.length - 1].equals("octet-stream")) {
+                String fileExtension = type[type.length - 1];
+                Image image = this.imageService.saveImage(multipartFile, nameWithoutExtension, fileExtension);
+
+                if(image != null)
+                {
+                    memberService.ProfileImageUpload(principal.getName(), image);
+                }
+            }
+        }
+
+        return "redirect:/";
     }
 }

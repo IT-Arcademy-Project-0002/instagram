@@ -12,23 +12,13 @@
             <div class = "border" style="height:80vh;">
                 <div class="search-list" id="searchList">
                 </div>
-                <div>
-                    현재는 회원아이디의 와일드카드(%키워드%) 형태로 <br>
-                    검색어 입력시 Local값에 맞게 보여줍니다.(개발중) <br>
-                </div>
             </div>
         </div>
     </div>
 
     <script>
 
-
-        // 서버에서 받아온 데이터를 리스트 생성
-        // 세 가지 분류
-        // 1) 데이터형이 계정이라면 계정 프로필 링크 생성 (~/계정아이디)
-        // 2) 해시태그라면 explore 페이지 연결, (~/explore/tags/태그명)
-        // 3) 장소라면 explore 페이지 연결 (~/explore/locations/장소분류고유번호) openstreetmap 사용
-
+        // 해시태그 입력란이 따로 있던가...? 아니면 #을 붙였을때는 음.. 어절의 시작에 #이 붙은 것을 대상으로 검색
 
         // 검색창의 변화를 감지하여 완성된 단어를 순서대로 읽어 백엔드로 전달. 실시간으로 검색결과 전송
         $(document).ready(function () {

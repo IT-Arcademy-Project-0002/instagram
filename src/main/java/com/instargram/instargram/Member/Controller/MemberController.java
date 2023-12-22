@@ -100,6 +100,8 @@ public class MemberController {
     public String ProfileImageUpload(@RequestParam("profile-photo-input") MultipartFile multipartFile,
                                      Principal principal) throws IOException, NoSuchAlgorithmException {
 
+        Member member = memberService.getMember(principal.getName());
+
         if (!multipartFile.isEmpty()) {
             String currName = multipartFile.getOriginalFilename();
             assert currName != null;
@@ -114,15 +116,27 @@ public class MemberController {
             String[] type = Objects.requireNonNull(multipartFile.getContentType()).split("/");
             if (!type[type.length - 1].equals("octet-stream")) {
                 String fileExtension = type[type.length - 1];
-                Image image = this.imageService.saveImage(multipartFile, nameWithoutExtension, fileExtension);
+                Image image = this.imageService.memberImageChange(memberService.getMember(principal.getName()).getImage()
+                        ,multipartFile, nameWithoutExtension, fileExtension);
 
                 if(image != null)
                 {
-                    memberService.ProfileImageUpload(principal.getName(), image);
+                    imageService.deleteImage(memberService.ProfileImageUpload(member, image));
                 }
             }
         }
 
-        return "redirect:/";
+        return "redirect:/member/page/"+member.getUsername();
+    }
+
+
+    @PostMapping("/profile/delete")
+    public String ProfileImageDelete(Principal principal)
+    {
+        Member member = memberService.getMember(principal.getName());
+
+        imageService.deleteImage(memberService.ProfileImageDelete(member));
+
+        return "redirect:/member/page/"+member.getUsername();
     }
 }

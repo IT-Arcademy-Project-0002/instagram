@@ -19,6 +19,7 @@ import groovyjarjarantlr4.v4.runtime.misc.NotNull;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.mapping.ToOne;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -54,7 +55,7 @@ public class Member {
     @NotNull
     private String email;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name="image_id")
     private Image image;
 

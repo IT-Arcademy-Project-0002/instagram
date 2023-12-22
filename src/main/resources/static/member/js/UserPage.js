@@ -20,3 +20,23 @@ function readFile(input) {
         document.getElementById('img-form').submit();
     }
 }
+
+function boardPinChange(board)
+{
+    debugger;
+    var input = document.getElementById("board");
+
+    input.value = board.value;
+
+    document.getElementById("board-pin-form").submit();
+}
+
+function boardKeep(board)
+{
+    debugger;
+    var input = document.getElementById("keep");
+
+    input.value = board.value;
+
+    document.getElementById("board-keep-form").submit();
+}

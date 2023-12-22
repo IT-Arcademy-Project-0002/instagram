@@ -38,6 +38,25 @@ public class BoardService {
         }
     }
     public List<Board> getBoardByMember(Member member) {
-        return this.boardRepository.findByMemberOrderByCreateDateDesc(member);
+        return this.boardRepository.findByMemberOrderByPinDateOrCreateDateDesc(member);
+    }
+
+    public void PinStateChange(Long id)
+    {
+        Board board = getBoardById(id);
+
+        board.setPin(!board.isPin());
+        board.setPinDate(LocalDateTime.now());
+
+        boardRepository.save(board);
+    }
+
+    public void KeepStateChange(Long id)
+    {
+        Board board = getBoardById(id);
+
+        board.setKeep(!board.isKeep());
+
+        boardRepository.save(board);
     }
 }

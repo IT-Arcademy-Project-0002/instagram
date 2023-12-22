@@ -16,10 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -91,5 +88,19 @@ public class BoardController {
         List<FeedListDTO> feedList = this.boardDataMapService.getFeed(boardList);
         model.addAttribute("feedList",  feedList);
         return "Board/board_main";
+    }
+
+    @PostMapping("/board/pin")
+    public String boardPin(@RequestParam("board") Long id, Principal principal)
+    {
+        boardService.PinStateChange(id);
+        return "redirect:/member/page/"+principal.getName();
+    }
+
+    @PostMapping("/board/keep")
+    public String boardKeep(@RequestParam("keep") Long id, Principal principal)
+    {
+        boardService.KeepStateChange(id);
+        return "redirect:/member/page/"+principal.getName();
     }
 }

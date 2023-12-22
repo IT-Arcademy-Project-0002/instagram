@@ -32,6 +32,8 @@ public class Board {
 
     // 상단 고정 여부(true : 상단 고정, false : 일반 게시글)
     private boolean pin;
+    // 상단 고정된 시간
+    private LocalDateTime pinDate;
 
     // 보관 여부(true : 보관 게시글, false : 일반 게시글)
     private boolean keep;

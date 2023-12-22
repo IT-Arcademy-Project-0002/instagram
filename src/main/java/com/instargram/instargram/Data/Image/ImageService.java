@@ -42,6 +42,31 @@ public class ImageService {
         return create(name, filePath);  // 이미지 생성에 대한 로직을 호출합니다.
     }
 
+    public void deleteImageFile(String imagePath) {
+        File file = new File(imagePath);
+
+        if (file.exists()) {
+            file.delete();
+        }
+    }
+
+    public void deleteImage(Image image) {
+        if(image != null)
+        {
+            this.imageRepository.delete(image);
+        }
+    }
+
+    public Image memberImageChange(Image image, MultipartFile multipartFile,
+                                   String nameWithoutExtension, String fileExtension) throws IOException {
+        if(image != null)
+        {
+            deleteImageFile(AppConfig.getImageFileDirPath()+"\\"+image.getName());
+        }
+
+        return saveImage(multipartFile, nameWithoutExtension, fileExtension);
+    }
+
     public Image getImageByID(Long id) {
         return this.imageRepository.findById(id).orElse(null);
 

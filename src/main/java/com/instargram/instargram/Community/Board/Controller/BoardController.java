@@ -13,7 +13,9 @@ import com.instargram.instargram.Data.Image.ImageService;
 import com.instargram.instargram.Enum_Data;
 import com.instargram.instargram.Member.Model.Entity.Member;
 import com.instargram.instargram.Member.Service.MemberService;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.apache.coyote.http11.HttpOutputBuffer;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -22,6 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -85,14 +88,30 @@ public class BoardController {
     }
 
     @GetMapping("/main")
-    public String create(Model model){
+    public String create(Model model, HttpSession httpSession){
         List<Board> boardList = this.boardService.getBoard();
         List<FeedListDTO> feedList = this.boardDataMapService.getFeed(boardList);
-//        List<CommentListDTO> commentList = this.commentService.getCommentList(boardList);
+        List<FeedListDTO> selectfeedList = (List<FeedListDTO>)httpSession.getAttribute("selectfeedList");
+        if(selectfeedList != null){
+            model.addAttribute("selectfeedList", selectfeedList);
+            httpSession.removeAttribute("selectfeedList");
+        }
+
+        System.out.println(selectfeedList);
         model.addAttribute("feedList",  feedList);
-//        model.addAttribute("commentList", commentList);
         return "Board/board_main";
     }
+
+    @GetMapping("/board/detail/{id}")
+    public String detail(Model model, @PathVariable("id") Long id, HttpSession httpSession) {
+        Board board = this.boardService.getBoardById(id);
+//        List<Board> boardList = new ArrayList<>();
+//        boardList.add(board);
+        List<FeedListDTO> selectfeedList = this.boardDataMapService.getFeedWithComments(board);
+        httpSession.setAttribute("selectfeedList", selectfeedList);
+        return "redirect:/main";
+    }
+
 
     @PostMapping("/board/pin")
     public String boardPin(@RequestParam("board") Long id, Principal principal)

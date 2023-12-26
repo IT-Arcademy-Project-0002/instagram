@@ -1,5 +1,6 @@
 package com.instargram.instargram.Community.Comment.Model.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.instargram.instargram.Community.Board.Model.Entity.Board;
 import com.instargram.instargram.Community.Recomment.Recomment;
 import com.instargram.instargram.Member.Model.Entity.Member;
@@ -37,10 +38,11 @@ public class Comment {
     private Member member;
 
     // 댓글의 대댓글 목록
-    @OneToMany(mappedBy = "comment", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "comment", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
     private List<Recomment> recommentList;
 
     // 댓글의 좋아요 한 사람 목록
-    @OneToMany(mappedBy = "comment", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "comment", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
+
     private List<Comment_Like_Map> commentLikeMembers;
 }

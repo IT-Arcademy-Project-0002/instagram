@@ -1,5 +1,6 @@
 package com.instargram.instargram.Community.Board.Model.DTO;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.instargram.instargram.Community.Board.Model.Entity.Board;
 import com.instargram.instargram.Community.Comment.Model.Entity.Comment;
 import com.instargram.instargram.Data.Image.Image;

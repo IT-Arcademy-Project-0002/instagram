@@ -1,7 +1,8 @@
-package com.instargram.instargram.Community.Comment;
+package com.instargram.instargram.Community.Comment.Model.Entity;
 
 import com.instargram.instargram.Community.Board.Model.Entity.Board;
 import com.instargram.instargram.Community.Recomment.Recomment;
+import com.instargram.instargram.Member.Model.Entity.Member;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -29,6 +30,11 @@ public class Comment {
     // 댓글의 부모 게시글
     @ManyToOne
     private Board board;
+    
+    // 댓글의 작성자
+    @ManyToOne
+    @JoinColumn(name="member_id")
+    private Member member;
 
     // 댓글의 대댓글 목록
     @OneToMany(mappedBy = "comment", cascade = CascadeType.REMOVE)

@@ -69,6 +69,5 @@ public class ImageService {
 
     public Image getImageByID(Long id) {
         return this.imageRepository.findById(id).orElse(null);
-
     }
 }

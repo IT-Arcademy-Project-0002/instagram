@@ -7,6 +7,7 @@ import com.instargram.instargram.Community.Board.Model.Entity.Board;
 import com.instargram.instargram.Community.Board.Service.BoardService;
 import com.instargram.instargram.Community.Board.Service.Board_Data_MapService;
 import com.instargram.instargram.Community.Board.Service.Board_Like_Member_MapService;
+import com.instargram.instargram.Community.Comment.Service.CommentService;
 import com.instargram.instargram.Data.Image.Image;
 import com.instargram.instargram.Data.Image.ImageService;
 import com.instargram.instargram.Enum_Data;
@@ -30,6 +31,7 @@ public class BoardController {
     private final MemberService memberService;
     private final BoardService boardService;
     private final ImageService imageService;
+    private final CommentService commentService;
     private final Board_Data_MapService boardDataMapService;
     private final Board_Like_Member_MapService boardLikeMemberMapService;
 
@@ -86,7 +88,9 @@ public class BoardController {
     public String create(Model model){
         List<Board> boardList = this.boardService.getBoard();
         List<FeedListDTO> feedList = this.boardDataMapService.getFeed(boardList);
+//        List<CommentListDTO> commentList = this.commentService.getCommentList(boardList);
         model.addAttribute("feedList",  feedList);
+//        model.addAttribute("commentList", commentList);
         return "Board/board_main";
     }
 

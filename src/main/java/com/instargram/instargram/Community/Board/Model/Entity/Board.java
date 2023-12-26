@@ -1,6 +1,6 @@
 package com.instargram.instargram.Community.Board.Model.Entity;
 
-import com.instargram.instargram.Community.Comment.Comment;
+import com.instargram.instargram.Community.Comment.Model.Entity.Comment;
 import com.instargram.instargram.Member.Model.Entity.Member;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -48,7 +48,6 @@ public class Board {
     @ManyToOne
     @JoinColumn(name="member_id")
     private Member member;
-
 
     // 지연 로딩 (매번 필요하지 않은 데이터)
 

@@ -44,6 +44,7 @@ public class SearchService {
         for (Member member : memberList) {
             SearchDTO sd = new SearchDTO();
             sd.setUsername(member.getUsername());
+            sd.setProfileimage(member.getImage() != null ? member.getImage().getName() : "");
             sd.setIntroduction(member.getIntroduction());
             searchDTOList.add(sd);
         }
@@ -51,6 +52,7 @@ public class SearchService {
         for (Member member : memberList2) {
             SearchDTO sd = new SearchDTO();
             sd.setUsername(member.getUsername());
+            sd.setProfileimage(member.getImage() != null ? member.getImage().getName() : "");
             sd.setIntroduction(member.getIntroduction());
             searchDTOList.add(sd);
         }
@@ -58,6 +60,7 @@ public class SearchService {
         for (Member member : memberList3) {
             SearchDTO sd = new SearchDTO();
             sd.setUsername(member.getUsername());
+            sd.setProfileimage(member.getImage() != null ? member.getImage().getName() : "");
             sd.setIntroduction(member.getIntroduction());
             searchDTOList.add(sd);
         }

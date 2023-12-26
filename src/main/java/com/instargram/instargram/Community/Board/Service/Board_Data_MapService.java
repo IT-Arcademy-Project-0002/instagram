@@ -4,10 +4,11 @@ import com.instargram.instargram.Community.Board.Model.DTO.FeedListDTO;
 import com.instargram.instargram.Community.Board.Model.Entity.Board;
 import com.instargram.instargram.Community.Board.Model.Entity.Board_Data_Map;
 import com.instargram.instargram.Community.Board.Model.Repository.Board_Data_MapRepository;
+import com.instargram.instargram.Community.Comment.Model.Entity.Comment;
+import com.instargram.instargram.Community.Comment.Model.Repository.CommentRepository;
 import com.instargram.instargram.Data.Image.Image;
 import com.instargram.instargram.Data.Image.ImageService;
 import com.instargram.instargram.Enum_Data;
-import com.instargram.instargram.Member.Model.Entity.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +22,7 @@ public class Board_Data_MapService {
     private final Board_Data_MapRepository boardDataMapRepository;
 
     private final ImageService imageService;
+    private final CommentRepository commentRepository;
 
     public Board_Data_Map create(Board board, Image image, Integer data_type) {
         Board_Data_Map boardDataMap = new Board_Data_Map();
@@ -35,10 +37,15 @@ public class Board_Data_MapService {
         return this.boardDataMapRepository.findByBoard(board);
     }
 
+    public List<Comment> getCommentsByBoard(Board board) {
+        return commentRepository.findByBoard(board);
+    }
+
     public List<FeedListDTO> getFeed(List<Board> boardList) {
         List<FeedListDTO> feedListDTOS = new ArrayList<>();
         for (Board board : boardList) {
             List<Board_Data_Map> maps = getMapByBoard(board);
+            List<Comment> comments = getCommentsByBoard(board);
             List<Image> images = new ArrayList<>();
             for(Board_Data_Map map : maps)
             {
@@ -48,7 +55,7 @@ public class Board_Data_MapService {
                 }
             }
 
-            feedListDTOS.add(new FeedListDTO(board, images));
+            feedListDTOS.add(new FeedListDTO(board, images, comments));
         }
         return feedListDTOS;
     }

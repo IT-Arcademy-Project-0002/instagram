@@ -30,7 +30,9 @@ public class SearchController {
 
         List<SearchDTO> searchResult = this.searchService.searchResult(keyword);
 
-        model.addAttribute("placeList", searchResult);
+        System.out.print("backend" + searchResult);
+
+        model.addAttribute("searchResult", searchResult);
 
         return searchResult;
     }

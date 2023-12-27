@@ -1,5 +1,6 @@
 package com.instargram.instargram.Member.Service;
 
+import com.instargram.instargram.Community.Board.Model.Entity.Board;
 import com.instargram.instargram.Data.Image.Image;
 import com.instargram.instargram.Data.Image.ImageService;
 import com.instargram.instargram.Member.Model.Entity.Member;

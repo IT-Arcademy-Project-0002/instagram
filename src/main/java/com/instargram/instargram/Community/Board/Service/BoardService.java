@@ -2,13 +2,10 @@ package com.instargram.instargram.Community.Board.Service;
 
 import com.instargram.instargram.Community.Board.Model.Entity.Board;
 import com.instargram.instargram.Community.Board.Model.Repository.BoardRepository;
-import com.instargram.instargram.Community.Comment.Model.Entity.Comment;
 import com.instargram.instargram.DataNotFoundException;
-import com.instargram.instargram.Member.Model.DTO.UserPageDTO;
 import com.instargram.instargram.Member.Model.Entity.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.time.LocalDateTime;
 import java.util.List;

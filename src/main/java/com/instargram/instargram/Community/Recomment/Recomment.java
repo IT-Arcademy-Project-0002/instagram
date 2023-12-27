@@ -1,7 +1,6 @@
 package com.instargram.instargram.Community.Recomment;
 
-import com.instargram.instargram.Community.Comment.Comment;
-import com.instargram.instargram.Community.Comment.Comment_Like_Map;
+import com.instargram.instargram.Community.Comment.Model.Entity.Comment;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;

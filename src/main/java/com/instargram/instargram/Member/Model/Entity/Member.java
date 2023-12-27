@@ -6,7 +6,7 @@ import com.instargram.instargram.Community.Board.Model.Entity.Board_Like_Member_
 import com.instargram.instargram.Community.Board.Model.Entity.Board_Save_Map;
 import com.instargram.instargram.Community.Board.Model.Entity.Board_TagMember_Map;
 
-import com.instargram.instargram.Community.Comment.Comment_Like_Map;
+import com.instargram.instargram.Community.Comment.Model.Entity.Comment_Like_Map;
 import com.instargram.instargram.Community.Recomment.ReComment_Like_Map;
 import com.instargram.instargram.DM.Message.Message_Member_Map;
 import com.instargram.instargram.DM.Message.Message_Request_Map;
@@ -19,7 +19,6 @@ import groovyjarjarantlr4.v4.runtime.misc.NotNull;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.mapping.ToOne;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

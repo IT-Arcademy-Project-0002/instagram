@@ -59,24 +59,44 @@
                                 </div>
 
                                 <!-- interest setting -->
-                                <div>
+                                <div class="my-5">
                                     <label for="interest" class="form-label fw-bold">소개</label>
-                                    <input id="interest" name="interest" type="text" class="form-control">
+                                    <input id="interest" name="interest" type="text" class="form-control" th:value="${loginMember.introduction == null}?'':${loginMember.introduction == null}">
                                 </div>
 
                                 <!-- sex setting -->
-                                <div>
+                                <div class="my-5">
+                                    <label class="form-label fw-bold">성별</label>
+                                    <div class="dropdown w-100">
+                                        <a th:if="${loginMember.sex==null}"
+                                           class="now-sex btn btn-outline-secondary w-100 text-start"
+                                           role="button" data-bs-toggle="dropdown" aria-expanded="false">밝히고 싶지 않음</a>
+                                        <a th:unless="${loginMember.sex==null}"
+                                           class="now-sex btn btn-outline-secondary w-100 text-start"
+                                           role="button" data-bs-toggle="dropdown" aria-expanded="false"
+                                           th:text="${#strings.equals(loginMember.sex,'male')}?'남성':'여성'"></a>
 
+                                        <ul class="dropdown-menu w-100">
+                                            <li class="dropdown-item" onclick="changeSex('female')">여성</li>
+                                            <li class="dropdown-item" onclick="changeSex('male')">남성</li>
+                                            <li class="dropdown-item" onclick="changeSex('null')">밝히고 싶지 않음</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <!-- change profile button -->
+                                <div class="d-flex justify-content-end">
+                                    <input id="change-btn" type="submit" class="btn btn-primary w-25 mt-5" th:value="제출" form="change-profile" disabled="disabled">
                                 </div>
                             </div>
                         </div>
-
                     </div>
-
                 </div>
             </div>
-
         </div>
+        <form id="change-profile" action="/member/changeProfile">
+            <input id="now-sex" type="hidden" th:value="${loginMember.sex}">
+            <input id="now-interest" type="hidden" th:value="${loginMember.introduction == null}?'':${loginMember.introduction == null}">
+        </form>
     </div>
     <script th:src="@{/member/js/AccountEdit.js}"></script>
 </div>

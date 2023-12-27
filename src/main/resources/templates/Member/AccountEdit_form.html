@@ -35,7 +35,9 @@
                                 <!--  profile photo setting -->
                                 <div class="my-5 d-flex justify-content-between align-items-center rounded-4" style="background: rgba(152,152,152,0.2)">
                                     <div class="d-flex m-3">
-                                        <div class="me-2" style="position: relative; width: 65px; height: 65px;">
+                                        <button class="btn btn-light rounded-circle p-0 m-0"
+                                                onclick="clickProfilePhotoChange()"
+                                                style="position: relative; width: 65px; height: 65px;">
                                             <img th:if="${loginMember.image == null}" id="none_user_img"
                                                  src="/files/designImg/noneuser.png"
                                                  class="shadow rounded-circle text-center smooth-update"
@@ -44,7 +46,7 @@
                                                  th:src="@{|/resources/${loginMember.image.name}|}"
                                                  class="shadow rounded-circle text-center smooth-update"
                                                  style="position: absolute; top: 0; left: 0; transform: translate(50,50); width: 100%; height: 100%; object-fit: cover; margin: auto">
-                                        </div>
+                                        </button>
                                         <div class="d-flex align-items-center">
                                             <div class="mx-2">
                                                 <div th:text="${loginMember.username}" class="fw-bold"></div>
@@ -54,14 +56,17 @@
                                     </div>
 
                                     <div class="m-3">
-                                        <button class="btn btn-primary">사진 변경</button>
+                                        <button class="btn btn-primary"
+                                            onclick="clickProfilePhotoChange()">사진 변경</button>
                                     </div>
                                 </div>
 
-                                <!-- interest setting -->
+                                <!-- introduce setting -->
                                 <div class="my-5">
-                                    <label for="interest" class="form-label fw-bold">소개</label>
-                                    <input id="interest" name="interest" type="text" class="form-control" th:value="${loginMember.introduction == null}?'':${loginMember.introduction == null}">
+                                    <label for="introduce" class="form-label fw-bold">소개</label>
+                                    <input id="introduce" name="introduce" type="text" class="form-control"
+                                           oninput="changeIntroduce()"
+                                           th:value="${loginMember.introduction == null}?'':${loginMember.introduction}">
                                 </div>
 
                                 <!-- sex setting -->
@@ -70,7 +75,7 @@
                                     <div class="dropdown w-100">
                                         <a th:if="${loginMember.sex==null}"
                                            class="now-sex btn btn-outline-secondary w-100 text-start"
-                                           role="button" data-bs-toggle="dropdown" aria-expanded="false">밝히고 싶지 않음</a>
+                                           role="button" data-bs-toggle="dropdown" aria-expanded="false" th:text="@{밝히고 싶지 않음}"></a>
                                         <a th:unless="${loginMember.sex==null}"
                                            class="now-sex btn btn-outline-secondary w-100 text-start"
                                            role="button" data-bs-toggle="dropdown" aria-expanded="false"
@@ -79,13 +84,15 @@
                                         <ul class="dropdown-menu w-100">
                                             <li class="dropdown-item" onclick="changeSex('female')">여성</li>
                                             <li class="dropdown-item" onclick="changeSex('male')">남성</li>
-                                            <li class="dropdown-item" onclick="changeSex('null')">밝히고 싶지 않음</li>
+                                            <li class="dropdown-item" onclick="changeSex('')">밝히고 싶지 않음</li>
                                         </ul>
                                     </div>
                                 </div>
                                 <!-- change profile button -->
                                 <div class="d-flex justify-content-end">
-                                    <input id="change-btn" type="submit" class="btn btn-primary w-25 mt-5" th:value="제출" form="change-profile" disabled="disabled">
+                                    <input id="change-btn" type="button" class="btn btn-primary w-25"
+                                           style="margin-top: 10rem"
+                                           th:value="제출" onclick="changeProfile()" disabled="disabled">
                                 </div>
                             </div>
                         </div>
@@ -94,8 +101,15 @@
             </div>
         </div>
         <form id="change-profile" action="/member/changeProfile">
-            <input id="now-sex" type="hidden" th:value="${loginMember.sex}">
-            <input id="now-interest" type="hidden" th:value="${loginMember.introduction == null}?'':${loginMember.introduction == null}">
+            <input id="now-sex" name="now-sex" type="hidden" th:value="${loginMember.sex}">
+            <input id="now-introduce" name="now-introduce" type="hidden" th:value="${loginMember.introduction == null}?'':${loginMember.introduction}">
+        </form>
+
+        <form th:action="@{|/member/profile/upload?account=true|}" method="post"
+              id="img-form" enctype="multipart/form-data">
+            <input type="file" accept="image/*" class="visually-hidden"
+                   id="profile-photo-input"
+                   name="profile-photo-input" onchange="readFile(this);">
         </form>
     </div>
     <script th:src="@{/member/js/AccountEdit.js}"></script>

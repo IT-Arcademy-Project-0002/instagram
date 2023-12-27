@@ -18,6 +18,12 @@
 
 /*   da_hee_css   */
 
+.btn_side_menu {
+    border: none;
+    background-color: transparent;
+
+}
+
 .sm_logo {
     padding-top: 25px;
     padding-bottom: 16px;
@@ -36,6 +42,12 @@
 .menu_list {
     margin: 6px 0 6px 0;
     padding: 12px;
+    transition: background-color 0.3s;
+    cursor: pointer;
+    border-radius: 8px;
+}
+.menu_list:hover {
+    background-color: #f2f2f2;
 }
 
 .menu_list_text {
@@ -46,26 +58,13 @@
 }
 .menu_list_text:hover {
     color: black;
-}
-.menu_list_text.active {
-    /* 활성화된 메뉴 항목의 배경색 변경 */
-    background-color: red;
-    height: 20px;
-    width: 50px;
-    /* 활성화된 메뉴 항목의 텍스트 색상 변경 */
-    /* 다른 스타일링 */
-    /* ... */
+
 }
 
 .img:hover {
     transform: scale(1.05);
     transition: transform 0.05s ease;
 }
-.btn_side_menu {
-    border: none;
-    background-color: transparent;
-}
-
 
 
 

@@ -14,6 +14,7 @@ import lombok.Setter;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @Getter
 @Setter
@@ -23,17 +24,32 @@ public class UserPageDTO {
     private List<Member> followers;
     private List<Member> followings;
     private Map<String, List<Story_Data_Map>> stories;
+    // 내 계정인지
+    boolean mine = false;
+    // 내가 팔로우 상태인지
+    boolean follow = false;
+    // 내 팔로워인지
+    boolean follower = false;
 
-    public UserPageDTO(Member member, BoardService boardService, FollowMapService followMapService,
+    public UserPageDTO(Member target, Member loginMember, BoardService boardService, FollowMapService followMapService,
                        StoryHighlightMapService storyHighlightMapService,
                        Board_Data_MapService boardDataMapService)
     {
-        feeds = boardDataMapService.getFeed(boardService.getBoardByMember(member));
+        feeds = boardDataMapService.getFeed(boardService.getBoardByMember(target));
 
-        followers = followMapService.getFollowers(member);
+        followers = followMapService.getFollowers(target);
 
-        followings = followMapService.getFollowings(member);
+        followings = followMapService.getFollowings(target);
 
-        stories = storyHighlightMapService.getStories(member);
+        stories = storyHighlightMapService.getStories(target);
+
+        if(Objects.equals(target, loginMember))
+        {
+            mine = true;
+        }
+        else{
+            follow = followMapService.isFollow(loginMember, target);
+            follower = followMapService.isFollower(loginMember, target);
+        }
     }
 }

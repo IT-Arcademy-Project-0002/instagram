@@ -17,6 +17,7 @@ import jakarta.servlet.http.HttpSession;
 
 import lombok.Builder;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -26,7 +27,9 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.security.Principal;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 @Controller
@@ -83,19 +86,6 @@ public class MemberController {
         return "redirect:/member/login";
     }
 
-    @GetMapping("/page/{username}")
-    public String userPage(@PathVariable("username")String username, Model model)
-    {
-        Member member = memberService.getMember(username);
-
-        UserPageDTO userPageDTO = new UserPageDTO(member, boardService, followMapService, storyHighlightMapService, dataMapService);
-
-        model.addAttribute("member", member);
-        model.addAttribute("userPageDTO", userPageDTO);
-
-        return "Member/UserPage_form";
-    }
-
     @PostMapping("/profile/upload")
     public String ProfileImageUpload(@RequestParam("profile-photo-input") MultipartFile multipartFile,
                                      Principal principal) throws IOException, NoSuchAlgorithmException {
@@ -129,6 +119,20 @@ public class MemberController {
         return "redirect:/member/page/"+member.getUsername();
     }
 
+    @GetMapping("/page/{username}")
+    public String userPage(@PathVariable("username")String username, Model model, Principal principal)
+    {
+        Member member = memberService.getMember(username);
+        Member loginMember = memberService.getMember(principal.getName());
+
+        UserPageDTO userPageDTO = new UserPageDTO(member, loginMember, boardService, followMapService, storyHighlightMapService, dataMapService);
+
+        model.addAttribute("member", member);
+        model.addAttribute("userPageDTO", userPageDTO);
+
+        return "Member/UserPage_form";
+    }
+
 
     @PostMapping("/profile/delete")
     public String ProfileImageDelete(Principal principal)
@@ -138,5 +142,30 @@ public class MemberController {
         imageService.deleteImage(memberService.ProfileImageDelete(member));
 
         return "redirect:/member/page/"+member.getUsername();
+    }
+
+    @GetMapping("/follow/{username}")
+    public ResponseEntity<Map<String, Object>> follow(@PathVariable("username")String username, Principal principal)
+    {
+        Map<String, Object> result = new HashMap<>();
+        Member member = memberService.getMember(principal.getName());
+        Member target =  memberService.getMember(username);
+
+        if(memberService.UserFollow(member, target))
+        {
+            result.put("result", true);
+        }
+        else{
+            result.put("result", false);
+        }
+
+        return ResponseEntity.ok().body(result);
+    }
+
+    @GetMapping("/account/{menu}")
+    public String accountEdit(@PathVariable("menu")String menu, Model model)
+    {
+        model.addAttribute("menu", menu);
+        return "Member/AccountEdit_form";
     }
 }

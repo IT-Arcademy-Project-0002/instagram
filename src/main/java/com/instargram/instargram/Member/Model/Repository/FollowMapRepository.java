@@ -9,4 +9,8 @@ import java.util.List;
 public interface FollowMapRepository extends JpaRepository<Follow_Map, Long> {
     List<Follow_Map> findByFollowerMember(Member member);
     List<Follow_Map> findByFollowingMember(Member member);
+
+    Follow_Map findByFollowerMemberAndFollowingMember(Member follower, Member following);
+
+    boolean existsByFollowerMemberAndFollowingMember(Member follower, Member following);
 }

@@ -1,14 +1,13 @@
 .side_menu {
     width: 350px;
-    background: #0dcaf0;
     position: fixed;
 }
 
 .side_bar {
     width: 245px;
     height: 100vh;
-    background: #5fb47a;
-    padding: 8px 12px 20px 12px
+    padding: 8px 12px 20px 12px;
+    border-right: 1px solid #dbdbdb;
 }
 
 .btn-create
@@ -35,15 +34,41 @@
 }
 
 .menu_list {
-    margin: 4px 0 4px 0;
+    margin: 6px 0 6px 0;
     padding: 12px;
 }
 
 .menu_list_text {
     color: black;
     text-decoration: none;
+    padding-left: 16px;
+    display: inline-flex;
 }
 .menu_list_text:hover {
     color: black;
-    font-weight: bold;
 }
+.menu_list_text.active {
+    /* 활성화된 메뉴 항목의 배경색 변경 */
+    background-color: red;
+    height: 20px;
+    width: 50px;
+    /* 활성화된 메뉴 항목의 텍스트 색상 변경 */
+    /* 다른 스타일링 */
+    /* ... */
+}
+
+.img:hover {
+    transform: scale(1.05);
+    transition: transform 0.05s ease;
+}
+.btn_side_menu {
+    border: none;
+    background-color: transparent;
+}
+
+
+
+
+
+
+

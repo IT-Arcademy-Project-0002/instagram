@@ -18,6 +18,7 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
+    private final FollowMapService followMapService;
 
     public Member getMemberByUsername(String id)
     {
@@ -94,5 +95,10 @@ public class MemberService {
         this.memberRepository.save(member);
 
         return oldImg;
+    }
+
+    public boolean UserFollow(Member loginUser, Member targetUser)
+    {
+        return followMapService.UserFollow(loginUser, targetUser);
     }
 }

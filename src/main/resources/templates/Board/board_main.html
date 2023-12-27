@@ -84,13 +84,32 @@
                             </div>
                             <div class="p-2" th:text="'좋아요 ' + ${#lists.size(feed.board.boardLikeMemberMaps)} + '개'"></div>
                             <div class="p-2" th:text="${feed.board.member.username} + ${feed.board.content}"></div>
+
                             <!-- Button trigger modal -->
                             <a th:href="@{|/board/detail/${feed.board.id}|}">
-                                <button type="button" id="commentButton" class="btn btn-link p-2" data-bs-toggle="modal"
-                                        data-bs-target="#selectFeedModal"
-                                        th:text="${'댓글 ' + #lists.size(feed.comments)}+'개 보기'">
-                                </button>
+                                <button type="button" class="btn btn-link p-2" data-bs-toggle="modal" data-bs-target="#FeedCommentModal" th:text="${'댓글 ' + #lists.size(feed.comments)}+'개 보기'"></button>
                             </a>
+
+                            <!-- Modal -->
+                            <div class="modal fade" id="FeedCommentModal" tabindex="-1" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div th:each="feed : ${selectfeed}">
+                                                <div th:each="comment : ${feed.comments()}" class="p-2">
+                                                    <div class="d-flex">
+                                                        <div th:text="${comment.member.username}"></div>
+                                                        <div th:text="${comment.content}"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                             <!-- Modal -->
 <!--                            <div class="modal fade" id="selectFeedModal" tabindex="-1"-->
 <!--                                 aria-labelledby="selectFeedModalLabel"-->

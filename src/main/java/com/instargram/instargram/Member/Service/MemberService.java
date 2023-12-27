@@ -102,4 +102,15 @@ public class MemberService {
     {
         return followMapService.UserFollow(loginUser, targetUser);
     }
+
+    public void changeProfile(String username, String sex, String introduce)
+    {
+        Member member = getMember(username);
+
+        member.setSex(sex);
+        member.setIntroduction(introduce);
+
+        memberRepository.save(member);
+    }
+
 }

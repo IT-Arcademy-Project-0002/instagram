@@ -88,6 +88,7 @@ public class MemberController {
 
     @PostMapping("/profile/upload")
     public String ProfileImageUpload(@RequestParam("profile-photo-input") MultipartFile multipartFile,
+                                     @RequestParam(value = "account") boolean account,
                                      Principal principal) throws IOException, NoSuchAlgorithmException {
 
         Member member = memberService.getMember(principal.getName());
@@ -116,7 +117,14 @@ public class MemberController {
             }
         }
 
-        return "redirect:/member/page/"+member.getUsername();
+        if(account)
+        {
+            return "redirect:/member/account/edit";
+        }
+        else
+        {
+            return "redirect:/member/page/"+member.getUsername();
+        }
     }
 
     @GetMapping("/page/{username}")
@@ -167,5 +175,23 @@ public class MemberController {
     {
         model.addAttribute("menu", menu);
         return "Member/AccountEdit_form";
+    }
+
+    @GetMapping("/changeProfile")
+    public String changeProfile(@RequestParam(value = "now-sex")String sex, @RequestParam(value = "now-introduce")String introduce,
+                                Principal principal)
+    {
+        if(sex.isEmpty())
+        {
+            sex = null;
+        }
+
+        if(introduce.isEmpty())
+        {
+            introduce = null;
+        }
+
+        memberService.changeProfile(principal.getName(), sex, introduce);
+        return "redirect:/member/account/edit";
     }
 }

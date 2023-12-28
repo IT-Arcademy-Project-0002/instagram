@@ -71,3 +71,24 @@ function removeModal() {
     var modal = document.getElementById('Back_Board_Create_Modal');
     modal.remove();
 }
+
+
+// 글자수 제한 및 체크
+const textarea = document.getElementById('content');
+const textCount = document.querySelector('.textCount');
+const maxLength = 2200;
+
+textarea.addEventListener('input', function() {
+    const textLength = textarea.value.length;
+    if (textLength > maxLength) {
+        textarea.value = textarea.value.slice(0, maxLength);
+    }
+
+    textCount.textContent = `${textLength}자`;
+
+    if (textLength >= maxLength) {
+        textCount.style.color = 'red';
+    } else {
+        textCount.style.color = 'initial';
+    }
+});

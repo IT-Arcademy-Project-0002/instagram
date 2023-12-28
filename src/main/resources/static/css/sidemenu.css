@@ -21,7 +21,6 @@
 .btn_side_menu {
     border: none;
     background-color: transparent;
-
 }
 
 .sm_logo {
@@ -33,14 +32,14 @@
 .sm_logo_img {
     background-image: url(../files/designImg/Logo.png);
     background-position: 0 -52px;
-    background-repeat: no-repeat; /* 이미지 반복 없이 설정 */
+    background-repeat: no-repeat;
     width: 200px;
     height: 52px;
     display: inline-block;
 }
 
-.menu_list {
-    margin: 6px 0 6px 0;
+.menu_list, .dropdown_menu_list {
+    margin: 8px 0 8px 0;
     padding: 12px;
     transition: background-color 0.3s;
     cursor: pointer;
@@ -48,6 +47,10 @@
 }
 .menu_list:hover {
     background-color: #f2f2f2;
+}
+
+a{
+    text-decoration: none;
 }
 
 .menu_list_text {
@@ -58,13 +61,67 @@
 }
 .menu_list_text:hover {
     color: black;
-
 }
 
-.img:hover {
-    transform: scale(1.05);
-    transition: transform 0.05s ease;
+.img:hover svg,
+.img:hover img { /* svg, img 이미지 확대 효과 적용 */
+    transform: scale(1.07);
+    transition: transform 0.1s ease;
 }
+
+/*   dropdown css   */
+.drop_btn {
+    background-color: transparent;
+    color: black;
+    border: none;
+}
+.drop_btn:hover, .dropdown-toggle:not(.active):focus, .dropdown-toggle:not(.show), .dropdown-toggle.active, .dropdown-menu .dropdown-item:focus {
+    background-color: transparent;
+    color: black;
+}
+
+.dropup .dropdown-toggle::after {
+    border: none;
+}
+
+.btn-check:checked+.btn, .btn.active, .btn.show, .btn:first-child:active, :not(.btn-check)+.btn:active {
+    background-color: transparent;
+    color: black;
+}
+
+.dropdown-menu {
+    padding: 8px;
+    width: 300px;
+    border-radius: 8px;
+}
+
+.dropdown_list {
+    padding: 10px 15px 10px 15px;
+}
+
+.dropdown_list_text {
+    font-size: 14px;
+    padding-left: 5px;
+}
+
+.drop_list_text:hover {
+    font-weight: bold;
+}
+
+.dropdown_change_line, .dropdown_logout_line {
+    height: 6px;
+    margin: 8px -8px 8px -8px;
+    background-color: #f2f2f2;
+}
+
+.dropdown_logout_line {
+    height: 0.5px;
+}
+
+
+/*   드롭다운 css   */
+
+
 
 
 

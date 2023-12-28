@@ -17,12 +17,12 @@
 <div th:replace="~{Layout/sidebar :: sidebarFragment}"></div>
 <!-- 전역 만들기 모달창 -->
 <div th:replace="~{Layout/createmodal :: createmodalFragment}"></div>
-<!-- 기본 템플릿 안에 삽입될 콘텐츠 Start -->
-<th:block layout:fragment="content"></th:block>
-<!-- 기본 템플릿 안에 삽입될 콘텐츠 End -->
 <!-- Bootstrap JS -->
 <script th:src="@{/css/bootstrap.min.js}"></script>
 <!-- Bootstrap Bundle-->
 <script th:src="@{/css/bootstrap.bundle.js}"></script>
+<!-- 기본 템플릿 안에 삽입될 콘텐츠 Start -->
+<th:block layout:fragment="content"></th:block>
+<!-- 기본 템플릿 안에 삽입될 콘텐츠 End -->
 </body>
 </html>

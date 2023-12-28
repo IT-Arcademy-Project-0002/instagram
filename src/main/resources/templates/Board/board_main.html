@@ -15,11 +15,34 @@
                         스토리
                     </div>
                     <div class="frag-board mt-4">
-                        <div th:each="feed, idx : ${feedList}" class="p-3">
-                            <div class="d-flex">
-                                <h5 th:text="${feed.board.member.username}"></h5>
-                                <span class="text-sm-center"
-                                      th:text="${#temporals.format(feed.board.CreateDate, 'yyyy-MM-dd HH:mm:ss')}"></span>
+                        <div th:each="feed, idx : ${feedList}" class="p-3 border-bottom">
+                            <div class="d-flex" style="padding: 0 0 12px 4px;">
+                                <div style="position: relative; width: 2.5rem; height: 2.5rem;">
+                                    <img th:if="${feed.board.member.image == null}"
+                                         id="none_user_img"
+                                         src="/files/designImg/noneuser.png"
+                                         class="shadow rounded-circle text-center"
+                                         style="width: 100%; height: 100%; object-fit: cover;">
+                                    <img th:unless="${feed.board.member.image == null}"
+                                         th:src="@{|/resources/${feed.board.member.image.name}|}"
+                                         class="shadow rounded-circle text-center"
+                                         style="width: 100%; height: 100%; object-fit: cover;">
+                                </div>
+                                <div class="d-flex flex-column mx-2">
+                                    <div class="d-flex justify-content-center align-items-center text-center">
+                                        <div class="d-flex">
+                                            <div style="font-weight: bold; font-size: medium"
+                                                 th:text="${feed.board.member.username}"></div>
+                                        </div>
+                                        <div class="d-flex" style="font-size: smaller;">
+                                            <span class="mx-2" dir="auto" style="line-height: var(--base-line-clamp-line-height); --base-line-clamp-line-height: 18px;">•</span>
+                                            <div th:text="${#temporals.format(feed.board.CreateDate, 'yyyy-MM-dd HH:mm:ss')}"></div>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex" style="font-size: 0.8rem;">
+                                        <div>위치ㅎㅎ</div>
+                                    </div>
+                                </div>
                             </div>
                             <div th:id="@{|carouselExampleControlsNoTouching${idx.index}|}" class="carousel slide"
                                  data-interval="false">
@@ -82,27 +105,217 @@
                                     </svg>
                                 </div>
                             </div>
-                            <div class="p-2" th:text="'좋아요 ' + ${#lists.size(feed.board.boardLikeMemberMaps)} + '개'"></div>
-                            <div class="p-2" th:text="${feed.board.member.username} + ${feed.board.content}"></div>
-
+                            <div class="px-2"
+                                 th:text="'좋아요 ' + ${#lists.size(feed.board.boardLikeMemberMaps)} + '개'"></div>
+                            <div class="d-flex">
+                                <div class="px-2" style="font-weight: bold;" th:text="${feed.board.member.username}"></div>
+                                <div th:text="${feed.board.content}"></div>
+                            </div>
                             <!-- Button trigger modal -->
                             <a th:href="@{|/board/detail/${feed.board.id}|}">
-                                <button type="button" class="btn btn-link p-2" data-bs-toggle="modal" data-bs-target="#FeedCommentModal" th:text="${'댓글 ' + #lists.size(feed.comments)}+'개 보기'"></button>
+                                <button type="button" class="btn btn-link px-2 py-0" data-bs-toggle="modal"
+                                        data-bs-target="#FeedCommentModal"
+                                        th:text="${'댓글 ' + #lists.size(feed.comments)}+'개 보기'"></button>
                             </a>
-
                             <!-- Modal -->
                             <div class="modal fade" id="FeedCommentModal" tabindex="-1" aria-hidden="true">
-                                <div class="modal-dialog">
+                                <div class="modal-dialog modal-xl">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
                                         </div>
-                                        <div class="modal-body">
-                                            <div th:each="feed : ${selectfeed}">
-                                                <div th:each="comment : ${feed.comments()}" class="p-2">
-                                                    <div class="d-flex">
-                                                        <div th:text="${comment.member.username}"></div>
-                                                        <div th:text="${comment.content}"></div>
+                                        <div class="modal-body p-0">
+                                            <div th:if="${selectFeed}">
+                                                <div class="row mx-0">
+                                                    <div class="col-8 p-0">
+                                                        <div id="carousel-main" class="carousel slide"
+                                                             data-ride="carousel" data-interval="false">
+                                                            <div class="carousel-inner">
+                                                                <div th:each="img, index : ${selectFeed.imageDTOS}"
+                                                                     class="carousel-item"
+                                                                     style="position: relative; width: 50rem; height: 50rem;"
+                                                                     th:classappend="${index.index == 0} ? 'active'">
+                                                                    <img th:src="@{|/resources/${img.name}|}"
+                                                                         alt="..."
+                                                                         class="shadow text-center"
+                                                                         style="width: 100%; height:100%;position: absolute; top: 0; left: 0; transform: translate(50,50); object-fit: cover; margin: auto">
+                                                                </div>
+                                                            </div>
+                                                            <button class="carousel-control-prev" type="button"
+                                                                    data-bs-target="#carousel-main"
+                                                                    th:classappend="${#lists.size(selectFeed.imageDTOS) == 1 }? 'visually-hidden'"
+                                                                    data-bs-slide="prev">
+                                                                <span class="carousel-control-prev-icon"
+                                                                      aria-hidden="true"></span>
+                                                                <span class="visually-hidden">Previous</span>
+                                                            </button>
+                                                            <button class="carousel-control-next" type="button"
+                                                                    data-bs-target="#carousel-main"
+                                                                    th:classappend="${#lists.size(selectFeed.imageDTOS) == 1 }? 'visually-hidden'"
+                                                                    data-bs-slide="next">
+                                                                <span class="carousel-control-next-icon"
+                                                                      aria-hidden="true"></span>
+                                                                <span class="visually-hidden">Next</span>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-4 p-0" style="height: 800px;">
+                                                        <div class="d-flex align-items-center border-bottom"
+                                                             style="padding: 14px 16px 14px 16px; height: 10%;">
+                                                            <div class="d-flex align-items-center" style="flex:6;">
+                                                                <div class="me-3"
+                                                                     style="position: relative; width: 2rem; height: 2rem;">
+                                                                    <img th:if="${selectFeed.boardDTO.memberDTO.imageDTO == null || selectFeed.boardDTO.memberDTO.imageDTO.name == null || selectFeed.boardDTO.memberDTO.imageDTO.name.isEmpty()}"
+                                                                         id="none_user_img"
+                                                                         src="/files/designImg/noneuser.png"
+                                                                         class="shadow rounded-circle text-center"
+                                                                         style="position: absolute; top: 0; right: 0; width: 100%; height: 100%; object-fit: cover;">
+                                                                    <img th:unless="${selectFeed.boardDTO.memberDTO.imageDTO == null || selectFeed.boardDTO.memberDTO.imageDTO.name == null || selectFeed.boardDTO.memberDTO.imageDTO.name.isEmpty()}"
+                                                                         th:src="@{|/resources/${selectFeed.boardDTO.memberDTO.imageDTO.name}|}"
+                                                                         class="shadow rounded-circle text-center"
+                                                                         style="position: absolute; top: 0; right: 0; width: 100%; height: 100%; object-fit: cover;">
+                                                                </div>
+                                                                <div class="d-flex justify-content-center align-items-center"
+                                                                     style="font-weight:bold;"
+                                                                     th:text="${selectFeed.boardDTO().memberDTO.username}"></div>
+                                                            </div>
+                                                            <div class="d-flex" style="flex:1;">
+                                                                <button class="btn btn-link">· · ·</button>
+                                                            </div>
+                                                        </div>
+                                                        <div class="d-flex flex-column border-bottom"
+                                                             style="height: 67%; overflow-y: scroll;">
+                                                            <div class="d-flex" style="padding: 14px 16px 14px 16px;">
+                                                                <div class="me-3"
+                                                                     style="position: relative; width: 2rem; height: 2rem;">
+                                                                    <img th:if="${selectFeed.boardDTO.memberDTO.imageDTO == null || selectFeed.boardDTO.memberDTO.imageDTO.name == null || selectFeed.boardDTO.memberDTO.imageDTO.name.isEmpty()}"
+                                                                         id="none_user_img"
+                                                                         src="/files/designImg/noneuser.png"
+                                                                         class="shadow rounded-circle text-center"
+                                                                         style="position: absolute; top: 0; right: 0; width: 100%; height: 100%; object-fit: cover;">
+                                                                    <img th:unless="${selectFeed.boardDTO.memberDTO.imageDTO == null || selectFeed.boardDTO.memberDTO.imageDTO.name == null || selectFeed.boardDTO.memberDTO.imageDTO.name.isEmpty()}"
+                                                                         th:src="@{|/resources/${selectFeed.boardDTO.memberDTO.imageDTO.name}|}"
+                                                                         class="shadow rounded-circle text-center"
+                                                                         style="position: absolute; top: 0; right: 0; width: 100%; height: 100%; object-fit: cover;">
+                                                                </div>
+                                                                <div class="d-flex flex-column">
+                                                                    <div class="d-flex justify-content-start align-items-center"
+                                                                         style="font-weight:bold;"
+                                                                         th:text="${selectFeed.boardDTO.memberDTO.username}"></div>
+                                                                    <div class="d-flex justify-content-center align-items-center"
+                                                                         th:text="${selectFeed.boardDTO.content}"></div>
+                                                                </div>
+                                                            </div>
+                                                            <div th:each="comment : ${selectFeed.commentDTOS}">
+                                                                <div class="d-flex align-items-center justify-content-between"
+                                                                     style="padding: 16px;">
+                                                                    <div class="d-flex align-items-center">
+                                                                        <div class="me-3"
+                                                                             style="position: relative; width: 2rem; height: 2rem;">
+                                                                            <img th:if="${comment.memberDTO.imageDTO == null || comment.memberDTO.imageDTO.name == null || comment.memberDTO.imageDTO.name.isEmpty()}"
+                                                                                 id="none_user_img"
+                                                                                 src="/files/designImg/noneuser.png"
+                                                                                 class="shadow rounded-circle text-center"
+                                                                                 style="position: absolute; top: 0; right: 0; width: 100%; height: 100%; object-fit: cover;">
+                                                                            <img th:unless="${comment.memberDTO.imageDTO == null || comment.memberDTO.imageDTO.name == null || comment.memberDTO.imageDTO.name.isEmpty()}"
+                                                                                 th:src="@{|/resources/${comment.memberDTO.imageDTO.name}|}"
+                                                                                 class="shadow rounded-circle text-center"
+                                                                                 style="position: absolute; top: 0; right: 0; width: 100%; height: 100%; object-fit: cover;">
+                                                                        </div>
+                                                                        <div class="d-flex flex-column">
+                                                                            <div class="d-flex">
+                                                                                <div th:text="${comment.memberDTO.username}"></div>
+                                                                                <div th:text="${comment.content}"></div>
+                                                                            </div>
+                                                                            <div class="d-flex">
+                                                                                <div class="pe-2"
+                                                                                     th:text="${#temporals.format(comment.createDate, 'yyyy-MM-dd HH:mm:ss')}"></div>
+                                                                                <div class="pe-2"
+                                                                                     th:text="'좋아요 ' + ${#lists.size(comment.getCommentLikeMemberIds())} + '개'"></div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="align-items-end">
+                                                                        <a th:href="@{|/comment/like/${comment.id}|}">
+                                                                            <svg fill="currentColor" width="18"
+                                                                                 height="18"
+                                                                                 role="img" viewBox="0 0 24 24"
+                                                                                 style="color:black;">
+                                                                                <path d="M16.792 3.904A4.989 4.989 0 0 1 21.5 9.122c0 3.072-2.652 4.959-5.197 7.222-2.512 2.243-3.865 3.469-4.303 3.752-.477-.309-2.143-1.823-4.303-3.752C5.141 14.072 2.5 12.167 2.5 9.122a4.989 4.989 0 0 1 4.708-5.218 4.21 4.21 0 0 1 3.675 1.941c.84 1.175.98 1.763 1.12 1.763s.278-.588 1.11-1.766a4.17 4.17 0 0 1 3.679-1.938m0-2a6.04 6.04 0 0 0-4.797 2.127 6.052 6.052 0 0 0-4.787-2.127A6.985 6.985 0 0 0 .5 9.122c0 3.61 2.55 5.827 5.015 7.97.283.246.569.494.853.747l1.027.918a44.998 44.998 0 0 0 3.518 3.018 2 2 0 0 0 2.174 0 45.263 45.263 0 0 0 3.626-3.115l.922-.824c.293-.26.59-.519.885-.774 2.334-2.025 4.98-4.32 4.98-7.94a6.985 6.985 0 0 0-6.708-7.218Z"></path>
+                                                                            </svg>
+                                                                        </a>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="border-bottom" style="height: 13%">
+                                                            <div class="d-flex flex-column m-1">
+                                                                <div class="d-flex">
+                                                                    <!--좋아요-->
+                                                                    <div class="p-2" role="button" tabindex="0">
+                                                                        <a th:href="@{|/board/like/${selectFeed.boardDTO.id}|}">
+                                                                            <svg aria-label="좋아요" fill="currentColor"
+                                                                                 height="24" role="img"
+                                                                                 class="liked-svg" viewBox="0 0 24 24"
+                                                                                 style="color: black;">
+                                                                                <path d="M16.792 3.904A4.989 4.989 0 0 1 21.5 9.122c0 3.072-2.652 4.959-5.197 7.222-2.512 2.243-3.865 3.469-4.303 3.752-.477-.309-2.143-1.823-4.303-3.752C5.141 14.072 2.5 12.167 2.5 9.122a4.989 4.989 0 0 1 4.708-5.218 4.21 4.21 0 0 1 3.675 1.941c.84 1.175.98 1.763 1.12 1.763s.278-.588 1.11-1.766a4.17 4.17 0 0 1 3.679-1.938m0-2a6.04 6.04 0 0 0-4.797 2.127 6.052 6.052 0 0 0-4.787-2.127A6.985 6.985 0 0 0 .5 9.122c0 3.61 2.55 5.827 5.015 7.97.283.246.569.494.853.747l1.027.918a44.998 44.998 0 0 0 3.518 3.018 2 2 0 0 0 2.174 0 45.263 45.263 0 0 0 3.626-3.115l.922-.824c.293-.26.59-.519.885-.774 2.334-2.025 4.98-4.32 4.98-7.94a6.985 6.985 0 0 0-6.708-7.218Z"></path>
+                                                                            </svg>
+                                                                        </a>
+                                                                    </div>
+                                                                    <!--댓글-->
+                                                                    <div class="p-2" type="button" tabindex="0"
+                                                                         data-bs-toggle="modal"
+                                                                         data-bs-target="#selectFeedModal">
+                                                                        <svg aria-label="댓글 달기" fill="currentColor"
+                                                                             height="24" width="24" role="img"
+                                                                             viewBox="0 0 24 24" style="color: black;">
+                                                                            <path d="M20.656 17.008a9.993 9.993 0 1 0-3.59 3.615L22 22Z"
+                                                                                  fill="none"
+                                                                                  stroke="currentColor"
+                                                                                  stroke-linejoin="round"
+                                                                                  stroke-width="2"></path>
+                                                                        </svg>
+                                                                    </div>
+                                                                    <!--공유-->
+                                                                    <div class="p-2" role="button" tabindex="0">
+                                                                        <svg aria-label="게시물 공유"
+                                                                             fill="currentColor" height="24" role="img"
+                                                                             viewBox="0 0 24 24"
+                                                                             width="24"><title>게시물 공유</title>
+                                                                            <line fill="none" stroke="currentColor"
+                                                                                  stroke-linejoin="round"
+                                                                                  stroke-width="2" x1="22" x2="9.218"
+                                                                                  y1="3"
+                                                                                  y2="10.083"></line>
+                                                                            <polygon fill="none"
+                                                                                     points="11.698 20.334 22 3.001 2 3.001 9.218 10.084 11.698 20.334"
+                                                                                     stroke="currentColor"
+                                                                                     stroke-linejoin="round"
+                                                                                     stroke-width="2"></polygon>
+                                                                        </svg>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="px-2"
+                                                                     th:text="'좋아요 ' + ${#lists.size(selectFeed.boardDTO().getBoardLikeMemberIds())} + '개'"></div>
+                                                                <div class="px-2"
+                                                                     th:text="${#temporals.format(selectFeed.boardDTO.getCreateDate(), 'MM월 dd일')}"></div>
+                                                            </div>
+                                                        </div>
+                                                        <div style="height: 10%">
+                                                            <form th:action="@{|/comment/create/${selectFeed.boardDTO.id}|}"
+                                                                  method="post">
+                                                                <div class="d-flex m-2">
+                                                                    <textarea class="form-control border-0 me-2"
+                                                                              style="resize: none;" name="content"
+                                                                              id="content"
+                                                                              placeholder="댓글 달기..."></textarea>
+                                                                    <button type="submit" style="width: 40px;"
+                                                                            class="btn btn-link p-0">게시
+                                                                    </button>
+                                                                </div>
+                                                            </form>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -110,63 +323,10 @@
                                     </div>
                                 </div>
                             </div>
-                            <!-- Modal -->
-<!--                            <div class="modal fade" id="selectFeedModal" tabindex="-1"-->
-<!--                                 aria-labelledby="selectFeedModalLabel"-->
-<!--                                 aria-hidden="true">-->
-<!--                                <div class="modal-dialog modal-xl">-->
-<!--                                    <div class="modal-content">-->
-<!--                                        <div class="modal-header">-->
-<!--                                            <h1 class="modal-title fs-5" id="selectFeedModalLabel">Modal title</h1>-->
-<!--                                            <button type="button" class="btn-close" data-bs-dismiss="modal"-->
-<!--                                                    aria-label="Close"></button>-->
-<!--                                        </div>-->
-<!--                                        <div class="modal-body">-->
-<!--                                            <div th:each="comment : ${selectfeed.commentDTOS}" class="p-2">-->
-<!--                                                <div class="d-flex align-items-center justify-content-between">-->
-<!--                                                    <div class="d-flex align-items-center">-->
-<!--                                                        <div class="me-3" style="position: relative; width: 2rem; height: 2rem;">-->
-<!--                                                            <img th:if="${comment.member.image == null}"-->
-<!--                                                                 id="none_user_img"-->
-<!--                                                                 src="/files/designImg/noneuser.png"-->
-<!--                                                                 class="shadow rounded-circle text-center"-->
-<!--                                                                 style="position: absolute; top: 0; right: 0; width: 100%; height: 100%; object-fit: cover;">-->
-<!--                                                            <img th:unless="${comment.member.image == null}"-->
-<!--                                                                 th:src="@{|/resources/${comment.member.image.name}|}"-->
-<!--                                                                 class="shadow rounded-circle text-center"-->
-<!--                                                                 style="position: absolute; top: 0; right: 0; width: 100%; height: 100%; object-fit: cover;">-->
-<!--                                                        </div>-->
-<!--                                                        <div class="d-flex flex-column">-->
-<!--                                                            <div class="d-flex">-->
-<!--                                                                <div th:text="${comment.memberDTO.username}"></div>-->
-<!--                                                                <div th:text="${comment.content}"></div>-->
-<!--                                                            </div>-->
-<!--                                                            <div class="d-flex">-->
-<!--                                                                <div class="pe-2"-->
-<!--                                                                     th:text="${#temporals.format(comment.createDate, 'yyyy-MM-dd HH:mm:ss')}"></div>-->
-<!--                                                                <div class="pe-2"-->
-<!--                                                                     th:text="'좋아요 ' + ${#lists.size(comment.commentLikeMembers)} + '개'"></div>-->
-<!--                                                            </div>-->
-<!--                                                        </div>-->
-<!--                                                    </div>-->
-<!--                                                    <div class="align-items-end">-->
-<!--                                                        <a th:href="@{|/comment/like/${comment.id}|}">-->
-<!--                                                            <svg fill="currentColor" width="18" height="18"-->
-<!--                                                                 role="img" viewBox="0 0 24 24"-->
-<!--                                                                 style="color:black;">-->
-<!--                                                                <path d="M16.792 3.904A4.989 4.989 0 0 1 21.5 9.122c0 3.072-2.652 4.959-5.197 7.222-2.512 2.243-3.865 3.469-4.303 3.752-.477-.309-2.143-1.823-4.303-3.752C5.141 14.072 2.5 12.167 2.5 9.122a4.989 4.989 0 0 1 4.708-5.218 4.21 4.21 0 0 1 3.675 1.941c.84 1.175.98 1.763 1.12 1.763s.278-.588 1.11-1.766a4.17 4.17 0 0 1 3.679-1.938m0-2a6.04 6.04 0 0 0-4.797 2.127 6.052 6.052 0 0 0-4.787-2.127A6.985 6.985 0 0 0 .5 9.122c0 3.61 2.55 5.827 5.015 7.97.283.246.569.494.853.747l1.027.918a44.998 44.998 0 0 0 3.518 3.018 2 2 0 0 0 2.174 0 45.263 45.263 0 0 0 3.626-3.115l.922-.824c.293-.26.59-.519.885-.774 2.334-2.025 4.98-4.32 4.98-7.94a6.985 6.985 0 0 0-6.708-7.218Z"></path>-->
-<!--                                                            </svg>-->
-<!--                                                        </a>-->
-<!--                                                    </div>-->
-<!--                                                </div>-->
-<!--                                            </div>-->
-<!--                                        </div>-->
-<!--                                    </div>-->
-<!--                                </div>-->
-<!--                            </div>-->
                             <form th:action="@{|/comment/create/${feed.board.id}|}" method="post">
                                 <div class="d-flex">
-                                    <textarea class="form-control me-2" name="content" id="content" placeholder="댓글 달기..."></textarea>
+                                    <textarea class="form-control border-0 me-2" style="resize: none;" name="content"
+                                              id="content" placeholder="댓글 달기..."></textarea>
                                     <button type="submit" style="width: 10%;" class="btn btn-dark">게시</button>
                                 </div>
                             </form>
@@ -176,5 +336,14 @@
             </div>
         </div>
     </div>
+    <script th:inline="javascript">
+        const selectFeed = /*[[${selectFeed}]]*/ null;
+        const myModal = new bootstrap.Modal('#FeedCommentModal', {
+            keyboard: true
+        })
+        if (selectFeed != null) {
+            myModal.show();
+        }
+    </script>
 </div>
 </html>

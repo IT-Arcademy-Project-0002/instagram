@@ -1,10 +1,5 @@
 package com.instargram.instargram.Community.Board.Controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.module.SimpleModule;
-import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.instargram.instargram.Community.Board.Model.DTO.FeedDTO;
 import com.instargram.instargram.Community.Board.Model.DTO.FeedListDTO;
 import com.instargram.instargram.Community.Board.Model.Entity.Board_Like_Member_Map;
@@ -21,8 +16,7 @@ import com.instargram.instargram.Member.Model.Entity.Member;
 import com.instargram.instargram.Member.Service.MemberService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.apache.catalina.core.ApplicationContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -97,12 +91,14 @@ public class BoardController {
     public String create(Model model, HttpSession httpSession){
         List<Board> boardList = this.boardService.getBoard();
         List<FeedListDTO> feedList = this.boardDataMapService.getFeed(boardList);
-        List<FeedListDTO> selectfeed = (List<FeedListDTO>) httpSession.getAttribute("selectfeed");
-        if(selectfeed != null){
-            model.addAttribute("selectfeed", selectfeed);
-            httpSession.removeAttribute("selectfeed");
+        FeedDTO selectFeed = (FeedDTO) httpSession.getAttribute("selectFeed");
+
+        if(selectFeed != null){
+            model.addAttribute("selectFeed", selectFeed);
+            httpSession.removeAttribute("selectFeed");
         }
-        System.out.println("===========================>" + selectfeed);
+
+        System.out.println("===========================>" + selectFeed);
         model.addAttribute("feedList",  feedList);
         return "Board/board_main";
     }
@@ -110,19 +106,12 @@ public class BoardController {
     @GetMapping("/board/detail/{id}")
     public String detail(@PathVariable("id") Long id, HttpSession httpSession) {
         Board board = this.boardService.getBoardById(id);
-        List<FeedListDTO> selectfeed = this.boardDataMapService.getFeedWithComments(board);
-        httpSession.setAttribute("selectfeed", selectfeed);
+
+        FeedDTO selectFeed = this.boardDataMapService.getFeedWithComments(board);
+        httpSession.setAttribute("selectFeed", selectFeed);
+
         return "redirect:/main";
     }
-
-//    @GetMapping("/board/detail/{id}")
-//    public ResponseEntity<?> getBoardDetail(@PathVariable("id") Long id) {
-//        Board board = boardService.getBoardById(id);
-//        FeedDTO selectfeedList = this.boardDataMapService.getFeedWithComments(board);
-//        ResponseEntity<?> entity = ResponseEntity.ok(selectfeedList);
-//        return ResponseEntity.ok(selectfeedList);
-//    }
-
     @PostMapping("/board/pin")
     public String boardPin(@RequestParam("board") Long id, Principal principal)
     {

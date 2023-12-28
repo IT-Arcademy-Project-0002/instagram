@@ -1,5 +1,6 @@
 package com.instargram.instargram.Data.Image;
 
+import com.instargram.instargram.Config.AppConfig;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,8 +12,14 @@ public class ImageDTO {
     private String name;
 
     public ImageDTO(Image image){
-        id = image.getId();
-        path = image.getPath();
-        name = image.getName();
+        if (image != null) {
+            id = image.getId();
+            path = image.getPath();
+            name = image.getName();
+        }else{
+            id = null;
+            path = null;
+            name = null;
+        }
     }
 }

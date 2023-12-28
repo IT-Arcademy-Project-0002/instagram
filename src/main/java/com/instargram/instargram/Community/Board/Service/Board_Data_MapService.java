@@ -66,44 +66,44 @@ public class Board_Data_MapService {
         return feedListDTOS;
     }
 
-    public List<FeedListDTO> getFeedWithComments(Board board) {
-        List<FeedListDTO> feedListDTOS = new ArrayList<>();
-        List<Board_Data_Map> maps = getMapByBoard(board);
-        List<Comment> comments = getCommentsByBoard(board);
-        List<Image> images = new ArrayList<>();
-        for(Board_Data_Map map : maps)
-        {
-            if (Objects.equals(map.getDataType(), Enum_Data.IMAGE.getNumber())) {
-                Image image = imageService.getImageByID(map.getDataId());
-                images.add(image);
-            }
-        }
-        feedListDTOS.add(new FeedListDTO(board, images, comments));
-        return feedListDTOS;
-    }
-
-//    public FeedDTO getFeedWithComments(Board board) {
+//    public List<FeedListDTO> getFeedWithComments(Board board) {
+//        List<FeedListDTO> feedListDTOS = new ArrayList<>();
 //        List<Board_Data_Map> maps = getMapByBoard(board);
 //        List<Comment> comments = getCommentsByBoard(board);
-//        List<ImageDTO> images = new ArrayList<>();
-//
-//        for (Board_Data_Map map : maps) {
+//        List<Image> images = new ArrayList<>();
+//        for(Board_Data_Map map : maps)
+//        {
 //            if (Objects.equals(map.getDataType(), Enum_Data.IMAGE.getNumber())) {
 //                Image image = imageService.getImageByID(map.getDataId());
-//                ImageDTO imageDTO = convertToImageDTO(image);
-//                images.add(imageDTO);
+//                images.add(image);
 //            }
 //        }
-//        return new FeedDTO(convertToBoardDTO(board), images, convertToCommentDTOs(comments));
+//        feedListDTOS.add(new FeedListDTO(board, images, comments));
+//        return feedListDTOS;
 //    }
+
+    public FeedDTO getFeedWithComments(Board board) {
+        List<Board_Data_Map> maps = getMapByBoard(board);
+        List<Comment> comments = getCommentsByBoard(board);
+        List<ImageDTO> images = new ArrayList<>();
+
+        for (Board_Data_Map map : maps) {
+            if (Objects.equals(map.getDataType(), Enum_Data.IMAGE.getNumber())) {
+                Image image = imageService.getImageByID(map.getDataId());
+                ImageDTO imageDTO = convertToImageDTO(image);
+                images.add(imageDTO);
+            }
+        }
+        return new FeedDTO(convertToBoardDTO(board), images, convertToCommentDTOs(comments));
+    }
     private BoardDTO convertToBoardDTO(Board board) {
-        return new BoardDTO(board, board.getMember());
+        return new BoardDTO(board);
     }
     private List<CommentDTO> convertToCommentDTOs(List<Comment> comments) {
         List<CommentDTO> commentDTOS = new ArrayList<>();
         for (Comment comment : comments) {
 
-            CommentDTO commentDTO = new CommentDTO(comment, comment.getBoard(), comment.getMember());
+            CommentDTO commentDTO = new CommentDTO(comment);
             commentDTOS.add(commentDTO);
         }
         return commentDTOS;

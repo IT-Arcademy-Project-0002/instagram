@@ -109,7 +109,7 @@ public class SearchService {
 
         List<Member> memberList = this.memberRepository.findByNicknameContaining(keyword);
         List<Member> memberList2 = this.memberRepository.findByUsernameContaining(keyword);
-        List<Member> memberList3 = this.memberRepository.findByIntroductionContaining(keyword);
+        List<Member> memberList3 =  this.memberRepository.findByIntroductionContaining(keyword);
 
         // 모든 검색결과를 담기 위한 배열 (이 검색결과는 종류가 달라도, 리스트에 들어가는 정보를 의미한다.)
         // data-order 개념 적용? 데이터를 배열에 저장할 때 식별번호로 전체 카테고리를 포함하여 전달

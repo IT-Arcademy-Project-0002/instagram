@@ -6,6 +6,8 @@ import com.instargram.instargram.Data.Image.Image;
 import com.instargram.instargram.Data.Image.ImageService;
 import com.instargram.instargram.Enum_Data;
 import com.instargram.instargram.Member.Config.OAuth2.Model.OAuth2UserInfo;
+import com.instargram.instargram.Member.Config.SpringSecurity.MemberSecurityService;
+import com.instargram.instargram.Member.Config.SpringSecurity.PrincipalDetails;
 import com.instargram.instargram.Member.Model.DTO.UserPageDTO;
 import com.instargram.instargram.Member.Model.Entity.Member;
 import com.instargram.instargram.Member.Model.Form.MemberCreateForm;
@@ -18,6 +20,11 @@ import jakarta.servlet.http.HttpSession;
 import lombok.Builder;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -43,6 +50,8 @@ public class MemberController {
     private final StoryHighlightMapService storyHighlightMapService;
     private final Board_Data_MapService dataMapService;
     private final ImageService imageService;
+
+    private final AuthenticationManager authenticationManager;
 
     @GetMapping("/login")
     public String login()
@@ -194,4 +203,24 @@ public class MemberController {
         memberService.changeProfile(principal.getName(), sex, introduce);
         return "redirect:/member/account/edit";
     }
+
+    @GetMapping("/changeName")
+    public String changeName(@RequestParam("new-name")String name, Principal principal)
+    {
+        memberService.changeName(principal.getName(), name);
+        return "redirect:/member/account/edit";
+    }
+
+    @GetMapping("/changeUsername")
+    public String changeUsername(@RequestParam("new-username")String username, Principal principal,
+                                 @AuthenticationPrincipal PrincipalDetails principalDetails){
+        Member member = memberService.changeUsername(principal.getName(), username);
+
+        principalDetails.setMember(member);
+        return "redirect:/member/account/edit";
+    }
+
+
+
+
 }

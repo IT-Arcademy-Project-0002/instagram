@@ -3,6 +3,8 @@ package com.instargram.instargram.Member.Config.SpringSecurity;
 import com.instargram.instargram.Member.Config.Enum.UserRole;
 import com.instargram.instargram.Member.Model.Entity.Member;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -11,7 +13,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
 
-@Data
+@Getter
+@Setter
 public class PrincipalDetails implements UserDetails, OAuth2User {
 
     private Member member;
@@ -53,10 +56,6 @@ public class PrincipalDetails implements UserDetails, OAuth2User {
                 {
                     return String.valueOf(UserRole.ADMIN.getValue());
                 }
-//                else if(member.get().equals(String.valueOf(UserRole.MANAGER.getValue())))
-//                {
-//                    return String.valueOf(UserRole.MANAGER.getValue());
-//                }
                 else {
                     return String.valueOf(UserRole.USER.getValue());
                 }
@@ -101,6 +100,6 @@ public class PrincipalDetails implements UserDetails, OAuth2User {
 
     @Override
     public String getName() {
-        return null;
+        return member.getUsername();
     }
 }

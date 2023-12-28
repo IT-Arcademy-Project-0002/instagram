@@ -125,4 +125,17 @@ public class BoardController {
         boardService.KeepStateChange(id);
         return "redirect:/member/page/"+principal.getName();
     }
+
+    @GetMapping("/board/likehide/{id}")
+    public String boardLikeHide(@PathVariable("id") Long id){
+        this.boardService.LikeStateChange(id);
+        return "redirect:/main";
+    }
+
+    @GetMapping("/beard/delete/{id}")
+    public String boarddelete(@PathVariable("id") Long id) {
+        Board board = this.boardService.getBoardById(id);
+        boardService.delete(board);
+        return "redirect:/main";
+    }
 }

@@ -5,6 +5,7 @@ import com.instargram.instargram.Member.Model.Repository.MemberRepository;
 import com.instargram.instargram.Search.Model.DTO.CoordinatesDTO;
 import com.instargram.instargram.Search.Model.DTO.SearchDTO;
 import lombok.RequiredArgsConstructor;
+import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -44,7 +45,7 @@ public class SearchService {
     private final String uri2 = "https://dapi.kakao.com/v2/local/search/address.json";
 
 
-    public CoordinatesDTO getCoordinateByKeyword() {
+    public CoordinatesDTO getCoordinateByKeyword() throws JSONException {
 
         RestTemplate restTemplate = new RestTemplate();
 
@@ -75,7 +76,7 @@ public class SearchService {
         return new CoordinatesDTO(x, y);
     }
 
-    public CoordinatesDTO getCoordinateByAddress(){
+    public CoordinatesDTO getCoordinateByAddress() throws JSONException {
         RestTemplate restTemplate = new RestTemplate();
 
         String apiKey = "KakaoAK " + kakaoLocalKey;

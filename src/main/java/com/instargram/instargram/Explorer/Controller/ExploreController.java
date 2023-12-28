@@ -7,6 +7,7 @@ import com.instargram.instargram.Explorer.Service.ExploreService;
 import com.instargram.instargram.Search.Model.DTO.CoordinatesDTO;
 import com.instargram.instargram.Search.Service.SearchService;
 import lombok.Builder;
+import org.json.JSONException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,7 +35,7 @@ public class ExploreController {
         return "Explore/explore";
     }
     @GetMapping("/location")
-    public String location(Model model) {
+    public String location(Model model) throws JSONException {
 
         // 향후 ajax를 이용하여 실시간으로 단어를 입력하면
         // REST API로 검색된 장소의 5~10개 수준을 검색리스트에 포함시키는 로직 필요 (해당 작업은 Search 클래스에서 진행)

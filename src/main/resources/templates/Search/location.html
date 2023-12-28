@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html layout:decorate="~{Layout/layout_main}">
+<head>
+    <title>Hello Vector Tiles!</title>
+
+    <!-- 이전 Mapbox GL JS v1은 무료 개방형 BSD3 라이센스로 계속 사용할 수 있지만 가장 중요한 보안 및 버그 수정을 제외하고는 개선되지 않습니다 -->
+    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.47.0/mapbox-gl.js'></script>
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.47.0/mapbox-gl.css' rel='stylesheet' />
+    <link rel="stylesheet" type="text/css" th:href="@{/search/css/map_content.css}">
+
+</head>
+<div layout:fragment="content">
+    <div class = "map-content">
+        <div class="map-container">
+            <div class = "keyword-box border border-1">
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" placeholder="검색어를 입력해주세요" aria-describedby="basic-addon2" id="keyword" name="keyword" size="15" >
+                    <button class="btn btn-primary" id="searchkeyword" type = "button"> 검색하기 </button>
+                </div>
+            </div>
+            <div class="map-box">
+                <div id='map'></div>
+            </div>
+        </div>
+        <h4> 검색된 장소의 좌표 (기본값:유성온천역, 검색버튼 미구현, 마커표기 미구현) </h4>
+        <p>X: <span th:text="${ByKeyword.x}"></span></p>
+        <p>Y: <span th:text="${ByKeyword.y}"></span></p>
+    </div>
+    <script>
+
+        // 아니면.. {z}/{x}/{y}의 형태로 접근하는 것이 혹시 가능할까?
+        // leaflet, openlayer, mapbox 예제의 확인이 필요할 것 같음.
+
+        var map = new mapboxgl.Map({
+            container: 'map',
+            style: 'https://www.greenwalker.xyz/bright.json',
+            center: [127.380816, 36.351155],
+            zoom: 14
+        });
+        // Add zoom and rotation controls to the map.
+        map.addControl(new mapboxgl.NavigationControl());
+        // Add a marker set to the center of the map
+        var marker2 = new mapboxgl.Marker({ color: 'red' }).setLngLat([127.380816, 36.351155]).addTo(map);
+        var marker3 = new mapboxgl.Marker({ color: 'red' }).setLngLat([127.379969, 36.352522]).addTo(map);
+        var marker4 = new mapboxgl.Marker({ color: 'red' }).setLngLat([127.377314, 36.353731]).addTo(map);
+        var marker5 = new mapboxgl.Marker({ color: 'red' }).setLngLat([127.378211, 36.349406]).addTo(map);
+        var marker6 = new mapboxgl.Marker({ color: 'red' }).setLngLat([127.377137, 36.351976]).addTo(map);
+
+    </script>
+</div>
+</html>

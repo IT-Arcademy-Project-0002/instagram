@@ -4476,10 +4476,11 @@
 
 
     toggle(relatedTarget) {
-      return this._isShown ? this.hide() : this.show(relatedTarget);
+      return this.show(relatedTarget);
     }
 
     show(relatedTarget) {
+
       if (this._isShown || this._isTransitioning) {
         return;
       }
@@ -4499,6 +4500,7 @@
       }
 
       this._scrollBar.hide();
+      this._hideModal();
 
       document.body.classList.add(CLASS_NAME_OPEN);
 
@@ -4539,7 +4541,7 @@
 
       const isAnimated = this._isAnimated();
 
-      if (isAnimated) {
+      if (isAnimated) {;
         this._isTransitioning = true;
       }
 

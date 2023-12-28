@@ -71,6 +71,7 @@ function changeProfile()
 
 function clickProfilePhotoChange()
 {
+    debugger;
     var fileInput = document.getElementById('profile-photo-input');
 
     fileInput.click();
@@ -89,4 +90,58 @@ function readFile(input) {
 
         document.getElementById('img-form').submit();
     }
+}
+
+function changeName()
+{
+    var form = document.getElementById('name-form');
+
+    form.submit();
+}
+
+function inputName()
+{
+    var name = document.getElementById('new-name').value;
+    var nowName = document.getElementById('now-name').value;
+    var btn = document.getElementById('name-btn');
+
+    btn.disabled = name === nowName;
+}
+
+function inputUserName() {
+    var username = document.getElementById('new-username').value;
+    var nowUsername = document.getElementById('now-username').value;
+    var btn = document.getElementById('username-btn');
+    var span = document.getElementById('username-error');
+
+    if (username === '')
+    {
+        btn.disabled = true;
+        span.textContent = '사용자 이름은 필수항목입니다.';
+    }
+    else if(containsSpecialCharacters(username))
+    {
+        btn.disabled = true;
+        span.textContent = '사용자 이름에는 문자, 숫자, 밑줄, 마침표만 사용할 수 있습니다.';
+    }
+    else
+    {
+        btn.disabled = username === nowUsername;
+        span.textContent='';
+    }
+}
+
+function changeUserName(){
+    var form = document.getElementById('username-form');
+
+    form.submit();
+}
+
+function containsSpecialCharacters(str) {
+    return /[^\w._]/.test(str);
+}
+
+function changeStopUserName()
+{
+    debugger;
 }

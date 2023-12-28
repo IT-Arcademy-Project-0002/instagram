@@ -2,6 +2,7 @@ package com.instargram.instargram.Member.Config.SpringSecurity;
 
 import com.instargram.instargram.Member.Config.OAuth2.PrincipalOauth2UserService;
 import lombok.Builder;
+import lombok.Getter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -48,9 +49,9 @@ public class SecurityConfig {
         return http.build();
     }
 
-
     @Bean
     AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
+
 }

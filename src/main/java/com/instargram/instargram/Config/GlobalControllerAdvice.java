@@ -4,6 +4,8 @@ import com.instargram.instargram.Data.Image.ImageService;
 import com.instargram.instargram.Member.Model.Entity.Member;
 import com.instargram.instargram.Member.Service.MemberService;
 import lombok.Builder;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -24,11 +26,26 @@ public class GlobalControllerAdvice {
 
         if(principal != null)
         {
+
             Member member = memberService.getMember(principal.getName());
 
             if(member != null)
             {
                 model.addAttribute("loginMember", member);
+            }
+            else{
+                Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+                var a = auth.getPrincipal();
+
+                if(a != "anonymousUser")
+                {
+                    member = memberService.getMember(principal.getName());
+
+                    if(member != null)
+                    {
+                        model.addAttribute("loginMember", member);
+                    }
+                }
             }
         }
     }

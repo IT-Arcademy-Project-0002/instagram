@@ -25,7 +25,6 @@ public class BoardService {
     }
     public List<Board> getBoard() {
         return this.boardRepository.findAll();
-//        return this.boardRepository.findAllByCreateDateDesc();
     }
     public Board getBoardById(Long id) {
         Optional<Board> board = this.boardRepository.findById(id);
@@ -56,5 +55,15 @@ public class BoardService {
         board.setKeep(!board.isKeep());
 
         boardRepository.save(board);
+    }
+
+    public void LikeStateChange(Long id) {
+        Board board = getBoardById(id);
+
+        board.setLikeHide(!board.isLikeHide());
+        boardRepository.save(board);
+    }
+    public void delete(Board board) {
+        this.boardRepository.delete(board);
     }
 }

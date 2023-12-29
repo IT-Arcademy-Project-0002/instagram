@@ -930,6 +930,7 @@
 
 
     toggle() {
+      
       // Toggle class and sync the `aria-pressed` attribute with the return value of the `.toggle()` method
       this._element.setAttribute('aria-pressed', this._element.classList.toggle(CLASS_NAME_ACTIVE$3));
     } // Static
@@ -1672,6 +1673,7 @@
 
 
     toggle() {
+      
       if (this._element.classList.contains(CLASS_NAME_SHOW$8)) {
         this.hide();
       } else {
@@ -3765,6 +3767,7 @@
    * ------------------------------------------------------------------------
    */
 
+  var dropdownToggleState = false;
   class Dropdown extends BaseComponent {
     constructor(element, config) {
       super(element);
@@ -3791,6 +3794,8 @@
 
 
     toggle() {
+
+      console.log("toggle");
       if (isDisabled(this._element)) {
         return;
       }
@@ -3798,11 +3803,14 @@
       const isActive = this._element.classList.contains(CLASS_NAME_SHOW$7);
 
       if (isActive) {
+        dropdownToggleState = false;
         this.hide();
         return;
       }
 
+      dropdownToggleState = true;
       this.show();
+
     }
 
     show() {
@@ -3868,6 +3876,7 @@
     }
 
     hide() {
+      
       if (isDisabled(this._element) || !this._menu.classList.contains(CLASS_NAME_SHOW$7)) {
         return;
       }
@@ -3880,6 +3889,7 @@
     }
 
     dispose() {
+      
       if (this._popper) {
         this._popper.destroy();
       }
@@ -3904,6 +3914,7 @@
     }
 
     _completeHide(relatedTarget) {
+      
       const hideEvent = EventHandler.trigger(this._element, EVENT_HIDE$4, relatedTarget);
 
       if (hideEvent.defaultPrevented) {
@@ -4053,10 +4064,11 @@
     }
 
     static clearMenus(event) {
+
+      console.log("clear");
       if (event && (event.button === RIGHT_MOUSE_BUTTON || event.type === 'keyup' && event.key !== TAB_KEY)) {
         return;
       }
-
       const toggles = SelectorEngine.find(SELECTOR_DATA_TOGGLE$3);
 
       for (let i = 0, len = toggles.length; i < len; i++) {
@@ -4075,6 +4087,7 @@
         };
 
         if (event) {
+          
           const composedPath = event.composedPath();
           const isMenuTarget = composedPath.includes(context._menu);
 
@@ -4088,10 +4101,12 @@
           }
 
           if (event.type === 'click') {
+            
             relatedTarget.clickEvent = event;
           }
         }
 
+        
         context._completeHide(relatedTarget);
       }
     }
@@ -4476,6 +4491,7 @@
 
 
     toggle(relatedTarget) {
+      
       return this.show(relatedTarget);
     }
 
@@ -4659,6 +4675,7 @@
         EventHandler.on(this._element, EVENT_KEYDOWN_DISMISS$1, event => {
           if (this._config.keyboard && event.key === ESCAPE_KEY$1) {
             event.preventDefault();
+            
             this.hide();
           } else if (!this._config.keyboard && event.key === ESCAPE_KEY$1) {
             this._triggerBackdropTransition();
@@ -4711,6 +4728,7 @@
         }
 
         if (this._config.backdrop === true) {
+          
           this.hide();
         } else if (this._config.backdrop === 'static') {
           this._triggerBackdropTransition();
@@ -4908,6 +4926,7 @@
 
 
     toggle(relatedTarget) {
+      
       return this._isShown ? this.hide() : this.show(relatedTarget);
     }
 
@@ -5014,7 +5033,10 @@
         isVisible: this._config.backdrop,
         isAnimated: true,
         rootElement: this._element.parentNode,
-        clickCallback: () => this.hide()
+        clickCallback: () => {
+          
+          this.hide();
+        }
       });
     }
 
@@ -5030,9 +5052,12 @@
     }
 
     _addEventListeners() {
-      EventHandler.on(this._element, EVENT_CLICK_DISMISS$1, SELECTOR_DATA_DISMISS$1, () => this.hide());
+      EventHandler.on(this._element, EVENT_CLICK_DISMISS$1, SELECTOR_DATA_DISMISS$1, () =>{
+        
+        this.hide();});
       EventHandler.on(this._element, EVENT_KEYDOWN_DISMISS, event => {
         if (this._config.keyboard && event.key === ESCAPE_KEY) {
+          
           this.hide();
         }
       });
@@ -5354,6 +5379,7 @@
     }
 
     toggle(event) {
+      
       if (!this._isEnabled) {
         return;
       }
@@ -5703,6 +5729,7 @@
 
       this._hideModalHandler = () => {
         if (this._element) {
+          
           this.hide();
         }
       };

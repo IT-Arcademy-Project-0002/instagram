@@ -19,4 +19,6 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     List<Member> findByUsernameContaining(String keyword);
     List<Member> findByNicknameContaining(String keyword);
     List<Member> findByIntroductionContaining(String keyword);
+
+    boolean existsByUsername(String username);
 }

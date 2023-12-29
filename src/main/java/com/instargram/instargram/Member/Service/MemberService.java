@@ -138,4 +138,9 @@ public class MemberService {
 
         return memberRepository.save(member);
     }
+
+    public boolean duplicUserName(String username)
+    {
+        return !memberRepository.existsByUsername(username);
+    }
 }

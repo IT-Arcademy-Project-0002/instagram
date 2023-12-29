@@ -164,13 +164,17 @@
                                                         <form action="/member/changeUsername" id="username-form">
                                                             <div class="d-flex flex-column" style="height: 175px">
                                                                 <input id="now-username" name="now-username" type="hidden" th:value="${loginMember.username}">
-                                                                <label for="new-username"
-                                                                       class="form-label fw-bold">사용자 이름</label>
+                                                                <span class="form-label fw-bold">사용자 이름</span>
                                                                 <div class="flex-fill">
-                                                                    <input type="text" id="new-username" name="new-username"
-                                                                           class="form-control" th:value="${loginMember.username}"
-                                                                           placeholder="변경할 이름을 입력해주세요." oninput="inputUserName()"
-                                                                           onchange="changeStopUserName()">
+                                                                    <div class="position-relative">
+                                                                        <input type="text" id="new-username" name="new-username"
+                                                                               autocomplete='off'
+                                                                               class="form-control" th:value="${loginMember.username}"
+                                                                               placeholder="변경할 이름을 입력해주세요." oninput="inputUserName()"
+                                                                               onchange="changeStopUserName()">
+                                                                        <span id="username-spin" class="visually-hidden spinner-border spinner-grow-sm
+                                                                        text-secondary position-absolute" style="top:11px; right:11px;"></span>
+                                                                    </div>
                                                                     <p id="username-error" class="text-danger mt-2"></p>
                                                                 </div>
                                                                 <button id="username-btn" class="btn btn-primary" disabled="disabled" onclick="changeUserName()">완료</button>

@@ -52,7 +52,7 @@
     display: inline-block;
 }
 
-.menu_list, .dropdown_menu_list {
+.menu_list, .dropdown_menu_list, .search-list {
     margin: 8px 0 8px 0;
     padding: 12px;
     transition: background-color 0.3s;

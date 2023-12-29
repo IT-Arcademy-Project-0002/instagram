@@ -1,5 +1,4 @@
-.main-content
-{
+.main-content {
     margin-left: 350px;
     width: 100%;
     background: #a0d7bd;
@@ -36,14 +35,12 @@
     background: #c5d7f2;
 }
 
-.login-content
-{
+.login-content {
     min-height:calc(100vh - 100px);
     height:calc(100vh - 100px);
     padding: 32px 0;
 }
 
-.footer
-{
+.footer {
     height: 100px;
 }

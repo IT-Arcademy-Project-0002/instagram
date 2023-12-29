@@ -58,4 +58,11 @@ public class CommentController {
         }
         return "redirect:/main";
     }
+
+    @GetMapping("/delete/{id}")
+    public String delete(@PathVariable("id") Long id){
+        Comment comment = this.commentService.getCommentById(id);
+        commentService.delete(comment);
+        return "redirect:/main";
+    }
 }

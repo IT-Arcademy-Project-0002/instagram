@@ -66,4 +66,17 @@ public class BoardService {
     public void delete(Board board) {
         this.boardRepository.delete(board);
     }
+
+    public void CommentDisableStateChange(Long id) {
+        Board board = getBoardById(id);
+
+        board.setCommentDisable(!board.isCommentDisable());
+        boardRepository.save(board);
+    }
+
+    public Integer getSizeByMember(Member member)
+    {
+        return boardRepository.countByMemberAndPin(member, false);
+
+    }
 }

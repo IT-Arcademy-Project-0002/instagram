@@ -29,6 +29,20 @@
                     </div>
                 </div>
 
+                <div class="p-4">
+                    <span>내 콘텐츠를 볼 수 있는 사람</span>
+                    <div class="px-2 py-3 border rounded-2">
+                        <ul class="nav nav-pills flex-column mb-auto">
+                            <!-- my account Nondisclosure setting-->
+                            <li class="nav-item w-100">
+                                <a href="/member/account/privacy_setting"
+                                   th:classappend="${#strings.equals(menu, 'privacy_setting')}?'active'"
+                                   class="nav-link text-dark">계정 공개 범위</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
             </div>
             <div class="col-9">
                 <div th:if="${#strings.equals(menu, 'edit')}">
@@ -209,14 +223,8 @@
                                                     <div class="modal-body p-0">
                                                         <div class="btn-group-vertical w-100" role="group"
                                                              aria-label="Vertical button group">
-                                                            <form th:action="@{|/member/profile/upload|}" method="post"
-                                                                  enctype="multipart/form-data">
-                                                                <input type="file" accept="image/*"
-                                                                       class="visually-hidden"
-                                                                       name="profile-photo-input"
-                                                                       onchange="readFile(this);">
-                                                            </form>
-                                                            <form th:action="@{|/member/profile/delete|}" method="post"
+
+                                                            <form th:action="@{|/member/profile/delete?account=true|}" method="post"
                                                                   id="img-delete-form"></form>
 
                                                             <button type="button" class="btn btn-light rounded-0"
@@ -272,6 +280,33 @@
                                 <input id="change-btn" type="button" class="btn btn-primary w-25"
                                        style="margin-top: 10rem"
                                        th:value="제출" onclick="changeProfile()" disabled="disabled">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div th:if="${#strings.equals(menu, 'privacy_setting')}">
+                    <div class="d-flex justify-content-center">
+                        <div class="col-6">
+                            <div class="my-5">
+                                <h5 class="fw-bold">계정 공개 범위</h5>
+                                <div class="my-5 d-flex justify-content-between align-items-center">
+                                    <div>
+                                        비공계 계정
+                                    </div>
+                                    <div>
+                                        <div class="form-check form-switch p-0 m-0" style="margin-top: 2px">
+                                            <form action="/member/privacySetting" id="privacySetting-form">
+                                                <label>
+                                                    <input class="form-check-input" type="checkbox" role="switch"
+                                                           th:checked="${!loginMember.scope}"
+                                                           name="privacySetting-input"
+                                                           id="privacySetting-input" onclick="changePrivacy(this)">
+                                                </label>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

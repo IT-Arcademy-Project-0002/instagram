@@ -128,7 +128,7 @@
                             <div class="d-flex" style="min-height:18px; height: 18px; margin-bottom: 20px">
                                 <div class="me-5">
                                     <span>게시물</span>
-                                    <span th:text="${#lists.size(userPageDTO.feeds)}"></span>
+                                    <span th:text="${userPageDTO.feedSize}"></span>
                                 </div>
                                 <div class="me-5">
                                     <span>팔로워</span>
@@ -158,39 +158,53 @@
 
                     </div>
 
-                    <!--board list menu-->
-                    <div class="d-flex justify-content-center align-items-center"
-                         style="height: 55px;">
-                        <div class="d-flex">
-                            <a class="btn" href="">게시물</a>
-                            <a class="btn" href="">저장됨</a>
-                            <a class="btn" href="">태그됨</a>
+                    <div th:if="${member.scope or userPageDTO.isMine()}">
+                        <!--board list menu-->
+                        <div class="d-flex justify-content-center align-items-center"
+                             style="height: 55px;">
+                            <div class="d-flex">
+                                <a class="btn" href="">게시물</a>
+                                <a class="btn" href="">저장됨</a>
+                                <a class="btn" href="">태그됨</a>
+                            </div>
                         </div>
-                    </div>
 
-                    <!--board list-->
-                    <div style="height: calc(100vh - 497px);">
-                        <div class="row row-cols-3 mx-0 p-0">
-                            <div th:each="feed : ${userPageDTO.feeds}" class="col mb-1 p-0">
-                                <div class="d-flex justify-content-center">
-                                    <div style="position: relative; width: 300px; height: 300px;">
-                                        <img th:src="@{|/resources/${feed.images().get(0).name}|}"
-                                             class="shadow-sm text-center smooth-update"
-                                             style="position: absolute; top: 0; left: 0; transform: translate(50,50); width: 100%; height: 100%; object-fit: cover; margin: auto">
-                                        <div style="width:10rem; height:10rem; position: absolute">
-                                            <button class="btn btn-primary" th:value="${feed.board().id}"
-                                                    onclick="boardPinChange(this)"
-                                                    th:text="${feed.board().isPin()}?'상단고정 해제':'상단고정'"></button>
-                                            <button class="btn btn-primary" th:value="${feed.board().id}"
-                                                    onclick="boardKeep(this)">보관
-                                            </button>
+                        <!--board list-->
+                        <div style="height: calc(100vh - 497px);">
+                            <div class="row row-cols-3 mx-0 p-0">
+                                <div th:each="feed : ${userPageDTO.feeds}" class="col mb-1 p-0">
+                                    <div class="d-flex justify-content-center">
+                                        <div style="position: relative; width: 300px; height: 300px;">
+                                            <img th:src="@{|/resources/${feed.images().get(0).name}|}"
+                                                 class="shadow-sm text-center smooth-update"
+                                                 style="position: absolute; top: 0; left: 0; transform: translate(50,50); width: 100%; height: 100%; object-fit: cover; margin: auto">
+                                            <div style="width:10rem; height:10rem; position: absolute">
+                                                <button class="btn btn-primary" th:value="${feed.board().id}"
+                                                        onclick="boardPinChange(this)"
+                                                        th:text="${feed.board().isPin()}?'상단고정 해제':'상단고정'"></button>
+                                                <button class="btn btn-primary" th:value="${feed.board().id}"
+                                                        onclick="boardKeep(this)">보관
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
 
+                                </div>
                             </div>
                         </div>
                     </div>
+
+                    <div th:unless="${member.scope or userPageDTO.isMine()}">
+                        <div class="border border-1 rounded-3 p-5 my-4">
+                            <div class="text-center py-2">
+                                비공개 계정입니다
+                                <br>
+                                <br>
+                                사진 및 동영상을 보려면 팔로우하세요.
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>

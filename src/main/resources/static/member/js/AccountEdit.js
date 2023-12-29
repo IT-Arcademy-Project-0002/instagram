@@ -202,3 +202,24 @@ function changeUserName(){
 function containsSpecialCharacters(str) {
     return /[^\w._]/.test(str);
 }
+
+function changePrivacy(btn)
+{
+    if(btn.checked)
+    {
+        var res = confirm("비공개 계정을 하시겠습니까?");
+        if(res)
+        {
+            document.getElementById('privacySetting-form').submit();
+        }
+        else
+        {
+            btn.checked = false;
+        }
+    }
+    else
+    {
+        btn.checked = false;
+        document.getElementById('privacySetting-form').submit();
+    }
+}

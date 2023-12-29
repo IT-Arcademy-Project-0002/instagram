@@ -2,20 +2,9 @@ package com.instargram.instargram.Search.Service;
 
 import com.instargram.instargram.Member.Model.Entity.Member;
 import com.instargram.instargram.Member.Model.Repository.MemberRepository;
-import com.instargram.instargram.Search.Model.DTO.CoordinatesDTO;
 import com.instargram.instargram.Search.Model.DTO.SearchDTO;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriComponents;
-import org.springframework.web.util.UriComponentsBuilder;
-import org.json.JSONArray;
-import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,73 +25,6 @@ public class SearchService {
 
     private final MemberRepository memberRepository;
 
-
-    @Value("${kakao.api.key}")
-    private String kakaoLocalKey;
-
-    private final String uri1 = "https://dapi.kakao.com/v2/local/search/keyword.json";
-    private final String uri2 = "https://dapi.kakao.com/v2/local/search/address.json";
-
-
-    public CoordinatesDTO getCoordinateByKeyword() {
-
-        RestTemplate restTemplate = new RestTemplate();
-
-        String apiKey = "KakaoAK " + kakaoLocalKey;
-        String keyword = "유성온천역";
-
-        // 요청 헤더에 만들기, Authorization 헤더 설정하기
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.set("Authorization", apiKey);
-        HttpEntity<String> entity = new HttpEntity<>(httpHeaders);
-
-        UriComponents uriComponents = UriComponentsBuilder
-                .fromHttpUrl(uri1)
-                .queryParam("query",keyword)
-                .build();
-
-        ResponseEntity<String> response = restTemplate.exchange(uriComponents.toString(), HttpMethod.GET, entity, String.class);
-
-        // API Response로부터 body 뽑아내기
-        String body = response.getBody();
-        JSONObject json = new JSONObject(body);
-        // body에서 좌표 뽑아내기 (index를 지정하지 않으면 모든값을 다 가져올수 있을듯? 공식문서 참조)
-        // https://developers.kakao.com/docs/latest/ko/local/dev-guide#search-by-keyword
-        JSONArray documents = json.getJSONArray("documents");
-        String x = documents.getJSONObject(0).getString("x");
-        String y = documents.getJSONObject(0).getString("y");
-
-        return new CoordinatesDTO(x, y);
-    }
-
-    public CoordinatesDTO getCoordinateByAddress(){
-        RestTemplate restTemplate = new RestTemplate();
-
-        String apiKey = "KakaoAK " + kakaoLocalKey;
-        String address = "대전광역시 유성구 계룡로 지하97 (봉명동)";
-
-        // 요청 헤더에 만들기, Authorization 헤더 설정하기
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.set("Authorization", apiKey);
-        HttpEntity<String> entity = new HttpEntity<>(httpHeaders);
-
-        UriComponents uriComponents = UriComponentsBuilder
-                .fromHttpUrl(uri2)
-                .queryParam("query",address)
-                .build();
-
-        ResponseEntity<String> response = restTemplate.exchange(uriComponents.toString(), HttpMethod.GET, entity, String.class);
-
-        // API Response로부터 body 뽑아내기
-        String body = response.getBody();
-        JSONObject json = new JSONObject(body);
-        // body에서 좌표 뽑아내기
-        JSONArray documents = json.getJSONArray("documents");
-        String x = documents.getJSONObject(0).getString("x");
-        String y = documents.getJSONObject(0).getString("y");
-
-        return new CoordinatesDTO(x, y);
-    }
 
     public List<SearchDTO> searchResult(String keyword) {
 

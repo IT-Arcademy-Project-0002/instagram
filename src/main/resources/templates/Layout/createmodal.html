@@ -1,4 +1,6 @@
+
 <div th:fragment="createmodalFragment">
+    <link rel="stylesheet" type="text/css" th:href="@{/location/css/location_content.css}">
     <form th:action="@{/board/create}" method="post" enctype="multipart/form-data">
         <div class="modal fade" id="Board_Create_Modal" tabindex="-1" aria-labelledby="Board_Create_ModalLabel"
              aria-hidden="true">
@@ -85,6 +87,19 @@
                                     <p class="textCount p-0 m-0" style="font-size: smaller;">0자</p>
                                     <p class="textTotal p-0 m-0" style="font-size: smaller;">/2200자</p>
                                 </div>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" placeholder="위치 추가" aria-describedby="basic-addon2" id="boardkeyword" name="boardkeyword" size="15"  autocomplete="off">
+                                </div>
+                                <div class="location-list" id="locationList">
+                                </div>
+                                <div>
+                                    <input type="hidden" id="locationId" name="locationId" value=" " readonly>
+                                    <input type="hidden" id="placeName" name="placeName" value=" " readonly>
+                                    <input type="hidden" id="addressName" name="addressName" value=" " readonly>
+                                    <input type="hidden" id="roadAddressName" name="roadAddressName" value=" " readonly>
+                                    <input type="hidden" id="x" name="x" value=" " readonly>
+                                    <input type="hidden" id="y" name="y" value=" " readonly>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -110,4 +125,5 @@
         </div>
     </form>
     <script th:src="@{/board/js/board_js.js}"></script>
+    <script th:src="@{/location/js/location.js}"></script>
 </div>

@@ -1,6 +1,7 @@
 package com.instargram.instargram.Community.Board.Model.Entity;
 
 import com.instargram.instargram.Community.Comment.Model.Entity.Comment;
+import com.instargram.instargram.Community.Location.Model.Entity.Location;
 import com.instargram.instargram.Member.Model.Entity.Member;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -76,4 +77,7 @@ public class Board {
     // 해당 리스트에서 직접 접근하지 말 것
     @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private List<Board_Save_Map> boardSaveMaps;
+
+    @OneToOne(mappedBy = "board", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    private Location location;
 }

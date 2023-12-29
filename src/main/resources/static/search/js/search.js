@@ -5,6 +5,16 @@ $(document).ready(function () {
 
     var searchListBody = $('#searchList');
 
+    function showSearchList() {
+        // searchList 요소의 visibility 속성을 visible로 변경하여 보이게 함
+        searchListBody.css('visibility', 'visible');
+    }
+
+    function hideSearchList() {
+        // searchList 요소의 visibility 속성을 hidden으로 변경하여 숨김
+        searchListBody.css('visibility', 'hidden');
+    }
+
     // input 요소에 대한 keyup 이벤트 핸들러 등록
     $("#keyword").keyup(function () {
         // 검색어를 가져오기
@@ -30,10 +40,11 @@ $(document).ready(function () {
                 searchListBody.empty();
 
                 if (keyword.trim() === "") {
-                    // 검색어가 비어있을 경우에 대한 처리 (예: 안내 메시지 표시)
+                    hideSearchList();
                     searchListBody.text('');
                 } else {
-                    displaySearchResults(data, keyword);
+                    showSearchList()
+                    displaySearchResults(data);
                 }
             },
             error: function (error) {
@@ -55,7 +66,6 @@ $(document).ready(function () {
                 }
 
                 var listItem = $(
-
                     '<a href="/member/page/'+ searchResult.username + '" target="_blank" class="link">' +
                     '<div class="search-box">' +
                     '<div class="search-profile">' +
@@ -67,7 +77,6 @@ $(document).ready(function () {
                     '</div>' +
                     '</div>' +
                     '</a>'
-
                 );
 
                 newList.append(listItem);

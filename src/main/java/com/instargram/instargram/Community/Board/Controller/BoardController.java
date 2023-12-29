@@ -10,6 +10,8 @@ import com.instargram.instargram.Community.Board.Service.BoardService;
 import com.instargram.instargram.Community.Board.Service.Board_Data_MapService;
 import com.instargram.instargram.Community.Board.Service.Board_Like_Member_MapService;
 import com.instargram.instargram.Community.Comment.Service.CommentService;
+import com.instargram.instargram.Community.Location.Model.DTO.LocationDTO;
+import com.instargram.instargram.Community.Location.Service.LocationService;
 import com.instargram.instargram.Data.Image.Image;
 import com.instargram.instargram.Data.Image.ImageService;
 import com.instargram.instargram.Enum_Data;
@@ -36,12 +38,13 @@ public class BoardController {
     private final BoardService boardService;
     private final ImageService imageService;
     private final CommentService commentService;
+    private final LocationService locationService;
     private final Board_Data_MapService boardDataMapService;
     private final Board_Like_Member_MapService boardLikeMemberMapService;
 
     @PostMapping("/board/create")
     public String create(@RequestParam("image-upload") List<MultipartFile> multipartFiles,
-                         BoardCreateForm boardCreateForm, BindingResult bindingResult,
+                         LocationDTO locationDTO, BoardCreateForm boardCreateForm, BindingResult bindingResult,
                          Principal principal) throws IOException {
         if (bindingResult.hasErrors()) {
             return "redirect:/main";
@@ -49,6 +52,8 @@ public class BoardController {
         Member member = this.memberService.getMember(principal.getName());
 
         Board board = this.boardService.create(member, boardCreateForm.getContent());
+
+        this.locationService.create(board, locationDTO);
 
         for (MultipartFile multipartFile : multipartFiles) {
             if (!multipartFile.isEmpty()) {

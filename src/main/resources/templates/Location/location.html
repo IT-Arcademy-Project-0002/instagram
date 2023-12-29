@@ -6,28 +6,49 @@
     <!-- 이전 Mapbox GL JS v1은 무료 개방형 BSD3 라이센스로 계속 사용할 수 있지만 가장 중요한 보안 및 버그 수정을 제외하고는 개선되지 않습니다 -->
     <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.47.0/mapbox-gl.js'></script>
     <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.47.0/mapbox-gl.css' rel='stylesheet' />
-    <link rel="stylesheet" type="text/css" th:href="@{/search/css/map_content.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/location/css/map_content.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/location/css/location_content.css}">
 
 </head>
 <div layout:fragment="content">
     <div class = "map-content">
         <div class="map-container">
-            <div class = "keyword-box border border-1">
+            <div class = "keyword-box">
                 <div class="input-group mb-3">
-                    <input type="text" class="form-control" placeholder="검색어를 입력해주세요" aria-describedby="basic-addon2" id="keyword" name="keyword" size="15" >
-                    <button class="btn btn-primary" id="searchkeyword" type = "button"> 검색하기 </button>
+                    <input type="text" class="form-control" placeholder="위치 추가" aria-describedby="basic-addon2" id="keyword" name="keyword" size="15"  autocomplete="off">
+                </div>
+                <div class = "search-list" id="searchList">
                 </div>
             </div>
             <div class="map-box">
                 <div id='map'></div>
             </div>
         </div>
-        <h4> 검색된 장소의 좌표 (기본값:유성온천역, 검색버튼 미구현, 마커표기 미구현) </h4>
-        <p>X: <span th:text="${ByKeyword.x}"></span></p>
-        <p>Y: <span th:text="${ByKeyword.y}"></span></p>
+        <div>
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control custom-input" id="locationId" name="locationId" value=" " readonly>
+                <label class="custom-label" for="locationId"> 장소고유번호 </label>
+            </div>
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control custom-input" id="placeName" name="placeName" value=" " readonly>
+                <label class="custom-label" for="placeName"> 장소명 </label>
+            </div>
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control custom-input" id="address" name="address" value=" " readonly>
+                <label class="custom-label" for="address"> 지번주소 </label>
+            </div>
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control custom-input" id="x" name="x" value=" " readonly>
+                <label class="custom-label" for="x"> 경도 </label>
+            </div>
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control custom-input" id="y" name="y" value=" " readonly>
+                <label class="custom-label" for="y"> 위도 </label>
+            </div>
+        </div>
     </div>
-    <script>
 
+    <script>
         // 아니면.. {z}/{x}/{y}의 형태로 접근하는 것이 혹시 가능할까?
         // leaflet, openlayer, mapbox 예제의 확인이 필요할 것 같음.
 
@@ -45,7 +66,6 @@
         var marker4 = new mapboxgl.Marker({ color: 'red' }).setLngLat([127.377314, 36.353731]).addTo(map);
         var marker5 = new mapboxgl.Marker({ color: 'red' }).setLngLat([127.378211, 36.349406]).addTo(map);
         var marker6 = new mapboxgl.Marker({ color: 'red' }).setLngLat([127.377137, 36.351976]).addTo(map);
-
     </script>
 </div>
 </html>

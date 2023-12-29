@@ -1,13 +1,20 @@
 package com.instargram.instargram.Member.Service;
 
 import com.instargram.instargram.Community.Board.Model.Entity.Board;
+import com.instargram.instargram.Config.AppConfig;
 import com.instargram.instargram.Data.Image.Image;
 import com.instargram.instargram.Data.Image.ImageService;
+import com.instargram.instargram.Member.Config.SpringSecurity.MemberSecurityService;
 import com.instargram.instargram.Member.Model.Entity.Member;
 import com.instargram.instargram.Member.Model.Form.MemberCreateForm;
 import com.instargram.instargram.Member.Model.Repository.MemberRepository;
 import jakarta.annotation.PostConstruct;
 import lombok.Builder;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +22,7 @@ import java.util.Optional;
 
 @Service
 @Builder
+@Lazy
 public class MemberService {
 
     private final MemberRepository memberRepository;
@@ -54,6 +62,7 @@ public class MemberService {
             member.setPassword(passwordEncoder.encode("test123!"));
             member.setEmail("test1@gmail.com");
             member.setNickname("테스트유저");
+            member.setScope(true);
 
             memberRepository.save(member);
         }
@@ -69,6 +78,7 @@ public class MemberService {
         member.setEmail(memberCreateForm.getEmail());
         member.setProvider(memberCreateForm.getProvider());
         member.setProviderId(memberCreateForm.getProviderID());
+        member.setScope(true);
         memberRepository.save(member);
     }
 
@@ -113,4 +123,35 @@ public class MemberService {
         memberRepository.save(member);
     }
 
+    public void changeName(String username, String name)
+    {
+        Member member = getMember(username);
+
+        member.setNickname(name);
+
+        memberRepository.save(member);
+    }
+
+    public Member changeUsername(String username, String newUsername)
+    {
+        Member member = getMember(username);
+
+        member.setUsername(newUsername);
+
+        return memberRepository.save(member);
+    }
+
+    public boolean duplicUserName(String username)
+    {
+        return !memberRepository.existsByUsername(username);
+    }
+
+    public void changeScope(String username, boolean scope)
+    {
+        Member member = getMember(username);
+
+        member.setScope(scope);
+
+        memberRepository.save(member);
+    }
 }

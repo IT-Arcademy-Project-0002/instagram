@@ -15,11 +15,29 @@
                         <ul class="nav nav-pills flex-column mb-auto">
                             <!-- my account setting -->
                             <li class="nav-item w-100">
-                                <a href="/member/account/edit" th:classappend="${#strings.equals(menu, 'edit')}?'active'" class="nav-link text-dark">프로필 편집</a>
+                                <a href="/member/account/edit"
+                                   th:classappend="${#strings.equals(menu, 'edit')}?'active'"
+                                   class="nav-link text-dark">프로필 편집</a>
                             </li>
                             <!-- notice setting -->
                             <li class="nav-item w-100">
-                                <a href="/member/account/notice" th:classappend="${#strings.equals(menu, 'notice')}?'active'" class="nav-link text-dark">알림</a>
+                                <a href="/member/account/notice"
+                                   th:classappend="${#strings.equals(menu, 'notice')}?'active'"
+                                   class="nav-link text-dark">알림</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="p-4">
+                    <span>내 콘텐츠를 볼 수 있는 사람</span>
+                    <div class="px-2 py-3 border rounded-2">
+                        <ul class="nav nav-pills flex-column mb-auto">
+                            <!-- my account Nondisclosure setting-->
+                            <li class="nav-item w-100">
+                                <a href="/member/account/privacy_setting"
+                                   th:classappend="${#strings.equals(menu, 'privacy_setting')}?'active'"
+                                   class="nav-link text-dark">계정 공개 범위</a>
                             </li>
                         </ul>
                     </div>
@@ -33,14 +51,15 @@
                             <div class="my-5">
                                 <h5 class="fw-bold">프로필 편집</h5>
                                 <!--  profile photo setting -->
-                                <div class="my-5 d-flex justify-content-between align-items-center rounded-4" style="background: rgba(152,152,152,0.2)">
+                                <div class="my-5 d-flex justify-content-between align-items-center rounded-4"
+                                     style="background: rgba(152,152,152,0.2)">
                                     <div class="d-flex m-3">
                                         <button class="btn btn-light rounded-circle p-0 m-0"
                                                 onclick="clickProfilePhotoChange()"
                                                 style="position: relative; width: 65px; height: 65px;">
                                             <img th:if="${loginMember.image == null}" id="none_user_img"
                                                  src="/files/designImg/noneuser.png"
-                                                 class="shadow rounded-circle text-center smooth-update"
+                                                 class="shadow rounded-circle text-center"
                                                  style="position: absolute; top: 0; left: 0; transform: translate(50,50); width: 100%; height: 100%; object-fit: cover; margin: auto">
                                             <img th:unless="${loginMember.image == null}" id="user_img"
                                                  th:src="@{|/resources/${loginMember.image.name}|}"
@@ -57,42 +76,236 @@
 
                                     <div class="m-3">
                                         <button class="btn btn-primary"
-                                            onclick="clickProfilePhotoChange()">사진 변경</button>
+                                                data-bs-toggle="modal" data-bs-target="#ProfileModifyModal">계정 관리
+                                        </button>
+
+                                        <!-- profile modify menu Modal -->
+                                        <div class="modal fade" id="ProfileModifyModal" role="dialog"
+                                             aria-hidden="true" aria-labelledby="ProfileModifyModalLabel" tabindex="-1">
+                                            <div class="modal-dialog modal-dialog-centered">
+                                                <div class="modal-content">
+                                                    <div class="modal-header justify-content-center">
+                                                        <h1 class="modal-title fs-5" id="ProfileModifyModalLabel">계정 관리</h1>
+                                                        <div class="position-absolute d-flex justify-content-end w-100 p-3">
+                                                            <button type="button" class="btn-close m-0"
+                                                                    data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-body p-0">
+                                                        <div class="btn-group-vertical w-100" role="group"
+                                                             aria-label="Vertical button group">
+
+                                                            <button class="btn btn-light" data-bs-toggle="modal"
+                                                                    data-bs-target="#NameModifyModal">
+                                                                이름
+                                                            </button>
+                                                            <button class="btn btn-light" data-bs-toggle="modal"
+                                                                    data-bs-target="#UserNameModifyModal">
+                                                                사용자 이름
+                                                            </button>
+                                                            <button class="btn btn-light" data-bs-toggle="modal"
+                                                                    data-bs-target="#PhotoModifyModal">
+                                                                프로필 사진
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- profile modify menu Modal end-->
+
+                                        <!-- name modify modal -->
+                                        <div class="modal fade" id="NameModifyModal" role="dialog"
+                                             aria-hidden="true" aria-labelledby="NameModifyModalLabel" tabindex="-1">
+                                            <div class="modal-dialog modal-dialog-centered">
+                                                <div class="modal-content">
+                                                    <div class="modal-header justify-content-between align-content-center">
+                                                        <button class="btn btn-light p-0" data-bs-toggle="modal"
+                                                                style="width: 32px; height: 32px"
+                                                                data-bs-target="#ProfileModifyModal">
+                                                            <svg viewBox="0 0 24 24" fill="currentColor" width="1em"
+                                                                 height="1em" aria-hidden="true">
+                                                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                                                      d="M16.753 4.341a1 1 0 0 0-1.412-.094l-8 7a1 1 0 0 0 0 1.506l8 7a1 1 0 0 0 1.318-1.506L9.518 12l7.14-6.247a1 1 0 0 0 .094-1.412z"></path>
+                                                            </svg>
+                                                        </button>
+
+                                                        <h5 class="m-0">이름 변경</h5>
+
+                                                        <button type="button" class="btn-close m-0" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <form action="/member/changeName" id="name-form">
+                                                            <div class="d-flex flex-column" style="height: 175px">
+                                                                <input id="now-name" name="now-name" type="hidden" th:value="${loginMember.nickname}">
+                                                                <label for="new-name"
+                                                                       class="form-label fw-bold">이름</label>
+                                                                <div class="flex-fill">
+                                                                    <input type="text" id="new-name" name="new-name"
+                                                                           class="form-control" th:value="${loginMember.nickname}"
+                                                                           placeholder="변경할 이름을 입력해주세요." oninput="inputName()">
+                                                                </div>
+                                                                <button id="name-btn" class="btn btn-primary" disabled="disabled" onclick="changeName()">완료</button>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- name modify modal end -->
+
+                                        <!-- username modify modal -->
+                                        <div class="modal fade" id="UserNameModifyModal" role="dialog"
+                                             aria-hidden="true" aria-labelledby="UserNameModifyModalLabel" tabindex="-1">
+                                            <div class="modal-dialog modal-dialog-centered">
+                                                <div class="modal-content">
+                                                    <div class="modal-header justify-content-between align-content-center">
+                                                        <button class="btn btn-light p-0" data-bs-toggle="modal"
+                                                                style="width: 32px; height: 32px"
+                                                                data-bs-target="#ProfileModifyModal">
+                                                            <svg viewBox="0 0 24 24" fill="currentColor" width="1em"
+                                                                 height="1em" aria-hidden="true">
+                                                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                                                      d="M16.753 4.341a1 1 0 0 0-1.412-.094l-8 7a1 1 0 0 0 0 1.506l8 7a1 1 0 0 0 1.318-1.506L9.518 12l7.14-6.247a1 1 0 0 0 .094-1.412z"></path>
+                                                            </svg>
+                                                        </button>
+
+                                                        <h5 class="m-0">사용자 이름 변경</h5>
+
+                                                        <button type="button" class="btn-close m-0" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <form action="/member/changeUsername" id="username-form">
+                                                            <div class="d-flex flex-column" style="height: 175px">
+                                                                <input id="now-username" name="now-username" type="hidden" th:value="${loginMember.username}">
+                                                                <span class="form-label fw-bold">사용자 이름</span>
+                                                                <div class="flex-fill">
+                                                                    <div class="position-relative">
+                                                                        <input type="text" id="new-username" name="new-username"
+                                                                               autocomplete='off'
+                                                                               class="form-control" th:value="${loginMember.username}"
+                                                                               placeholder="변경할 이름을 입력해주세요." oninput="inputUserName()"
+                                                                               onchange="changeStopUserName()">
+                                                                        <span id="username-spin" class="visually-hidden spinner-border spinner-grow-sm
+                                                                        text-secondary position-absolute" style="top:11px; right:11px;"></span>
+                                                                    </div>
+                                                                    <p id="username-error" class="text-danger mt-2"></p>
+                                                                </div>
+                                                                <button id="username-btn" class="btn btn-primary" disabled="disabled" onclick="changeUserName()">완료</button>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- username modify modal end -->
+
+                                        <!-- photo modify modal -->
+                                        <div class="modal fade" id="PhotoModifyModal" role="dialog"
+                                             aria-hidden="true" aria-labelledby="PhotoModifyModalLabel" tabindex="-1">
+                                            <div class="modal-dialog modal-dialog-centered">
+                                                <div class="modal-content">
+                                                    <div class="modal-header justify-content-between align-content-center">
+                                                        <button class="btn btn-light p-0" data-bs-toggle="modal"
+                                                                style="width: 32px; height: 32px"
+                                                                data-bs-target="#ProfileModifyModal">
+                                                            <svg viewBox="0 0 24 24" fill="currentColor" width="1em"
+                                                                 height="1em" aria-hidden="true">
+                                                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                                                      d="M16.753 4.341a1 1 0 0 0-1.412-.094l-8 7a1 1 0 0 0 0 1.506l8 7a1 1 0 0 0 1.318-1.506L9.518 12l7.14-6.247a1 1 0 0 0 .094-1.412z"></path>
+                                                            </svg>
+                                                        </button>
+
+                                                        <h5 class="m-0">프로필 사진 변경</h5>
+
+                                                        <button type="button" class="btn-close m-0" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body p-0">
+                                                        <div class="btn-group-vertical w-100" role="group"
+                                                             aria-label="Vertical button group">
+
+                                                            <form th:action="@{|/member/profile/delete?account=true|}" method="post"
+                                                                  id="img-delete-form"></form>
+
+                                                            <button type="button" class="btn btn-light rounded-0"
+                                                                    onclick="clickProfilePhotoChange()"> 사진 업로드
+                                                            </button>
+                                                            <button type="submit" class="btn btn-light"
+                                                                    form="img-delete-form">
+                                                                현재 사진 삭제
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- photo modify modal end -->
+
+
                                     </div>
                                 </div>
+                            </div>
 
-                                <!-- introduce setting -->
-                                <div class="my-5">
-                                    <label for="introduce" class="form-label fw-bold">소개</label>
-                                    <input id="introduce" name="introduce" type="text" class="form-control"
-                                           oninput="changeIntroduce()"
-                                           th:value="${loginMember.introduction == null}?'':${loginMember.introduction}">
+
+                            <!-- introduce setting -->
+                            <div class="my-5">
+                                <label for="introduce" class="form-label fw-bold">소개</label>
+                                <input id="introduce" name="introduce" type="text" class="form-control"
+                                       oninput="changeIntroduce()"
+                                       th:value="${loginMember.introduction == null}?'':${loginMember.introduction}">
+                            </div>
+
+                            <!-- sex setting -->
+                            <div class="my-5">
+                                <label class="form-label fw-bold">성별</label>
+                                <div class="dropdown w-100">
+                                    <a th:if="${loginMember.sex==null}"
+                                       class="now-sex btn btn-outline-secondary w-100 text-start"
+                                       role="button" data-bs-toggle="dropdown" aria-expanded="false"
+                                       th:text="@{밝히고 싶지 않음}"></a>
+                                    <a th:unless="${loginMember.sex==null}"
+                                       class="now-sex btn btn-outline-secondary w-100 text-start"
+                                       role="button" data-bs-toggle="dropdown" aria-expanded="false"
+                                       th:text="${#strings.equals(loginMember.sex,'male')}?'남성':'여성'"></a>
+
+                                    <ul class="dropdown-menu w-100">
+                                        <li class="dropdown-item" onclick="changeSex('female')">여성</li>
+                                        <li class="dropdown-item" onclick="changeSex('male')">남성</li>
+                                        <li class="dropdown-item" onclick="changeSex('')">밝히고 싶지 않음</li>
+                                    </ul>
                                 </div>
+                            </div>
+                            <!-- change profile button -->
+                            <div class="d-flex justify-content-end">
+                                <input id="change-btn" type="button" class="btn btn-primary w-25"
+                                       style="margin-top: 10rem"
+                                       th:value="제출" onclick="changeProfile()" disabled="disabled">
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-                                <!-- sex setting -->
-                                <div class="my-5">
-                                    <label class="form-label fw-bold">성별</label>
-                                    <div class="dropdown w-100">
-                                        <a th:if="${loginMember.sex==null}"
-                                           class="now-sex btn btn-outline-secondary w-100 text-start"
-                                           role="button" data-bs-toggle="dropdown" aria-expanded="false" th:text="@{밝히고 싶지 않음}"></a>
-                                        <a th:unless="${loginMember.sex==null}"
-                                           class="now-sex btn btn-outline-secondary w-100 text-start"
-                                           role="button" data-bs-toggle="dropdown" aria-expanded="false"
-                                           th:text="${#strings.equals(loginMember.sex,'male')}?'남성':'여성'"></a>
-
-                                        <ul class="dropdown-menu w-100">
-                                            <li class="dropdown-item" onclick="changeSex('female')">여성</li>
-                                            <li class="dropdown-item" onclick="changeSex('male')">남성</li>
-                                            <li class="dropdown-item" onclick="changeSex('')">밝히고 싶지 않음</li>
-                                        </ul>
+                <div th:if="${#strings.equals(menu, 'privacy_setting')}">
+                    <div class="d-flex justify-content-center">
+                        <div class="col-6">
+                            <div class="my-5">
+                                <h5 class="fw-bold">계정 공개 범위</h5>
+                                <div class="my-5 d-flex justify-content-between align-items-center">
+                                    <div>
+                                        비공계 계정
                                     </div>
-                                </div>
-                                <!-- change profile button -->
-                                <div class="d-flex justify-content-end">
-                                    <input id="change-btn" type="button" class="btn btn-primary w-25"
-                                           style="margin-top: 10rem"
-                                           th:value="제출" onclick="changeProfile()" disabled="disabled">
+                                    <div>
+                                        <div class="form-check form-switch p-0 m-0" style="margin-top: 2px">
+                                            <form action="/member/privacySetting" id="privacySetting-form">
+                                                <label>
+                                                    <input class="form-check-input" type="checkbox" role="switch"
+                                                           th:checked="${!loginMember.scope}"
+                                                           name="privacySetting-input"
+                                                           id="privacySetting-input" onclick="changePrivacy(this)">
+                                                </label>
+                                            </form>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -100,18 +313,20 @@
                 </div>
             </div>
         </div>
-        <form id="change-profile" action="/member/changeProfile">
-            <input id="now-sex" name="now-sex" type="hidden" th:value="${loginMember.sex}">
-            <input id="now-introduce" name="now-introduce" type="hidden" th:value="${loginMember.introduction == null}?'':${loginMember.introduction}">
-        </form>
-
-        <form th:action="@{|/member/profile/upload?account=true|}" method="post"
-              id="img-form" enctype="multipart/form-data">
-            <input type="file" accept="image/*" class="visually-hidden"
-                   id="profile-photo-input"
-                   name="profile-photo-input" onchange="readFile(this);">
-        </form>
     </div>
+    <form id="change-profile" action="/member/changeProfile">
+        <input id="now-sex" name="now-sex" type="hidden" th:value="${loginMember.sex}">
+        <input id="now-introduce" name="now-introduce" type="hidden"
+               th:value="${loginMember.introduction == null}?'':${loginMember.introduction}">
+    </form>
+
+
+    <form th:action="@{|/member/profile/upload?account=true|}" method="post"
+          id="img-form" enctype="multipart/form-data">
+        <input type="file" accept="image/*" class="visually-hidden"
+               id="profile-photo-input"
+               name="profile-photo-input" onchange="readFile(this);">
+    </form>
     <script th:src="@{/member/js/AccountEdit.js}"></script>
 </div>
 </html>

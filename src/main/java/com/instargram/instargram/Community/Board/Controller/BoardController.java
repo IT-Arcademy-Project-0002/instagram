@@ -1,5 +1,6 @@
 package com.instargram.instargram.Community.Board.Controller;
 
+import com.fasterxml.jackson.databind.introspect.TypeResolutionContext;
 import com.instargram.instargram.Community.Board.Model.DTO.FeedDTO;
 import com.instargram.instargram.Community.Board.Model.DTO.FeedListDTO;
 import com.instargram.instargram.Community.Board.Model.Entity.Board_Like_Member_Map;
@@ -79,16 +80,19 @@ public class BoardController {
 
     // 좋아요
     @GetMapping("/board/like/{id}")
-    public String like(@PathVariable("id") Long id, Principal principal, Model model) {
+    public String like(@PathVariable("id") Long id, Principal principal, Model model, HttpSession httpSession) {
         Board board = this.boardService.getBoardById(id);
         Member member = this.memberService.getMember(principal.getName());
 
         Board_Like_Member_Map isBoardMemberLiked = this.boardLikeMemberMapService.exists(board, member);
         if (isBoardMemberLiked == null) {
             this.boardLikeMemberMapService.create(board, member);
+            model.addAttribute("isLiked",true);
         }else{
             this.boardLikeMemberMapService.delete(isBoardMemberLiked);
+            model.addAttribute("isLiked", false);
         }
+
         return "redirect:/main";
     }
 
@@ -102,7 +106,6 @@ public class BoardController {
             model.addAttribute("selectFeed", selectFeed);
             httpSession.removeAttribute("selectFeed");
         }
-
         System.out.println("===========================>" + selectFeed);
         model.addAttribute("feedList",  feedList);
         return "Board/board_main";
@@ -129,5 +132,35 @@ public class BoardController {
     {
         boardService.KeepStateChange(id);
         return "redirect:/member/page/"+principal.getName();
+    }
+
+    @GetMapping("/board/likehide/{id}")
+    public String boardLikeHide(@PathVariable("id") Long id){
+        this.boardService.LikeStateChange(id);
+        return "redirect:/main";
+    }
+    @GetMapping("/board/comment_disable/{id}")
+    public String boardCommentDisable(@PathVariable("id") Long id){
+        this.boardService.CommentDisableStateChange(id);
+        return "redirect:/main";
+    }
+
+    @GetMapping("/beard/delete/{id}")
+    public String boarddelete(@PathVariable("id") Long id) {
+        Board board = this.boardService.getBoardById(id);
+        boardService.delete(board);
+        return "redirect:/main";
+    }
+
+    @GetMapping("/board/feedMemberInfo/{id}")
+    public String boardFeedMemberInfo(@PathVariable("id") Long id){
+        Board board = this.boardService.getBoardById(id);
+
+        if (board != null) {
+            Member member = board.getMember();
+            return "redirect:/member/page/" + member.getUsername();
+        }else{
+            return "redirect:/main";
+        }
     }
 }

@@ -6,6 +6,8 @@ import com.instargram.instargram.Data.Image.Image;
 import com.instargram.instargram.Data.Image.ImageService;
 import com.instargram.instargram.Enum_Data;
 import com.instargram.instargram.Member.Config.OAuth2.Model.OAuth2UserInfo;
+import com.instargram.instargram.Member.Config.SpringSecurity.MemberSecurityService;
+import com.instargram.instargram.Member.Config.SpringSecurity.PrincipalDetails;
 import com.instargram.instargram.Member.Model.DTO.UserPageDTO;
 import com.instargram.instargram.Member.Model.Entity.Member;
 import com.instargram.instargram.Member.Model.Form.MemberCreateForm;
@@ -18,6 +20,11 @@ import jakarta.servlet.http.HttpSession;
 import lombok.Builder;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -43,6 +50,8 @@ public class MemberController {
     private final StoryHighlightMapService storyHighlightMapService;
     private final Board_Data_MapService dataMapService;
     private final ImageService imageService;
+
+    private final AuthenticationManager authenticationManager;
 
     @GetMapping("/login")
     public String login()
@@ -133,9 +142,9 @@ public class MemberController {
         Member member = memberService.getMember(username);
         Member loginMember = memberService.getMember(principal.getName());
 
-        UserPageDTO userPageDTO = new UserPageDTO(member, loginMember, boardService, followMapService, storyHighlightMapService, dataMapService);
-
         model.addAttribute("member", member);
+
+        UserPageDTO userPageDTO = new UserPageDTO(member, loginMember, boardService, followMapService, storyHighlightMapService, dataMapService);
         model.addAttribute("userPageDTO", userPageDTO);
 
         return "Member/UserPage_form";
@@ -143,13 +152,21 @@ public class MemberController {
 
 
     @PostMapping("/profile/delete")
-    public String ProfileImageDelete(Principal principal)
+    public String ProfileImageDelete(Principal principal, @RequestParam(value = "account") boolean account)
     {
         Member member = memberService.getMember(principal.getName());
 
         imageService.deleteImage(memberService.ProfileImageDelete(member));
 
-        return "redirect:/member/page/"+member.getUsername();
+
+        if(account)
+        {
+            return "redirect:/member/account/edit";
+        }
+        else
+        {
+            return "redirect:/member/page/"+member.getUsername();
+        }
     }
 
     @GetMapping("/follow/{username}")
@@ -159,13 +176,7 @@ public class MemberController {
         Member member = memberService.getMember(principal.getName());
         Member target =  memberService.getMember(username);
 
-        if(memberService.UserFollow(member, target))
-        {
-            result.put("result", true);
-        }
-        else{
-            result.put("result", false);
-        }
+        result.put("result", memberService.UserFollow(member, target));
 
         return ResponseEntity.ok().body(result);
     }
@@ -193,5 +204,38 @@ public class MemberController {
 
         memberService.changeProfile(principal.getName(), sex, introduce);
         return "redirect:/member/account/edit";
+    }
+
+    @GetMapping("/changeName")
+    public String changeName(@RequestParam("new-name")String name, Principal principal)
+    {
+        memberService.changeName(principal.getName(), name);
+        return "redirect:/member/account/edit";
+    }
+
+    @GetMapping("/changeUsername")
+    public String changeUsername(@RequestParam("new-username")String username, Principal principal,
+                                 @AuthenticationPrincipal PrincipalDetails principalDetails){
+        Member member = memberService.changeUsername(principal.getName(), username);
+
+        principalDetails.setMember(member);
+        return "redirect:/member/account/edit";
+    }
+
+    @GetMapping("/duplicUserName/{username}")
+    public ResponseEntity<Map<String, Object>> duplicUserName(@PathVariable("username")String username)
+    {
+        Map<String, Object> result = new HashMap<>();
+
+        result.put("result", memberService.duplicUserName(username));
+
+        return ResponseEntity.ok().body(result);
+    }
+
+    @GetMapping("/privacySetting")
+    public String privacySetting(@RequestParam(value = "privacySetting-input", defaultValue = "false")boolean checked, Principal principal)
+    {
+        memberService.changeScope(principal.getName(), !checked);
+        return  "redirect:/member/account/privacy_setting";
     }
 }

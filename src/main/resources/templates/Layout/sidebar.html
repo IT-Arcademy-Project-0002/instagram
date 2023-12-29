@@ -1,7 +1,17 @@
 <div th:fragment="sidebarFragment" class="side_menu d-flex" xmlns="http://www.w3.org/1999/html">
-    <div class="side_bar">
 
-        <div class="d-flex flex-column h-100">
+    <div class="offcanvas offcanvas-start"
+         data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1" id="offcanvasNotify"
+         aria-labelledby="offcanvasNotifyLabel">
+        <div class="offcanvas-body">
+            <div>
+                <div th:replace="~{Layout/Notify::notifyFragment}"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="side_bar">
+        <div class="d-flex flex-column h-100" id="side_bar">
             <!-- logo -->
             <div class="container sm_logo">
                 <div style="box-sizing: border-box;">
@@ -80,7 +90,8 @@
                     </div>
                 </a>
 
-                <a class="d-flex menu_list img" href="">
+                <a class="d-flex menu_list img" data-bs-toggle="offcanvas" href="#offcanvasNotify" role="button"
+                   aria-controls="offcanvasNotify" onclick="smallMenu()">
                     <div class="btn_side_menu p-0 menu_list_text">
                         <svg aria-label="알림" fill="currentColor" height="24"
                              role="img"
@@ -90,6 +101,7 @@
                         <span class="menu_list_text">알림</span>
                     </div>
                 </a>
+
 
                 <!-- Button trigger modal -->
                 <a class="d-flex menu_list img" data-bs-toggle="modal" data-bs-target="#Board_Create_Modal">
@@ -133,23 +145,25 @@
 
 
             <!-- dropdowns -->
-            <div class="dropup-center dropup menu_list d">
-                <button class="btn btn-secondary dropdown-toggle drop_btn p-0 menu_list_text img" type="button"
-                        data-bs-toggle="dropdown" aria-expanded="false">
-                    <svg aria-label="설정" fill="currentColor" height="24"
-                         role="img"
-                         viewBox="0 0 24 24" width="24">
-                        <line fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                              stroke-width="2" x1="3" x2="21" y1="4" y2="4"></line>
-                        <line fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                              stroke-width="2" x1="3" x2="21" y1="12" y2="12"></line>
-                        <line fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                              stroke-width="2" x1="3" x2="21" y1="20" y2="20"></line>
-                    </svg>
-                    <span class="menu_list_text">
-                        더 보기
-                    </span>
-                </button>
+
+            <div class="dropup-center dropup">
+                <a class="d-flex menu_list img mb-0" href="#" role="button" data-bs-toggle="dropdown"
+                   aria-expanded="false">
+                    <div class="btn_side_menu p-0 menu_list_text">
+                        <svg aria-label="설정" fill="currentColor" height="24"
+                             role="img"
+                             viewBox="0 0 24 24" width="24">
+                            <line fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                  stroke-width="2" x1="3" x2="21" y1="4" y2="4"></line>
+                            <line fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                  stroke-width="2" x1="3" x2="21" y1="12" y2="12"></line>
+                            <line fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                  stroke-width="2" x1="3" x2="21" y1="20" y2="20"></line>
+                        </svg>
+                        <span class="menu_list_text">더 보기</span>
+                    </div>
+                </a>
+
 
                 <ul class="dropdown-menu dropdown-menu-lg drop-menu mb-3">
                     <li>
@@ -254,8 +268,25 @@
             </div>
         </div>
     </div>
-</div>
+    <script>
+        function smallMenu()
+        {
+            var cnverse = document.getElementById('offcanvasNotify');
+            var sidebar = document.getElementById('side_bar');
 
+            if(cnverse.classList.contains('show'))
+            {
+                sidebar.classList.add('small');
+            }
+            else
+            {
+                sidebar.classList.remove('small');
+            }
+        }
+
+
+    </script>
+</div>
 
 
 

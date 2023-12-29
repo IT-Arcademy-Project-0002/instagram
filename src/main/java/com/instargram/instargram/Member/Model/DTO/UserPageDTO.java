@@ -21,6 +21,7 @@ import java.util.Objects;
 public class UserPageDTO {
 
     private List<FeedListDTO> feeds;
+    private Integer feedSize;
     private List<Member> followers;
     private List<Member> followings;
     private Map<String, List<Story_Data_Map>> stories;
@@ -35,8 +36,6 @@ public class UserPageDTO {
                        StoryHighlightMapService storyHighlightMapService,
                        Board_Data_MapService boardDataMapService)
     {
-        feeds = boardDataMapService.getFeed(boardService.getBoardByMember(target));
-
         followers = followMapService.getFollowers(target);
 
         followings = followMapService.getFollowings(target);
@@ -50,6 +49,15 @@ public class UserPageDTO {
         else{
             follow = followMapService.isFollow(loginMember, target);
             follower = followMapService.isFollower(loginMember, target);
+        }
+
+        if(loginMember.isScope() || mine)
+        {
+            feeds = boardDataMapService.getFeed(boardService.getBoardByMember(target));
+            feedSize = feeds.size();
+        }
+        else {
+            feedSize = boardService.getSizeByMember(loginMember);
         }
     }
 }

@@ -1,5 +1,4 @@
-.main-content
-{
+.main-content {
     margin-left: 350px;
     width: 100%;
     background: #a0d7bd;
@@ -14,15 +13,14 @@
 
 .content-background {
     width: 750px;
-    background: coral;
+    background-color: transparent;
 }
 
 .frag-story {
-    margin-top: 16px;
-    margin-right: 64px;
-    padding: 16px 0;
+    margin-top: 0;
+    padding: 8px 0;
     height: 66px;
-    background: #bb2d3b;
+    background-color: transparent;
 }
 
 .frag-board {
@@ -37,14 +35,12 @@
     background: #c5d7f2;
 }
 
-.login-content
-{
+.login-content {
     min-height:calc(100vh - 100px);
     height:calc(100vh - 100px);
     padding: 32px 0;
 }
 
-.footer
-{
+.footer {
     height: 100px;
 }

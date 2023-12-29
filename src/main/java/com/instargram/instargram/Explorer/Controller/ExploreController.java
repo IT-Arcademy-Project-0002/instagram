@@ -6,6 +6,7 @@ import com.instargram.instargram.Community.Board.Service.BoardService;
 import com.instargram.instargram.Explorer.Service.ExploreService;
 import com.instargram.instargram.Search.Service.SearchService;
 import lombok.Builder;
+import org.json.JSONException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

@@ -36,4 +36,7 @@ public class CommentService {
             throw new DataNotFoundException("Comment not found");
         }
     }
+    public void delete(Comment comment) {
+        this.commentRepository.delete(comment);
+    }
 }

@@ -4,6 +4,14 @@ import com.instargram.instargram.Member.Model.Entity.Member;
 import com.instargram.instargram.Member.Model.Repository.MemberRepository;
 import com.instargram.instargram.Search.Model.DTO.SearchDTO;
 import lombok.RequiredArgsConstructor;
+
+import org.json.JSONException;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
+
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +32,6 @@ public class SearchService {
     //    (괄호안의 숫자는 위치 DB의 ID로 추정, 일반적인 게시물의 의미를 생각하였을 때)
 
     private final MemberRepository memberRepository;
-
 
     public List<SearchDTO> searchResult(String keyword) {
 

@@ -142,9 +142,9 @@ public class MemberController {
         Member member = memberService.getMember(username);
         Member loginMember = memberService.getMember(principal.getName());
 
-        UserPageDTO userPageDTO = new UserPageDTO(member, loginMember, boardService, followMapService, storyHighlightMapService, dataMapService);
-
         model.addAttribute("member", member);
+
+        UserPageDTO userPageDTO = new UserPageDTO(member, loginMember, boardService, followMapService, storyHighlightMapService, dataMapService);
         model.addAttribute("userPageDTO", userPageDTO);
 
         return "Member/UserPage_form";
@@ -152,13 +152,21 @@ public class MemberController {
 
 
     @PostMapping("/profile/delete")
-    public String ProfileImageDelete(Principal principal)
+    public String ProfileImageDelete(Principal principal, @RequestParam(value = "account") boolean account)
     {
         Member member = memberService.getMember(principal.getName());
 
         imageService.deleteImage(memberService.ProfileImageDelete(member));
 
-        return "redirect:/member/page/"+member.getUsername();
+
+        if(account)
+        {
+            return "redirect:/member/account/edit";
+        }
+        else
+        {
+            return "redirect:/member/page/"+member.getUsername();
+        }
     }
 
     @GetMapping("/follow/{username}")
@@ -222,5 +230,12 @@ public class MemberController {
         result.put("result", memberService.duplicUserName(username));
 
         return ResponseEntity.ok().body(result);
+    }
+
+    @GetMapping("/privacySetting")
+    public String privacySetting(@RequestParam(value = "privacySetting-input", defaultValue = "false")boolean checked, Principal principal)
+    {
+        memberService.changeScope(principal.getName(), !checked);
+        return  "redirect:/member/account/privacy_setting";
     }
 }

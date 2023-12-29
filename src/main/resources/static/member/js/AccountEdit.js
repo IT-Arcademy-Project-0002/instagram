@@ -135,10 +135,6 @@ function inputUserName() {
     }
 }
 
-// Add an event listener to the input field (e.g., oninput)
-const inputField = document.getElementById('yourInputId'); // Replace 'yourInputId' with the actual ID of your input field.
-inputField.addEventListener('input', checkInputValue);
-
 function changeStopUserName()
 {
     var spin = document.getElementById("username-spin");
@@ -205,4 +201,25 @@ function changeUserName(){
 
 function containsSpecialCharacters(str) {
     return /[^\w._]/.test(str);
+}
+
+function changePrivacy(btn)
+{
+    if(btn.checked)
+    {
+        var res = confirm("비공개 계정을 하시겠습니까?");
+        if(res)
+        {
+            document.getElementById('privacySetting-form').submit();
+        }
+        else
+        {
+            btn.checked = false;
+        }
+    }
+    else
+    {
+        btn.checked = false;
+        document.getElementById('privacySetting-form').submit();
+    }
 }

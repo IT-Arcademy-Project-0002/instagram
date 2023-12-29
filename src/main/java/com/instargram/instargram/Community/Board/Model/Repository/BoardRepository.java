@@ -12,4 +12,7 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
 
     @Query("SELECT b FROM Board b WHERE b.member = :member and b.keep = false ORDER BY CASE WHEN b.pin = true THEN b.pinDate ELSE b.createDate END DESC")
     List<Board> findByMemberOrderByPinDateOrCreateDateDesc(@Param("member") Member member);
+
+
+    Integer countByMemberAndPin(Member member, boolean pin);
 }

@@ -62,6 +62,7 @@ public class MemberService {
             member.setPassword(passwordEncoder.encode("test123!"));
             member.setEmail("test1@gmail.com");
             member.setNickname("테스트유저");
+            member.setScope(true);
 
             memberRepository.save(member);
         }
@@ -77,6 +78,7 @@ public class MemberService {
         member.setEmail(memberCreateForm.getEmail());
         member.setProvider(memberCreateForm.getProvider());
         member.setProviderId(memberCreateForm.getProviderID());
+        member.setScope(true);
         memberRepository.save(member);
     }
 
@@ -142,5 +144,14 @@ public class MemberService {
     public boolean duplicUserName(String username)
     {
         return !memberRepository.existsByUsername(username);
+    }
+
+    public void changeScope(String username, boolean scope)
+    {
+        Member member = getMember(username);
+
+        member.setScope(scope);
+
+        memberRepository.save(member);
     }
 }

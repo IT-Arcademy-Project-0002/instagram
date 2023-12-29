@@ -73,4 +73,10 @@ public class BoardService {
         board.setCommentDisable(!board.isCommentDisable());
         boardRepository.save(board);
     }
+
+    public Integer getSizeByMember(Member member)
+    {
+        return boardRepository.countByMemberAndPin(member, false);
+
+    }
 }

@@ -2,6 +2,7 @@ package com.instargram.instargram.Community.Board.Service;
 
 import com.instargram.instargram.Community.Board.Model.Entity.Board;
 import com.instargram.instargram.Community.Board.Model.Repository.BoardRepository;
+import com.instargram.instargram.Community.Location.Model.Entity.Location;
 import com.instargram.instargram.DataNotFoundException;
 import com.instargram.instargram.Member.Model.Entity.Member;
 import lombok.RequiredArgsConstructor;
@@ -16,11 +17,12 @@ import java.util.Optional;
 public class BoardService {
     private final BoardRepository boardRepository;
 
-    public Board create(Member member, String content){
+    public Board create(Member member, String content, Location location){
         Board board = new Board();
         board.setMember(member);
         board.setContent(content);
         board.setCreateDate(LocalDateTime.now());
+        board.setLocation(location);
         return this.boardRepository.save(board);
     }
     public List<Board> getBoard() {

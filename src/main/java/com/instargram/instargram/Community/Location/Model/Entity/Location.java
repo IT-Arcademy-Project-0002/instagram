@@ -37,7 +37,4 @@ public class Location {
 
     // Y좌표값, 위도(latitude, ex 35.24)
     private String y;
-
-    @OneToOne
-    private Board board;
 }

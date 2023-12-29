@@ -8,6 +8,7 @@ import com.instargram.instargram.Member.Model.Entity.Member;
 import io.micrometer.common.util.StringUtils;
 import lombok.RequiredArgsConstructor;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -35,7 +36,7 @@ public class LocationService {
 
     private final LocationRepository locationRepository;
 
-    public void create(Board board, LocationDTO locationDTO) {
+    public Location create(LocationDTO locationDTO) {
         if (isValidLocationDTO(locationDTO)) {
             Location location = new Location();
 
@@ -48,10 +49,11 @@ public class LocationService {
             }
             location.setX(locationDTO.getX());
             location.setY(locationDTO.getY());
-            location.setBoard(board);
 
-            this.locationRepository.save(location);
+            return this.locationRepository.save(location);
         }
+
+        return null;
     }
 
     private boolean isValidLocationDTO(LocationDTO locationDTO) {
@@ -63,7 +65,7 @@ public class LocationService {
                 StringUtils.isNotBlank(locationDTO.getY());
     }
 
-    public List<LocationDTO> getCoordinateByKeyword(String keyword) {
+    public List<LocationDTO> getCoordinateByKeyword(String keyword) throws JSONException {
 
         RestTemplate restTemplate = new RestTemplate();
 
@@ -109,7 +111,7 @@ public class LocationService {
         return locationDTOList;
     }
 
-    public LocationDTO getCoordinateByAddress(){
+    public LocationDTO getCoordinateByAddress() throws JSONException {
         RestTemplate restTemplate = new RestTemplate();
 
         String apiKey = "KakaoAK " + kakaoLocalKey;

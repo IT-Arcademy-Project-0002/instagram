@@ -19,6 +19,7 @@ public class BoardDTO {
     private LocalDateTime updateDate;
     private MemberDTO memberDTO;
     private Boolean likeHide;
+    private Boolean commentDisable;
     private List<Long> boardLikeMemberIds; // Board_Like_Member_Map의 일부 데이터
 
     public BoardDTO(Board board){
@@ -27,6 +28,7 @@ public class BoardDTO {
         createDate = board.getCreateDate();
         updateDate = board.getUpdateDate();
         likeHide = board.isLikeHide();
+        commentDisable = board.isCommentDisable();
         if (board.getMember() != null) {
             memberDTO = new MemberDTO(board.getMember());
         }

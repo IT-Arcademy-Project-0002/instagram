@@ -10,6 +10,20 @@
     border-right: 1px solid #dbdbdb;
 }
 
+.small{
+    animation: smallSideBar 0.3s ease forwards;
+}
+
+@keyframes smallSideBar
+{
+    from {
+        width: 245px; /* 시작 너비 */
+    }
+    to {
+        width: 4rem; /* 최종으로 줄일 너비 */
+    }
+}
+
 .btn-create
 {
     text-decoration:none;

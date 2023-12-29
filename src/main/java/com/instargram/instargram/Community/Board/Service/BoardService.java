@@ -66,4 +66,9 @@ public class BoardService {
     public void delete(Board board) {
         this.boardRepository.delete(board);
     }
+
+    public Integer getSizeByMember(Member member)
+    {
+        return boardRepository.countByMemberAndPin(member, false);
+    }
 }

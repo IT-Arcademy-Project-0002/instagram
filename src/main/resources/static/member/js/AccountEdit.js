@@ -135,10 +135,6 @@ function inputUserName() {
     }
 }
 
-// Add an event listener to the input field (e.g., oninput)
-const inputField = document.getElementById('yourInputId'); // Replace 'yourInputId' with the actual ID of your input field.
-inputField.addEventListener('input', checkInputValue);
-
 function changeStopUserName()
 {
     var spin = document.getElementById("username-spin");

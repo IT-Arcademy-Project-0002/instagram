@@ -3794,15 +3794,13 @@
 
 
     toggle() {
-
-      console.log("toggle");
       if (isDisabled(this._element)) {
         return;
       }
 
       const isActive = this._element.classList.contains(CLASS_NAME_SHOW$7);
 
-      if (isActive) {
+      if (isActive || dropdownToggleState) {
         dropdownToggleState = false;
         this.hide();
         return;
@@ -4065,7 +4063,6 @@
 
     static clearMenus(event) {
 
-      console.log("clear");
       if (event && (event.button === RIGHT_MOUSE_BUTTON || event.type === 'keyup' && event.key !== TAB_KEY)) {
         return;
       }
@@ -4079,6 +4076,7 @@
         }
 
         if (!context._element.classList.contains(CLASS_NAME_SHOW$7)) {
+          dropdownToggleState = false;
           continue;
         }
 
@@ -4087,7 +4085,6 @@
         };
 
         if (event) {
-          
           const composedPath = event.composedPath();
           const isMenuTarget = composedPath.includes(context._menu);
 
@@ -4105,8 +4102,6 @@
             relatedTarget.clickEvent = event;
           }
         }
-
-        
         context._completeHide(relatedTarget);
       }
     }

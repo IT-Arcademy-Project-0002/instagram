@@ -168,13 +168,7 @@ public class MemberController {
         Member member = memberService.getMember(principal.getName());
         Member target =  memberService.getMember(username);
 
-        if(memberService.UserFollow(member, target))
-        {
-            result.put("result", true);
-        }
-        else{
-            result.put("result", false);
-        }
+        result.put("result", memberService.UserFollow(member, target));
 
         return ResponseEntity.ok().body(result);
     }
@@ -220,7 +214,13 @@ public class MemberController {
         return "redirect:/member/account/edit";
     }
 
+    @GetMapping("/duplicUserName/{username}")
+    public ResponseEntity<Map<String, Object>> duplicUserName(@PathVariable("username")String username)
+    {
+        Map<String, Object> result = new HashMap<>();
 
+        result.put("result", memberService.duplicUserName(username));
 
-
+        return ResponseEntity.ok().body(result);
+    }
 }

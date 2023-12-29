@@ -11,6 +11,7 @@ import com.instargram.instargram.Community.Board.Service.Board_Data_MapService;
 import com.instargram.instargram.Community.Board.Service.Board_Like_Member_MapService;
 import com.instargram.instargram.Community.Comment.Service.CommentService;
 import com.instargram.instargram.Community.Location.Model.DTO.LocationDTO;
+import com.instargram.instargram.Community.Location.Model.Entity.Location;
 import com.instargram.instargram.Community.Location.Service.LocationService;
 import com.instargram.instargram.Data.Image.Image;
 import com.instargram.instargram.Data.Image.ImageService;
@@ -51,9 +52,8 @@ public class BoardController {
         }
         Member member = this.memberService.getMember(principal.getName());
 
-        Board board = this.boardService.create(member, boardCreateForm.getContent());
-
-        this.locationService.create(board, locationDTO);
+        Location location = this.locationService.create(locationDTO);
+        Board board = this.boardService.create(member, boardCreateForm.getContent(), location);
 
         for (MultipartFile multipartFile : multipartFiles) {
             if (!multipartFile.isEmpty()) {

@@ -3,6 +3,7 @@ package com.instargram.instargram.Community.Location.Controller;
 import com.instargram.instargram.Community.Location.Model.DTO.LocationDTO;
 import com.instargram.instargram.Community.Location.Service.LocationService;
 import lombok.Builder;
+import org.json.JSONException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,7 +27,7 @@ public class LocationController {
 
     @GetMapping(value = "/keyword", produces = "application/json")
     @ResponseBody
-    public List<LocationDTO> keywordSearchJson(Model model, @RequestParam("keyword") String keyword) {
+    public List<LocationDTO> keywordSearchJson(Model model, @RequestParam("keyword") String keyword) throws JSONException {
 
         List<LocationDTO> locationResult = this.locationService.getCoordinateByKeyword(keyword);
         model.addAttribute("locationResult", locationResult);

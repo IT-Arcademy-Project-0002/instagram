@@ -78,6 +78,7 @@ public class Board {
     @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private List<Board_Save_Map> boardSaveMaps;
 
-    @OneToOne(mappedBy = "board", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    @OneToOne
+    @JoinColumn(name="location_id")
     private Location location;
 }

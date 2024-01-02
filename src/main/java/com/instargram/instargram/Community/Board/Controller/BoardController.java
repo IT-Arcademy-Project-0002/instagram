@@ -146,7 +146,7 @@ public class BoardController {
     }
 
     @GetMapping("/beard/delete/{id}")
-    public String boarddelete(@PathVariable("id") Long id) {
+    public String boardDelete(@PathVariable("id") Long id) {
         Board board = this.boardService.getBoardById(id);
         boardService.delete(board);
         return "redirect:/main";

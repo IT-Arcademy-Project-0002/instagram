@@ -29,10 +29,16 @@ public class Notice {
     //    디엠 왔을 때 : 5
     //    디엠 좋아요 : 6
     //    스토리 좋아요 : 7
+    //    팔로우 요청 : 8
     private Integer type;
 
     // 알림 확인 여부(확인 : true, 확인안함 : flase)
     private boolean checked;
+
+    // 알림을 발생하게 한 회원
+    @ManyToOne
+    @JoinColumn(name = "request_member_id")
+    private Member requestMember;
 
     // 알림을 받을 계정주
     @ManyToOne

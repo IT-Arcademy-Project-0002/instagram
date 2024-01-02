@@ -9,6 +9,9 @@ import com.instargram.instargram.Community.Board.Model.Repository.Board_Data_Map
 import com.instargram.instargram.Community.Comment.Model.DTO.CommentDTO;
 import com.instargram.instargram.Community.Comment.Model.Entity.Comment;
 import com.instargram.instargram.Community.Comment.Model.Repository.CommentRepository;
+import com.instargram.instargram.Community.Recomment.Model.DTO.RecommentDTO;
+import com.instargram.instargram.Community.Recomment.Model.Entity.Recomment;
+import com.instargram.instargram.Community.Recomment.Model.Repository.RecommentRepository;
 import com.instargram.instargram.Data.Image.Image;
 import com.instargram.instargram.Data.Image.ImageDTO;
 import com.instargram.instargram.Data.Image.ImageService;
@@ -18,6 +21,7 @@ import com.instargram.instargram.Member.Model.Entity.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.net.ConnectException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -26,7 +30,6 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class Board_Data_MapService {
     private final Board_Data_MapRepository boardDataMapRepository;
-    private final BoardService boardService;
     private final ImageService imageService;
     private final CommentRepository commentRepository;
 
@@ -66,26 +69,11 @@ public class Board_Data_MapService {
         return feedListDTOS;
     }
 
-//    public List<FeedListDTO> getFeedWithComments(Board board) {
-//        List<FeedListDTO> feedListDTOS = new ArrayList<>();
-//        List<Board_Data_Map> maps = getMapByBoard(board);
-//        List<Comment> comments = getCommentsByBoard(board);
-//        List<Image> images = new ArrayList<>();
-//        for(Board_Data_Map map : maps)
-//        {
-//            if (Objects.equals(map.getDataType(), Enum_Data.IMAGE.getNumber())) {
-//                Image image = imageService.getImageByID(map.getDataId());
-//                images.add(image);
-//            }
-//        }
-//        feedListDTOS.add(new FeedListDTO(board, images, comments));
-//        return feedListDTOS;
-//    }
-
     public FeedDTO getFeedWithComments(Board board) {
         List<Board_Data_Map> maps = getMapByBoard(board);
         List<Comment> comments = getCommentsByBoard(board);
         List<ImageDTO> images = new ArrayList<>();
+        List<CommentDTO> commentDTOs = convertToCommentDTOs(comments);
 
         for (Board_Data_Map map : maps) {
             if (Objects.equals(map.getDataType(), Enum_Data.IMAGE.getNumber())) {
@@ -94,8 +82,10 @@ public class Board_Data_MapService {
                 images.add(imageDTO);
             }
         }
-        return new FeedDTO(convertToBoardDTO(board), images, convertToCommentDTOs(comments));
+
+        return new FeedDTO(convertToBoardDTO(board), images, commentDTOs);
     }
+
     private BoardDTO convertToBoardDTO(Board board) {
         return new BoardDTO(board);
     }

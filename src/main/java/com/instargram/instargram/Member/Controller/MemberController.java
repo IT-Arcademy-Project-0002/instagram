@@ -181,6 +181,29 @@ public class MemberController {
         return ResponseEntity.ok().body(result);
     }
 
+    @GetMapping("/requestFollow/{username}")
+    public ResponseEntity<Map<String, Object>> requestFollow(@PathVariable("username")String username, Principal principal)
+    {
+        Map<String, Object> result = new HashMap<>();
+        Member member = memberService.getMember(principal.getName());
+        Member target =  memberService.getMember(username);
+
+        result.put("result", memberService.RequestFollowApply(member, target));
+
+        result.put("followState", memberService.isFollow(member, target));
+
+        return ResponseEntity.ok().body(result);
+    }
+
+    @GetMapping("/requestFollow/delete/{id}")
+    public ResponseEntity<Map<String, Object>> requestFollowDelete(@PathVariable("id")Long id, Principal principal)
+    {
+        Map<String, Object> result = new HashMap<>();
+        memberService.RequestFollowDelete(id);
+
+        return ResponseEntity.ok().body(result);
+    }
+
     @GetMapping("/account/{menu}")
     public String accountEdit(@PathVariable("menu")String menu, Model model)
     {

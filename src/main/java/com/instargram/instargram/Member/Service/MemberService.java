@@ -5,19 +5,27 @@ import com.instargram.instargram.Config.AppConfig;
 import com.instargram.instargram.Data.Image.Image;
 import com.instargram.instargram.Data.Image.ImageService;
 import com.instargram.instargram.Member.Config.SpringSecurity.MemberSecurityService;
+import com.instargram.instargram.Member.Model.Entity.Follow_Request_Map;
 import com.instargram.instargram.Member.Model.Entity.Member;
 import com.instargram.instargram.Member.Model.Form.MemberCreateForm;
 import com.instargram.instargram.Member.Model.Repository.MemberRepository;
+import com.instargram.instargram.Notice.Notice;
+import com.instargram.instargram.Notice.NoticeService;
 import jakarta.annotation.PostConstruct;
 import lombok.Builder;
+import lombok.Getter;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.parameters.P;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -27,7 +35,9 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
+    @Getter
     private final FollowMapService followMapService;
+    private final NoticeService noticeService;
 
     public Member getMemberByUsername(String id)
     {
@@ -110,9 +120,36 @@ public class MemberService {
 
     public boolean UserFollow(Member loginUser, Member targetUser)
     {
-        return followMapService.UserFollow(loginUser, targetUser);
+        if(targetUser.isScope())
+        {
+            return followMapService.UserFollow(loginUser, targetUser);
+        }
+        else{
+            return followMapService.followRequest(noticeService, loginUser, targetUser);
+        }
     }
 
+    public boolean RequestFollowApply(Member loginUser, Member requestUser)
+    {
+        return followMapService.RequestFollowApply(requestUser, loginUser);
+    }
+
+    public void RequestFollowDelete(Long id)
+    {
+        Notice notice = noticeService.getNotice(id);
+        followMapService.deleteRequestFollow(notice.getRequestMember(), notice.getMember());
+        noticeService.deleteById(id);
+    }
+
+    public boolean isFollow(Member loginUser, Member targetUser)
+    {
+        return followMapService.isFollow(loginUser, targetUser);
+    }
+
+    public boolean isFollower(Member loginUser, Member targetUser)
+    {
+        return followMapService.isFollower(targetUser, loginUser);
+    }
     public void changeProfile(String username, String sex, String introduce)
     {
         Member member = getMember(username);
@@ -154,4 +191,18 @@ public class MemberService {
 
         memberRepository.save(member);
     }
+
+    public Map<String, Object> requestFollowState(Long id, String loginUser)
+    {
+        Map<String, Object> result = new HashMap<>();
+
+        Notice notice = noticeService.getNotice(id);
+        Member member = getMember(loginUser);
+
+        result.put("isFollow", isFollow(member, notice.getRequestMember()));
+        result.put("isFollower", isFollower(member, notice.getRequestMember()));
+
+        return result;
+    }
+
 }

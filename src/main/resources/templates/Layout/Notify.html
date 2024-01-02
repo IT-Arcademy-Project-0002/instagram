@@ -1,3 +1,162 @@
 <div th:fragment="notifyFragment">
-    <h4>알림 김주현 작업 중 건들지 말 것</h4>
+    <div class="mb-4">
+        <h5>알림창(차후 수정)</h5>
+    </div>
+    <div th:each="notice : ${notices}">
+        <div class="d-flex" th:id="@{|notice-${notice.id}|}">
+            <div>
+                <div style="position: relative; width: 44px; height: 44px;"
+                     id="image_container">
+                    <img th:if="${notice.requestMember.Image == null}" id="none_user_img"
+                         src="/files/designImg/noneuser.png"
+                         class="rounded-circle text-center"
+                         style="position: absolute; top: 0; left: 0; transform: translate(50,50); width: 100%; height: 100%; object-fit: cover; margin: auto">
+                    <img th:unless="${notice.requestMember.Image == null}" id="user_img"
+                         th:src="@{|/resources/${notice.requestMember.Image.name}|}"
+                         class="rounded-circle text-center"
+                         style="position: absolute; top: 0; left: 0; transform: translate(50,50); width: 100%; height: 100%; object-fit: cover; margin: auto">
+                </div>
+            </div>
+            <div th:if="${notice.type == 8}">
+                <div class="d-flex">
+                    <div class="ms-2" style="width: 200px">
+                        <input type="hidden" th:value="${notice.requestMember.username}" id="username">
+                        <span th:text="@{|${notice.requestMember.username}님이 팔로우를 요청했습니다.|}"></span>
+                    </div>
+                    <div style="width: 140px" th:id="${notice.id}">
+                        <div th:if="${not notice.follower}" class="d-flex align-items-center" >
+                            <button id="apply-btn" class="ms-2 btn btn-primary text-light" style="font-size: 10px; height: 32px" onclick="clickFollowApply()">
+                                <span id="request-follow-spin" class="visually-hidden spinner-border spinner-border-sm" aria-hidden="true"></span>
+                                <span class="request-follow-text">
+                                확인
+                            </span>
+                            </button>
+                            <button id="no-btn" class="ms-2 btn btn-outline-secondary"
+                                    style="font-size: 10px; height: 32px" th:onclick="@{|clickFollowDelete(${notice.id})|}">
+                                삭제
+                            </button>
+                        </div>
+                        <div th:unless="${not notice.follower}">
+                            <div th:if="${not notice.follow and notice.follower or notice.follow}">
+                                <button id="follow-btn" class="ms-2 btn w-75" th:classappend="${notice.follow}?'btn-outline-secondary':'btn-primary text-light'" style="font-size: 10px; height: 32px" onclick="clickFollow()">
+                                    <span id="follow-spin" class="visually-hidden spinner-border spinner-border-sm" aria-hidden="true"></span>
+                                    <span id="follow-text" th:text="${notice.follow}?'팔로잉':'팔로우'"></span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function clickFollowApply()
+        {
+            var username = document.getElementById('username').value;
+            var spin = document.getElementById('request-follow-spin');
+            var texts = document.getElementsByClassName('request-follow-text');
+
+            for(var i = 0; i < texts.length; i++)
+            {
+                texts.item(i).textContent='';
+            }
+            spin.classList.remove('visually-hidden');
+
+            debugger;
+            fetch('/member/requestFollow/'+username)
+                .then(response => {
+                    return response.json()
+                })
+                .then(data => {
+                    spin.classList.add('visually-hidden');
+                    var noBtn = document.getElementById('no-btn');
+                    var btn = document.getElementById('apply-btn');
+
+                    if(data.result)
+                    {
+                        if(data.followState)
+                        {
+                            for(var i = 0; i < texts.length; i++)
+                            {
+                                texts.item(i).textContent='팔로잉';
+                            }
+                            btn.classList = 'ms-2 btn btn-outline-secondary w-75';
+
+                        }
+                        else
+                        {
+                            for(var i = 0; i < texts.length; i++)
+                            {
+                                texts.item(i).textContent='팔로우';
+                            }
+                            btn.classList = 'ms-2 btn btn-primary w-75';
+                        }
+                        noBtn.classList.add('visually-hidden');
+                    }
+                    else
+                    {
+                        for(var i = 0; i < texts.length; i++)
+                        {
+                            texts.item(i).textContent='확인';
+                        }
+                        btn.classList = 'ms-2 btn btn-primary';
+
+                        noBtn.classList.remove('visually-hidden');
+                    }
+                })
+                .catch(error => console.error('데이터를 받지 못했습니다.',error));
+        }
+
+        function clickFollowDelete(id)
+        {
+            debugger;
+            fetch("/member/requestFollow/delete/"+id)
+                .then(response => {
+                    return response.json();
+                })
+                .then(data=>{
+                    var container = document.getElementById('notice-'+id);
+
+                    container.classList.add('visually-hidden');
+                })
+                .catch(error => console.error('데이터를 받지 못했습니다.', error));
+        }
+
+        function clickFollow()
+        {
+            var username = document.getElementById('username').value;
+            var spin = document.getElementById('follow-spin');
+            var text = document.getElementById('follow-text');
+            var btn = document.getElementById('follow-btn');
+
+            text.textContent='';
+
+            spin.classList.remove('visually-hidden');
+
+            debugger;
+            fetch('/member/follow/'+username)
+                .then(response => {
+                    return response.json()
+                })
+                .then(data => {
+                    setTimeout(function (){
+                        spin.classList.add('visually-hidden');
+                        if(data.result)
+                        {
+                            text.textContent='팔로잉';
+
+                            btn.classList = 'ms-2 btn btn-outline-secondary w-75';
+                        }
+                        else
+                        {
+                            text.textContent='팔로우';
+
+                            btn.classList = 'ms-2 btn btn-primary text-light w-75';
+                        }
+                    }, 1500);
+                })
+                .catch(error => console.error('데이터를 받지 못했습니다.',error));
+        }
+    </script>
 </div>

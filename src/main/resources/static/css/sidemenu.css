@@ -3,26 +3,12 @@
     position: fixed;
 }
 
+/* 반응형 사이드바 메뉴 */
 .side_bar {
     width: 245px;
-    height: 100vh;
-    padding: 8px 12px 20px 12px;
-    border-right: 1px solid #dbdbdb;
 }
 
-.small{
-    animation: smallSideBar 0.3s ease forwards;
-}
-
-@keyframes smallSideBar
-{
-    from {
-        width: 245px; /* 시작 너비 */
-    }
-    to {
-        width: 4rem; /* 최종으로 줄일 너비 */
-    }
-}
+/* 반응형 사이드바 메뉴 */
 
 .btn-create
 {
@@ -131,11 +117,90 @@ a{
 .dropdown_logout_line {
     height: 0.5px;
 }
-
-
 /*   드롭다운 css   */
 
 
+.menu { /**/
+    display: block;
+    width: 245px;
+    background-color: white;
+    color: black;
+    transition: all 0.5s ease;
+    border-right: 1px solid #dbdbdb;
+
+    height: 100vh;
+    min-height: 100vh;
+    padding: 8px 12px 20px 12px;
+}
+.menu ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.menu a, .menu > label {
+    display: block;
+    cursor: pointer;
+    color: black;
+    text-decoration: none;
+}
+
+.menu a:hover {
+    color: #000;
+}
+.menu ul li:hover, .menu > label:hover {
+    background-color: #fff;
+    color: #000;
+    border-radius: 10px;
+}
+
+#expand-menu{ /* */
+    display: none;
+}
+
+#expand-menu:checked ~ ul { /* */
+    display: block;
+    height: auto;
+}
+
+.menu:not(:has(#expand-menu:checked)) { /* */
+    width: 4rem;
+}
+
+.menu:not(:has(#expand-menu:checked)) .menu_text{ /* */
+    display: none;
+}
+
+.menu:not(:has(#expand-menu:checked)) { /* */
+    width: 4rem;
+}
+
+.menu:not(:has(#expand-menu:checked)) .menu_text{ /* */
+    display: none;
+}
+
+.menu:not(:has(#expand-menu:checked)) .logo-img{ /* */
+    display: none;
+}
+
+.menu:has(#expand-menu:checked) .logo-svg{ /* */
+    visibility: hidden;
+}
+
+.menu:not(:has(#expand-menu:checked)) .logo-svg{ /* */
+    visibility: visible;
+}
+
+.menu ::before { /* XXXXX */
+    font-size: 1.5em;
+    float: left;
+    clear: left;
+}
+
+.menu .position-fixed {
+    position: fixed;
+    font-size: 1em;
+}
 
 
 

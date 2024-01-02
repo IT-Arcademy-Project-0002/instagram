@@ -23,5 +23,18 @@
             </div>
         </div>
     </div>
+    <script>
+        const eventSource = new EventSource('/notification/sse');
+
+        eventSource.onmessage = (event) => {
+            alert(event.data);
+        };
+
+        eventSource.onerror = (error) => {
+            console.error('SSE Error:', error);
+            eventSource.close();
+        };
+
+    </script>
 </div>
 </html>

@@ -1,4 +1,4 @@
-package com.instargram.instargram.Community.Recomment;
+package com.instargram.instargram.Community.Recomment.Model.Entity;
 
 import com.instargram.instargram.Member.Model.Entity.Member;
 import jakarta.persistence.*;

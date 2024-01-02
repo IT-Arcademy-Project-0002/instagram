@@ -1,6 +1,7 @@
-package com.instargram.instargram.Community.Recomment;
+package com.instargram.instargram.Community.Recomment.Model.Entity;
 
 import com.instargram.instargram.Community.Comment.Model.Entity.Comment;
+import com.instargram.instargram.Member.Model.Entity.Member;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -28,6 +29,10 @@ public class Recomment {
     // 대댓글의 부모 댓글
     @ManyToOne
     private Comment comment;
+
+    @ManyToOne
+    @JoinColumn(name="member_id")
+    private Member member;
 
     // 해당 대댓글에 좋아요 한 회원 목록
     @OneToMany(mappedBy = "recomment", cascade = CascadeType.REMOVE)

@@ -5,6 +5,7 @@ import com.instargram.instargram.Community.Board.Model.Entity.Board;
 import com.instargram.instargram.Community.Board.Model.Entity.Board_Like_Member_Map;
 import com.instargram.instargram.Community.Comment.Model.Entity.Comment;
 import com.instargram.instargram.Community.Comment.Model.Entity.Comment_Like_Map;
+import com.instargram.instargram.Community.Recomment.Model.DTO.RecommentDTO;
 import com.instargram.instargram.Member.Model.DTO.MemberDTO;
 import com.instargram.instargram.Member.Model.Entity.Member;
 import lombok.Getter;
@@ -23,7 +24,8 @@ public class CommentDTO {
     private LocalDateTime updateDate;
     private BoardDTO boardDTO;
     private MemberDTO memberDTO;
-    private List<Long> commentLikeMemberIds; // Board_Like_Member_Map의 일부 데이터
+    private List<Long> commentLikeMemberIds;
+    private List<RecommentDTO> recommentDTOS;
 
     public CommentDTO(Comment comment) {
         id = comment.getId();
@@ -40,5 +42,8 @@ public class CommentDTO {
         commentLikeMemberIds = comment.getCommentLikeMembers().stream()
                                         .map(Comment_Like_Map::getId)
                                         .collect(Collectors.toList());
+        recommentDTOS = comment.getRecommentList().stream()
+                .map(RecommentDTO::new) // RecommentDTO로 매핑
+                .collect(Collectors.toList());
     }
 }

@@ -1,8 +1,7 @@
 package com.instargram.instargram.Community.Comment.Model.Entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.instargram.instargram.Community.Board.Model.Entity.Board;
-import com.instargram.instargram.Community.Recomment.Recomment;
+import com.instargram.instargram.Community.Recomment.Model.Entity.Recomment;
 import com.instargram.instargram.Member.Model.Entity.Member;
 import jakarta.persistence.*;
 import lombok.Getter;

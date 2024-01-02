@@ -7,7 +7,7 @@ import com.instargram.instargram.Community.Board.Model.Entity.Board_Save_Map;
 import com.instargram.instargram.Community.Board.Model.Entity.Board_TagMember_Map;
 
 import com.instargram.instargram.Community.Comment.Model.Entity.Comment_Like_Map;
-import com.instargram.instargram.Community.Recomment.ReComment_Like_Map;
+import com.instargram.instargram.Community.Recomment.Model.Entity.ReComment_Like_Map;
 import com.instargram.instargram.DM.Message.Message_Member_Map;
 import com.instargram.instargram.DM.Message.Message_Request_Map;
 import com.instargram.instargram.DM.Room.Room_Member_Map;

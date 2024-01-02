@@ -14,10 +14,6 @@ import org.springframework.stereotype.Service;
 public class Comment_Like_MapService {
     private final Comment_like_MapRepository commentLikeMapRepository;
 
-    public Comment_Like_Map exists(Comment comment, Member member) {
-        return this.commentLikeMapRepository.findByCommentAndMember(comment, member);
-    }
-
     public void create(Comment comment, Member member) {
         Comment_Like_Map commentLikeMap = new Comment_Like_Map();
         commentLikeMap.setComment(comment);
@@ -30,4 +26,7 @@ public class Comment_Like_MapService {
     }
 
 
+    public Comment_Like_Map exists(Comment comment, Member member) {
+        return this.commentLikeMapRepository.findByCommentAndMember(comment, member);
+    }
 }

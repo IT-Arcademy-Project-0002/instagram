@@ -4,6 +4,7 @@ import com.instargram.instargram.Explorer.Model.DTO.ExploreDTO;
 import com.instargram.instargram.Community.Board.Model.Entity.Board;
 import com.instargram.instargram.Community.Board.Service.BoardService;
 import com.instargram.instargram.Explorer.Service.ExploreService;
+import com.instargram.instargram.Notification.Controller.NotificationController;
 import com.instargram.instargram.Search.Service.SearchService;
 import lombok.Builder;
 import org.json.JSONException;
@@ -23,6 +24,8 @@ public class ExploreController {
     private final ExploreService exploreService;
     private final SearchService searchService;
 
+    private final NotificationController notificationController;
+
     @GetMapping("")
     public String searchUrl(Model model){
 
@@ -30,6 +33,8 @@ public class ExploreController {
         List<ExploreDTO> exploreList = this.exploreService.initExplore(boardList);
 
         model.addAttribute("ExploreList", exploreList);
+
+        notificationController.alerttest();
 
         return "Explore/explore";
     }

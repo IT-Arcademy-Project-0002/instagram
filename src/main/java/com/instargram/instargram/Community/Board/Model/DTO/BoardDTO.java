@@ -2,6 +2,8 @@ package com.instargram.instargram.Community.Board.Model.DTO;
 
 import com.instargram.instargram.Community.Board.Model.Entity.Board;
 import com.instargram.instargram.Community.Board.Model.Entity.Board_Like_Member_Map;
+import com.instargram.instargram.Community.Comment.Model.DTO.CommentDTO;
+import com.instargram.instargram.Community.Comment.Model.Entity.Comment;
 import com.instargram.instargram.Member.Model.DTO.MemberDTO;
 import lombok.Getter;
 import lombok.Setter;
@@ -20,7 +22,7 @@ public class BoardDTO {
     private MemberDTO memberDTO;
     private Boolean likeHide;
     private Boolean commentDisable;
-    private List<Long> boardLikeMemberIds; // Board_Like_Member_Map의 일부 데이터
+    private List<Long> boardLikeMemberIds;
 
     public BoardDTO(Board board){
         id = board.getId();

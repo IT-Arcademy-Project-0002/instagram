@@ -31,6 +31,8 @@ public class UserPageDTO {
     boolean follow = false;
     // 내 팔로워인지
     boolean follower = false;
+    // 팔로우 요청 상태인지
+    boolean requestFollow = false;
 
     public UserPageDTO(Member target, Member loginMember, BoardService boardService, FollowMapService followMapService,
                        StoryHighlightMapService storyHighlightMapService,
@@ -49,6 +51,7 @@ public class UserPageDTO {
         else{
             follow = followMapService.isFollow(loginMember, target);
             follower = followMapService.isFollower(loginMember, target);
+            requestFollow = followMapService.isRequestFollow(loginMember, target);
         }
 
         if(loginMember.isScope() || mine)

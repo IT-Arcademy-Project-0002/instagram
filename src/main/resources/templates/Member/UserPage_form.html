@@ -100,12 +100,13 @@
                                         <!-- button -->
                                         <div class="d-flex" style="width: 265px; margin-left: 20px;">
                                             <a class="btn" style="min-width: 74px;"
-                                               th:classappend="${userPageDTO.isFollow()}?'btn-outline-secondary' : 'btn-primary'"
+                                               th:classappend="${userPageDTO.isFollow() or userPageDTO.isRequestFollow()}?'btn-outline-secondary' : 'btn-primary'"
                                                onclick="clickFollow()">
                                                 <span id="follow-spin" class="visually-hidden spinner-border spinner-border-sm" aria-hidden="true"></span>
                                                 <span th:if="${userPageDTO.isFollow()}" class="follow-text">팔로잉</span>
-                                                <span th:if="${not userPageDTO.isFollow() and userPageDTO.isFollower()}" style="width: 140px" class="follow-text">맞팔로우 하기</span>
-                                                <span th:if="${not userPageDTO.isFollow() and not userPageDTO.isFollower()}" class="follow-text">팔로우</span>
+                                                <span th:if="${not userPageDTO.isFollow() and userPageDTO.isFollower() and not userPageDTO.isRequestFollow()}" style="width: 140px" class="follow-text">맞팔로우 하기</span>
+                                                <span th:if="${userPageDTO.isRequestFollow()}" class="follow-text">요청됨</span>
+                                                <span th:if="${not userPageDTO.isRequestFollow() and not userPageDTO.isFollow() and not userPageDTO.isFollower()}" class="follow-text">팔로우</span>
                                             </a>
                                             <a th:if="${not userPageDTO.isFollower() or userPageDTO.isFollow()}" class="btn btn-primary" style="margin-left: 8px">메세지 보내기</a>
                                         </div>
@@ -135,7 +136,7 @@
                                     <span id="followers" th:text="${#lists.size(userPageDTO.followers)}"></span>
                                 </div>
                                 <div>
-                                    <span>팔로우</span>
+                                    <span>팔로잉</span>
                                     <span id="follows" th:text="${#lists.size(userPageDTO.followings)}"></span>
                                 </div>
                             </div>

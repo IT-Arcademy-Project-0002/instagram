@@ -1,15 +1,9 @@
 package com.instargram.instargram.Community.Location.Model.Entity;
 
 
-import com.instargram.instargram.Community.Board.Model.Entity.Board;
-import com.instargram.instargram.Community.Comment.Model.Entity.Comment;
-import com.instargram.instargram.Community.Recomment.ReComment_Like_Map;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.time.LocalDateTime;
-import java.util.List;
 
 @Getter
 @Setter

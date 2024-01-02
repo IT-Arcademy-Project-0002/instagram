@@ -4491,6 +4491,7 @@
     }
 
     show(relatedTarget) {
+      
 
       if (this._isShown || this._isTransitioning) {
         return;
@@ -4571,6 +4572,7 @@
     }
 
     dispose() {
+      
       [window, this._dialog].forEach(htmlElement => EventHandler.off(htmlElement, EVENT_KEY$6));
 
       this._backdrop.dispose();
@@ -4690,6 +4692,7 @@
     }
 
     _hideModal() {
+      
       this._element.style.display = 'none';
 
       this._element.setAttribute('aria-hidden', true);

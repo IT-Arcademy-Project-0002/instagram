@@ -1,20 +1,18 @@
 package com.instargram.instargram.Search.Service;
 
+import com.instargram.instargram.Community.Location.Model.Entity.Location;
+import com.instargram.instargram.Community.Location.Model.Repository.LocationRepository;
 import com.instargram.instargram.Member.Model.Entity.Member;
 import com.instargram.instargram.Member.Model.Repository.MemberRepository;
+import com.instargram.instargram.Search.Config.Enum.SearchType;
 import com.instargram.instargram.Search.Model.DTO.SearchDTO;
 import lombok.RequiredArgsConstructor;
 
-import org.json.JSONException;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
-
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @RequiredArgsConstructor
 @Service
@@ -32,44 +30,67 @@ public class SearchService {
     //    (괄호안의 숫자는 위치 DB의 ID로 추정, 일반적인 게시물의 의미를 생각하였을 때)
 
     private final MemberRepository memberRepository;
+    private final LocationRepository locationRepository;
 
     public List<SearchDTO> searchResult(String keyword) {
 
 
+        // 중복되는 객체 처리해줘야함.
         List<Member> memberList = this.memberRepository.findByNicknameContaining(keyword);
         List<Member> memberList2 = this.memberRepository.findByUsernameContaining(keyword);
-        List<Member> memberList3 =  this.memberRepository.findByIntroductionContaining(keyword);
+        List<Member> memberList3 = this.memberRepository.findByIntroductionContaining(keyword);
+        List<Location> locationList = this.locationRepository.findByPlaceNameContaining(keyword);
 
         // 모든 검색결과를 담기 위한 배열 (이 검색결과는 종류가 달라도, 리스트에 들어가는 정보를 의미한다.)
-        // data-order 개념 적용? 데이터를 배열에 저장할 때 식별번호로 전체 카테고리를 포함하여 전달
-
         List<SearchDTO> searchDTOList = new ArrayList<>();
 
+        // 중복 체크를 위한 Set 생성
+        Set<Long> addedMemberIds = new HashSet<>();
+
         for (Member member : memberList) {
-            SearchDTO sd = new SearchDTO();
-            sd.setUsername(member.getUsername());
-            sd.setProfileimage(member.getImage() != null ? member.getImage().getName() : "");
-            sd.setIntroduction(member.getIntroduction());
-            searchDTOList.add(sd);
+            if (addedMemberIds.add(member.getId())) { // Set에 추가하고, 이미 존재하면 추가하지 않음
+                SearchDTO sd = new SearchDTO();
+                sd.setSearchType(SearchType.USER.getNumber());
+                sd.setListName(member.getUsername());
+                sd.setListImage(member.getImage() != null ? member.getImage().getName() : "");
+                sd.setListIntroduction(member.getIntroduction());
+                searchDTOList.add(sd);
+            }
         }
 
         for (Member member : memberList2) {
-            SearchDTO sd = new SearchDTO();
-            sd.setUsername(member.getUsername());
-            sd.setProfileimage(member.getImage() != null ? member.getImage().getName() : "");
-            sd.setIntroduction(member.getIntroduction());
-            searchDTOList.add(sd);
+            if (addedMemberIds.add(member.getId())) {
+                SearchDTO sd = new SearchDTO();
+                sd.setSearchType(SearchType.USER.getNumber());
+                sd.setListName(member.getUsername());
+                sd.setListImage(member.getImage() != null ? member.getImage().getName() : "");
+                sd.setListIntroduction(member.getIntroduction());
+                searchDTOList.add(sd);
+            }
         }
 
         for (Member member : memberList3) {
+            if (addedMemberIds.add(member.getId())) {
+                SearchDTO sd = new SearchDTO();
+                sd.setSearchType(SearchType.USER.getNumber());
+                sd.setListName(member.getUsername());
+                sd.setListImage(member.getImage() != null ? member.getImage().getName() : "");
+                sd.setListIntroduction(member.getIntroduction());
+                searchDTOList.add(sd);
+            }
+        }
+
+
+        for (Location location : locationList) {
             SearchDTO sd = new SearchDTO();
-            sd.setUsername(member.getUsername());
-            sd.setProfileimage(member.getImage() != null ? member.getImage().getName() : "");
-            sd.setIntroduction(member.getIntroduction());
+            sd.setSearchType(SearchType.LOCATION.getNumber());
+            sd.setListLocationId(location.getLocationId());
+            sd.setListName(location.getPlaceName());
+            sd.setListImage("");
+            sd.setListIntroduction(location.getAddress());
             searchDTOList.add(sd);
         }
 
         return searchDTOList;
     }
-
 }

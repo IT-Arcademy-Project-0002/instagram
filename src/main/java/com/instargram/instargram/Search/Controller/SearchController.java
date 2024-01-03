@@ -1,6 +1,5 @@
 package com.instargram.instargram.Search.Controller;
 
-import com.instargram.instargram.Notification.Controller.NotificationController;
 import com.instargram.instargram.Search.Model.DTO.SearchDTO;
 import com.instargram.instargram.Search.Service.SearchService;
 import lombok.Builder;

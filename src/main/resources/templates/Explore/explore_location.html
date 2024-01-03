@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html layout:decorate="~{Layout/layout_main}">
+<head>
+    <link rel="stylesheet" type="text/css" th:href="@{/Explore/css/explore_content.css}">
+    <title> Location Page </title>
+</head>
+<div class="explore-container" layout:fragment="content">
+    <div class="explore-content text-center w-75 mx-auto">
+        <div class="row row-cols-3">
+            이곳은 장소의 탐색페이지 입니다.
+            <p>Location ID: <span th:text="${locationId}"></span></p>
+        </div>
+    </div>
+</div>
+</html>

@@ -1,6 +1,7 @@
 package com.instargram.instargram.Community.Recomment.Model.DTO;
 
 import com.instargram.instargram.Community.Comment.Model.DTO.CommentDTO;
+import com.instargram.instargram.Community.Comment.Model.Entity.Comment;
 import com.instargram.instargram.Community.Comment.Model.Entity.Comment_Like_Map;
 import com.instargram.instargram.Community.Recomment.Model.Entity.ReComment_Like_Map;
 import com.instargram.instargram.Community.Recomment.Model.Entity.Recomment;

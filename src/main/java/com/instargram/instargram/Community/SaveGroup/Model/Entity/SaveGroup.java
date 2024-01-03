@@ -1,4 +1,4 @@
-package com.instargram.instargram.Community.SaveGroup;
+package com.instargram.instargram.Community.SaveGroup.Model.Entity;
 
 import com.instargram.instargram.Community.Board.Model.Entity.Board_Save_Map;
 import jakarta.persistence.*;

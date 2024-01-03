@@ -17,12 +17,14 @@ import java.util.Optional;
 public class BoardService {
     private final BoardRepository boardRepository;
 
-    public Board create(Member member, String content, Location location){
+    public Board create(Member member, String content, Location location, boolean likeHide, boolean commentDisalbe){
         Board board = new Board();
         board.setMember(member);
         board.setContent(content);
         board.setCreateDate(LocalDateTime.now());
         board.setLocation(location);
+        board.setLikeHide(likeHide);
+        board.setCommentDisable(commentDisalbe);
         return this.boardRepository.save(board);
     }
     public List<Board> getBoard() {
@@ -80,5 +82,14 @@ public class BoardService {
     {
         return boardRepository.countByMemberAndPin(member, false);
 
+    }
+
+    public List<Board> getBoardsByFollowerIds(List<Long> followerIds) {
+        return boardRepository.findByMember_IdIn(followerIds);
+
+    }
+
+    public List<Board> getBoardsByMember(Member member) {
+        return this.boardRepository.findByMember(member);
     }
 }

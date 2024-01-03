@@ -8,4 +8,8 @@ import lombok.Setter;
 @Setter
 public class BoardCreateForm {
     private String content;
+
+    private boolean likeHide;
+    private boolean commentDisable;
+
 }

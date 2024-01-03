@@ -5,9 +5,11 @@ import com.instargram.instargram.Config.AppConfig;
 import com.instargram.instargram.Data.Image.Image;
 import com.instargram.instargram.Data.Image.ImageService;
 import com.instargram.instargram.Member.Config.SpringSecurity.MemberSecurityService;
+import com.instargram.instargram.Member.Model.Entity.Follow_Map;
 import com.instargram.instargram.Member.Model.Entity.Follow_Request_Map;
 import com.instargram.instargram.Member.Model.Entity.Member;
 import com.instargram.instargram.Member.Model.Form.MemberCreateForm;
+import com.instargram.instargram.Member.Model.Repository.FollowMapRepository;
 import com.instargram.instargram.Member.Model.Repository.MemberRepository;
 import com.instargram.instargram.Notice.Notice;
 import com.instargram.instargram.Notice.NoticeService;
@@ -24,9 +26,7 @@ import org.springframework.security.core.parameters.P;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @Builder
@@ -38,6 +38,7 @@ public class MemberService {
     @Getter
     private final FollowMapService followMapService;
     private final NoticeService noticeService;
+    private final FollowMapRepository followMapRepository;
 
     public Member getMemberByUsername(String id)
     {
@@ -205,4 +206,14 @@ public class MemberService {
         return result;
     }
 
+    public List<Long> getFollower(Member member) {
+        List<Follow_Map> followerMappings = this.followMapRepository.findByFollowingMember(member);
+        List<Long> followerIds = new ArrayList<>();
+
+        for (Follow_Map mapping : followerMappings) {
+            followerIds.add(mapping.getFollowerMember().getId());
+        }
+
+        return followerIds;
+    }
 }

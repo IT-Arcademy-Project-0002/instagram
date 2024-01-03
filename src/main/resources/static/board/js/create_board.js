@@ -92,3 +92,21 @@ textarea.addEventListener('input', function() {
         textCount.style.color = 'initial';
     }
 });
+
+
+const advancedSettingsToggle = document.getElementById('advancedSettingsToggle');
+const collapseArrow = document.getElementById('collapseArrow');
+const expandArrow = document.getElementById('expandArrow');
+const advancedSettings = document.getElementById('advancedSettings');
+
+advancedSettingsToggle.addEventListener('click', function() {
+    if (advancedSettings.style.display === 'none') {
+        advancedSettings.style.display = 'block';
+        collapseArrow.style.display = 'none';
+        expandArrow.style.display = 'inline-block';
+    } else {
+        advancedSettings.style.display = 'none';
+        collapseArrow.style.display = 'inline-block';
+        expandArrow.style.display = 'none';
+    }
+});

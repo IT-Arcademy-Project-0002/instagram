@@ -59,25 +59,45 @@ $(document).ready(function () {
         if (data.length > 0) {
             data.forEach(searchResult => {
 
-                var profileImageSrc = "/files/designImg/noneuser.png";
+                if(searchResult.searchType == "1") {
 
-                if (searchResult.profileimage !== undefined && searchResult.profileimage !== null && searchResult.profileimage.trim() !== '') {
-                    profileImageSrc = '/resources/' + searchResult.profileimage;
+                    var listImageSrc = "/files/designImg/noneuser.png";
+
+                    if (searchResult.listImage !== undefined && searchResult.listImage !== null && searchResult.listImage.trim() !== '') {
+                        profileImageSrc = '/resources/' + searchResult.listImage;
+                    }
+
+                    var listItem = $(
+                        '<a href="/member/page/'+ searchResult.listName + '" target="_blank" class="link">' +
+                        '<div class="search-box">' +
+                        '<div class="search-profile">' +
+                        '<img src="'+ listImageSrc +'" class="search-profile-image rounded-circle text-center">' +
+                        '</div>' +
+                        '<div class="search-userinfo">' +
+                        '<div class="search-username">' + searchResult.listName + '</div>' +
+                        '<div class="search-userintroduction">' + searchResult.listIntroduction + '</div>' +
+                        '</div>' +
+                        '</div>' +
+                        '</a>'
+                    );
+                } else if (searchResult.searchType == "2") {
+
+                    var listImageSrc = "/files/designImg/locationBase.png";
+
+                    var listItem = $(
+                        '<a href="/explore/location/'+ searchResult.listLocationId + '" target="_blank" class="link">' +
+                        '<div class="search-box">' +
+                        '<div class="search-profile">' +
+                        '<img src="'+ listImageSrc +'" class="search-profile-image rounded-circle text-center">' +
+                        '</div>' +
+                        '<div class="search-userinfo">' +
+                        '<div class="search-username">' + searchResult.listName + '</div>' +
+                        '<div class="search-userintroduction">' + searchResult.listIntroduction + '</div>' +
+                        '</div>' +
+                        '</div>' +
+                        '</a>'
+                    );
                 }
-
-                var listItem = $(
-                    '<a href="/member/page/'+ searchResult.username + '" target="_blank" class="link">' +
-                    '<div class="search-box">' +
-                    '<div class="search-profile">' +
-                    '<img src="'+ profileImageSrc +'" class="search-profile-image rounded-circle text-center">' +
-                    '</div>' +
-                    '<div class="search-userinfo">' +
-                    '<div class="search-username">' + searchResult.username + '</div>' +
-                    '<div class="search-userintroduction">' + searchResult.introduction + '</div>' +
-                    '</div>' +
-                    '</div>' +
-                    '</a>'
-                );
 
                 newList.append(listItem);
             });

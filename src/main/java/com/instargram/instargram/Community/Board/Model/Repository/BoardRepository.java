@@ -15,4 +15,8 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
 
 
     Integer countByMemberAndPin(Member member, boolean pin);
+
+    List<Board> findByMember_IdIn(List<Long> followerIds);
+
+    List<Board> findByMember(Member member);
 }

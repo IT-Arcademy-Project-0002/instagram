@@ -13,4 +13,6 @@ public interface FollowMapRepository extends JpaRepository<Follow_Map, Long> {
     Follow_Map findByFollowerMemberAndFollowingMember(Member follower, Member following);
 
     boolean existsByFollowerMemberAndFollowingMember(Member follower, Member following);
+
+    List<Follow_Map> findByFollowingMember_Id(Long memberId);
 }

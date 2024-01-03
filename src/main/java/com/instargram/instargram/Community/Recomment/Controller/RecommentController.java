@@ -25,8 +25,8 @@ public class RecommentController {
     private final CommentService commentService;
     private final RecommentService recommentService;
     private final Recomment_Like_MapService recommentLikeMapService;
-    @PostMapping("/create/{recommentId}")
-    public String create(@PathVariable("recommentId") Long id, RecommentCreateForm recommentCreateForm, BindingResult bindingResult, Principal principal){
+    @PostMapping("/create/{id}")
+    public String create(@PathVariable("id") Long id, RecommentCreateForm recommentCreateForm, BindingResult bindingResult, Principal principal){
         if (bindingResult.hasErrors()) {
             return "redirect:/main";
         }
@@ -54,7 +54,7 @@ public class RecommentController {
         return "redirect:/main";
     }
 
-    @PostMapping("/delete/{id}")
+    @GetMapping("/delete/{id}")
     public String delete(@PathVariable("id") Long id){
         Recomment recomment = this.recommentService.getRecommentById(id);
         recommentService.delete(recomment);

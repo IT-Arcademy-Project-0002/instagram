@@ -35,7 +35,7 @@
 
 
         <!--Board_Create_Modal2-->
-        <div class="modal fade" id="Board_Create_Modal2" aria-hidden="true" aria-labelledby="Board_Create_ModalLabel2"
+        <div class="modal fade" id="Board_Create_Modal2" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="Board_Create_ModalLabel2"
              tabindex="-1">
             <div class="modal-dialog modal-xl modal-dialog-centered">
                 <div class="modal-content">
@@ -157,6 +157,33 @@
             </div>
         </div>
         <!--Board_Create_Modal2 End-->
+
+
+        <!-- Modal -->
+        <div class="modal fade" id="Back_Board_Create_Modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="Back_Board_Create_ModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-body p-0">
+                        <div class="border-bottom ">
+                            <div class="d-flex flex-column justify-content-start align-items-center m-5">
+                                <h3>게시물을 삭제하시겠어요?</h3>
+                                <h5>지금 나가면 수정 내용이 저장되지 않습니다.</h5>
+                            </div>
+                        </div>
+
+                        <!--모달 뒤로 돌려야함-->
+                        <div class="border-bottom text-center p-2">
+                            <button type="button" class="btn btn-link text-danger" data-bs-target="#Board_Create_Modal" data-bs-toggle="modal" style="font-weight: bold;">삭제</button>
+                        </div>
+                        <div class="border-bottom text-center p-2">
+                            <button type="button" class="btn btn-link text-dark" data-bs-dismiss="modal">취소</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
 
     </form>
     <script th:src="@{/board/js/create_board.js}"></script>

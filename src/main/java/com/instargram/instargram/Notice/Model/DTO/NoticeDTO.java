@@ -1,7 +1,8 @@
-package com.instargram.instargram.Notice;
+package com.instargram.instargram.Notice.Model.DTO;
 
 import com.instargram.instargram.Member.Model.Entity.Member;
 import com.instargram.instargram.Member.Service.FollowMapService;
+import com.instargram.instargram.Notice.Model.Entitiy.Notice;
 import lombok.Getter;
 import lombok.Setter;
 

@@ -1,28 +1,17 @@
 package com.instargram.instargram.Member.Service;
 
-import com.instargram.instargram.Community.Board.Model.Entity.Board;
-import com.instargram.instargram.Config.AppConfig;
 import com.instargram.instargram.Data.Image.Image;
-import com.instargram.instargram.Data.Image.ImageService;
-import com.instargram.instargram.Member.Config.SpringSecurity.MemberSecurityService;
 import com.instargram.instargram.Member.Model.Entity.Follow_Map;
-import com.instargram.instargram.Member.Model.Entity.Follow_Request_Map;
 import com.instargram.instargram.Member.Model.Entity.Member;
 import com.instargram.instargram.Member.Model.Form.MemberCreateForm;
 import com.instargram.instargram.Member.Model.Repository.FollowMapRepository;
 import com.instargram.instargram.Member.Model.Repository.MemberRepository;
-import com.instargram.instargram.Notice.Notice;
-import com.instargram.instargram.Notice.NoticeService;
+import com.instargram.instargram.Notice.Model.Entitiy.Notice;
+import com.instargram.instargram.Notice.Service.NoticeService;
 import jakarta.annotation.PostConstruct;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.parameters.P;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 

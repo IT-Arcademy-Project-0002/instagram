@@ -1,4 +1,4 @@
-package com.instargram.instargram.Notice;
+package com.instargram.instargram.Notice.Model.Entitiy;
 
 import com.instargram.instargram.Member.Model.Entity.Member;
 import jakarta.persistence.*;
@@ -29,7 +29,8 @@ public class Notice {
     //    디엠 왔을 때 : 5
     //    디엠 좋아요 : 6
     //    스토리 좋아요 : 7
-    //    팔로우 요청 : 8
+    //    (계정주가 비공개 계정일 시) 팔로우 요청 : 8
+    //    (공개 계정) 팔로우 : 9
     private Integer type;
 
     // 알림 확인 여부(확인 : true, 확인안함 : flase)

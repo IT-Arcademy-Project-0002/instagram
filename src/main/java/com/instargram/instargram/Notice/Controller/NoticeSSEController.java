@@ -1,25 +1,23 @@
-package com.instargram.instargram.Notification.Controller;
+package com.instargram.instargram.Notice.Controller;
 
 import com.instargram.instargram.Member.Model.Entity.Member;
 import com.instargram.instargram.Member.Service.MemberService;
-import com.instargram.instargram.Notification.Service.NotificationService;
+import com.instargram.instargram.Notice.Service.NoticeSSEService;
+
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.event.AuthenticationSuccessEvent;
+
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/notice")
-public class NotificationController {
+public class NoticeSSEController {
 
-    private final NotificationService notificationService;
+    private final NoticeSSEService noticeSSEService;
     private final MemberService memberService;
 
     @GetMapping("/alert")
@@ -31,14 +29,14 @@ public class NotificationController {
             Member member = this.memberService.getMember(username);
 
             // 사용자 정보를 통해 새로운 SseEmitter를 생성하여 추가합니다.
-            SseEmitter emitter = this.notificationService.subscribe();
-            this.notificationService.addEmitter(member.getId(), emitter);
+            SseEmitter emitter = this.noticeSSEService.subscribe();
+            this.noticeSSEService.addEmitter(member.getId(), emitter);
 
             // SSE 연결이 종료될 때 해당 emitter를 제거합니다.
-            emitter.onCompletion(() -> this.notificationService.removeEmitter(member.getId(), emitter));
+            emitter.onCompletion(() -> this.noticeSSEService.removeEmitter(member.getId(), emitter));
 
             // SSE 연결이 에러가 발생할 때 해당 emitter를 제거합니다.
-            emitter.onError((ex) -> this.notificationService.removeEmitter(member.getId(), emitter));
+            emitter.onError((ex) -> this.noticeSSEService.removeEmitter(member.getId(), emitter));
 
             // emitter를 반환하여 클라이언트에게 연결을 제공합니다.
             return emitter;

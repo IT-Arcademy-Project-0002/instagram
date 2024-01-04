@@ -17,7 +17,7 @@ import com.instargram.instargram.Data.Image.ImageService;
 import com.instargram.instargram.Enum_Data;
 import com.instargram.instargram.Member.Model.Entity.Member;
 import com.instargram.instargram.Member.Service.MemberService;
-import com.instargram.instargram.Notice.NoticeService;
+import com.instargram.instargram.Notice.Service.NoticeService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;

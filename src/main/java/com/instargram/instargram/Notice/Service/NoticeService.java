@@ -46,8 +46,8 @@ public class NoticeService {
             noticeDTO.setId(notice.getId());
             noticeDTO.setType(notice.getType());
             noticeDTO.setCreateDate(notice.getCreateDate());
-            noticeDTO.setFollower(followMapService.isFollower(loginUser, notice.getMember()));
-            noticeDTO.setFollow(followMapService.isFollow(loginUser, notice.getMember()));
+            noticeDTO.setFollower(followMapService.isFollower(loginUser, notice.getRequestMember()));
+            noticeDTO.setFollow(followMapService.isFollow(loginUser, notice.getRequestMember()));
             noticeDTOS.add(noticeDTO);
         }
 

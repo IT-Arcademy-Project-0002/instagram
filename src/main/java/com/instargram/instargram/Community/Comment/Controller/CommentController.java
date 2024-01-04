@@ -11,7 +11,7 @@ import com.instargram.instargram.Community.Comment.Service.Comment_Like_MapServi
 import com.instargram.instargram.Enum_Data;
 import com.instargram.instargram.Member.Model.Entity.Member;
 import com.instargram.instargram.Member.Service.MemberService;
-import com.instargram.instargram.Notice.NoticeService;
+import com.instargram.instargram.Notice.Service.NoticeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

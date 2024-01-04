@@ -1,4 +1,4 @@
-package com.instargram.instargram.DM.Message;
+package com.instargram.instargram.DM.Model.Entity.Room;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -11,12 +11,12 @@ import lombok.Setter;
 @Setter
 @Entity
 
-// 디엠 텍스트 메세지 데이타 테이블
-public class Message {
+// 디엠 방 테이블
+public class Room {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // 메세지 내용
-    private String content;
+    // 방 이름
+    private String name;
 }

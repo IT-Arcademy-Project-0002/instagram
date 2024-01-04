@@ -10,10 +10,4 @@ public class mainController {
     public String mainUrl(){
         return "redirect:/main";
     }
-
-    @GetMapping("/test")
-    public String test(){
-        return "test";
-    }
-
 }

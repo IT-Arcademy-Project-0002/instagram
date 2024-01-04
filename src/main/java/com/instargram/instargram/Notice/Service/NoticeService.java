@@ -1,7 +1,10 @@
-package com.instargram.instargram.Notice;
+package com.instargram.instargram.Notice.Service;
 
 import com.instargram.instargram.Member.Model.Entity.Member;
 import com.instargram.instargram.Member.Service.FollowMapService;
+import com.instargram.instargram.Notice.Model.DTO.NoticeDTO;
+import com.instargram.instargram.Notice.Model.Entitiy.Notice;
+import com.instargram.instargram.Notice.Model.Repository.NoticeRepository;
 import lombok.Builder;
 import org.springframework.stereotype.Service;
 

@@ -84,8 +84,8 @@ public class BoardService {
 
     }
 
-    public List<Board> getBoardsByFollowerIds(List<Long> followerIds) {
-        return boardRepository.findByMember_IdIn(followerIds);
+    public List<Board> getBoardsByFollowerIds(List<Long> followerIdList) {
+        return boardRepository.findByMember_IdIn(followerIdList);
 
     }
 

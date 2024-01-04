@@ -1,28 +1,17 @@
 package com.instargram.instargram.Member.Service;
 
-import com.instargram.instargram.Community.Board.Model.Entity.Board;
-import com.instargram.instargram.Config.AppConfig;
 import com.instargram.instargram.Data.Image.Image;
-import com.instargram.instargram.Data.Image.ImageService;
-import com.instargram.instargram.Member.Config.SpringSecurity.MemberSecurityService;
 import com.instargram.instargram.Member.Model.Entity.Follow_Map;
-import com.instargram.instargram.Member.Model.Entity.Follow_Request_Map;
 import com.instargram.instargram.Member.Model.Entity.Member;
 import com.instargram.instargram.Member.Model.Form.MemberCreateForm;
 import com.instargram.instargram.Member.Model.Repository.FollowMapRepository;
 import com.instargram.instargram.Member.Model.Repository.MemberRepository;
-import com.instargram.instargram.Notice.Notice;
-import com.instargram.instargram.Notice.NoticeService;
+import com.instargram.instargram.Notice.Model.Entitiy.Notice;
+import com.instargram.instargram.Notice.Service.NoticeService;
 import jakarta.annotation.PostConstruct;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.parameters.P;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -208,12 +197,22 @@ public class MemberService {
 
     public List<Long> getFollower(Member member) {
         List<Follow_Map> followerMappings = this.followMapRepository.findByFollowingMember(member);
-        List<Long> followerIds = new ArrayList<>();
+        List<Long> followerIdList = new ArrayList<>();
 
-        for (Follow_Map mapping : followerMappings) {
-            followerIds.add(mapping.getFollowerMember().getId());
+        for (Follow_Map map : followerMappings) {
+            followerIdList.add(map.getFollowerMember().getId());
         }
 
-        return followerIds;
+        return followerIdList;
+    }
+
+    public List<Long> getFollowing(Member member) {
+        List<Follow_Map> followingMappings = this.followMapRepository.findByFollowerMember(member);
+        List<Long> followingIdList = new ArrayList<>();
+
+        for(Follow_Map map : followingMappings){
+            followingIdList.add(map.getFollowingMember().getId());
+        }
+        return followingIdList;
     }
 }

@@ -1,4 +1,4 @@
-package com.instargram.instargram.Notification.Service;
+package com.instargram.instargram.Notice.Service;
 
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
@@ -10,14 +10,15 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 @Service
-public class NotificationService {
+public class NoticeSSEService {
 
     private final List<SseEmitter> emitters = new CopyOnWriteArrayList<>();
     private final Map<Long, SseEmitter> userEmitters = new ConcurrentHashMap<>();
 
     // 새로운 emitter 객체를 생성
     public SseEmitter subscribe() {
-        SseEmitter emitter = new SseEmitter();
+
+        SseEmitter emitter = new SseEmitter(); // 유지시간 입력가능 (톰캣 기본 유지시간은 30초, 새로고침시 시간 갱신됨)
         emitters.add(emitter);
         emitter.onCompletion(() -> emitters.remove(emitter));
         return emitter;
@@ -51,4 +52,5 @@ public class NotificationService {
             userEmitters.remove(userId);
         }
     }
+
 }

@@ -24,7 +24,7 @@
                         <span th:text="@{|${notice.requestMember.username}님이 팔로우를 요청했습니다.|}"></span>
                     </div>
                     <div style="width: 140px" th:id="${notice.id}">
-                        <div th:if="${not notice.follower}" class="d-flex align-items-center" >
+                        <div id="apply-container" th:if="${not notice.follower}" class="d-flex align-items-center" >
                             <button id="apply-btn" class="ms-2 btn btn-primary text-light" style="font-size: 10px; height: 32px" onclick="clickFollowApply()">
                                 <span id="request-follow-spin" class="visually-hidden spinner-border spinner-border-sm" aria-hidden="true"></span>
                                 <span class="request-follow-text">
@@ -36,9 +36,10 @@
                                 삭제
                             </button>
                         </div>
-                        <div th:unless="${not notice.follower}">
+                        <div id="follow-container" th:unless="${not notice.follower}">
                             <div th:if="${not notice.follow and notice.follower or notice.follow}">
-                                <button id="follow-btn" class="ms-2 btn w-75" th:classappend="${notice.follow}?'btn-outline-secondary':'btn-primary text-light'" style="font-size: 10px; height: 32px" onclick="clickFollow()">
+                                <button id="follow-btn" class="ms-2 btn w-75"
+                                        th:classappend="${notice.follow}?'btn-outline-secondary':'btn-primary text-light'" style="font-size: 10px; height: 32px" onclick="clickFollow()">
                                     <span id="follow-spin" class="visually-hidden spinner-border spinner-border-sm" aria-hidden="true"></span>
                                     <span id="follow-text" th:text="${notice.follow}?'팔로잉':'팔로우'"></span>
                                 </button>
@@ -71,38 +72,12 @@
                 .then(data => {
                     spin.classList.add('visually-hidden');
                     var noBtn = document.getElementById('no-btn');
-                    var btn = document.getElementById('apply-btn');
-
+                    var apply = document.getElementById('apply-container');
+                    var follow = document.getElementById('follow-container');
                     if(data.result)
                     {
-                        if(data.followState)
-                        {
-                            for(var i = 0; i < texts.length; i++)
-                            {
-                                texts.item(i).textContent='팔로잉';
-                            }
-                            btn.classList = 'ms-2 btn btn-outline-secondary w-75';
-
-                        }
-                        else
-                        {
-                            for(var i = 0; i < texts.length; i++)
-                            {
-                                texts.item(i).textContent='팔로우';
-                            }
-                            btn.classList = 'ms-2 btn btn-primary w-75';
-                        }
-                        noBtn.classList.add('visually-hidden');
-                    }
-                    else
-                    {
-                        for(var i = 0; i < texts.length; i++)
-                        {
-                            texts.item(i).textContent='확인';
-                        }
-                        btn.classList = 'ms-2 btn btn-primary';
-
-                        noBtn.classList.remove('visually-hidden');
+                      apply.classList.add('visually-hidden');
+                      follow.classList.remove('visually-hidden');
                     }
                 })
                 .catch(error => console.error('데이터를 받지 못했습니다.',error));

@@ -4,11 +4,9 @@ import com.instargram.instargram.Explorer.Model.DTO.ExploreDTO;
 import com.instargram.instargram.Community.Board.Model.Entity.Board;
 import com.instargram.instargram.Community.Board.Service.BoardService;
 import com.instargram.instargram.Explorer.Service.ExploreService;
-import com.instargram.instargram.Notification.Controller.NotificationController;
-import com.instargram.instargram.Notification.Service.NotificationService;
+import com.instargram.instargram.Notice.Service.NoticeSSEService;
 import com.instargram.instargram.Search.Service.SearchService;
 import lombok.Builder;
-import org.json.JSONException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,7 +23,7 @@ public class ExploreController {
     private final BoardService boardService;
     private final ExploreService exploreService;
     private final SearchService searchService;
-    private final NotificationService notificationService;
+    private final NoticeSSEService noticeSseService;
 
     @GetMapping("")
     public String searchMain(Model model){
@@ -35,7 +33,7 @@ public class ExploreController {
 
         model.addAttribute("ExploreList", exploreList);
 
-        this.notificationService.notifyUser(2L, "test message");
+        this.noticeSseService.notifyUser(2L, "test message");
 
         return "Explore/explore";
     }

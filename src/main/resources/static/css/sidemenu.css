@@ -3,20 +3,15 @@
     position: fixed;
 }
 
-/* 반응형 사이드바 메뉴 */
 .side_bar {
     width: 245px;
 }
-
-/* 반응형 사이드바 메뉴 */
 
 .btn-create
 {
     text-decoration:none;
     color:inherit;
 }
-
-/*   da_hee_css   */
 
 .btn_side_menu {
     border: none;
@@ -38,14 +33,31 @@
     display: inline-block;
 }
 
-.menu_list, .dropdown_menu_list, .search-list {
+.logo_layout {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 25%;
+    margin: auto;
+}
+
+.small-menu_btn
+{
+    transition: background-color 0.3s;
+    cursor: pointer;
+    border-radius: 8px;
+}
+
+.menu_list, .dropdown_menu_list, .search-list, .offCanvas_img {
     margin: 8px 0 8px 0;
     padding: 12px;
     transition: background-color 0.3s;
     cursor: pointer;
     border-radius: 8px;
 }
-.menu_list:hover {
+.menu_list:hover, .offCanvas_img:hover, .small-menu_btn:hover {
     background-color: #f2f2f2;
 }
 
@@ -68,6 +80,7 @@ a{
     transform: scale(1.07);
     transition: transform 0.1s ease;
 }
+
 
 /*   dropdown css   */
 .drop_btn {
@@ -117,10 +130,11 @@ a{
 .dropdown_logout_line {
     height: 0.5px;
 }
-/*   드롭다운 css   */
+/*   dropdown css   */
 
 
-.menu { /**/
+/* offcanvas */
+.menu {
     display: block;
     width: 245px;
     background-color: white;
@@ -154,53 +168,35 @@ a{
     border-radius: 10px;
 }
 
-#expand-menu{ /* */
+.expand-menu{
     display: none;
 }
 
-#expand-menu:checked ~ ul { /* */
-    display: block;
-    height: auto;
+.menu:has(.expand-menu:checked)
+{
+    width: 4.5rem;
 }
 
-.menu:not(:has(#expand-menu:checked)) { /* */
-    width: 4rem;
-}
-
-.menu:not(:has(#expand-menu:checked)) .menu_text{ /* */
+.menu:has(.expand-menu:checked) .menu_text{
     display: none;
 }
 
-.menu:not(:has(#expand-menu:checked)) { /* */
-    width: 4rem;
-}
-
-.menu:not(:has(#expand-menu:checked)) .menu_text{ /* */
+.menu:has(.expand-menu:checked) .logo_img{
     display: none;
 }
 
-.menu:not(:has(#expand-menu:checked)) .logo-img{ /* */
+.menu:not(:has(.expand-menu:checked)) .logo-svg
+{
     display: none;
 }
 
-.menu:has(#expand-menu:checked) .logo-svg{ /* */
-    visibility: hidden;
+.logo-svg
+{
+    padding-top: 6px;
+    padding-bottom: 6px;
+    margin-bottom: 19px;
 }
-
-.menu:not(:has(#expand-menu:checked)) .logo-svg{ /* */
-    visibility: visible;
-}
-
-.menu ::before { /* XXXXX */
-    font-size: 1.5em;
-    float: left;
-    clear: left;
-}
-
-.menu .position-fixed {
-    position: fixed;
-    font-size: 1em;
-}
+/* offcanvas */
 
 
 

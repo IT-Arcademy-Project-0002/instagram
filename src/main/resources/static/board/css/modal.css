@@ -6,3 +6,7 @@
 .hidden{
     display: none;
 }
+
+.modal-body .modalInfo {
+    overflow-y: auto; /* 세로 스크롤 적용 */
+}

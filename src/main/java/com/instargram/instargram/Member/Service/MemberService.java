@@ -208,12 +208,22 @@ public class MemberService {
 
     public List<Long> getFollower(Member member) {
         List<Follow_Map> followerMappings = this.followMapRepository.findByFollowingMember(member);
-        List<Long> followerIds = new ArrayList<>();
+        List<Long> followerIdList = new ArrayList<>();
 
-        for (Follow_Map mapping : followerMappings) {
-            followerIds.add(mapping.getFollowerMember().getId());
+        for (Follow_Map map : followerMappings) {
+            followerIdList.add(map.getFollowerMember().getId());
         }
 
-        return followerIds;
+        return followerIdList;
+    }
+
+    public List<Long> getFollowing(Member member) {
+        List<Follow_Map> followingMappings = this.followMapRepository.findByFollowerMember(member);
+        List<Long> followingIdList = new ArrayList<>();
+
+        for(Follow_Map map : followingMappings){
+            followingIdList.add(map.getFollowingMember().getId());
+        }
+        return followingIdList;
     }
 }

@@ -18,9 +18,6 @@ function clickFileUpload() {
         $(firstModal).on('hidden.bs.modal', function () {
             $(firstModal).modal('dispose'); // 첫 번째 모달 삭제
 
-            var modalBackdrop = document.querySelector('.modal-backdrop');
-            modalBackdrop.parentNode.removeChild(modalBackdrop); // 모달 배경 제거
-
             let imagePreviewArray = [];
             var files = document.getElementById("img-container");
             for (let i = 0; i < filesArray.length; i++) {
@@ -67,11 +64,6 @@ function clickFileUpload() {
     });
 }
 
-function removeModal() {
-    var modal = document.getElementById('Back_Board_Create_Modal');
-    modal.remove();
-}
-
 
 // 글자수 제한 및 체크
 const textarea = document.getElementById('content');
@@ -94,19 +86,39 @@ textarea.addEventListener('input', function() {
 });
 
 
+// board 고급설정 js
 const advancedSettingsToggle = document.getElementById('advancedSettingsToggle');
-const collapseArrow = document.getElementById('collapseArrow');
-const expandArrow = document.getElementById('expandArrow');
+const advancedcollapseArrow = document.getElementById('advancedcollapseArrow');
+const advancedexpandArrow = document.getElementById('advancedexpandArrow');
 const advancedSettings = document.getElementById('advancedSettings');
+
+const accessibilitySettingsToggle = document.getElementById('accessibilitySettingsToggle');
+const accessibilitycollapseArrow = document.getElementById('accessibilitycollapseArrow');
+const accessibilityexpandArrow = document.getElementById('accessibilityexpandArrow');
+const accessibilitySettings = document.getElementById('accessibilitySettings');
+
+
 
 advancedSettingsToggle.addEventListener('click', function() {
     if (advancedSettings.style.display === 'none') {
         advancedSettings.style.display = 'block';
-        collapseArrow.style.display = 'none';
-        expandArrow.style.display = 'inline-block';
+        advancedcollapseArrow.style.display = 'none';
+        advancedexpandArrow.style.display = 'inline-block';
     } else {
         advancedSettings.style.display = 'none';
-        collapseArrow.style.display = 'inline-block';
-        expandArrow.style.display = 'none';
+        advancedcollapseArrow.style.display = 'inline-block';
+        advancedexpandArrow.style.display = 'none';
+    }
+});
+
+accessibilitySettingsToggle.addEventListener('click', function() {
+    if (accessibilitySettings.style.display === 'none') {
+        accessibilitySettings.style.display = 'block';
+        accessibilitycollapseArrow.style.display = 'none';
+        accessibilityexpandArrow.style.display = 'inline-block';
+    } else {
+        accessibilitySettings.style.display = 'none';
+        accessibilitycollapseArrow.style.display = 'inline-block';
+        accessibilityexpandArrow.style.display = 'none';
     }
 });

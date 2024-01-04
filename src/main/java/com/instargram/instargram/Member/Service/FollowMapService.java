@@ -6,12 +6,10 @@ import com.instargram.instargram.Member.Model.Entity.Follow_Request_Map;
 import com.instargram.instargram.Member.Model.Entity.Member;
 import com.instargram.instargram.Member.Model.Repository.FollowMapRepository;
 import com.instargram.instargram.Member.Model.Repository.FollowRequestMapRepository;
-import com.instargram.instargram.Notice.NoticeService;
+import com.instargram.instargram.Notice.Service.NoticeService;
 import lombok.Builder;
 import org.springframework.stereotype.Service;
 
-import java.lang.annotation.Target;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service

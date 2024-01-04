@@ -12,7 +12,7 @@ import com.instargram.instargram.DM.Message.Message_Member_Map;
 import com.instargram.instargram.DM.Message.Message_Request_Map;
 import com.instargram.instargram.DM.Room.Room_Member_Map;
 import com.instargram.instargram.Data.Image.Image;
-import com.instargram.instargram.Notice.Notice;
+import com.instargram.instargram.Notice.Model.Entitiy.Notice;
 import com.instargram.instargram.Story.Model.Entity.Story_Data_Map;
 import com.instargram.instargram.Story.Model.Entity.Story_Highlight_Map;
 import groovyjarjarantlr4.v4.runtime.misc.NotNull;

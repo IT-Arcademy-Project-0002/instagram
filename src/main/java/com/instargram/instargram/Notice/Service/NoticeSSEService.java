@@ -17,6 +17,7 @@ public class NoticeSSEService {
 
     // 새로운 emitter 객체를 생성
     public SseEmitter subscribe() {
+
         SseEmitter emitter = new SseEmitter(); // 유지시간 입력가능 (톰캣 기본 유지시간은 30초, 새로고침시 시간 갱신됨)
         emitters.add(emitter);
         emitter.onCompletion(() -> emitters.remove(emitter));

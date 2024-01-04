@@ -102,8 +102,8 @@ public class BoardController {
         Member member = this.memberService.getMember(principal.getName());
 
         List<Board> memberBoards = this.boardService.getBoardsByMember(member);
-        List<Long> followerIds = this.memberService.getFollower(member);
-        List<Board> followerBoards = this.boardService.getBoardsByFollowerIds(followerIds);
+        List<Long> followerIdList = this.memberService.getFollowing(member);
+        List<Board> followerBoards = this.boardService.getBoardsByFollowerIds(followerIdList);
 
         List<Board> allBoards = new ArrayList<>();
         allBoards.addAll(memberBoards);

@@ -8,15 +8,16 @@ import com.instargram.instargram.Community.Comment.Model.Entity.Comment_Like_Map
 import com.instargram.instargram.Community.Comment.Model.Form.CommentCreateForm;
 import com.instargram.instargram.Community.Comment.Service.CommentService;
 import com.instargram.instargram.Community.Comment.Service.Comment_Like_MapService;
+import com.instargram.instargram.Enum_Data;
 import com.instargram.instargram.Member.Model.Entity.Member;
-import com.instargram.instargram.Member.Model.Repository.MemberRepository;
 import com.instargram.instargram.Member.Service.MemberService;
+import com.instargram.instargram.Notice.NoticeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.thymeleaf.spring6.processor.SpringUErrorsTagProcessor;
+import com.instargram.instargram.Enum_Data;
 
 import java.security.Principal;
 
@@ -28,6 +29,7 @@ public class CommentController {
     private final CommentService commentService;
     private final MemberService memberService;
     private final Comment_Like_MapService commentLikeMapService;
+    private final NoticeService noticeService;
 
     //댓글 작성
     @PostMapping("/create/{id}")
@@ -40,6 +42,7 @@ public class CommentController {
         Board board = this.boardService.getBoardById(id);
         if (member != null && board != null) {
             commentService.create(member, board, commentCreateForm.getContent());
+            noticeService.createNotice(Enum_Data.BOARD_COMMENT.getNumber(), member, board.getMember());
         }
         return "redirect:/main";
     }
@@ -53,6 +56,7 @@ public class CommentController {
         Comment_Like_Map isCommentMemberLiked = this.commentLikeMapService.exists(comment, member);
         if (isCommentMemberLiked == null) {
             this.commentLikeMapService.create(comment, member);
+            this.noticeService.createNotice(Enum_Data.COMMENT_LIKE.getNumber(), member,comment.getMember());
         }else{
             this.commentLikeMapService.delete(isCommentMemberLiked);
         }

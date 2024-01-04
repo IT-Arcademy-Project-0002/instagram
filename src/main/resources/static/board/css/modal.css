@@ -8,5 +8,6 @@
 }
 
 .modal-body .modalInfo {
+    height: 800vh;
     overflow-y: auto; /* 세로 스크롤 적용 */
 }

@@ -33,7 +33,7 @@ public class Notice {
     //    (공개 계정) 팔로우 : 9
     private Integer type;
 
-    // 알림 확인 여부(확인 : true, 확인안함 : flase)
+    // 알림 확인 여부(확인 : true, 확인안함 : false)
     private boolean checked;
 
     // 알림을 발생하게 한 회원

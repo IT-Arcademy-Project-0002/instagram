@@ -3,6 +3,8 @@
 // 검색창의 변화를 감지하여 완성된 단어를 순서대로 읽어 백엔드로 전달. 실시간으로 검색결과 전송
 $(document).ready(function () {
 
+    var searchTimer; // 전역 변수로 선언
+
     var searchListBody = $('#searchList');
 
     function showSearchList() {
@@ -20,8 +22,16 @@ $(document).ready(function () {
         // 검색어를 가져오기
         var searchKeyword = $(this).val();
 
-        // 검색어를 이용하여 검색을 수행하고 결과를 표시하는 함수 호출
-        SearchKeyword(searchKeyword);
+        // 이전 타이머가 있다면 클리어
+        if (searchTimer) {
+            clearTimeout(searchTimer);
+        }
+
+        // 300밀리초(0.3초) 이후에 검색을 수행
+        searchTimer = setTimeout(function () {
+            SearchKeyword(searchKeyword);
+        }, 300);
+
     });
 
 

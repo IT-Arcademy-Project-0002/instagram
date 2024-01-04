@@ -17,7 +17,7 @@ public class NotificationService {
 
     // 새로운 emitter 객체를 생성
     public SseEmitter subscribe() {
-        SseEmitter emitter = new SseEmitter();
+        SseEmitter emitter = new SseEmitter(30*60*1000L); // 30분 동안 유지 (톰캣 기본 유지시간이 30초인듯?)
         emitters.add(emitter);
         emitter.onCompletion(() -> emitters.remove(emitter));
         return emitter;

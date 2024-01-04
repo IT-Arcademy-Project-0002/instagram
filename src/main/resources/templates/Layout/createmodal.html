@@ -1,5 +1,6 @@
 <div th:fragment="createmodalFragment">
     <link rel="stylesheet" type="text/css" th:href="@{/location/css/location_content.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/board/css/modal.css}">
     <form th:action="@{/board/create}" method="post" enctype="multipart/form-data">
 
         <!--Board_Create_Modal-->
@@ -41,33 +42,40 @@
                 <div class="modal-content">
                     <div class="modal-header d-flex justify-content-between">
                         <button type="button" class="btn btn-link" data-bs-toggle="modal"
-                                data-bs-target="#Back_Board_Create_Modal"><<
+                                data-bs-target="#Back_Board_Create_Modal">
+                            <svg viewBox="0 0 24 24" fill="currentColor" width="1em"
+                                 height="1em" aria-hidden="true">
+                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                      d="M16.753 4.341a1 1 0 0 0-1.412-.094l-8 7a1 1 0 0 0 0 1.506l8 7a1 1 0 0 0 1.318-1.506L9.518 12l7.14-6.247a1 1 0 0 0 .094-1.412z"></path>
+                            </svg>
                         </button>
                         <h1 class="modal-title fs-5" id="Board_Create_ModalLabel2">새 게시물 등록</h1>
                         <button type="submit" class="btn btn-link">등록하기</button>
                     </div>
-                    <div class="modal-body p-0" style="width: 1138px;">
+                    <div class="modal-body p-0" style="width: 1138px; height: 800px;">
                         <div class="d-flex">
-                            <div style="width: 838px;">
-                                <div id="carouselExampleControlsNoTouching" class="carousel slide"
-                                     data-interval="false">
-                                    <div class="carousel-inner">
-                                        <div id="img-container">
+                            <div class="d-flex">
+                                <div style="width: 838px;">
+                                    <div id="carouselExampleControlsNoTouching" class="carousel slide"
+                                         data-interval="false">
+                                        <div class="carousel-inner">
+                                            <div id="img-container">
+                                            </div>
                                         </div>
+                                        <button class="carousel-control-prev" type="button"
+                                                data-bs-target="#carouselExampleControlsNoTouching" data-bs-slide="prev">
+                                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                            <span class="visually-hidden">Previous</span>
+                                        </button>
+                                        <button class="carousel-control-next" type="button"
+                                                data-bs-target="#carouselExampleControlsNoTouching" data-bs-slide="next">
+                                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                            <span class="visually-hidden">Next</span>
+                                        </button>
                                     </div>
-                                    <button class="carousel-control-prev" type="button"
-                                            data-bs-target="#carouselExampleControlsNoTouching" data-bs-slide="prev">
-                                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                        <span class="visually-hidden">Previous</span>
-                                    </button>
-                                    <button class="carousel-control-next" type="button"
-                                            data-bs-target="#carouselExampleControlsNoTouching" data-bs-slide="next">
-                                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                        <span class="visually-hidden">Next</span>
-                                    </button>
                                 </div>
                             </div>
-                            <div class="d-flex flex-column p-3" style="width: 300px;">
+                            <div class="d-flex flex-column p-3 modalInfo" style="width: 300px; overflow-y: auto; height: 800px;">
                                 <div class="d-flex">
                                     <div style="position: relative; width: 2.2rem; height: 2.2rem;"
                                          id="image_container">
@@ -85,7 +93,7 @@
                                          th:text="${loginMember.username}"></div>
                                 </div>
                                 <textarea class="form-control border-0 mt-3 p-0"
-                                          style="resize: none; height: 170px;" name="content"
+                                          style="resize: none; height: 200px;" name="content"
                                           id="content"
                                           placeholder="문구를 입력하세요..."></textarea>
                                 <div class="textLengthWrap d-flex justify-content-end">
@@ -108,15 +116,45 @@
                                     <input type="hidden" id="y" name="y" value=" " readonly>
                                 </div>
                                 <div class="d-flex flex-column mt-2">
+                                    <!--접근성-->
+                                    <div class="d-flex justify-content-between align-items-center" id="accessibilitySettingsToggle">
+                                        <div style="font-weight: bold;" th:text="접근성"></div>
+                                        <span id="accessibilitycollapseArrow" style="display: inline-block; transform: rotate(0deg);">
+                                                <svg aria-label="위쪽 V자형 아이콘" class="x1lliihq x1n2onr6 x5n08af" fill="currentColor" height="16" role="img" viewBox="0 0 24 24" width="16">
+                                                    <title>아래쪽 V자형 아이콘</title>
+                                                    <path d="M21 17.502a.997.997 0 0 1-.707-.293L12 8.913l-8.293 8.296a1 1 0 1 1-1.414-1.414l9-9.004a1.03 1.03 0 0 1 1.414 0l9 9.004A1 1 0 0 1 21 17.502Z"></path>
+                                                </svg>
+                                            </span>
+                                        <span id="accessibilityexpandArrow" style="display: none; transform: rotate(180deg);">
+                                                <svg aria-label="아래쪽 V자형 아이콘" class="x1lliihq x1n2onr6 x5n08af" fill="currentColor" height="16" role="img" viewBox="0 0 24 24" width="16">
+                                                    <title>위쪽 V자형 아이콘</title>
+                                                    <path d="M21 17.502a.997.997 0 0 1-.707-.293L12 8.913l-8.293 8.296a1 1 0 1 1-1.414-1.414l9-9.004a1.03 1.03 0 0 1 1.414 0l9 9.004A1 1 0 0 1 21 17.502Z"></path>
+                                                <</svg>
+                                            </span>
+                                    </div>
+                                    <div id="accessibilitySettings" style="display: none;">
+                                        <div class="d-flex flex-column justify-content-between align-items-center w-100">
+                                            <div class="d-flex flex-column justify-content-between my-2 w-100">
+                                                <div class="text small" style="font-size: 0.8rem;">
+                                                    대체 텍스트는 시각적으로 사진을 보기 어려운 사람들에게 사진 내용을 설명하는 텍스트입니다. 대체 텍스트는 회원님의 사진에 대해 자동으로 생성되며, 직접 입력할 수도 있습니다
+                                                </div>
+                                                <input type="text" class="form-control mt-2" placeholder="대체 텍스트 입력...">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--접근성 End-->
+                                </div>
+                                <div class="d-flex flex-column mt-2">
+                                    <!-- 고급설정 -->
                                     <div class="d-flex justify-content-between align-items-center" id="advancedSettingsToggle">
-                                        <div th:text="고급설정"></div>
-                                        <span id="collapseArrow" style="display: inline-block; transform: rotate(0deg);">
+                                        <div style="font-weight: bold;" th:text="고급설정"></div>
+                                        <span id="advancedcollapseArrow" style="display: inline-block; transform: rotate(0deg);">
                                             <svg aria-label="위쪽 V자형 아이콘" class="x1lliihq x1n2onr6 x5n08af" fill="currentColor" height="16" role="img" viewBox="0 0 24 24" width="16">
                                                 <title>아래쪽 V자형 아이콘</title>
                                                 <path d="M21 17.502a.997.997 0 0 1-.707-.293L12 8.913l-8.293 8.296a1 1 0 1 1-1.414-1.414l9-9.004a1.03 1.03 0 0 1 1.414 0l9 9.004A1 1 0 0 1 21 17.502Z"></path>
                                             </svg>
                                         </span>
-                                        <span id="expandArrow" style="display: none; transform: rotate(180deg);">
+                                        <span id="advancedexpandArrow" style="display: none; transform: rotate(180deg);">
                                             <svg aria-label="아래쪽 V자형 아이콘" class="x1lliihq x1n2onr6 x5n08af" fill="currentColor" height="16" role="img" viewBox="0 0 24 24" width="16">
                                                 <title>위쪽 V자형 아이콘</title>
                                                 <path d="M21 17.502a.997.997 0 0 1-.707-.293L12 8.913l-8.293 8.296a1 1 0 1 1-1.414-1.414l9-9.004a1.03 1.03 0 0 1 1.414 0l9 9.004A1 1 0 0 1 21 17.502Z"></path>
@@ -126,7 +164,7 @@
                                     <div id="advancedSettings" style="display: none;">
                                         <div class="d-flex flex-column justify-content-between align-items-center w-100">
                                             <div class="d-flex justify-content-between my-2 w-100">
-                                                <div>이 게시물의 좋아요 수 숨기기</div>
+                                                <div>이 게시물의 좋아요 수 <br> 숨기기</div>
                                                 <div class="form-check form-switch p-0 m-0" style="margin-top: 2px">
                                                     <label>
                                                         <input class="form-check-input" type="checkbox" role="switch" id="likeHide" name="likeHide">
@@ -149,6 +187,8 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <!-- 고급설정 End-->
+
                                 </div>
                             </div>
                         </div>
@@ -159,7 +199,7 @@
         <!--Board_Create_Modal2 End-->
 
 
-        <!-- Modal -->
+        <!-- Board_Create_back_Modal -->
         <div class="modal fade" id="Back_Board_Create_Modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="Back_Board_Create_ModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
@@ -182,10 +222,12 @@
                 </div>
             </div>
         </div>
-
-
+        <!-- Board_Create_back_Modal End-->
 
     </form>
+    <!--board-create js-->
     <script th:src="@{/board/js/create_board.js}"></script>
+
+    <!--location js-->
     <script th:src="@{/location/js/location.js}"></script>
 </div>

@@ -17,7 +17,6 @@
                     </div>
                     <div class="frag-board mt-4">
                         <div th:each="feed, idx : ${feedList}" class="p-3 border-bottom">
-
                             <!--location not null-->
                             <div th:if="${feed.board.location == null}">
                                 <div class="d-flex" style="padding: 0 0 12px 4px;">
@@ -81,14 +80,14 @@
                                 </div>
                             </div>
 
-                            <div th:id="@{|carouselExampleControlsNoTouching${idx.index}|}" class="carousel slide"
+                            <div th:id="@{|carouselExampleControlsNoTouching${idx.index}|}" class="carousel slide" data-bs-touch="false"
                                  data-interval="false">
                                 <div class="carousel-inner">
                                     <div th:each="img , iterStat :${feed.images()}" class="carousel-item"
                                          style="position: relative; width: 37rem; height: 37rem;"
                                          th:classappend="${iterStat.index == 0} ? 'active'">
                                         <img th:id="${img.getId()}" th:src="@{|/resources/${img.name}|}" alt="..."
-                                             class="shadow text-center"
+                                             class="shadow text-center rounded"
                                              style="width: 654px; height:100%;position: absolute; top: 0; left: 0; transform: translate(50,50); object-fit: cover; margin: auto">
                                     </div>
                                 </div>
@@ -107,6 +106,7 @@
                                     <span class="visually-hidden">Next</span>
                                 </button>
                             </div>
+
                             <div class="d-flex justify-content-between">
                                 <div class="d-flex">
                                     <!-- Like -->
@@ -155,17 +155,71 @@
                                 </div>
                                 <!-- save -->
                                 <div class="d-flex">
-                                    <a th:href="@{|/board/saveGroup/${feed.board.id}|}">
-                                        <div class="p-2" role="button" tabindex="0">
-                                            <svg aria-label="저장" class="x1lliihq x1n2onr6 x5n08af" fill="currentColor"
-                                                 height="24" role="img" viewBox="0 0 24 24" width="24"><title>저장</title>
-                                                <polygon fill="none" points="20 21 12 13.44 4 21 4 3 20 3 20 21"
-                                                         stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                                         stroke-width="2"></polygon>
-                                            </svg>
+                                    <div class="p-2" role="button" tabindex="0" data-bs-toggle="modal" data-bs-target="#BoardSaveModal">
+                                        <svg aria-label="저장" fill="currentColor"
+                                             height="24" role="img" viewBox="0 0 24 24" width="24"><title>저장</title>
+                                            <polygon fill="none" points="20 21 12 13.44 4 21 4 3 20 3 20 21"
+                                                     stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                                     stroke-width="2"></polygon>
+                                        </svg>
+                                    </div>
+                                    <!-- BoardSaveModal -->
+                                    <div class="modal fade" id="BoardSaveModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="BoardSaveModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <div class="d-flex justify-content-between align-items-center w-100">
+                                                        <button class="btn-close m-0" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        <h1 class="modal-title fs-5 m-0" id="BoardSaveModalLabel">컬렉션</h1>
+                                                        <button class="btn-close m-0" data-bs-target="#NewSaveGroupModal" data-bs-toggle="modal" style="transform: rotate(45deg);"></button>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-body">
+
+                                                </div>
+                                            </div>
                                         </div>
-                                    </a>
+                                    </div>
+                                    <!-- BoardSaveModal End-->
+
+                                    <!-- NewSaveGroupModal -->
+                                    <div class="modal fade" id="NewSaveGroupModal" aria-hidden="true" aria-labelledby="NewSaveGroupModalLabel" tabindex="-1">
+                                        <div class="modal-dialog modal-sm modal-dialog-centered">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h1 class="modal-title fs-5" id="BoardSaveModal2Label">새 컬렉션</h1>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body d-flex align-items-center flex-column">
+                                                    <div th:if="${idx.index}">
+                                                        <div th:each="img : ${feed.images}" style="width: 10rem; height: 10rem;">
+                                                            <img th:id="${img.getId()}" th:src="@{|/resources/${img.name}|}" alt="..." class="shadow text-center rounded"
+                                                                 style="width:100%; height:100%; object-fit: cover; margin: auto">
+                                                        </div>
+                                                        <input type="text" class="form-control mt-3 w-100" placeholder="컬렉션 이름">
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer p-0">
+                                                    <div class="border-bottom text-center p-2 w-100">
+                                                        <button type="button" class="btn btn-link text-dark" style="font-weight: bold;">저장</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
+<!--                                <div class="d-flex">-->
+<!--                                    <a th:href="@{|/board/saveGroup/${feed.board.id}|}">-->
+<!--                                        <div class="p-2" role="button" tabindex="0">-->
+<!--                                            <svg aria-label="저장" fill="currentColor"-->
+<!--                                                 height="24" role="img" viewBox="0 0 24 24" width="24"><title>저장</title>-->
+<!--                                                <polygon fill="none" points="20 21 12 13.44 4 21 4 3 20 3 20 21"-->
+<!--                                                         stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"-->
+<!--                                                         stroke-width="2"></polygon>-->
+<!--                                            </svg>-->
+<!--                                        </div>-->
+<!--                                    </a>-->
+<!--                                </div>-->
                             </div>
                             <div class="px-2" th:if="${feed.board.isLikeHide() == false}"
                                  th:text="'좋아요 ' + ${#lists.size(feed.board.boardLikeMemberMaps)} + '개'"></div>
@@ -213,8 +267,7 @@
                     <div th:if="${selectFeed}">
                         <div class="row mx-0">
                             <div class="col-7 p-0">
-                                <div id="carousel-main" class="carousel slide"
-                                     data-ride="carousel" data-interval="false">
+                                <div id="carousel-main" class="carousel slide" data-interval="false" data-bs-touch="false">
                                     <div class="carousel-inner">
                                         <div th:each="img, index : ${selectFeed.imageDTOS}"
                                              class="carousel-item"
@@ -332,22 +385,22 @@
                                                                  style="width: 30%; font-size: 12px;"
                                                                  th:text="${#temporals.format(comment.createDate, 'MM월dd일 HH:mm')}"></div>
                                                             <div class="pe-2 text-dark small"
-                                                                 style="width: 30%; font-size: 12px;"
+                                                                 style="width: 20%; font-size: 12px;"
                                                                  th:text="'좋아요 ' + ${#lists.size(comment.getCommentLikeMemberIds())} + '개'"></div>
 
                                                             <!--대댓글 달기-->
                                                             <a class="btn btn-sm btn-link text-dark small p-0 pe-2"
-                                                               style="width: 25%; font-size: 12px;"
+                                                               style="width: 20%; font-size: 12px;"
                                                                th:onclick="@{|Comment(${comment.id})|}">답글 달기</a>
 
                                                             <!-- Button trigger modal -->
                                                             <button type="button"
-                                                                    style="font-size: 12px; width: 15%;"
+                                                                    style="font-size: 12px; width: 10%;"
                                                                     class="btn btn-sm btn-link p-0"
                                                                     data-bs-toggle="modal"
                                                                     th:data-id="${comment.id}"
                                                                     th:attr="data-bs-target=(${comment.memberDTO.username} == ${loginMember.username}) ? '#BoardUserCommentModal' : '#UserCommentModal'">
-                                                                ···
+                                                                · · ·
                                                             </button>
                                                         </div>
                                                     </div>
@@ -402,26 +455,26 @@
                                                                     </div>
                                                                     <div class="d-flex w-80">
                                                                         <div class="pe-2 text-dark small"
-                                                                             style="width: 40%; font-size: 12px;"
+                                                                             style="width: 30%; font-size: 12px;"
                                                                              th:text="${#temporals.format(recomment.createDate, 'MM월dd일 HH:mm')}"></div>
                                                                         <div class="pe-2 text-dark small"
-                                                                             style="width: 30%; font-size: 12px;"
+                                                                             style="width: 20%; font-size: 12px;"
                                                                              th:text="'좋아요 ' + ${#lists.size(recomment.getRecommentLikeMemberIds())} + '개'"></div>
 
                                                                         <!--대댓글 달기-->
                                                                         <a class="btn btn-sm btn-link text-dark small p-0 pe-2"
-                                                                           style="width: 15%; font-size: 12px;"
+                                                                           style="width: 20%; font-size: 12px;"
                                                                            th:onclick="@{|Recomment(${comment.id}, ${recomment.id})|}">답글
                                                                             달기</a>
 
                                                                         <!-- Button trigger modal -->
                                                                         <button type="button"
-                                                                                style="font-size: 12px; width: 15%;"
+                                                                                style="font-size: 12px; width: 10%;"
                                                                                 class="btn btn-sm btn-link p-0"
                                                                                 data-bs-toggle="modal"
                                                                                 th:data-id="${recomment.id}"
                                                                                 th:attr="data-bs-target=(${recomment.memberDTO.username} == ${loginMember.username}) ? '#ReCommentCreateUserModal' : '#ReCommentUserModal'">
-                                                                            ···
+                                                                            · · ·
                                                                         </button>
                                                                     </div>
                                                                 </div>
@@ -695,6 +748,9 @@
 
     <!-- javascript -->
     <script th:inline="javascript">
+        const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+        const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+
         const selectFeed = /*[[${selectFeed}]]*/ null;
         const myModal = new bootstrap.Modal('#FeedCommentModal', {
             keyboard: true

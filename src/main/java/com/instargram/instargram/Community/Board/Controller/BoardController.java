@@ -6,10 +6,7 @@ import com.instargram.instargram.Community.Board.Model.Entity.Board_Like_Member_
 import com.instargram.instargram.Community.Board.Model.Entity.Board_Save_Map;
 import com.instargram.instargram.Community.Board.Model.Form.BoardCreateForm;
 import com.instargram.instargram.Community.Board.Model.Entity.Board;
-import com.instargram.instargram.Community.Board.Service.BoardService;
-import com.instargram.instargram.Community.Board.Service.Board_Data_MapService;
-import com.instargram.instargram.Community.Board.Service.Board_Like_Member_MapService;
-import com.instargram.instargram.Community.Board.Service.Board_Save_MapService;
+import com.instargram.instargram.Community.Board.Service.*;
 import com.instargram.instargram.Community.Location.Model.DTO.LocationDTO;
 import com.instargram.instargram.Community.Location.Model.Entity.Location;
 import com.instargram.instargram.Community.Location.Service.LocationService;
@@ -20,6 +17,7 @@ import com.instargram.instargram.Data.Image.ImageService;
 import com.instargram.instargram.Enum_Data;
 import com.instargram.instargram.Member.Model.Entity.Member;
 import com.instargram.instargram.Member.Service.MemberService;
+import com.instargram.instargram.Notice.NoticeService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -45,6 +43,8 @@ public class BoardController {
     private final Board_Like_Member_MapService boardLikeMemberMapService;
     private final SaveGroupService saveGroupService;
     private final Board_Save_MapService boardSaveMapService;
+    private final NoticeService noticeService;
+    private final Board_TagMember_MapService boardTagMemberMapService;
 
     @PostMapping("/board/create")
     public String create(@RequestParam("image-upload") List<MultipartFile> multipartFiles,
@@ -56,7 +56,16 @@ public class BoardController {
         Member member = this.memberService.getMember(principal.getName());
 
         Location location = this.locationService.create(locationDTO);
+
+        List<String> tagMemberList = this.boardTagMemberMapService.extractMentionedWords(boardCreateForm.getContent());
+
         Board board = this.boardService.create(member, boardCreateForm.getContent(), location, boardCreateForm.isLikeHide(), boardCreateForm.isCommentDisable());
+
+        for (String memberMap : tagMemberList){
+            Member tagMember = this.memberService.getMember(memberMap);
+            this.boardTagMemberMapService.create(board, tagMember);
+            this.noticeService.createNotice(Enum_Data.BOARD_TAGMEMBER.getNumber(), member, tagMember);
+        }
 
         for (MultipartFile multipartFile : multipartFiles) {
             if (!multipartFile.isEmpty()) {
@@ -90,6 +99,7 @@ public class BoardController {
         Board_Like_Member_Map isBoardMemberLiked = this.boardLikeMemberMapService.exists(board, member);
         if (isBoardMemberLiked == null) {
             this.boardLikeMemberMapService.create(board, member);
+            this.noticeService.createNotice(Enum_Data.BOARD_LIKE.getNumber(), member, board.getMember());
         } else {
             this.boardLikeMemberMapService.delete(isBoardMemberLiked);
         }
@@ -104,7 +114,6 @@ public class BoardController {
         List<Board> memberBoards = this.boardService.getBoardsByMember(member);
         List<Long> followerIdList = this.memberService.getFollowing(member);
         List<Board> followerBoards = this.boardService.getBoardsByFollowerIds(followerIdList);
-
         List<Board> allBoards = new ArrayList<>();
         allBoards.addAll(memberBoards);
         allBoards.addAll(followerBoards);

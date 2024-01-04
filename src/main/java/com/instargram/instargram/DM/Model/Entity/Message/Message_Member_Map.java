@@ -1,5 +1,6 @@
-package com.instargram.instargram.DM.Message;
+package com.instargram.instargram.DM.Model.Entity.Message;
 
+import com.instargram.instargram.DM.Model.Entity.Room.Room;
 import com.instargram.instargram.Member.Model.Entity.Member;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -21,6 +22,9 @@ public class Message_Member_Map {
 
     // 감정 (null 일 수 있음)
     private String Empathy;
+
+    @ManyToOne
+    private Room room;
 
     // 메세지를 보낸 회원
     @ManyToOne

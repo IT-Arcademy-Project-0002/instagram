@@ -125,6 +125,47 @@ public class BoardController {
     }
 
     // board detail
+    // 좋아요
+    @GetMapping("/board/like/{id}")
+    public String like(@PathVariable("id") Long id, Principal principal) {
+        Board board = this.boardService.getBoardById(id);
+        Member member = this.memberService.getMember(principal.getName());
+
+        Board_Like_Member_Map isBoardMemberLiked = this.boardLikeMemberMapService.exists(board, member);
+        if (isBoardMemberLiked == null) {
+            this.boardLikeMemberMapService.create(board, member);
+//            this.noticeService.createNotice(Enum_Data.BOARD_LIKE.getNumber(), member, board.getMember());
+        } else {
+            this.boardLikeMemberMapService.delete(isBoardMemberLiked);
+        }
+
+        return "redirect:/main";
+    }
+
+    @GetMapping("/main")
+    public String create(Model model, Principal principal, HttpSession httpSession) {
+        Member member = this.memberService.getMember(principal.getName());
+
+        List<Board> memberBoards = this.boardService.getBoardsByMember(member);
+        List<Long> followerIdList = this.memberService.getFollowing(member);
+        List<Board> followerBoards = this.boardService.getBoardsByFollowerIds(followerIdList);
+        List<Board> allBoards = new ArrayList<>();
+        allBoards.addAll(memberBoards);
+        allBoards.addAll(followerBoards);
+
+        List<FeedListDTO> feedList = this.boardDataMapService.getFeed(allBoards);
+        FeedDTO selectFeed = (FeedDTO) httpSession.getAttribute("selectFeed");
+
+        if (selectFeed != null) {
+            model.addAttribute("selectFeed", selectFeed);
+            httpSession.removeAttribute("selectFeed");
+        }
+        System.out.println("===========================>" + selectFeed);
+        model.addAttribute("feedList", feedList);
+        return "Board/board_main";
+    }
+
+
     @GetMapping("/board/detail/{id}")
     public String detail(@PathVariable("id") Long id, HttpSession httpSession) {
         Board board = this.boardService.getBoardById(id);

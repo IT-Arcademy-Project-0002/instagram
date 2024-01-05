@@ -3,6 +3,9 @@ package com.instargram.instargram.Community.Comment.Model.Entity;
 import com.instargram.instargram.Community.Board.Model.Entity.Board;
 import com.instargram.instargram.Community.Recomment.Model.Entity.Recomment;
 import com.instargram.instargram.Member.Model.Entity.Member;
+import com.instargram.instargram.Notice.Model.Entitiy.Notice;
+import com.instargram.instargram.Notice.Model.Entitiy.Notice_Board_Map;
+import com.instargram.instargram.Notice.Model.Entitiy.Notice_Comment_Map;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -43,4 +46,7 @@ public class Comment {
     // 댓글의 좋아요 한 사람 목록
     @OneToMany(mappedBy = "comment", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
     private List<Comment_Like_Map> commentLikeMembers;
+
+    @OneToMany(mappedBy = "comment", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    private List<Notice_Comment_Map> noticeCommentMap;
 }

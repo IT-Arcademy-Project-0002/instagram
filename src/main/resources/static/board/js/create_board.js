@@ -1,5 +1,5 @@
 function clickFileUpload() {
-    var upload = document.getElementById("image-upload");
+    var upload = document.getElementById("file-upload");
     upload.click();
 
     upload.addEventListener('change', function () {

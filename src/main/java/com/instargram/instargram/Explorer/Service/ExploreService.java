@@ -1,9 +1,7 @@
 package com.instargram.instargram.Explorer.Service;
 
-import com.instargram.instargram.Community.Board.Model.DTO.FeedListDTO;
 import com.instargram.instargram.Community.Board.Model.Entity.Board;
 import com.instargram.instargram.Community.Board.Model.Entity.Board_Data_Map;
-import com.instargram.instargram.Community.Board.Model.Repository.Board_Data_MapRepository;
 import com.instargram.instargram.Community.Board.Service.Board_Data_MapService;
 import com.instargram.instargram.Data.Image.Image;
 import com.instargram.instargram.Data.Image.ImageService;

@@ -99,7 +99,7 @@ public class BoardController {
         Board_Like_Member_Map isBoardMemberLiked = this.boardLikeMemberMapService.exists(board, member);
         if (isBoardMemberLiked == null) {
             this.boardLikeMemberMapService.create(board, member);
-//            this.noticeService.createNotice(Enum_Data.BOARD_LIKE.getNumber(), member, board.getMember());
+            this.noticeService.createNotice(Enum_Data.BOARD_LIKE.getNumber(), member, board.getMember());
         } else {
             this.boardLikeMemberMapService.delete(isBoardMemberLiked);
         }

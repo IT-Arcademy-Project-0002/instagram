@@ -1,6 +1,6 @@
 package com.instargram.instargram.Notice.Model.Repository;
 
-import com.instargram.instargram.Notice.Model.Entitiy.Notice_Board_Map;
+import com.instargram.instargram.Notice.Model.Entity.Notice_Board_Map;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface Notice_Board_MapRepository extends JpaRepository<Notice_Board_Map, Long>  {

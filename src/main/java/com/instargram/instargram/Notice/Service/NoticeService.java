@@ -1,13 +1,11 @@
 package com.instargram.instargram.Notice.Service;
 
-import com.instargram.instargram.Community.Board.Model.Entity.Board;
 import com.instargram.instargram.Community.Board.Model.Repository.BoardRepository;
-import com.instargram.instargram.Community.Comment.Model.Entity.Comment;
 import com.instargram.instargram.Community.Comment.Service.CommentService;
 import com.instargram.instargram.Member.Model.Entity.Member;
 import com.instargram.instargram.Member.Service.FollowMapService;
 import com.instargram.instargram.Notice.Model.DTO.NoticeDTO;
-import com.instargram.instargram.Notice.Model.Entitiy.Notice;
+import com.instargram.instargram.Notice.Model.Entity.Notice;
 import com.instargram.instargram.Notice.Model.Repository.NoticeRepository;
 import com.instargram.instargram.Notice.Model.Repository.Notice_Comment_MapRepository;
 import lombok.Builder;

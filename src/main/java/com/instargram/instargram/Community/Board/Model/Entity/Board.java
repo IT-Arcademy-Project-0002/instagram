@@ -3,7 +3,7 @@ package com.instargram.instargram.Community.Board.Model.Entity;
 import com.instargram.instargram.Community.Comment.Model.Entity.Comment;
 import com.instargram.instargram.Community.Location.Model.Entity.Location;
 import com.instargram.instargram.Member.Model.Entity.Member;
-import com.instargram.instargram.Notice.Model.Entitiy.Notice_Board_Map;
+import com.instargram.instargram.Notice.Model.Entity.Notice_Board_Map;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;

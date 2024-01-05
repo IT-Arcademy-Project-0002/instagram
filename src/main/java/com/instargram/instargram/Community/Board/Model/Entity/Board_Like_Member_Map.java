@@ -1,9 +1,13 @@
 package com.instargram.instargram.Community.Board.Model.Entity;
 
 import com.instargram.instargram.Member.Model.Entity.Member;
+import com.instargram.instargram.Notice.Model.Entity.Notice_Board_Like_Member_Map;
+import com.instargram.instargram.Notice.Model.Entity.Notice_Board_Map;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -23,4 +27,7 @@ public class Board_Like_Member_Map {
     @ManyToOne
     @JoinColumn(name="like_member_id")
     private Member likeMember;
+
+    @OneToMany(mappedBy = "boardLikeMember", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    private List<Notice_Board_Like_Member_Map> noticeBoardLikeMap;
 }

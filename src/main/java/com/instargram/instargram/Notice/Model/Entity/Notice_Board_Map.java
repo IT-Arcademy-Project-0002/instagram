@@ -1,4 +1,4 @@
-package com.instargram.instargram.Notice.Model.Entitiy;
+package com.instargram.instargram.Notice.Model.Entity;
 
 
 import com.instargram.instargram.Community.Board.Model.Entity.Board;

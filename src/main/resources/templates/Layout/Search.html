@@ -1,21 +1,29 @@
-<div th:fragment="searchFragment">
+<div th:fragment="searchFragment" style="width: 397px">
     <head>
         <link rel="stylesheet" type="text/css" th:href="@{/search/css/search_content.css}">
     </head>
 
-    <div class="d-flex justify-content-center">
-        <div class="search-content">
-            <div class="search-container border mb-3">
-                <div class="input-group mb-2">
-                    <input type="text" class="form-control" placeholder="검색어를 입력해주세요" aria-describedby="basic-addon2"
-                           id="keyword" name="keyword" size="15">
+
+            <div class="search-content">
+                <div class="search_title">
+                    <div>
+                        <span class="search_title_text">검색</span>
+                    </div>
                 </div>
-                <div class="search-list" id="searchList">
+                <div class="search-container">
+                    <div class="input-group search_bar">
+                        <input type="text" class="form-control" style="margin-bottom: 24px" placeholder="검색어를 입력해주세요" aria-describedby="basic-addon2"
+                               id="keyword" name="keyword" size="15">
+                    </div>
+                    <hr style="margin: 0; background-color: #dadde1">
+                    <div class="search-list" id="searchList">
+                    </div>
                 </div>
+                <a th:href="@{/location/search}" class="btn btn-primary float-end"> 장소검색 (Beta) </a>
             </div>
-            <a th:href="@{/location/search}" class="btn btn-primary float-end"> 장소검색 (Beta) </a>
-        </div>
-    </div>
+
+
+
 
     <script src="/search/js/search.js"></script>
 </div>

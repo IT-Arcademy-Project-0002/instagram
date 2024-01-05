@@ -1,0 +1,29 @@
+.main-content
+{
+    margin-left: 350px;
+    width: 100%;
+    min-height:100vh;
+    height:100vh;
+}
+
+.smooth-update {
+    transition: opacity 0.3s ease-in-out;
+    opacity:0;
+}
+
+.nav-link
+{
+    padding: 8px 8px;
+}
+
+.nav-link:hover
+{
+    background: rgba(152,152,152,0.2);
+    padding: 8px 8px;
+}
+
+.nav-pills .nav-link.active, .nav-pills .show>.nav-link
+{
+    background: rgba(152,152,152,0.2);
+    padding: 8px 8px;
+}

@@ -83,7 +83,24 @@ public class MemberService {
     }
 
     public Member getMember(String username) {
-        return this.memberRepository.findByUsername(username);
+        return this.memberRepository.getByUsername(username);
+    }
+
+    public List<Member> searchMemberList(String kw)
+    {
+        List<Member> results = new ArrayList<>();
+        results.addAll(searchMemberByUsername(kw));
+        results.addAll(searchMemberByNickname(kw));
+        return results;
+    }
+    public List<Member> searchMemberByUsername(String kw)
+    {
+        return this.memberRepository.findByUsernameContaining(kw);
+    }
+
+    public List<Member> searchMemberByNickname(String kw)
+    {
+        return this.memberRepository.findByNicknameContaining(kw);
     }
 
     public Image ProfileImageUpload(Member member, Image image)

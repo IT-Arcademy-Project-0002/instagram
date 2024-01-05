@@ -15,12 +15,12 @@ public class Follow_Map {
     Long id;
 
     // 팔로우 당한 회원
-    @ManyToOne
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name="following_member_id")
     Member followingMember;
 
     // 팔로우 한 회원
-    @ManyToOne
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name="follower_member_id")
     Member followerMember;
 }

@@ -1,14 +1,14 @@
 .map-content {
-    margin-left:350px;
+    margin-left:500px;
 }
 
 .map-container{
     display: flex;
-    width: calc(100vw - 350px);
+    width: calc(100vw - 550px);
 }
 
 .keyword-box{
-    width: 400px;
+    width: 250px;
 }
 
 .map-box {
@@ -17,5 +17,5 @@
 
 #map {
     width: 100%;
-    height: 80vh;
+    height: 65vh;
 }

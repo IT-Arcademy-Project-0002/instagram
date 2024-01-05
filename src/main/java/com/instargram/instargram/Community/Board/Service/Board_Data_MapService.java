@@ -9,19 +9,15 @@ import com.instargram.instargram.Community.Board.Model.Repository.Board_Data_Map
 import com.instargram.instargram.Community.Comment.Model.DTO.CommentDTO;
 import com.instargram.instargram.Community.Comment.Model.Entity.Comment;
 import com.instargram.instargram.Community.Comment.Model.Repository.CommentRepository;
-import com.instargram.instargram.Community.Recomment.Model.DTO.RecommentDTO;
-import com.instargram.instargram.Community.Recomment.Model.Entity.Recomment;
-import com.instargram.instargram.Community.Recomment.Model.Repository.RecommentRepository;
 import com.instargram.instargram.Data.Image.Image;
 import com.instargram.instargram.Data.Image.ImageDTO;
 import com.instargram.instargram.Data.Image.ImageService;
+import com.instargram.instargram.Data.Video.Video;
+import com.instargram.instargram.Data.Video.VideoService;
 import com.instargram.instargram.Enum_Data;
-import com.instargram.instargram.Member.Model.DTO.MemberDTO;
-import com.instargram.instargram.Member.Model.Entity.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.net.ConnectException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -31,11 +27,21 @@ import java.util.Objects;
 public class Board_Data_MapService {
     private final Board_Data_MapRepository boardDataMapRepository;
     private final ImageService imageService;
+    private final VideoService videoService;
     private final CommentRepository commentRepository;
 
     public Board_Data_Map create(Board board, Image image, Integer data_type) {
         Board_Data_Map boardDataMap = new Board_Data_Map();
         boardDataMap.setDataId(image.getId());
+        boardDataMap.setDataType(data_type);
+        boardDataMap.setBoard(board);
+
+        return this.boardDataMapRepository.save(boardDataMap);
+    }
+
+    public Board_Data_Map create(Board board, Video video, Integer data_type) {
+        Board_Data_Map boardDataMap = new Board_Data_Map();
+        boardDataMap.setDataId(video.getId());
         boardDataMap.setDataType(data_type);
         boardDataMap.setBoard(board);
 
@@ -56,15 +62,18 @@ public class Board_Data_MapService {
             List<Board_Data_Map> maps = getMapByBoard(board);
             List<Comment> comments = getCommentsByBoard(board);
             List<Image> images = new ArrayList<>();
+            List<Video> videos = new ArrayList<>();
             for(Board_Data_Map map : maps)
             {
                 if (Objects.equals(map.getDataType(), Enum_Data.IMAGE.getNumber())) {
                     Image image = imageService.getImageByID(map.getDataId());
                     images.add(image);
+                } else if(Objects.equals(map.getDataType(), Enum_Data.VIDEO.getNumber())){
+                    Video video = videoService.getVideoByID(map.getDataId());
+                    videos.add(video);
                 }
             }
-
-            feedListDTOS.add(new FeedListDTO(board, images, comments));
+            feedListDTOS.add(new FeedListDTO(new BoardDTO(board), images, videos, comments));
         }
         return feedListDTOS;
     }

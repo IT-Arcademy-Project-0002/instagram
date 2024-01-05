@@ -86,7 +86,7 @@ public class FollowMapService {
             followRequestMap.setRequestMember(member);
             followRequestMap.setOwner(target);
             followRequestMapRepository.save(followRequestMap);
-            noticeService.createNotice(Enum_Data.FOLLOW_REQUEST.getNumber(), member, target);
+//            noticeService.createNotice(Enum_Data.FOLLOW_REQUEST.getNumber(), member, target);
             return true;
         }
         else {

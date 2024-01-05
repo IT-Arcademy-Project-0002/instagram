@@ -9,6 +9,7 @@ import com.instargram.instargram.Member.Service.FollowMapService;
 import com.instargram.instargram.Notice.Model.DTO.NoticeDTO;
 import com.instargram.instargram.Notice.Model.Entitiy.Notice;
 import com.instargram.instargram.Notice.Model.Repository.NoticeRepository;
+import com.instargram.instargram.Notice.Model.Repository.Notice_Comment_MapRepository;
 import lombok.Builder;
 import org.springframework.stereotype.Service;
 
@@ -26,8 +27,9 @@ public class NoticeService {
     private final BoardRepository boardRepository;
     private final FollowMapService followMapService;
     private final CommentService commentService;
+    private final Notice_Comment_MapRepository noticeCommentMapRepository;
 
-    public void createNotice(Integer type, Member loginMember, Member member)
+    public Notice createNotice(Integer type, Member loginMember, Member member)
     {
         Notice notice = new Notice();
 
@@ -38,6 +40,8 @@ public class NoticeService {
         notice.setCreateDate(LocalDateTime.now());
 
         noticeRepository.save(notice);
+
+        return notice;
     }
 
     public List<NoticeDTO> getNoticeDTOsByMember(Member loginUser)
@@ -61,7 +65,7 @@ public class NoticeService {
             // 게시글 좋아요 : 1
 
             // 게시글 댓글 : 2
-            noticeDTO.setCommentContent("내용");
+            noticeDTO.setCommentContent(noticeCommentMapRepository.findByNoticeId(notice.getId()).getComment().getContent());
             noticeDTO.setBoardMainImage("메인이미지경로");
 
             // 댓글 좋아요 : 3

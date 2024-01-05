@@ -24,7 +24,8 @@ public class CommentService {
         comment.setMember(member);
         comment.setContent(content);
         comment.setCreateDate(LocalDateTime.now());
-        return this.commentRepository.save(comment);
+        this.commentRepository.save(comment);
+        return comment;
     }
 
     public Comment getCommentById(Long id) {

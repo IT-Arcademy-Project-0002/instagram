@@ -30,7 +30,7 @@
                     <div class="ms-2" style="width: 244px">
                         <input type="hidden" th:value="${notice.requestMember.username}">
                         <span th:text="@{|${notice.requestMember.username}님이 댓글을 남겼습니다.|}"></span>
-                        <span th:text="@{|댓글내용인 것이에요|}"></span>
+                        <span th:text="@{|${notice.commentContent}|}"></span>
                         <span th:text="@{|${notice.createDate}|}"></span>
                     </div>
                 </div>

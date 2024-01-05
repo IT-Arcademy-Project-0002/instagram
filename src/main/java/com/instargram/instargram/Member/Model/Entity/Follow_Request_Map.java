@@ -16,12 +16,12 @@ public class Follow_Request_Map {
     Long id;
 
     // 계정주
-    @ManyToOne
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "owner_id")
     Member owner;
 
     // 팔로우를 요청한 사람
-    @ManyToOne
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name="request_member_id")
     Member requestMember;
 }

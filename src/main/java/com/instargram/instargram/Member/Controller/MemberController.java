@@ -17,8 +17,10 @@ import com.instargram.instargram.Story.Service.StoryHighlightMapService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
+import jakarta.websocket.server.PathParam;
 import lombok.Builder;
 
+import org.hibernate.Hibernate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -260,5 +262,16 @@ public class MemberController {
     {
         memberService.changeScope(principal.getName(), !checked);
         return  "redirect:/member/account/privacy_setting";
+    }
+
+    @GetMapping("/search/{kw}")
+    public ResponseEntity<Map<String, List<Member>>> memberSearch(@PathVariable("kw") String kw, Principal principal)
+    {
+        Map<String, List<Member>> result = new HashMap<>();
+
+        Member member = memberService.getMember(principal.getName());
+        result.put("data", memberService.searchMemberList(kw));
+
+        return ResponseEntity.ok().body(result);
     }
 }

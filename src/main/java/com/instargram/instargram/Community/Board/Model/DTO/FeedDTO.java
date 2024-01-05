@@ -8,5 +8,5 @@ import com.instargram.instargram.Community.Comment.Model.Entity.Comment;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public record FeedDTO(BoardDTO boardDTO, List<ImageDTO> imageDTOS, List<CommentDTO> commentDTOS) {
+public record FeedDTO(BoardDTO board, List<ImageDTO> imageDTOS, List<CommentDTO> commentDTOS) {
 }

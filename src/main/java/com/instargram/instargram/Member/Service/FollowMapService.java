@@ -18,12 +18,12 @@ public class FollowMapService {
     private final FollowMapRepository followMapRepository;
     private final FollowRequestMapRepository followRequestMapRepository;
 
-    public List<Member> getFollowers(Member member)
+    public List<Member> getFollowings(Member member)
     {
         return followMapRepository.findByFollowerMember(member).stream().map(Follow_Map::getFollowerMember).toList();
     }
 
-    public List<Member> getFollowings(Member member)
+    public List<Member> getFollowers(Member member)
     {
         return followMapRepository.findByFollowingMember(member).stream().map(Follow_Map::getFollowingMember).toList();
     }

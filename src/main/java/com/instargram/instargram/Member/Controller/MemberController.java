@@ -99,7 +99,7 @@ public class MemberController {
 
     @PostMapping("/profile/upload")
     public String ProfileImageUpload(@RequestParam("profile-photo-input") MultipartFile multipartFile,
-                                     @RequestParam(value = "account") boolean account,
+                                     @RequestParam(value = "account", defaultValue = "false") boolean account,
                                      Principal principal) throws IOException, NoSuchAlgorithmException {
 
         Member member = memberService.getMember(principal.getName());

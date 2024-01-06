@@ -22,7 +22,6 @@
                                 <div class="d-flex" style="padding: 0 0 12px 4px;">
                                     <div style="position: relative; width: 2.5rem; height: 2.5rem;">
                                         <img th:if="${feed.board.memberDTO.imageDTO == null}"
-                                             id="none_user_img"
                                              src="/files/designImg/noneuser.png"
                                              class="shadow rounded-circle text-center"
                                              style="width: 100%; height: 100%; object-fit: cover;">
@@ -52,7 +51,6 @@
                                 <div class="d-flex" style="padding: 0 0 12px 4px;">
                                     <div style="position: relative; width: 2.5rem; height: 2.5rem;">
                                         <img th:if="${feed.board.memberDTO.imageDTO == null}"
-                                             id="none_user_img"
                                              src="/files/designImg/noneuser.png"
                                              class="shadow rounded-circle text-center"
                                              style="width: 100%; height: 100%; object-fit: cover;">
@@ -318,29 +316,28 @@
                                     <div class="d-flex align-items-center" style="flex:6;">
                                         <div class="me-3"
                                              style="position: relative; width: 2rem; height: 2rem;">
-                                            <img th:if="${selectFeed.boardDTO.memberDTO.imageDTO == null || selectFeed.boardDTO.memberDTO.imageDTO.name == null || selectFeed.boardDTO.memberDTO.imageDTO.name.isEmpty()}"
-                                                 id="none_user_img"
+                                            <img th:if="${selectFeed.board.memberDTO.imageDTO == null || selectFeed.board.memberDTO.imageDTO.name == null || selectFeed.board.memberDTO.imageDTO.name.isEmpty()}"
                                                  src="/files/designImg/noneuser.png"
                                                  class="shadow rounded-circle text-center"
                                                  style="position: absolute; top: 0; right: 0; width: 100%; height: 100%; object-fit: cover;">
-                                            <img th:unless="${selectFeed.boardDTO.memberDTO.imageDTO == null || selectFeed.boardDTO.memberDTO.imageDTO.name == null || selectFeed.boardDTO.memberDTO.imageDTO.name.isEmpty()}"
-                                                 th:src="@{|/resources/${selectFeed.boardDTO.memberDTO.imageDTO.name}|}"
+                                            <img th:unless="${selectFeed.board.memberDTO.imageDTO == null || selectFeed.board.memberDTO.imageDTO.name == null || selectFeed.board.memberDTO.imageDTO.name.isEmpty()}"
+                                                 th:src="@{|/resources/${selectFeed.board.memberDTO.imageDTO.name}|}"
                                                  class="shadow rounded-circle text-center"
                                                  style="position: absolute; top: 0; right: 0; width: 100%; height: 100%; object-fit: cover;">
                                         </div>
                                         <div class="d-flex justify-content-center align-items-center"
                                              style="font-weight:bold;"
-                                             th:text="${selectFeed.boardDTO().memberDTO.username}"></div>
+                                             th:text="${selectFeed.board.memberDTO.username}"></div>
                                     </div>
                                     <div class="d-flex" style="flex:1;">
                                         <button type="button" class="btn noneBtn btn-link"
-                                                th:if="${selectFeed.boardDTO.memberDTO.username} == ${loginMember.username}"
+                                                th:if="${selectFeed.board.memberDTO.username} == ${loginMember.username}"
                                                 data-bs-toggle="modal"
                                                 data-bs-target="#CreateUserBoardSettingModal">· · ·
                                         </button>
                                         <!-- 다른 경우 exampleModal 버튼을 보여줍니다. -->
                                         <button type="button" class="btn noneBtn btn-link"
-                                                th:if="${selectFeed.boardDTO.memberDTO.username} != ${loginMember.username}"
+                                                th:if="${selectFeed.board.memberDTO.username} != ${loginMember.username}"
                                                 data-bs-toggle="modal"
                                                 data-bs-target="#UserBoardSettingModal">···
                                         </button>
@@ -351,25 +348,25 @@
                                     <div class="d-flex" style="padding: 14px 16px 14px 16px;">
                                         <div class="me-3"
                                              style="position: relative; width: 2rem; height: 2rem;">
-                                            <img th:if="${selectFeed.boardDTO.memberDTO.imageDTO == null || selectFeed.boardDTO.memberDTO.imageDTO.name == null || selectFeed.boardDTO.memberDTO.imageDTO.name.isEmpty()}"
+                                            <img th:if="${selectFeed.board.memberDTO.imageDTO == null || selectFeed.board.memberDTO.imageDTO.name == null || selectFeed.board.memberDTO.imageDTO.name.isEmpty()}"
                                                  id="none_user_img"
                                                  src="/files/designImg/noneuser.png"
                                                  class="shadow rounded-circle text-center"
                                                  style="position: absolute; top: 0; right: 0; width: 100%; height: 100%; object-fit: cover;">
-                                            <img th:unless="${selectFeed.boardDTO.memberDTO.imageDTO == null || selectFeed.boardDTO.memberDTO.imageDTO.name == null || selectFeed.boardDTO.memberDTO.imageDTO.name.isEmpty()}"
-                                                 th:src="@{|/resources/${selectFeed.boardDTO.memberDTO.imageDTO.name}|}"
+                                            <img th:unless="${selectFeed.board.memberDTO.imageDTO == null || selectFeed.board.memberDTO.imageDTO.name == null || selectFeed.board.memberDTO.imageDTO.name.isEmpty()}"
+                                                 th:src="@{|/resources/${selectFeed.board.memberDTO.imageDTO.name}|}"
                                                  class="shadow rounded-circle text-center"
                                                  style="position: absolute; top: 0; right: 0; width: 100%; height: 100%; object-fit: cover;">
                                         </div>
                                         <div class="d-flex flex-column">
                                             <div class="d-flex justify-content-start align-items-center"
                                                  style="font-weight:bold;"
-                                                 th:text="${selectFeed.boardDTO.memberDTO.username}"></div>
+                                                 th:text="${selectFeed.board.memberDTO.username}"></div>
                                             <div class="d-flex justify-content-start align-items-center"
-                                                 th:text="${selectFeed.boardDTO.content}"></div>
+                                                 th:text="${selectFeed.board.content}"></div>
                                         </div>
                                     </div>
-                                    <div th:classappend="${selectFeed.boardDTO.getCommentDisable() == true} ? 'visually-hidden'">
+                                    <div th:classappend="${selectFeed.board.getCommentDisable() == true} ? 'visually-hidden'">
                                         <!-- Comment List -->
                                         <div th:each="comment, loop : ${selectFeed.commentDTOS}">
                                             <div class="d-flex" style="padding: 16px;">
@@ -518,19 +515,19 @@
                                                 <!--Like-->
                                                 <div class="p-2" role="button" tabindex="0">
                                                     <div>
-                                                        <a th:onclick="@{|ModalclickLike(${selectFeed.boardDTO().id})|}"
-                                                           th:id="${#lists.contains(selectFeed.boardDTO().boardLikeMemberIds, loginMember.id)}">
-                                                            <svg th:id="@{|modal-liked-svg${selectFeed.boardDTO().id}|}"
-                                                                 th:classappend="${#lists.contains(selectFeed.boardDTO().boardLikeMemberIds, loginMember.id)}?'visually-hidden':''"
+                                                        <a th:onclick="@{|ModalclickLike(${selectFeed.board.id})|}"
+                                                           th:id="${#lists.contains(selectFeed.board.boardLikeMemberIds, loginMember.id)}">
+                                                            <svg th:id="@{|modal-liked-svg${selectFeed.board.id}|}"
+                                                                 th:classappend="${#lists.contains(selectFeed.board.boardLikeMemberIds, loginMember.id)}?'visually-hidden':''"
                                                                  aria-label="좋아요"
                                                                  fill="currentColor"
                                                                  height="24" width="24" role="img" viewBox="0 0 24 24"
                                                                  style="color: black;">
                                                                 <path d="M16.792 3.904A4.989 4.989 0 0 1 21.5 9.122c0 3.072-2.652 4.959-5.197 7.222-2.512 2.243-3.865 3.469-4.303 3.752-.477-.309-2.143-1.823-4.303-3.752C5.141 14.072 2.5 12.167 2.5 9.122a4.989 4.989 0 0 1 4.708-5.218 4.21 4.21 0 0 1 3.675 1.941c.84 1.175.98 1.763 1.12 1.763s.278-.588 1.11-1.766a4.17 4.17 0 0 1 3.679-1.938m0-2a6.04 6.04 0 0 0-4.797 2.127 6.052 6.052 0 0 0-4.787-2.127A6.985 6.985 0 0 0 .5 9.122c0 3.61 2.55 5.827 5.015 7.97.283.246.569.494.853.747l1.027.918a44.998 44.998 0 0 0 3.518 3.018 2 2 0 0 0 2.174 0 45.263 45.263 0 0 0 3.626-3.115l.922-.824c.293-.26.59-.519.885-.774 2.334-2.025 4.98-4.32 4.98-7.94a6.985 6.985 0 0 0-6.708-7.218Z"></path>
                                                             </svg>
-                                                            <svg th:id="@{|modal-not-like-svg${selectFeed.boardDTO().id}|}"
+                                                            <svg th:id="@{|modal-not-like-svg${selectFeed.board.id}|}"
                                                                  aria-label="좋아요 취소"
-                                                                 th:classappend="${#lists.contains(selectFeed.boardDTO().boardLikeMemberIds, loginMember.id)}?'':'visually-hidden'"
+                                                                 th:classappend="${#lists.contains(selectFeed.board.boardLikeMemberIds, loginMember.id)}?'':'visually-hidden'"
                                                                  fill="currentColor"
                                                                  height="24" width="24" role="img" viewBox="0 0 48 48"
                                                                  style="color:red;">
@@ -576,12 +573,12 @@
                                             </div>
                                             <div class="d-flex">
                                                 <a class="popoverLink"
-                                                   th:onclick="@{|ModalclickSaveGroup(${selectFeed.boardDTO().id})|}"
-                                                   th:id="${#lists.contains(selectFeed.boardDTO().boardSaveIds, selectFeed.boardDTO().id)}">
+                                                   th:onclick="@{|ModalclickSaveGroup(${selectFeed.board.id})|}"
+                                                   th:id="${#lists.contains(selectFeed.board.boardSaveIds, selectFeed.board.id)}">
                                                     <div class="p-2" role="button" tabindex="0">
-                                                        <svg th:id="@{|modal-saved-svg${selectFeed.boardDTO().id}|}"
+                                                        <svg th:id="@{|modal-saved-svg${selectFeed.board.id}|}"
                                                              aria-label="저장"
-                                                             th:classappend="${#lists.contains(selectFeed.boardDTO().boardSaveIds, selectFeed.boardDTO().id)} ? 'visually-hidden' : '' "
+                                                             th:classappend="${#lists.contains(selectFeed.board.boardSaveIds, selectFeed.board.id)} ? 'visually-hidden' : '' "
                                                              fill="currentColor" height="24" role="img"
                                                              viewBox="0 0 24 24"
                                                              width="24">
@@ -592,9 +589,9 @@
                                                                      stroke-linecap="round" stroke-linejoin="round"
                                                                      stroke-width="2"></polygon>
                                                         </svg>
-                                                        <svg th:id="@{|modal-not-save-svg${selectFeed.boardDTO().id}|}"
+                                                        <svg th:id="@{|modal-not-save-svg${selectFeed.board.id}|}"
                                                              aria-label="삭제"
-                                                             th:classappend="${#lists.contains(selectFeed.boardDTO().boardSaveIds, selectFeed.boardDTO().id)} ? '' : 'visually-hidden' "
+                                                             th:classappend="${#lists.contains(selectFeed.board.boardSaveIds, selectFeed.board.id)} ? '' : 'visually-hidden' "
                                                              fill="currentColor" height="24" role="img"
                                                              viewBox="0 0 24 24"
                                                              width="24">
@@ -650,15 +647,15 @@
                                             </script>
                                         </div>
                                         <div class="px-2"
-                                             th:text="'좋아요 ' + ${#lists.size(selectFeed.boardDTO().getBoardLikeMemberIds())} + '개'"></div>
+                                             th:text="'좋아요 ' + ${#lists.size(selectFeed.board.getBoardLikeMemberIds())} + '개'"></div>
                                         <div class="px-2"
-                                             th:text="${#temporals.format(selectFeed.boardDTO.getCreateDate(), 'MM월 dd일')}"></div>
+                                             th:text="${#temporals.format(selectFeed.board.getCreateDate(), 'MM월 dd일')}"></div>
                                     </div>
                                 </div>
                                 <div style="height: 10%">
-                                    <div th:classappend="${selectFeed.boardDTO.getCommentDisable() == true}?'visually-hidden'">
+                                    <div th:classappend="${selectFeed.board.getCommentDisable() == true}?'visually-hidden'">
                                         <form id="comment-form"
-                                              th:action="@{|/comment/create/${selectFeed.boardDTO.id}|}"
+                                              th:action="@{|/comment/create/${selectFeed.board.id}|}"
                                               method="post"></form>
                                         <form th:action id="recomment-form" method="post"
                                               onsubmit="return false;">
@@ -698,28 +695,28 @@
                 <div th:if="${selectFeed}">
                     <div class="modal-body p-0">
                         <div class="border-bottom text-center p-2">
-                            <a th:href="@{|/beard/delete/${selectFeed.boardDTO.id}|}">
+                            <a th:href="@{|/beard/delete/${selectFeed.board.id}|}">
                                 <button type="button" class="btn noneBtn btn-link text-danger">삭제</button>
                             </a>
                         </div>
                         <div class="border-bottom text-center p-2">
-                            <a th:href="@{|/board/likehide/${selectFeed.boardDTO.id}|}">
-                                <button type="button" th:if="${selectFeed.boardDTO.getLikeHide() == true}"
+                            <a th:href="@{|/board/likehide/${selectFeed.board.id}|}">
+                                <button type="button" th:if="${selectFeed.board.getLikeHide() == true}"
                                         class="btn noneBtn btn-link text-dark">좋아요 수 숨기기 취소
                                 </button>
-                                <button type="button" th:if="${selectFeed.boardDTO.getLikeHide() == false}"
+                                <button type="button" th:if="${selectFeed.board.getLikeHide() == false}"
                                         class="btn noneBtn btn-link text-dark">좋아요 수 숨기기
                                 </button>
                             </a>
                         </div>
                         <div class="border-bottom text-center p-2">
-                            <a th:href="@{|/board/comment_disable/${selectFeed.boardDTO.id}|}">
+                            <a th:href="@{|/board/comment_disable/${selectFeed.board.id}|}">
                                 <button type="button"
-                                        th:if="${selectFeed.boardDTO.getCommentDisable() == false}"
+                                        th:if="${selectFeed.board.getCommentDisable() == false}"
                                         class="btn noneBtn btn-link text-dark">댓글 비활성화
                                 </button>
                                 <button type="button"
-                                        th:if="${selectFeed.boardDTO.getCommentDisable() == true}"
+                                        th:if="${selectFeed.board.getCommentDisable() == true}"
                                         class="btn noneBtn btn-link text-dark">댓글 활성화
                                 </button>
                             </a>
@@ -747,7 +744,7 @@
                             <button class="btn noneBtn btn-link text-dark">즐겨찾기 추가</button>
                         </div>
                         <div class="border-bottom text-center p-2">
-                            <a th:href="@{|/board/feedMemberInfo/${selectFeed.boardDTO.id}|}">
+                            <a th:href="@{|/board/feedMemberInfo/${selectFeed.board.id}|}">
                                 <button class="btn noneBtn btn-link text-dark">이 계정 정보</button>
                             </a>
                         </div>

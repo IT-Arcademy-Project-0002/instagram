@@ -48,9 +48,9 @@ public class Notice {
     @ManyToOne
     private Member member;
 
-    @OneToMany(mappedBy = "notice", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private List<Notice_Board_Map> noticeBoardMap;
 
-    @OneToMany(mappedBy = "notice", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private List<Notice_Comment_Map> noticeCommentMap;
 }

@@ -21,6 +21,6 @@ public class HashTag {
     private String name;
 
     // 해당 해시태그가 작성된 게시물 매핑 테이블 목록
-    @OneToMany(mappedBy = "tag", cascade = CascadeType.REMOVE)
+    @OneToMany(cascade = CascadeType.REMOVE)
     private List<Board_HashTag_Map> boardHashTagMaps;
 }

@@ -16,11 +16,11 @@ public class Board_Like_Member_Map {
     private Long id;
 
     // 게시글
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Board board;
 
     // 게시글을 좋아요 한 회원
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="like_member_id")
     private Member likeMember;
 }

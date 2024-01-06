@@ -28,27 +28,29 @@ public class BoardDTO {
     private String location;
     private List<Long> boardLikeMemberIds;
     private List<Long> boardSaveIds;
+    private boolean pin;
 
 
     public BoardDTO(Board board) {
-        id = board.getId();
-        content = board.getContent();
-        createDate = board.getCreateDate();
-        updateDate = board.getUpdateDate();
-        likeHide = board.isLikeHide();
-        commentDisable = board.isCommentDisable();
+        this.id = board.getId();
+        this.content = board.getContent();
+        this.createDate = board.getCreateDate();
+        this.updateDate = board.getUpdateDate();
+        this.likeHide = board.isLikeHide();
+        this.commentDisable = board.isCommentDisable();
+        this.pin = board.isPin();
         if (board.getLocation() != null) {
             this.location = board.getLocation().getPlaceName();
         } else {
             this.location = null;
         }
         if (board.getMember() != null) {
-            memberDTO = new MemberDTO(board.getMember());
+            this.memberDTO = new MemberDTO(board.getMember());
         }
         // Board_Like_Member_Map에서 필요한 데이터만 가져와서 저장
-        boardLikeMemberIds = board.getBoardLikeMemberMaps().stream().map(Board_Like_Member_Map::getLikeMember).map(Member::getId).collect(Collectors.toList());
+        this.boardLikeMemberIds = board.getBoardLikeMemberMaps().stream().map(Board_Like_Member_Map::getLikeMember).map(Member::getId).collect(Collectors.toList());
 
         // Board_Save_Map에서 필요한 데이터만 가져와서 저장
-        boardSaveIds = board.getBoardSaveMaps().stream().map(Board_Save_Map::getBoard).map(Board::getId).collect(Collectors.toList());
+        this.boardSaveIds = board.getBoardSaveMaps().stream().map(Board_Save_Map::getBoard).map(Board::getId).collect(Collectors.toList());
     }
 }

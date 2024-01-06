@@ -57,6 +57,12 @@ a {
 
 /* jeongDaHee css */
 
+.search_layout {
+    width: 397px;
+    height: 100%;
+    padding: 8px 0 8px 0;
+}
+
 .search_title {
     padding: 12px 14px 36px 24px;
     margin: 8px 0 8px 0;

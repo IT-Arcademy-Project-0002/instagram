@@ -11,6 +11,7 @@ import com.instargram.instargram.Enum_Data;
 import com.instargram.instargram.Member.Model.Entity.Member;
 import com.instargram.instargram.Member.Service.MemberService;
 //import com.instargram.instargram.Notice.Service.NoticeService;
+import com.instargram.instargram.Notice.Service.NoticeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -27,7 +28,7 @@ public class RecommentController {
     private final CommentService commentService;
     private final RecommentService recommentService;
     private final Recomment_Like_MapService recommentLikeMapService;
-//    private final NoticeService noticeService;
+    private final NoticeService noticeService;
 
     @PostMapping("/create/{id}")
     public String create(@PathVariable("id") Long id, RecommentCreateForm recommentCreateForm, BindingResult bindingResult, Principal principal){

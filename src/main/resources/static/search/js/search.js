@@ -79,7 +79,7 @@ $(document).ready(function () {
 
                     var listItem = $(
                         '<a href="/member/page/'+ searchResult.listName + '" target="_blank" class="link">' +
-                        '<div class="search-box">' +
+                        '<div class="search-list-box">' +
                         '<div class="search-profile">' +
                         '<img src="'+ listImageSrc +'" class="search-profile-image rounded-circle text-center">' +
                         '</div>' +
@@ -96,7 +96,7 @@ $(document).ready(function () {
 
                     var listItem = $(
                         '<a href="/explore/location/'+ searchResult.listLocationId + '" target="_blank" class="link">' +
-                        '<div class="search-box">' +
+                        '<div class="search-list-box">' +
                         '<div class="search-profile">' +
                         '<img src="'+ listImageSrc +'" class="search-profile-image rounded-circle text-center">' +
                         '</div>' +

@@ -65,9 +65,8 @@ public class NoticeService {
             // 게시글 좋아요 : 1
 
             // 게시글 댓글 : 2
-            var a = noticeCommentMapRepository.findByNoticeId(notice.getId());
-            noticeDTO.setCommentContent(a.getComment().getContent());
-            noticeDTO.setBoardMainImage("메인이미지경로");
+//            noticeDTO.setCommentContent(noticeCommentMapRepository.findByNoticeId(notice.getId()).getComment().getContent());
+//            noticeDTO.setBoardMainImage("메인이미지경로");
 
             // 댓글 좋아요 : 3
 

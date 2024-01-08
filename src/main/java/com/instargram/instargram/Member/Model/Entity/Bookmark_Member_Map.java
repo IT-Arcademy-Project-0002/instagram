@@ -3,6 +3,8 @@ package com.instargram.instargram.Member.Model.Entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Getter
 @Setter
@@ -19,10 +21,12 @@ public class Bookmark_Member_Map {
     // 계정주
     @ManyToOne
     @JoinColumn(name="owner_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     Member owner;
 
     // 즐겨찾기 한 계정
     @ManyToOne
     @JoinColumn(name="bookmark_member_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     Member bookmarkMember;
 }

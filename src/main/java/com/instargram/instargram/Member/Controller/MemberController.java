@@ -269,7 +269,6 @@ public class MemberController {
     {
         Map<String, List<Member>> result = new HashMap<>();
 
-        Member member = memberService.getMember(principal.getName());
         result.put("data", memberService.searchMemberList(kw));
 
         return ResponseEntity.ok().body(result);

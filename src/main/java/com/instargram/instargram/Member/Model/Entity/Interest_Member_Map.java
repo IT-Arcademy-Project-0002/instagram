@@ -3,6 +3,8 @@ package com.instargram.instargram.Member.Model.Entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Getter
 @Setter
@@ -18,11 +20,13 @@ public class Interest_Member_Map {
     // 계정주
     @ManyToOne()
     @JoinColumn(name="owner_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     Member owner;
 
 
     // 관심 계정
     @ManyToOne
     @JoinColumn(name="interest_member_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     Member interestMemberId;
 }

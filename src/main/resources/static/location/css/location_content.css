@@ -10,7 +10,7 @@ a {
 
 .location-list {
     visibility:hidden;
-    height:20vh;
+    height:10vh;
     overflow-x: hidden;
     overflow-y: scroll;
 }

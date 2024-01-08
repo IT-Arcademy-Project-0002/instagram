@@ -237,7 +237,7 @@
                                         });
                                     </script>
                                 </div>
-                                <div class="px-2"
+                                <div class="px-2" id="likeCount"
                                      th:text="${feed.board.likeHide == false ? '좋아요 ' + #lists.size(feed.board.boardLikeMemberIds) + '개' : '좋아요 여러개 입니다.'}"></div>
                                 <div class="d-flex" style="width: 50%;">
                                     <div class="px-2"
@@ -331,20 +331,53 @@
                                     <div class="d-flex align-items-center border-bottom"
                                          style="padding: 14px 16px 14px 16px; height: 10%;">
                                         <div class="d-flex align-items-center" style="flex:6;">
-                                            <div class="me-3"
-                                                 style="position: relative; width: 2rem; height: 2rem;">
-                                                <img th:if="${selectFeed.board.memberDTO.imageDTO == null || selectFeed.board.memberDTO.imageDTO.name == null || selectFeed.board.memberDTO.imageDTO.name.isEmpty()}"
-                                                     src="/files/designImg/noneuser.png"
-                                                     class="shadow rounded-circle text-center"
-                                                     style="position: absolute; top: 0; right: 0; width: 100%; height: 100%; object-fit: cover;">
-                                                <img th:unless="${selectFeed.board.memberDTO.imageDTO == null || selectFeed.board.memberDTO.imageDTO.name == null || selectFeed.board.memberDTO.imageDTO.name.isEmpty()}"
-                                                     th:src="@{|/resources/${selectFeed.board.memberDTO.imageDTO.name}|}"
-                                                     class="shadow rounded-circle text-center"
-                                                     style="position: absolute; top: 0; right: 0; width: 100%; height: 100%; object-fit: cover;">
+
+                                            <!--location not null-->
+                                            <div th:if="${selectFeed.board.location == null}">
+                                                <div class="d-flex">
+                                                    <div style="position: relative; width: 2rem; height: 2rem;">
+                                                        <img th:if="${selectFeed.board.memberDTO.imageDTO == null}"
+                                                             src="/files/designImg/noneuser.png"
+                                                             class="shadow rounded-circle text-center"
+                                                             style="width: 100%; height: 100%; object-fit: cover;">
+                                                        <img th:unless="${selectFeed.board.memberDTO.imageDTO == null}"
+                                                             th:src="@{|/resources/${selectFeed.board.memberDTO.imageDTO.name}|}"
+                                                             class="shadow rounded-circle text-center"
+                                                             style="width: 100%; height: 100%; object-fit: cover;">
+                                                    </div>
+                                                    <div class="d-flex mx-2">
+                                                        <div class="d-flex">
+                                                            <div style="font-weight: bold; font-size: medium"
+                                                                 th:text="${selectFeed.board.memberDTO.username}"></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <div class="d-flex justify-content-center align-items-center"
-                                                 style="font-weight:bold;"
-                                                 th:text="${selectFeed.board.memberDTO.username}"></div>
+
+                                            <!--location null-->
+                                            <div th:if="${selectFeed.board.location != null}">
+                                                <div class="d-flex">
+                                                    <div style="position: relative; width: 2rem; height: 2rem;">
+                                                        <img th:if="${selectFeed.board.memberDTO.imageDTO == null}"
+                                                             src="/files/designImg/noneuser.png"
+                                                             class="shadow rounded-circle text-center"
+                                                             style="width: 100%; height: 100%; object-fit: cover;">
+                                                        <img th:unless="${selectFeed.board.memberDTO.imageDTO == null}"
+                                                             th:src="@{|/resources/${selectFeed.board.memberDTO.imageDTO.name}|}"
+                                                             class="shadow rounded-circle text-center"
+                                                             style="width: 100%; height: 100%; object-fit: cover;">
+                                                    </div>
+                                                    <div class="d-flex flex-column mx-2">
+                                                        <div class="d-flex">
+                                                            <div style="font-weight: bold; font-size: medium"
+                                                                 th:text="${selectFeed.board.memberDTO.username}"></div>
+                                                        </div>
+                                                        <div class="d-flex" style="font-size: 0.8rem;">
+                                                            <div th:text="${selectFeed.board.location}"></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                         <div class="d-flex" style="flex:1;">
                                             <button type="button" class="btn noneBtn btn-link"
@@ -528,7 +561,6 @@
                                         <div class="d-flex flex-column m-1">
                                             <div class="d-flex justify-content-between">
                                                 <div class="d-flex">
-
                                                     <!--Like-->
                                                     <div class="p-2" role="button" tabindex="0">
                                                         <div>

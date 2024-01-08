@@ -8,6 +8,7 @@ import com.instargram.instargram.Notice.Model.DTO.NoticeDTO;
 import com.instargram.instargram.Notice.Model.Entity.Notice;
 import com.instargram.instargram.Notice.Model.Entity.Notice_Comment_Map;
 import com.instargram.instargram.Notice.Model.Repository.NoticeRepository;
+import com.instargram.instargram.Notice.Model.Repository.Notice_Comment_Like_MapRepository;
 import com.instargram.instargram.Notice.Model.Repository.Notice_Comment_MapRepository;
 import lombok.Builder;
 import org.springframework.stereotype.Service;
@@ -28,6 +29,7 @@ public class NoticeService {
     private final CommentService commentService;
     private final NoticeCommentMapService noticeCommentMapService;
     private final Notice_Comment_MapRepository noticeCommentMapRepository;
+    private final NoticeBoardMapService noticeBoardMapService;
 
     public Notice createNotice(Integer type, Member loginMember, Member member)
     {
@@ -54,7 +56,7 @@ public class NoticeService {
         {
             NoticeDTO noticeDTO = new NoticeDTO();
 
-            // 공통 객체
+            // 공통 객체 + 팔로우 요청 : 8
             noticeDTO.setRequestMember(notice.getRequestMember());
             noticeDTO.setType(notice.getType());
             noticeDTO.setId(notice.getId());
@@ -62,13 +64,15 @@ public class NoticeService {
             noticeDTO.setFollower(followMapService.isFollower(loginUser, notice.getRequestMember()));
             noticeDTO.setFollow(followMapService.isFollow(loginUser, notice.getRequestMember()));
 
-            // 게시글 좋아요 : 1
 
-            // 게시글 댓글 : 2
-            noticeDTO.setCommentContent(noticeCommentMapService.getNoticeComment(notice.getId()).getContent());
-            noticeDTO.setBoardMainImage(noticeCommentMapService.getNoticeComment(notice.getId()).getBoard().getContent());
+            //  (notice 타입을 식별자로 사용하여 코드 간소화 진행)
 
-            // 댓글 좋아요 : 3
+            // 보드 이미지 : 게시글 좋아요(1), 게시글 댓글(2), 댓글 좋아요(3)
+            noticeDTO.setBoardMainImage(noticeBoardMapService.getNoticeBoardImage(notice.getId(), notice.getType()));
+
+            // 댓글 내용 : 게시글 댓글(2), 댓글 좋아요(3)
+            noticeDTO.setCommentContent(noticeCommentMapService.getNoticeComment(notice.getId(), notice.getType()).getContent());
+
 
             // 댓글 대댓글 : 4
 
@@ -77,8 +81,6 @@ public class NoticeService {
             // 디엠 좋아요 : 6
 
             // 스토리 좋아요 : 7
-
-            // 팔로우 요청 : 8
 
             // 게시글 멤버태그 : 9
             noticeDTOS.add(noticeDTO);

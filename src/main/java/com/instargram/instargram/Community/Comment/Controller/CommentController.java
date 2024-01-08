@@ -45,8 +45,8 @@ public class CommentController {
         Board board = this.boardService.getBoardById(id);
         if (member != null && board != null) {
             Comment comment = commentService.create(member, board, commentCreateForm.getContent());
-//            Notice notice = noticeService.createNotice(Enum_Data.BOARD_COMMENT.getNumber(), member, board.getMember());
-//            noticeCommentMapService.createNoticeComment(comment, notice);
+            Notice notice = noticeService.createNotice(Enum_Data.BOARD_COMMENT.getNumber(), member, board.getMember());
+            noticeCommentMapService.createNoticeComment(comment, notice);
         }
         return "redirect:/main";
     }

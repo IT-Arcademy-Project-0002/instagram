@@ -1,7 +1,7 @@
-package com.instargram.instargram.Notice.Model.Entitiy;
+package com.instargram.instargram.Notice.Model.Entity;
 
 
-import com.instargram.instargram.Community.Board.Model.Entity.Board;
+import com.instargram.instargram.Community.Comment.Model.Entity.Comment;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -9,7 +9,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-public class Notice_Board_Map {
+public class Notice_Comment_Map {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,6 +20,7 @@ public class Notice_Board_Map {
     private Notice notice;
 
     @ManyToOne
-    @JoinColumn(name="board_id")
-    private Board board;
+    @JoinColumn(name="comment_id")
+    private Comment comment;
+
 }

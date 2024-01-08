@@ -1,7 +1,5 @@
-package com.instargram.instargram.Notice.Model.Entitiy;
+package com.instargram.instargram.Notice.Model.Entity;
 
-import com.instargram.instargram.Community.Comment.Model.Entity.Comment;
-import com.instargram.instargram.DM.Model.Entity.Message.Message_Request_Map;
 import com.instargram.instargram.Member.Model.Entity.Member;
 import jakarta.persistence.*;
 import lombok.Getter;

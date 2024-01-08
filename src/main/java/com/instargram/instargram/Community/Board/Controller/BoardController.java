@@ -124,6 +124,7 @@ public class BoardController {
         return "redirect:/main";
     }
 
+
     @GetMapping("/board/detail/{id}")
     public String detail(@PathVariable("id") Long id, HttpSession httpSession) {
         Board board = this.boardService.getBoardById(id);
@@ -182,7 +183,6 @@ public class BoardController {
             return "redirect:/main";
         }
     }
-
     // board like
     @GetMapping("/board/like/{id}")
     public ResponseEntity<Map<String, Object>> like(@PathVariable("id") Long id, Principal principal) {

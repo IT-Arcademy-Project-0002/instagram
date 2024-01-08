@@ -10,7 +10,9 @@ import com.instargram.instargram.Community.Comment.Service.Comment_Like_MapServi
 import com.instargram.instargram.Enum_Data;
 import com.instargram.instargram.Member.Model.Entity.Member;
 import com.instargram.instargram.Member.Service.MemberService;
-import com.instargram.instargram.Notice.Model.Entitiy.Notice;
+
+import com.instargram.instargram.Notice.Model.Entity.Notice;
+
 import com.instargram.instargram.Notice.Service.NoticeCommentMapService;
 import com.instargram.instargram.Notice.Service.NoticeService;
 import lombok.RequiredArgsConstructor;
@@ -29,8 +31,8 @@ public class CommentController {
     private final CommentService commentService;
     private final MemberService memberService;
     private final Comment_Like_MapService commentLikeMapService;
-//    private final NoticeService noticeService;
-//    private final NoticeCommentMapService noticeCommentMapService;
+    private final NoticeService noticeService;
+    private final NoticeCommentMapService noticeCommentMapService;
 
     //댓글 작성
     @PostMapping("/create/{id}")
@@ -57,8 +59,9 @@ public class CommentController {
 
         Comment_Like_Map isCommentMemberLiked = this.commentLikeMapService.exists(comment, member);
         if (isCommentMemberLiked == null) {
-            this.commentLikeMapService.create(comment, member);
-//            this.noticeService.createNotice(Enum_Data.COMMENT_LIKE.getNumber(), member,comment.getMember());
+            Comment_Like_Map commentLikeMap = this.commentLikeMapService.create(comment, member);
+            Notice notice = this.noticeService.createNotice(Enum_Data.COMMENT_LIKE.getNumber(), member,comment.getMember());
+            noticeCommentMapService.createNoticeCommentLike(commentLikeMap, notice);
         }else{
             this.commentLikeMapService.delete(isCommentMemberLiked);
         }

@@ -38,7 +38,7 @@ public class RecommentController {
         Comment comment = this.commentService.getCommentById(id);
         if (member != null && comment != null) {
             recommentService.create(member, comment, recommentCreateForm.getContent());
-//            this.noticeService.createNotice(Enum_Data.COMMENT_RECOMMENT.getNumber(), member, comment.getMember());
+            this.noticeService.createNotice(Enum_Data.COMMENT_RECOMMENT.getNumber(), member, comment.getMember());
         }
         return "redirect:/main";
     }

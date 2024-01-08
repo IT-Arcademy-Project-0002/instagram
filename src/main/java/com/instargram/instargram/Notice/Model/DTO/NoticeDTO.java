@@ -11,8 +11,8 @@ import java.time.LocalDateTime;
 public class NoticeDTO {
 
     // 공통 객체
-    private Long id;
-    private Integer type;
+    private Long id; // PK
+    private Integer type; // 알림 타입
     private Member requestMember;
     private String createDate;
 

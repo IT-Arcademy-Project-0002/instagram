@@ -7,6 +7,8 @@ import com.instargram.instargram.Community.Board.Model.Entity.Board_Save_Map;
 import com.instargram.instargram.Community.Board.Model.Form.BoardCreateForm;
 import com.instargram.instargram.Community.Board.Model.Entity.Board;
 import com.instargram.instargram.Community.Board.Service.*;
+import com.instargram.instargram.Community.HashTag.Model.Entity.HashTag;
+import com.instargram.instargram.Community.HashTag.Service.HashTagService;
 import com.instargram.instargram.Community.Location.Model.DTO.LocationDTO;
 import com.instargram.instargram.Community.Location.Model.Entity.Location;
 import com.instargram.instargram.Community.Location.Service.LocationService;
@@ -50,6 +52,7 @@ public class BoardController {
     private final NoticeService noticeService;
     private final Board_TagMember_MapService boardTagMemberMapService;
     private final NoticeBoardMapService noticeBoardMapService;
+    private final HashTagService hashTagService;
 
     // main
     @GetMapping("/main")
@@ -92,7 +95,7 @@ public class BoardController {
         List<String> tagMemberList = this.boardTagMemberMapService.extractMentionedWords(boardCreateForm.getContent());
 
         Board board = this.boardService.create(member, boardCreateForm.getContent(), location, boardCreateForm.isLikeHide(), boardCreateForm.isCommentDisable());
-
+//        HashTag hashTag = this.hashTagService.create(boardCreateForm.getHashTag());
         for (String memberMap : tagMemberList){
             Member tagMember = this.memberService.getMember(memberMap);
             this.boardTagMemberMapService.create(board, tagMember);
@@ -114,7 +117,10 @@ public class BoardController {
                 String[] type = Objects.requireNonNull(multipartFile.getContentType()).split("/");
                 if (!type[type.length - 1].equals("octet-stream")) {
                     String fileExtension = type[type.length - 1];
-                    if(fileExtension.equals("jpeg")){
+                    if (fileExtension.equals("jpeg")) {
+                        Image image = this.imageService.saveImage(multipartFile, nameWithoutExtension, fileExtension);
+                        this.boardDataMapService.create(board, image, Enum_Data.IMAGE.getNumber());
+                    } else if(fileExtension.equals("png")){
                         Image image = this.imageService.saveImage(multipartFile, nameWithoutExtension, fileExtension);
                         this.boardDataMapService.create(board, image, Enum_Data.IMAGE.getNumber());
                     }else if(fileExtension.equals("mp4")){
@@ -204,7 +210,6 @@ public class BoardController {
         } else {
             this.boardLikeMemberMapService.delete(isBoardMemberLiked);
             result.put("result", false);
-
         }
         return ResponseEntity.ok().body(result);
     }

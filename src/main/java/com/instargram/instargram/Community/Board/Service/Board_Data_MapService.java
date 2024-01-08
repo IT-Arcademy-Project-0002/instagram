@@ -62,21 +62,16 @@ public class Board_Data_MapService {
         for (Board board : boardList) {
             List<Board_Data_Map> maps = getMapByBoard(board);
             List<Comment> comments = getCommentsByBoard(board);
-            List<Image> images = new ArrayList<>();
-            List<Video> videos = new ArrayList<>();
-            Image image = new Image();
-            Video video = new Video();
             List<FileDTO> fileList = new ArrayList<>();
             for (Board_Data_Map map : maps) {
                 if (Objects.equals(map.getDataType(), Enum_Data.IMAGE.getNumber())) {
-                    image = imageService.getImageByID(map.getDataId());
-                    images.add(image);
+                    Image image = imageService.getImageByID(map.getDataId());
+                    fileList.add(new FileDTO(image, null));
                 } else if (Objects.equals(map.getDataType(), Enum_Data.VIDEO.getNumber())) {
-                    video = videoService.getVideoByID(map.getDataId());
-                    videos.add(video);
+                    Video video = videoService.getVideoByID(map.getDataId());
+                    fileList.add(new FileDTO(null, video));
                 }
             }
-            fileList.add(new FileDTO(image, video));
             feedListDTOS.add(new FeedListDTO(new BoardDTO(board), fileList, comments));
         }
         return feedListDTOS;
@@ -85,17 +80,18 @@ public class Board_Data_MapService {
     public FeedDTO getFeedWithComments(Board board) {
         List<Board_Data_Map> maps = getMapByBoard(board);
         List<Comment> comments = getCommentsByBoard(board);
-        List<ImageDTO> images = new ArrayList<>();
-
+        List<FileDTO> selectfileList = new ArrayList<>();
         for (Board_Data_Map map : maps) {
             if (Objects.equals(map.getDataType(), Enum_Data.IMAGE.getNumber())) {
                 Image image = imageService.getImageByID(map.getDataId());
-                ImageDTO imageDTO = convertToImageDTO(image);
-                images.add(imageDTO);
+                selectfileList.add(new FileDTO(image, null));
+            } else if (Objects.equals(map.getDataType(), Enum_Data.VIDEO.getNumber())) {
+                Video video = videoService.getVideoByID(map.getDataId());
+                selectfileList.add(new FileDTO(null, video));
             }
         }
 
-        return new FeedDTO(convertToBoardDTO(board), images, convertToCommentDTOs(comments));
+        return new FeedDTO(convertToBoardDTO(board), selectfileList, convertToCommentDTOs(comments));
     }
 
     private BoardDTO convertToBoardDTO(Board board) {

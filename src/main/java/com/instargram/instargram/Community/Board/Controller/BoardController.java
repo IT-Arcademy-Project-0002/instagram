@@ -3,6 +3,7 @@ package com.instargram.instargram.Community.Board.Controller;
 import com.instargram.instargram.Community.Board.Model.DTO.FeedDTO;
 import com.instargram.instargram.Community.Board.Model.DTO.FeedListDTO;
 import com.instargram.instargram.Community.Board.Model.Entity.BoardLikeMemberMap;
+import com.instargram.instargram.Community.Board.Model.Entity.Board_HashTag_Map;
 import com.instargram.instargram.Community.Board.Model.Entity.Board_Save_Map;
 import com.instargram.instargram.Community.Board.Model.Form.BoardCreateForm;
 import com.instargram.instargram.Community.Board.Model.Entity.Board;
@@ -53,6 +54,7 @@ public class BoardController {
     private final Board_TagMember_MapService boardTagMemberMapService;
     private final NoticeBoardMapService noticeBoardMapService;
     private final HashTagService hashTagService;
+    private final BoardHashTagMapService hashTagMapService;
 
     // main
     @GetMapping("/main")
@@ -95,7 +97,13 @@ public class BoardController {
         List<String> tagMemberList = this.boardTagMemberMapService.extractMentionedWords(boardCreateForm.getContent());
 
         Board board = this.boardService.create(member, boardCreateForm.getContent(), location, boardCreateForm.isLikeHide(), boardCreateForm.isCommentDisable());
-//        HashTag hashTag = this.hashTagService.create(boardCreateForm.getHashTag());
+
+        List<String> hashTagsList = this.hashTagService.extractMentionedWords(boardCreateForm.getHashTag());
+        for (String hashTag_name : hashTagsList) {
+           HashTag hashTag = this.hashTagService.create(hashTag_name);
+            this.hashTagMapService.createBoardHashTag(board, hashTag);
+        }
+
         for (String memberMap : tagMemberList){
             Member tagMember = this.memberService.getMember(memberMap);
             this.boardTagMemberMapService.create(board, tagMember);

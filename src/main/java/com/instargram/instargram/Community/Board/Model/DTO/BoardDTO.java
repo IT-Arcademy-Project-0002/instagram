@@ -1,11 +1,8 @@
 package com.instargram.instargram.Community.Board.Model.DTO;
 
 import com.instargram.instargram.Community.Board.Model.Entity.Board;
-import com.instargram.instargram.Community.Board.Model.Entity.Board_Like_Member_Map;
+import com.instargram.instargram.Community.Board.Model.Entity.BoardLikeMemberMap;
 import com.instargram.instargram.Community.Board.Model.Entity.Board_Save_Map;
-import com.instargram.instargram.Community.Comment.Model.DTO.CommentDTO;
-import com.instargram.instargram.Community.Comment.Model.Entity.Comment;
-import com.instargram.instargram.Community.Location.Model.Entity.Location;
 import com.instargram.instargram.Member.Model.DTO.MemberDTO;
 import com.instargram.instargram.Member.Model.Entity.Member;
 import jakarta.transaction.Transactional;
@@ -49,9 +46,8 @@ public class BoardDTO {
         if (board.getMember() != null) {
             this.memberDTO = new MemberDTO(board.getMember());
         }
-        // Board_Like_Member_Map에서 필요한 데이터만 가져와서 저장
-        var a = board.getBoardLikeMemberMaps();
-        this.boardLikeMemberIds = a.stream().map(Board_Like_Member_Map::getLikeMember).map(Member::getId).collect(Collectors.toList());
+        // BoardLikeMemberMap에서 필요한 데이터만 가져와서 저장
+        this.boardLikeMemberIds = board.getBoardLikeMemberMaps().stream().map(BoardLikeMemberMap::getLikeMember).map(Member::getId).collect(Collectors.toList());
 
         // Board_Save_Map에서 필요한 데이터만 가져와서 저장
         this.boardSaveIds = board.getBoardSaveMaps().stream().map(Board_Save_Map::getBoard).map(Board::getId).collect(Collectors.toList());

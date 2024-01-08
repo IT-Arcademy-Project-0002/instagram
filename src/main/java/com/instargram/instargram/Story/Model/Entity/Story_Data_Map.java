@@ -4,6 +4,8 @@ import com.instargram.instargram.Member.Model.Entity.Member;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.util.List;
 
@@ -26,9 +28,6 @@ public class Story_Data_Map {
     // 계정주
     @ManyToOne
     @JoinColumn(name = "owner_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Member owner;
-
-    // 스토리를 좋아요 한 사람들 목록
-    @OneToMany(cascade = CascadeType.REMOVE)
-    private List<Story_LikeMember_Map> storyLikeMembers;
 }

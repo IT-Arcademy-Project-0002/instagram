@@ -10,6 +10,6 @@ public class CustomWebMvcConfig implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/resources/**")
-                .addResourceLocations("File:///"+ AppConfig.getImageFileDirPath());
+                .addResourceLocations("file:///" + AppConfig.getImageFileDirPath(), "file:///" + AppConfig.getVideoFileDirPath());
     }
 }

@@ -154,7 +154,7 @@ public class MemberController {
 
 
     @PostMapping("/profile/delete")
-    public String ProfileImageDelete(Principal principal, @RequestParam(value = "account") boolean account)
+    public String ProfileImageDelete(Principal principal, @RequestParam(value = "account", defaultValue = "false") boolean account)
     {
         Member member = memberService.getMember(principal.getName());
 
@@ -269,7 +269,6 @@ public class MemberController {
     {
         Map<String, List<Member>> result = new HashMap<>();
 
-        Member member = memberService.getMember(principal.getName());
         result.put("data", memberService.searchMemberList(kw));
 
         return ResponseEntity.ok().body(result);

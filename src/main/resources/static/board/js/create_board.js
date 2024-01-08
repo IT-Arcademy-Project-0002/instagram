@@ -19,6 +19,8 @@ function clickFileUpload() {
             $(firstModal).modal('dispose'); // 첫 번째 모달 삭제
 
             let imagePreviewArray = [];
+            let videoPreviewArray = [];
+
             var files = document.getElementById("img-container");
             for (let i = 0; i < filesArray.length; i++) {
                 var carouselItem = document.createElement("div");
@@ -43,9 +45,31 @@ function clickFileUpload() {
                 img.style.margin="auto";
                 img.src = URL.createObjectURL(filesArray[i]);
 
-                imagePreviewArray.push(img.src);
+                var video = document.createElement("video");
+                video.id="name"+i;
+                video.classList.add("shadow", "text-center");
+                video.style.position="absolute";
+                video.style.top="0";
+                video.style.left="0";
+                video.style.transform="translate(50,50)";
+                video.style.width="100%";
+                video.style.height="100%";
+                video.style.objectFit="cover";
+                video.style.margin="auto";
+                video.src = URL.createObjectURL(filesArray[i]);
+                video.controls = true; // 비디오 컨트롤
+                video.autoplay = true; // 자동 재생
+                video.muted = true; // 음소거
 
-                imageContainer.appendChild(img);
+                imagePreviewArray.push(img.src);
+                videoPreviewArray.push(video.src);
+
+                // 이미지 또는 비디오를 캐러셀에 추가
+                if (filesArray[i].type.startsWith('image/')) {
+                    imageContainer.appendChild(img);
+                } else if (filesArray[i].type.startsWith('video/')) {
+                    imageContainer.appendChild(video);
+                }
                 carouselItem.appendChild(imageContainer);
                 files.appendChild(carouselItem);
             }
@@ -53,12 +77,13 @@ function clickFileUpload() {
             var prevButton = carousel.querySelector(".carousel-control-prev");
             var nextButton = carousel.querySelector(".carousel-control-next");
 
-            if (imagePreviewArray.length === 1){
+            if (imagePreviewArray.length === 1 || videoPreviewArray.length === 1){
                 prevButton.classList.add("visually-hidden")
                 nextButton.classList.add("visually-hidden")
             }
             carouselItem.classList.add('active');
-            console.log(imagePreviewArray)
+            console.log(imagePreviewArray);
+            console.log(videoPreviewArray);
             $(secondModal).modal('show'); // 두 번째 모달 활성화
         });
     });

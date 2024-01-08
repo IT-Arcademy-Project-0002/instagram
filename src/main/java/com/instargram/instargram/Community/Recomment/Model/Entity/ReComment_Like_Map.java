@@ -4,6 +4,8 @@ import com.instargram.instargram.Member.Model.Entity.Member;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Getter
 @Setter
@@ -17,9 +19,13 @@ public class ReComment_Like_Map {
 
     // 대댓글
     @ManyToOne
+    @JoinColumn(name="recomment_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Recomment recomment;
 
     // 회원
     @ManyToOne
+    @JoinColumn(name = "member_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Member member;
 }

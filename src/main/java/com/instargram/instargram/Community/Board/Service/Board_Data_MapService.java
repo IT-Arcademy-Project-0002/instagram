@@ -9,6 +9,7 @@ import com.instargram.instargram.Community.Board.Model.Repository.Board_Data_Map
 import com.instargram.instargram.Community.Comment.Model.DTO.CommentDTO;
 import com.instargram.instargram.Community.Comment.Model.Entity.Comment;
 import com.instargram.instargram.Community.Comment.Model.Repository.CommentRepository;
+import com.instargram.instargram.Data.FileDTO;
 import com.instargram.instargram.Data.Image.Image;
 import com.instargram.instargram.Data.Image.ImageDTO;
 import com.instargram.instargram.Data.Image.ImageService;
@@ -61,19 +62,17 @@ public class Board_Data_MapService {
         for (Board board : boardList) {
             List<Board_Data_Map> maps = getMapByBoard(board);
             List<Comment> comments = getCommentsByBoard(board);
-            List<Image> images = new ArrayList<>();
-            List<Video> videos = new ArrayList<>();
-            for(Board_Data_Map map : maps)
-            {
+            List<FileDTO> fileList = new ArrayList<>();
+            for (Board_Data_Map map : maps) {
                 if (Objects.equals(map.getDataType(), Enum_Data.IMAGE.getNumber())) {
                     Image image = imageService.getImageByID(map.getDataId());
-                    images.add(image);
-                } else if(Objects.equals(map.getDataType(), Enum_Data.VIDEO.getNumber())){
+                    fileList.add(new FileDTO(image, null));
+                } else if (Objects.equals(map.getDataType(), Enum_Data.VIDEO.getNumber())) {
                     Video video = videoService.getVideoByID(map.getDataId());
-                    videos.add(video);
+                    fileList.add(new FileDTO(null, video));
                 }
             }
-            feedListDTOS.add(new FeedListDTO(new BoardDTO(board), images, videos, comments));
+            feedListDTOS.add(new FeedListDTO(new BoardDTO(board), fileList, comments));
         }
         return feedListDTOS;
     }
@@ -81,23 +80,24 @@ public class Board_Data_MapService {
     public FeedDTO getFeedWithComments(Board board) {
         List<Board_Data_Map> maps = getMapByBoard(board);
         List<Comment> comments = getCommentsByBoard(board);
-        List<ImageDTO> images = new ArrayList<>();
-        List<CommentDTO> commentDTOs = convertToCommentDTOs(comments);
-
+        List<FileDTO> selectfileList = new ArrayList<>();
         for (Board_Data_Map map : maps) {
             if (Objects.equals(map.getDataType(), Enum_Data.IMAGE.getNumber())) {
                 Image image = imageService.getImageByID(map.getDataId());
-                ImageDTO imageDTO = convertToImageDTO(image);
-                images.add(imageDTO);
+                selectfileList.add(new FileDTO(image, null));
+            } else if (Objects.equals(map.getDataType(), Enum_Data.VIDEO.getNumber())) {
+                Video video = videoService.getVideoByID(map.getDataId());
+                selectfileList.add(new FileDTO(null, video));
             }
         }
 
-        return new FeedDTO(convertToBoardDTO(board), images, commentDTOs);
+        return new FeedDTO(convertToBoardDTO(board), selectfileList, convertToCommentDTOs(comments));
     }
 
     private BoardDTO convertToBoardDTO(Board board) {
         return new BoardDTO(board);
     }
+
     private List<CommentDTO> convertToCommentDTOs(List<Comment> comments) {
         List<CommentDTO> commentDTOS = new ArrayList<>();
         for (Comment comment : comments) {
@@ -107,6 +107,7 @@ public class Board_Data_MapService {
         }
         return commentDTOS;
     }
+
     private ImageDTO convertToImageDTO(Image image) {
         return new ImageDTO(image);
     }

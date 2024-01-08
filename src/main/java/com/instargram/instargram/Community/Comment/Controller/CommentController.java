@@ -57,8 +57,9 @@ public class CommentController {
 
         Comment_Like_Map isCommentMemberLiked = this.commentLikeMapService.exists(comment, member);
         if (isCommentMemberLiked == null) {
-            this.commentLikeMapService.create(comment, member);
-            this.noticeService.createNotice(Enum_Data.COMMENT_LIKE.getNumber(), member,comment.getMember());
+            Comment_Like_Map commentLikeMap = this.commentLikeMapService.create(comment, member);
+            Notice notice = this.noticeService.createNotice(Enum_Data.COMMENT_LIKE.getNumber(), member,comment.getMember());
+            noticeCommentMapService.createNoticeCommentLike(commentLikeMap, notice);
         }else{
             this.commentLikeMapService.delete(isCommentMemberLiked);
         }

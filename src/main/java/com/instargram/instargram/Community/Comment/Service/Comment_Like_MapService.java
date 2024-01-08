@@ -14,11 +14,12 @@ import org.springframework.stereotype.Service;
 public class Comment_Like_MapService {
     private final Comment_like_MapRepository commentLikeMapRepository;
 
-    public void create(Comment comment, Member member) {
+    public Comment_Like_Map create(Comment comment, Member member) {
         Comment_Like_Map commentLikeMap = new Comment_Like_Map();
         commentLikeMap.setComment(comment);
         commentLikeMap.setMember(member);
         this.commentLikeMapRepository.save(commentLikeMap);
+        return commentLikeMap;
     }
 
     public void delete(Comment_Like_Map map) {

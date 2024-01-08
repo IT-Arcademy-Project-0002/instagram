@@ -1,7 +1,6 @@
 package com.instargram.instargram.Community.Comment.Controller;
 
 import com.instargram.instargram.Community.Board.Model.Entity.Board;
-import com.instargram.instargram.Community.Board.Model.Entity.Board_Like_Member_Map;
 import com.instargram.instargram.Community.Board.Service.BoardService;
 import com.instargram.instargram.Community.Comment.Model.Entity.Comment;
 import com.instargram.instargram.Community.Comment.Model.Entity.Comment_Like_Map;
@@ -12,15 +11,13 @@ import com.instargram.instargram.Enum_Data;
 import com.instargram.instargram.Member.Model.Entity.Member;
 import com.instargram.instargram.Member.Service.MemberService;
 import com.instargram.instargram.Notice.Model.Entitiy.Notice;
-import com.instargram.instargram.Notice.Model.Entitiy.Notice_Comment_Map;
-//import com.instargram.instargram.Notice.Service.NoticeCommentMapService;
-//import com.instargram.instargram.Notice.Service.NoticeService;
+import com.instargram.instargram.Notice.Service.NoticeCommentMapService;
+import com.instargram.instargram.Notice.Service.NoticeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import com.instargram.instargram.Enum_Data;
 
 import java.security.Principal;
 

@@ -1,7 +1,6 @@
 package com.instargram.instargram.Notice.Model.Entity;
 
 import com.instargram.instargram.Community.Board.Model.Entity.BoardLikeMemberMap;
-import com.instargram.instargram.Community.Comment.Model.Entity.Comment;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;

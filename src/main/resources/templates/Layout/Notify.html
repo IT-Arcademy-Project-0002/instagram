@@ -18,6 +18,18 @@
                 </div>
             </div>
             <div th:if="${notice.type == 1}">
+                <div class="d-flex">
+                    <div class="ms-2" style="width: 244px">
+                        <input type="hidden" th:value="${notice.requestMember.username}">
+                        <span th:text="@{|${notice.requestMember.username}님이 회원님의 사진을 좋아합니다.|}"></span>
+                        <span th:text="@{|${notice.createDate}|}" style="color: grey;"></span>
+                    </div>
+                    <div class="ms-2">
+                        <img th:src="@{|${notice.boardMainImage}|}"
+                             class="text-center"
+                             style="position: relative; top: 0; left: 0; transform: translate(50,50); width: 44px; height: 44px; object-fit: cover; margin: auto">
+                    </div>
+                </div>
             </div>
             <div th:if="${notice.type == 2}">
                 <div class="d-flex">
@@ -25,49 +37,70 @@
                         <input type="hidden" th:value="${notice.requestMember.username}">
                         <span th:text="@{|${notice.requestMember.username}님이 댓글을 남겼습니다.|}"></span>
                         <span th:text="@{|${notice.commentContent}|}"></span>
-                        <span th:text="@{|${notice.createDate}|}"></span>
+                        <span th:text="@{|${notice.createDate}|}" style="color: grey;"></span>
+                    </div>
+                    <div class="ms-2">
+                        <img th:src="@{|${notice.boardMainImage}|}"
+                             class="text-center"
+                             style="position: relative; top: 0; left: 0; transform: translate(50,50); width: 44px; height: 44px; object-fit: cover; margin: auto">
                     </div>
                 </div>
             </div>
             <div th:if="${notice.type == 3}">
+                <div class="d-flex">
+                    <div class="ms-2" style="width: 244px">
+                        <input type="hidden" th:value="${notice.requestMember.username}">
+                        <span th:text="@{|${notice.requestMember.username}님이 회원님의 댓글을 좋아합니다: |}"></span>
+                        <span th:text="@{|${notice.commentLikeContent}|}"></span>
+                        <span th:text="@{|${notice.createDate}|}" style="color: grey;"></span>
+                    </div>
+                    <div class="ms-2">
+                        <img th:src="@{|${notice.boardMainImage}|}"
+                             class="text-center"
+                             style="position: relative; top: 0; left: 0; transform: translate(50,50); width: 44px; height: 44px; object-fit: cover; margin: auto">
+                    </div>
+                </div>
             </div>
             <div th:if="${notice.type == 4}">
             </div>
             <div th:if="${notice.type == 8}">
-                <div class="d-flex">
-                    <div class="ms-2" style="width: 200px">
-                        <input type="hidden" th:value="${notice.requestMember.username}" id="username">
-                        <span th:text="@{|${notice.requestMember.username}님이 팔로우를 요청했습니다.|}"></span>
-                    </div>
-                    <div style="width: 140px" th:id="${notice.id}">
-                        <div id="apply-container" th:if="${not notice.follower}" class="d-flex align-items-center">
-                            <button id="apply-btn" class="ms-2 btn btn-primary text-light"
-                                    style="font-size: 10px; height: 32px" onclick="clickFollowApply()">
-                                <span id="request-follow-spin" class="visually-hidden spinner-border spinner-border-sm"
-                                      aria-hidden="true"></span>
-                                <span class="request-follow-text">
-                                확인
-                            </span>
-                            </button>
-                            <button id="no-btn" class="ms-2 btn btn-outline-secondary"
-                                    style="font-size: 10px; height: 32px"
-                                    th:onclick="@{|clickFollowDelete(${notice.id})|}">
-                                삭제
-                            </button>
+                <a th:href="@{'/member/page/' + ${notice.requestMember.username}}">
+                    <div class="d-flex">
+                        <div class="ms-2" style="width: 200px">
+                            <input type="hidden" th:value="${notice.requestMember.username}" id="username">
+                            <span th:text="@{|${notice.requestMember.username}님이 팔로우를 요청했습니다.|}"></span>
+                            <span th:text="@{|${notice.createDate}|}" style="color: grey;"></span>
                         </div>
-                        <div id="follow-container" th:unless="${not notice.follower}">
-                            <div th:if="${not notice.follow and notice.follower or notice.follow}">
-                                <button id="follow-btn" class="ms-2 btn w-75"
-                                        th:classappend="${notice.follow}?'btn-outline-secondary':'btn-primary text-light'"
-                                        style="font-size: 10px; height: 32px" onclick="clickFollow()">
-                                    <span id="follow-spin" class="visually-hidden spinner-border spinner-border-sm"
+                        <div style="width: 140px" th:id="${notice.id}">
+                            <div id="apply-container" th:if="${not notice.follower}" class="d-flex align-items-center">
+                                <button id="apply-btn" class="ms-2 btn btn-primary text-light"
+                                        style="font-size: 10px; height: 32px" onclick="clickFollowApply()">
+                                    <span id="request-follow-spin" class="visually-hidden spinner-border spinner-border-sm"
                                           aria-hidden="true"></span>
-                                    <span id="follow-text" th:text="${notice.follow}?'팔로잉':'팔로우'"></span>
+                                    <span class="request-follow-text">
+                                    확인
+                                </span>
                                 </button>
+                                <button id="no-btn" class="ms-2 btn btn-outline-secondary"
+                                        style="font-size: 10px; height: 32px"
+                                        th:onclick="@{|clickFollowDelete(${notice.id})|}">
+                                    삭제
+                                </button>
+                            </div>
+                            <div id="follow-container" th:unless="${not notice.follower}">
+                                <div th:if="${not notice.follow and notice.follower or notice.follow}">
+                                    <button id="follow-btn" class="ms-2 btn w-75"
+                                            th:classappend="${notice.follow}?'btn-outline-secondary':'btn-primary text-light'"
+                                            style="font-size: 10px; height: 32px" onclick="clickFollow()">
+                                        <span id="follow-spin" class="visually-hidden spinner-border spinner-border-sm"
+                                              aria-hidden="true"></span>
+                                        <span id="follow-text" th:text="${notice.follow}?'팔로잉':'팔로우'"></span>
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                </a>
             </div>
             <div th:if="${notice.type == 9}">
             </div>

@@ -22,11 +22,9 @@ public class NoticeDTO {
 
     // 게시글 좋아요 : 1
 
-    // 게시글 댓글 : 2
+    // 게시글 댓글 : 2 + 댓글 좋아요 : 3
     private String commentContent; // 댓글 내용
     private String boardMainImage; // 게시글 메인 이미지
-
-    // 댓글 좋아요 : 3
 
     // 댓글 대댓글 : 4
 

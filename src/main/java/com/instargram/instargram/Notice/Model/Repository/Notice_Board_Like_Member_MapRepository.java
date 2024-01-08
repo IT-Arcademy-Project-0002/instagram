@@ -4,4 +4,6 @@ import com.instargram.instargram.Notice.Model.Entity.Notice_Board_Like_Member_Ma
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface Notice_Board_Like_Member_MapRepository extends JpaRepository<Notice_Board_Like_Member_Map, Long> {
+
+    Notice_Board_Like_Member_Map findByNoticeId(Long noticeId);
 }

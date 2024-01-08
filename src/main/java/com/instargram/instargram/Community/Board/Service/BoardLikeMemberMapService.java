@@ -12,11 +12,12 @@ import org.springframework.stereotype.Service;
 public class BoardLikeMemberMapService {
     private final BoardLikeMemberMapRepository boardLikeMemberMapRepository;
 
-    public void create(Board board, Member username) {
+    public BoardLikeMemberMap create(Board board, Member username) {
         BoardLikeMemberMap boardLikeMemberMap = new BoardLikeMemberMap();
         boardLikeMemberMap.setBoard(board);
         boardLikeMemberMap.setLikeMember(username);
         this.boardLikeMemberMapRepository.save(boardLikeMemberMap);
+        return boardLikeMemberMap;
     }
 
     public BoardLikeMemberMap exists(Board board, Member member) {

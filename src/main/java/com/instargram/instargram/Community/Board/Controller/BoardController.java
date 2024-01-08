@@ -19,6 +19,8 @@ import com.instargram.instargram.Data.Video.VideoService;
 import com.instargram.instargram.Enum_Data;
 import com.instargram.instargram.Member.Model.Entity.Member;
 import com.instargram.instargram.Member.Service.MemberService;
+import com.instargram.instargram.Notice.Model.Entity.Notice;
+import com.instargram.instargram.Notice.Service.NoticeBoardMapService;
 import com.instargram.instargram.Notice.Service.NoticeService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -47,6 +49,7 @@ public class BoardController {
     private final Board_Save_MapService boardSaveMapService;
     private final NoticeService noticeService;
     private final Board_TagMember_MapService boardTagMemberMapService;
+    private final NoticeBoardMapService noticeBoardMapService;
 
     // main
     @GetMapping("/main")
@@ -194,8 +197,9 @@ public class BoardController {
         BoardLikeMemberMap isBoardMemberLiked = this.boardLikeMemberMapService.exists(board, member);
 
         if (isBoardMemberLiked == null) {
-            this.boardLikeMemberMapService.create(board, member);
-            this.noticeService.createNotice(Enum_Data.BOARD_LIKE.getNumber(), member, board.getMember());
+            BoardLikeMemberMap boardLikeMemberMap = this.boardLikeMemberMapService.create(board, member);
+            Notice notice = this.noticeService.createNotice(Enum_Data.BOARD_LIKE.getNumber(), member, board.getMember());
+            this.noticeBoardMapService.createNoticeBoardLikeMember(boardLikeMemberMap, notice);
             result.put("result", true);
         } else {
             this.boardLikeMemberMapService.delete(isBoardMemberLiked);

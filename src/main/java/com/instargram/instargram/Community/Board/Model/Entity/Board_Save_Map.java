@@ -20,14 +20,19 @@ public class Board_Save_Map {
 
     // 게시글
     @ManyToOne
+    @JoinColumn(name = "board_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Board board;
 
     // 회원
     @ManyToOne
+    @JoinColumn(name = "member_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Member member;
 
     // 저장 그룹
     @ManyToOne
+    @JoinColumn(name = "save_group_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private SaveGroup saveGroup;
 }

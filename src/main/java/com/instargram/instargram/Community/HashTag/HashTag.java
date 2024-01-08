@@ -19,8 +19,4 @@ public class HashTag {
 
     // 해시태그 내용
     private String name;
-
-    // 해당 해시태그가 작성된 게시물 매핑 테이블 목록
-    @OneToMany(cascade = CascadeType.REMOVE)
-    private List<Board_HashTag_Map> boardHashTagMaps;
 }

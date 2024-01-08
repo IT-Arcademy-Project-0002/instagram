@@ -3,6 +3,8 @@ package com.instargram.instargram.Community.Board.Model.Entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Getter
 @Setter
@@ -22,5 +24,7 @@ public class Board_Data_Map {
 
     // 게시글
     @ManyToOne
+    @JoinColumn(name = "board_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Board board;
 }

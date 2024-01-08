@@ -19,10 +19,13 @@ public class Comment_Like_Map {
 
     // 댓글
     @ManyToOne
+    @JoinColumn(name = "comment_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Comment comment;
 
     // 댓글을 좋아요 한 회원
     @ManyToOne
+    @JoinColumn(name="member_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Member member;
 }

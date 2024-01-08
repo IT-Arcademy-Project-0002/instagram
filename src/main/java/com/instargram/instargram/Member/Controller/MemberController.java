@@ -154,7 +154,7 @@ public class MemberController {
 
 
     @PostMapping("/profile/delete")
-    public String ProfileImageDelete(Principal principal, @RequestParam(value = "account") boolean account)
+    public String ProfileImageDelete(Principal principal, @RequestParam(value = "account", defaultValue = "false") boolean account)
     {
         Member member = memberService.getMember(principal.getName());
 

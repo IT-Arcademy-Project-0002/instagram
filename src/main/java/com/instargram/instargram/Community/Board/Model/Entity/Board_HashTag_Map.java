@@ -4,6 +4,8 @@ import com.instargram.instargram.Community.HashTag.HashTag;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Getter
 @Setter
@@ -17,9 +19,13 @@ public class Board_HashTag_Map {
 
     // 게시글
     @ManyToOne
+    @JoinColumn(name = "board_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Board board;
 
     // 해시 태그
     @ManyToOne
+    @JoinColumn(name = "tag_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private HashTag tag;
 }

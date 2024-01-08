@@ -9,6 +9,8 @@ import com.instargram.instargram.Notice.Model.Entitiy.Notice_Comment_Map;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -32,21 +34,21 @@ public class Comment {
 
     // 댓글의 부모 게시글
     @ManyToOne
+    @JoinColumn(name="board_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Board board;
     
     // 댓글의 작성자
     @ManyToOne
     @JoinColumn(name="member_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Member member;
 
     // 댓글의 대댓글 목록
-    @OneToMany(cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "comment",cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
     private List<Recomment> recommentList;
 
     // 댓글의 좋아요 한 사람 목록
-    @OneToMany(cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "comment", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
     private List<Comment_Like_Map> commentLikeMembers;
-
-    @OneToMany(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
-    private List<Notice_Comment_Map> noticeCommentMap;
 }

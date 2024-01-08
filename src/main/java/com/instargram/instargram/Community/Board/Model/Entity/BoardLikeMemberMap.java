@@ -29,7 +29,7 @@ public class BoardLikeMemberMap {
     // 게시글을 좋아요 한 회원
     @ManyToOne(fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name="like_member_id", referencedColumnName = "member_id")
+    @JoinColumn(name="like_member_id")
     private Member likeMember;
 
     @OneToMany(mappedBy = "boardLikeMember", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)

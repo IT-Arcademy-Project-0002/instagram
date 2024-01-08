@@ -27,11 +27,12 @@ public class Story_Highlight_Map {
     // 스토리 데이터
     @ManyToOne
     @JoinColumn(name="story_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     Story_Data_Map storyData;
 
     // 저장된 그룹
     @ManyToOne
     @JoinColumn(name="group_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     SaveGroup saveGroup;
-
 }

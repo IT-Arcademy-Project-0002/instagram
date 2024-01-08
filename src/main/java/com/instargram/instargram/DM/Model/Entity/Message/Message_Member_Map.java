@@ -30,6 +30,7 @@ public class Message_Member_Map {
 
     // 메세지를 보낸 회원
     @ManyToOne
+    @JoinColumn(name = "member_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Member member;
 }

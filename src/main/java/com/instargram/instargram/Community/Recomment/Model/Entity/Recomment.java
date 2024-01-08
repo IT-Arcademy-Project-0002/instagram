@@ -6,6 +6,8 @@ import com.instargram.instargram.Notice.Model.Entity.Notice_Recomment_Map;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -29,14 +31,17 @@ public class Recomment {
 
     // 대댓글의 부모 댓글
     @ManyToOne
+    @JoinColumn(name = "comment_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Comment comment;
 
     @ManyToOne
     @JoinColumn(name="member_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Member member;
 
     // 해당 대댓글에 좋아요 한 회원 목록
-    @OneToMany(cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "recomment", cascade = CascadeType.REMOVE)
     private List<ReComment_Like_Map> reCommentLikeMembers;
 
     @OneToMany(mappedBy = "recomment", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)

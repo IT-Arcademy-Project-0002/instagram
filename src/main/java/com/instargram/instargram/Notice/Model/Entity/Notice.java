@@ -46,12 +46,7 @@ public class Notice {
 
     // 알림을 받을 계정주
     @ManyToOne
+    @JoinColumn(name = "member_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Member member;
-
-    @OneToMany(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
-    private List<Notice_Board_Map> noticeBoardMap;
-
-    @OneToMany(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
-    private List<Notice_Comment_Map> noticeCommentMap;
 }

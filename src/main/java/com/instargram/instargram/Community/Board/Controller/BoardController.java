@@ -2,7 +2,7 @@ package com.instargram.instargram.Community.Board.Controller;
 
 import com.instargram.instargram.Community.Board.Model.DTO.FeedDTO;
 import com.instargram.instargram.Community.Board.Model.DTO.FeedListDTO;
-import com.instargram.instargram.Community.Board.Model.Entity.Board_Like_Member_Map;
+import com.instargram.instargram.Community.Board.Model.Entity.BoardLikeMemberMap;
 import com.instargram.instargram.Community.Board.Model.Entity.Board_Save_Map;
 import com.instargram.instargram.Community.Board.Model.Form.BoardCreateForm;
 import com.instargram.instargram.Community.Board.Model.Entity.Board;
@@ -42,7 +42,7 @@ public class BoardController {
     private final VideoService videoService;
     private final LocationService locationService;
     private final Board_Data_MapService boardDataMapService;
-    private final Board_Like_Member_MapService boardLikeMemberMapService;
+    private final BoardLikeMemberMapService boardLikeMemberMapService;
     private final SaveGroupService saveGroupService;
     private final Board_Save_MapService boardSaveMapService;
     private final NoticeService noticeService;
@@ -191,7 +191,7 @@ public class BoardController {
         Board board = this.boardService.getBoardById(id);
         Member member = this.memberService.getMember(principal.getName());
 
-        Board_Like_Member_Map isBoardMemberLiked = this.boardLikeMemberMapService.exists(board, member);
+        BoardLikeMemberMap isBoardMemberLiked = this.boardLikeMemberMapService.exists(board, member);
 
         if (isBoardMemberLiked == null) {
             this.boardLikeMemberMapService.create(board, member);

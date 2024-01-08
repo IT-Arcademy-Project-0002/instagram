@@ -37,9 +37,8 @@ public class GlobalControllerAdvice {
             }
             else{
                 Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-                var a = auth.getPrincipal();
 
-                if(a != "anonymousUser")
+                if(auth.getPrincipal() != "anonymousUser")
                 {
                     member = memberService.getMember(principal.getName());
 

@@ -1,7 +1,5 @@
 package com.instargram.instargram.Community.Comment.Service;
 
-import com.instargram.instargram.Community.Board.Model.Entity.Board;
-import com.instargram.instargram.Community.Board.Model.Entity.Board_Like_Member_Map;
 import com.instargram.instargram.Community.Comment.Model.Entity.Comment;
 import com.instargram.instargram.Community.Comment.Model.Entity.Comment_Like_Map;
 import com.instargram.instargram.Community.Comment.Model.Repository.Comment_like_MapRepository;

@@ -31,7 +31,7 @@ public class RecommentDTO {
         if (recomment.getMember() != null){
             memberDTO = new MemberDTO(recomment.getMember());
         }
-        // Board_Like_Member_Map에서 필요한 데이터만 가져와서 저장
+        // BoardLikeMemberMap에서 필요한 데이터만 가져와서 저장
         recommentLikeMemberIds = recomment.getReCommentLikeMembers().stream()
                 .map(ReComment_Like_Map::getId)
                 .collect(Collectors.toList());

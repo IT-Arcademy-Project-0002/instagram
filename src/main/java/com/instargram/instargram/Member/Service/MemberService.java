@@ -9,6 +9,7 @@ import com.instargram.instargram.Member.Model.Repository.MemberRepository;
 import com.instargram.instargram.Notice.Model.Entity.Notice;
 import com.instargram.instargram.Notice.Service.NoticeService;
 import jakarta.annotation.PostConstruct;
+import jakarta.transaction.Transactional;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.context.annotation.Lazy;
@@ -20,6 +21,7 @@ import java.util.*;
 @Service
 @Builder
 @Lazy
+@Transactional
 public class MemberService {
 
     private final MemberRepository memberRepository;

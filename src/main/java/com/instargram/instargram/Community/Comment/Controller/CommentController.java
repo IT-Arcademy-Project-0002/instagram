@@ -10,7 +10,9 @@ import com.instargram.instargram.Community.Comment.Service.Comment_Like_MapServi
 import com.instargram.instargram.Enum_Data;
 import com.instargram.instargram.Member.Model.Entity.Member;
 import com.instargram.instargram.Member.Service.MemberService;
+
 import com.instargram.instargram.Notice.Model.Entity.Notice;
+
 import com.instargram.instargram.Notice.Service.NoticeCommentMapService;
 import com.instargram.instargram.Notice.Service.NoticeService;
 import lombok.RequiredArgsConstructor;
@@ -43,8 +45,8 @@ public class CommentController {
         Board board = this.boardService.getBoardById(id);
         if (member != null && board != null) {
             Comment comment = commentService.create(member, board, commentCreateForm.getContent());
-            Notice notice = noticeService.createNotice(Enum_Data.BOARD_COMMENT.getNumber(), member, board.getMember());
-            noticeCommentMapService.createNoticeComment(comment, notice);
+//            Notice notice = noticeService.createNotice(Enum_Data.BOARD_COMMENT.getNumber(), member, board.getMember());
+//            noticeCommentMapService.createNoticeComment(comment, notice);
         }
         return "redirect:/main";
     }

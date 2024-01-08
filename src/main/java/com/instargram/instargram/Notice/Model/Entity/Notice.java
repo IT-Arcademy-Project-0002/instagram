@@ -4,6 +4,8 @@ import com.instargram.instargram.Member.Model.Entity.Member;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -44,6 +46,7 @@ public class Notice {
 
     // 알림을 받을 계정주
     @ManyToOne
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Member member;
 
     @OneToMany(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)

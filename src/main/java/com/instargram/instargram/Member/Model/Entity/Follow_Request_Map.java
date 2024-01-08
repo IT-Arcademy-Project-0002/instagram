@@ -3,6 +3,8 @@ package com.instargram.instargram.Member.Model.Entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Getter
 @Setter
@@ -18,10 +20,12 @@ public class Follow_Request_Map {
     // 계정주
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "owner_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     Member owner;
 
     // 팔로우를 요청한 사람
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name="request_member_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     Member requestMember;
 }

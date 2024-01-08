@@ -16,8 +16,10 @@ public class Notice_Board_Map {
     private Long id;
 
     @ManyToOne
+    @JoinColumn(name="notice_id")
     private Notice notice;
 
     @ManyToOne
+    @JoinColumn(name="board_id")
     private Board board;
 }

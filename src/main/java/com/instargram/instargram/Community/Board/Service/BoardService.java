@@ -5,6 +5,7 @@ import com.instargram.instargram.Community.Board.Model.Repository.BoardRepositor
 import com.instargram.instargram.Community.Location.Model.Entity.Location;
 import com.instargram.instargram.DataNotFoundException;
 import com.instargram.instargram.Member.Model.Entity.Member;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +15,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class BoardService {
     private final BoardRepository boardRepository;
 

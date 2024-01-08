@@ -7,6 +7,8 @@ import com.instargram.instargram.Notice.Model.Entity.Notice_Board_Map;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -19,6 +21,7 @@ import java.util.List;
 public class Board {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="board_id")
     private Long id;
 
     // 게시글 내용
@@ -49,6 +52,7 @@ public class Board {
     // 게시글 작성자
     @ManyToOne
     @JoinColumn(name="member_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Member member;
 
     // 지연 로딩 (매번 필요하지 않은 데이터)
@@ -67,7 +71,7 @@ public class Board {
 
     // 게시글에 좋아요 한 회원 목록
     @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
-    private List<Board_Like_Member_Map> boardLikeMemberMaps;
+    private List<BoardLikeMemberMap> boardLikeMemberMaps;
 
     // 게시글에 작성되 이미지 혹은 비디오 목록
     @OneToMany(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)

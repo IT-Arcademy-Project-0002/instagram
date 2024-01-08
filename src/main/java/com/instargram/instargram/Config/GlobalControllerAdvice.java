@@ -29,7 +29,7 @@ public class GlobalControllerAdvice {
         {
 
             Member member = this.memberService.getMember(principal.getName());
-            model.addAttribute("notices", this.noticeService.getNoticeDTOsByMember(member));
+//            model.addAttribute("notices", this.noticeService.getNoticeDTOsByMember(member));
 
             if(member != null)
             {
@@ -37,9 +37,8 @@ public class GlobalControllerAdvice {
             }
             else{
                 Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-                var a = auth.getPrincipal();
 
-                if(a != "anonymousUser")
+                if(auth.getPrincipal() != "anonymousUser")
                 {
                     member = memberService.getMember(principal.getName());
 

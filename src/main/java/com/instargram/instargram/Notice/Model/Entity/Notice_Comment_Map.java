@@ -16,9 +16,11 @@ public class Notice_Comment_Map {
     private Long id;
 
     @ManyToOne
+    @JoinColumn(name="notice_id")
     private Notice notice;
 
     @ManyToOne
+    @JoinColumn(name="comment_id")
     private Comment comment;
 
 }

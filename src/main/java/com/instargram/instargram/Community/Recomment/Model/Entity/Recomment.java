@@ -2,6 +2,7 @@ package com.instargram.instargram.Community.Recomment.Model.Entity;
 
 import com.instargram.instargram.Community.Comment.Model.Entity.Comment;
 import com.instargram.instargram.Member.Model.Entity.Member;
+import com.instargram.instargram.Notice.Model.Entity.Notice_Recomment_Map;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -42,4 +43,7 @@ public class Recomment {
     // 해당 대댓글에 좋아요 한 회원 목록
     @OneToMany(mappedBy = "recomment", cascade = CascadeType.REMOVE)
     private List<ReComment_Like_Map> reCommentLikeMembers;
+
+    @OneToMany(mappedBy = "recomment", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    private List<Notice_Recomment_Map> noticeRecommentMap;
 }

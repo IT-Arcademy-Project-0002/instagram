@@ -1,13 +1,12 @@
 package com.instargram.instargram.Notice.Service;
 
-import com.instargram.instargram.Community.Board.Model.Entity.Board;
 import com.instargram.instargram.Community.Board.Model.Repository.BoardRepository;
-import com.instargram.instargram.Community.Comment.Model.Entity.Comment;
 import com.instargram.instargram.Community.Comment.Service.CommentService;
 import com.instargram.instargram.Member.Model.Entity.Member;
 import com.instargram.instargram.Member.Service.FollowMapService;
 import com.instargram.instargram.Notice.Model.DTO.NoticeDTO;
-import com.instargram.instargram.Notice.Model.Entitiy.Notice;
+import com.instargram.instargram.Notice.Model.Entity.Notice;
+import com.instargram.instargram.Notice.Model.Entity.Notice_Comment_Map;
 import com.instargram.instargram.Notice.Model.Repository.NoticeRepository;
 import com.instargram.instargram.Notice.Model.Repository.Notice_Comment_MapRepository;
 import lombok.Builder;
@@ -27,6 +26,7 @@ public class NoticeService {
     private final BoardRepository boardRepository;
     private final FollowMapService followMapService;
     private final CommentService commentService;
+    private final NoticeCommentMapService noticeCommentMapService;
     private final Notice_Comment_MapRepository noticeCommentMapRepository;
 
     public Notice createNotice(Integer type, Member loginMember, Member member)
@@ -65,8 +65,8 @@ public class NoticeService {
             // 게시글 좋아요 : 1
 
             // 게시글 댓글 : 2
-//            noticeDTO.setCommentContent(noticeCommentMapRepository.findByNoticeId(notice.getId()).getComment().getContent());
-//            noticeDTO.setBoardMainImage("메인이미지경로");
+            noticeDTO.setCommentContent(noticeCommentMapService.getNoticeComment(notice.getId()).getContent());
+            noticeDTO.setBoardMainImage(noticeCommentMapService.getNoticeComment(notice.getId()).getBoard().getContent());
 
             // 댓글 좋아요 : 3
 

@@ -6,7 +6,7 @@ import com.instargram.instargram.Member.Model.Entity.Member;
 import com.instargram.instargram.Member.Model.Form.MemberCreateForm;
 import com.instargram.instargram.Member.Model.Repository.FollowMapRepository;
 import com.instargram.instargram.Member.Model.Repository.MemberRepository;
-import com.instargram.instargram.Notice.Model.Entitiy.Notice;
+import com.instargram.instargram.Notice.Model.Entity.Notice;
 import com.instargram.instargram.Notice.Service.NoticeService;
 import jakarta.annotation.PostConstruct;
 import jakarta.transaction.Transactional;

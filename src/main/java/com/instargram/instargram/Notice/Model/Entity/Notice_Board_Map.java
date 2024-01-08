@@ -1,8 +1,7 @@
-package com.instargram.instargram.Notice.Model.Entitiy;
+package com.instargram.instargram.Notice.Model.Entity;
 
 
 import com.instargram.instargram.Community.Board.Model.Entity.Board;
-import com.instargram.instargram.Community.Comment.Model.Entity.Comment;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -12,7 +11,7 @@ import org.hibernate.annotations.OnDeleteAction;
 @Getter
 @Setter
 @Entity
-public class Notice_Comment_Map {
+public class Notice_Board_Map {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,8 +23,7 @@ public class Notice_Comment_Map {
     private Notice notice;
 
     @ManyToOne
-    @JoinColumn(name = "comment_id")
+    @JoinColumn(name = "board_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private Comment comment;
-
+    private Board board;
 }

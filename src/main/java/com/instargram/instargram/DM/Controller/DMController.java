@@ -12,11 +12,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
 @Builder
-@RequestMapping("/dm")
+@RequestMapping("/direct")
 public class DMController {
     private final RoomService roomService;
     private final MemberService memberService;
@@ -26,17 +27,18 @@ public class DMController {
         return "Dm/dm";
     }
 
-    @GetMapping("/list")
+    @GetMapping("/inbox")
     public String dmList(Model model, Principal principal){
 
         List<Room> roomList = roomService.findByMember(memberService.getMember(principal.getName()));
         model.addAttribute("roomList",roomList);
-        return "chatTest";
+        return "Dm/DirectInbox";
     }
 
     @GetMapping("/room")
     public String dmRoom(Model model, @RequestParam("id")Long id)
     {
+        List<Long> a = new ArrayList<>();
         Room room = roomService.getRoom(id);
         model.addAttribute("room", room);
         return "testChat";

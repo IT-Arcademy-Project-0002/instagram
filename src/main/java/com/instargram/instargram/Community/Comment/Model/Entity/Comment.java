@@ -38,13 +38,13 @@ public class Comment {
     private Member member;
 
     // 댓글의 대댓글 목록
-    @OneToMany(mappedBy = "comment", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
     private List<Recomment> recommentList;
 
     // 댓글의 좋아요 한 사람 목록
-    @OneToMany(mappedBy = "comment", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
     private List<Comment_Like_Map> commentLikeMembers;
 
-    @OneToMany(mappedBy = "comment", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private List<Notice_Comment_Map> noticeCommentMap;
 }

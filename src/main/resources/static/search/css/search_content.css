@@ -4,19 +4,19 @@ a {
 }
 
 .search-content {
-    width:350px;
+    width: 397px;
+    height: 100%;
 }
 
 .search-list {
-    visibility:hidden;
-    height:60vh;
+    visibility: hidden;
+    height: 60vh;
     overflow-x: hidden;
     overflow-y: scroll;
 }
 
 .search-container {
-    width:350px;
-    height:100%;
+    height: 100%;
 }
 
 .search-box {
@@ -29,8 +29,8 @@ a {
 }
 
 .search-profile-image {
-    height:50px;
-    width:50px;
+    height: 50px;
+    width: 50px;
 }
 
 .search-username {
@@ -53,4 +53,26 @@ a {
 .search-box:hover .search-profile img {
     /* .search-box가 호버될 때 .search-profile 내부의 img에 영향을 주는 스타일 추가 */
     filter: brightness(95%); /* 예시로 이미지를 어둡게 만듦 */
+}
+
+/* jeongDaHee css */
+
+.search_layout {
+    width: 397px;
+    height: 100%;
+    padding: 8px 0 8px 0;
+}
+
+.search_title {
+    padding: 12px 14px 36px 24px;
+    margin: 8px 0 8px 0;
+}
+
+.search_title_text {
+    font-size: 24px;
+    font-weight: 600;
+}
+.search_bar {
+    margin: 0 16px 0 16px;
+    width: 364px;
 }

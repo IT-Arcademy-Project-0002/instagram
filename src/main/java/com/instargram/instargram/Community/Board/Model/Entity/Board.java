@@ -54,15 +54,15 @@ public class Board {
     // 지연 로딩 (매번 필요하지 않은 데이터)
 
     // 게시글에 달린 댓글 목록
-    @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private List<Comment> commentList;
 
     // 게시글에 언급된 회원 목록
-    @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private List<Board_TagMember_Map> boardTagMembers;
 
     // 게시글에 입력된 해시태그 목록
-    @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private List<Board_HashTag_Map> boardHashTagMaps;
 
     // 게시글에 좋아요 한 회원 목록
@@ -70,19 +70,19 @@ public class Board {
     private List<Board_Like_Member_Map> boardLikeMemberMaps;
 
     // 게시글에 작성되 이미지 혹은 비디오 목록
-    @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private List<Board_Data_Map> boardDataMaps;
 
 
     // 회원이 저장한 게시글 매핑 테이블 목록
     // 해당 리스트에서 직접 접근하지 말 것
-    @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private List<Board_Save_Map> boardSaveMaps;
 
     @OneToOne
     @JoinColumn(name="location_id")
     private Location location;
 
-    @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private List<Notice_Board_Map> noticeBoardMap;
 }

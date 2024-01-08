@@ -4,7 +4,7 @@
 }
 
 .side_bar {
-    width: 245px;
+    width: 350px;
 }
 
 .btn-create
@@ -16,6 +16,12 @@
 .btn_side_menu {
     border: none;
     background-color: transparent;
+}
+.btn_side_menu span {
+    position: absolute; /* 절대 위치로 텍스트 고정 */
+    left: 50px;
+    line-height: 1.5;
+    width: 146px;
 }
 
 .sm_logo {
@@ -70,15 +76,25 @@ a{
     text-decoration: none;
     padding-left: 16px;
     display: inline-flex;
+    cursor: pointer;
 }
 .menu_list_text:hover {
     color: black;
+}
+
+.img {
+    max-width: 100%; /* 이미지가 사이드바 너비를 벗어나지 않도록 최대 너비 설정 */
+    height: auto;
 }
 
 .img:hover svg,
 .img:hover img { /* svg, img 이미지 확대 효과 적용 */
     transform: scale(1.07);
     transition: transform 0.1s ease;
+}
+
+.dropup {
+    position: static;
 }
 
 
@@ -136,7 +152,7 @@ a{
 /* offcanvas */
 .menu {
     display: block;
-    width: 245px;
+    width: 350px;
     background-color: white;
     color: black;
     transition: all 0.5s ease;
@@ -149,7 +165,6 @@ a{
 .menu ul {
     list-style: none;
     margin: 0;
-    padding: 0;
 }
 
 .menu a, .menu > label {
@@ -196,7 +211,20 @@ a{
     padding-bottom: 6px;
     margin-bottom: 19px;
 }
+
+.offCanvas-sidebar-open img {
+    width: 100%; /* 혹은 원하는 크기로 설정 */
+    height: auto; /* 이미지의 비율 유지 */
+}
+
+.offCanvas_line {
+    width: 397px;
+    border-radius: 15px;
+    border-right: none;
+}
+
 /* offcanvas */
+
 
 
 

@@ -1,4 +1,4 @@
-package com.instargram.instargram.Community.HashTag;
+package com.instargram.instargram.Community.HashTag.Model.Entity;
 
 import com.instargram.instargram.Community.Board.Model.Entity.Board_HashTag_Map;
 import jakarta.persistence.*;

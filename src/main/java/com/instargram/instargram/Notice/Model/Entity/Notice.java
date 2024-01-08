@@ -42,6 +42,7 @@ public class Notice {
     // 알림을 발생하게 한 회원
     @ManyToOne
     @JoinColumn(name = "request_member_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Member requestMember;
 
     // 알림을 받을 계정주

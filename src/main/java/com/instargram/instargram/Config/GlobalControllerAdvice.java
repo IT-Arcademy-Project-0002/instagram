@@ -29,7 +29,7 @@ public class GlobalControllerAdvice {
         {
 
             Member member = this.memberService.getMember(principal.getName());
-//            model.addAttribute("notices", this.noticeService.getNoticeDTOsByMember(member));
+//          model.addAttribute("notices", this.noticeService.getNoticeDTOsByMember(member));
 
             if(member != null)
             {

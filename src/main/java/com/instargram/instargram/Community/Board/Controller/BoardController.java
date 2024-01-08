@@ -111,7 +111,10 @@ public class BoardController {
                 String[] type = Objects.requireNonNull(multipartFile.getContentType()).split("/");
                 if (!type[type.length - 1].equals("octet-stream")) {
                     String fileExtension = type[type.length - 1];
-                    if(fileExtension.equals("jpeg")){
+                    if (fileExtension.equals("jpeg")) {
+                        Image image = this.imageService.saveImage(multipartFile, nameWithoutExtension, fileExtension);
+                        this.boardDataMapService.create(board, image, Enum_Data.IMAGE.getNumber());
+                    } else if(fileExtension.equals("png")){
                         Image image = this.imageService.saveImage(multipartFile, nameWithoutExtension, fileExtension);
                         this.boardDataMapService.create(board, image, Enum_Data.IMAGE.getNumber());
                     }else if(fileExtension.equals("mp4")){

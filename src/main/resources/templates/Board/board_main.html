@@ -7,8 +7,6 @@
 <div layout:fragment="content">
     <!-- feed list -->
     <div class="d-flex">
-        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-        <input type="hidden" th:name="_csrf_header" th:value="${_csrf.headerName}"/>
         <div class="main-content d-flex justify-content-center">
             <div class="frag-main d-flex h-100">
                 <div class="content-background">
@@ -102,15 +100,6 @@
                                                    style="width: 654px; height: 592px; object-fit: cover;">
                                             </video>
                                         </div>
-<!--                                        <div class="carousel-item"-->
-<!--                                             th:classappend="${iterStat.index == 0} ? 'active' : ''">-->
-<!--                                            <div th:each="video : ${file.video()}">-->
-<!--                                                <video th:id="${video.getId()}" class="shadow text-center rounded"-->
-<!--                                                       th:src="@{|/resources/${video.name}|}" controls autoplay muted-->
-<!--                                                       style="width: 654px; height: 592px; object-fit: cover;">-->
-<!--                                                </video>-->
-<!--                                            </div>-->
-<!--                                        </div>-->
                                     </div>
                                     <button class="carousel-control-prev" type="button"
                                             th:classappend="${#lists.size(feed.fileDTOS()) == 1 }? 'visually-hidden'"
@@ -248,7 +237,7 @@
                                         });
                                     </script>
                                 </div>
-                                <div class="px-2"
+                                <div class="px-2" id="likeCount"
                                      th:text="${feed.board.likeHide == false ? '좋아요 ' + #lists.size(feed.board.boardLikeMemberIds) + '개' : '좋아요 여러개 입니다.'}"></div>
                                 <div class="d-flex" style="width: 50%;">
                                     <div class="px-2"
@@ -297,19 +286,32 @@
                                     <div id="carousel-main" class="carousel slide" data-interval="false"
                                          data-bs-touch="false">
                                         <div class="carousel-inner">
-                                            <div th:each="img, index : ${selectFeed.imageDTOS}"
-                                                 class="carousel-item"
-                                                 style="position: relative; width: 60rem; height: 50rem;"
-                                                 th:classappend="${index.index == 0} ? 'active'">
-                                                <img th:src="@{|/resources/${img.name}|}"
-                                                     alt="..."
-                                                     class="shadow text-center"
-                                                     style="width: 70%; height:100%;position: absolute; top: 0; left: 0; transform: translate(50,50); object-fit: cover; margin: auto">
+                                            <div th:each="file, iterStat: ${selectFeed.fileDTOS()}">
+                                                <div class="carousel-item"
+                                                     style="position: relative; width: 60rem; height: 50rem;"
+                                                     th:classappend="${iterStat.index == 0} ? 'active' : ''">
+                                                    <!-- 이미지인 경우 -->
+                                                    <img th:if="${#strings.endsWith(file.name, '.jpg') or #strings.endsWith(file.name, '.jpeg') or #strings.endsWith(file.name, '.png')}"
+                                                         th:id="${file.getId()}"
+                                                         th:src="@{|/resources/${file.name}|}"
+                                                         alt="..."
+                                                         class="shadow text-center"
+                                                         style="width: 70%; height:100%; position: absolute; top: 0; left: 0; transform: translate(50,50); object-fit: cover; margin: auto">
+
+                                                    <!-- 비디오인 경우 -->
+                                                    <video th:if="${#strings.endsWith(file.name, '.mp4') or #strings.endsWith(file.name, '.webm') or #strings.endsWith(file.name, '.mov')}"
+                                                           th:id="${file.getId()}"
+                                                           class="shadow text-center"
+                                                           th:src="@{|/resources/${file.name}|}"
+                                                           controls autoplay muted
+                                                           style="width: 70%; height:100%; position: absolute; top: 0; left: 0; transform: translate(50,50); object-fit: cover; margin: auto">
+                                                    </video>
+                                                </div>
                                             </div>
                                         </div>
                                         <button class="carousel-control-prev" type="button"
                                                 data-bs-target="#carousel-main"
-                                                th:classappend="${#lists.size(selectFeed.imageDTOS) == 1 }? 'visually-hidden'"
+                                                th:classappend="${#lists.size(selectFeed.fileDTOS()) == 1 }? 'visually-hidden'"
                                                 data-bs-slide="prev">
                                         <span class="carousel-control-prev-icon"
                                               aria-hidden="true"></span>
@@ -317,7 +319,7 @@
                                         </button>
                                         <button class="carousel-control-next" type="button"
                                                 data-bs-target="#carousel-main"
-                                                th:classappend="${#lists.size(selectFeed.imageDTOS) == 1 }? 'visually-hidden'"
+                                                th:classappend="${#lists.size(selectFeed.fileDTOS()) == 1 }? 'visually-hidden'"
                                                 data-bs-slide="next">
                                         <span class="carousel-control-next-icon"
                                               aria-hidden="true"></span>
@@ -329,20 +331,53 @@
                                     <div class="d-flex align-items-center border-bottom"
                                          style="padding: 14px 16px 14px 16px; height: 10%;">
                                         <div class="d-flex align-items-center" style="flex:6;">
-                                            <div class="me-3"
-                                                 style="position: relative; width: 2rem; height: 2rem;">
-                                                <img th:if="${selectFeed.board.memberDTO.imageDTO == null || selectFeed.board.memberDTO.imageDTO.name == null || selectFeed.board.memberDTO.imageDTO.name.isEmpty()}"
-                                                     src="/files/designImg/noneuser.png"
-                                                     class="shadow rounded-circle text-center"
-                                                     style="position: absolute; top: 0; right: 0; width: 100%; height: 100%; object-fit: cover;">
-                                                <img th:unless="${selectFeed.board.memberDTO.imageDTO == null || selectFeed.board.memberDTO.imageDTO.name == null || selectFeed.board.memberDTO.imageDTO.name.isEmpty()}"
-                                                     th:src="@{|/resources/${selectFeed.board.memberDTO.imageDTO.name}|}"
-                                                     class="shadow rounded-circle text-center"
-                                                     style="position: absolute; top: 0; right: 0; width: 100%; height: 100%; object-fit: cover;">
+
+                                            <!--location not null-->
+                                            <div th:if="${selectFeed.board.location == null}">
+                                                <div class="d-flex">
+                                                    <div style="position: relative; width: 2rem; height: 2rem;">
+                                                        <img th:if="${selectFeed.board.memberDTO.imageDTO == null}"
+                                                             src="/files/designImg/noneuser.png"
+                                                             class="shadow rounded-circle text-center"
+                                                             style="width: 100%; height: 100%; object-fit: cover;">
+                                                        <img th:unless="${selectFeed.board.memberDTO.imageDTO == null}"
+                                                             th:src="@{|/resources/${selectFeed.board.memberDTO.imageDTO.name}|}"
+                                                             class="shadow rounded-circle text-center"
+                                                             style="width: 100%; height: 100%; object-fit: cover;">
+                                                    </div>
+                                                    <div class="d-flex mx-2">
+                                                        <div class="d-flex">
+                                                            <div style="font-weight: bold; font-size: medium"
+                                                                 th:text="${selectFeed.board.memberDTO.username}"></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <div class="d-flex justify-content-center align-items-center"
-                                                 style="font-weight:bold;"
-                                                 th:text="${selectFeed.board.memberDTO.username}"></div>
+
+                                            <!--location null-->
+                                            <div th:if="${selectFeed.board.location != null}">
+                                                <div class="d-flex">
+                                                    <div style="position: relative; width: 2rem; height: 2rem;">
+                                                        <img th:if="${selectFeed.board.memberDTO.imageDTO == null}"
+                                                             src="/files/designImg/noneuser.png"
+                                                             class="shadow rounded-circle text-center"
+                                                             style="width: 100%; height: 100%; object-fit: cover;">
+                                                        <img th:unless="${selectFeed.board.memberDTO.imageDTO == null}"
+                                                             th:src="@{|/resources/${selectFeed.board.memberDTO.imageDTO.name}|}"
+                                                             class="shadow rounded-circle text-center"
+                                                             style="width: 100%; height: 100%; object-fit: cover;">
+                                                    </div>
+                                                    <div class="d-flex flex-column mx-2">
+                                                        <div class="d-flex">
+                                                            <div style="font-weight: bold; font-size: medium"
+                                                                 th:text="${selectFeed.board.memberDTO.username}"></div>
+                                                        </div>
+                                                        <div class="d-flex" style="font-size: 0.8rem;">
+                                                            <div th:text="${selectFeed.board.location}"></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                         <div class="d-flex" style="flex:1;">
                                             <button type="button" class="btn noneBtn btn-link"
@@ -350,7 +385,7 @@
                                                     data-bs-toggle="modal"
                                                     data-bs-target="#CreateUserBoardSettingModal">· · ·
                                             </button>
-                                            <!-- 다른 경우 exampleModal 버튼을 보여줍니다. -->
+                                            <!-- 다른 경우 UserBoardSettingModal 버튼을 보여줍니다. -->
                                             <button type="button" class="btn noneBtn btn-link"
                                                     th:if="${selectFeed.board.memberDTO.username} != ${loginMember.username}"
                                                     data-bs-toggle="modal"
@@ -526,7 +561,6 @@
                                         <div class="d-flex flex-column m-1">
                                             <div class="d-flex justify-content-between">
                                                 <div class="d-flex">
-
                                                     <!--Like-->
                                                     <div class="p-2" role="button" tabindex="0">
                                                         <div>

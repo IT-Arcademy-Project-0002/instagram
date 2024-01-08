@@ -7,6 +7,8 @@ import com.instargram.instargram.Community.Board.Model.Entity.Board_Save_Map;
 import com.instargram.instargram.Community.Board.Model.Form.BoardCreateForm;
 import com.instargram.instargram.Community.Board.Model.Entity.Board;
 import com.instargram.instargram.Community.Board.Service.*;
+import com.instargram.instargram.Community.HashTag.Model.Entity.HashTag;
+import com.instargram.instargram.Community.HashTag.Service.HashTagService;
 import com.instargram.instargram.Community.Location.Model.DTO.LocationDTO;
 import com.instargram.instargram.Community.Location.Model.Entity.Location;
 import com.instargram.instargram.Community.Location.Service.LocationService;
@@ -19,6 +21,8 @@ import com.instargram.instargram.Data.Video.VideoService;
 import com.instargram.instargram.Enum_Data;
 import com.instargram.instargram.Member.Model.Entity.Member;
 import com.instargram.instargram.Member.Service.MemberService;
+import com.instargram.instargram.Notice.Model.Entity.Notice;
+import com.instargram.instargram.Notice.Service.NoticeBoardMapService;
 import com.instargram.instargram.Notice.Service.NoticeService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -47,6 +51,8 @@ public class BoardController {
     private final Board_Save_MapService boardSaveMapService;
     private final NoticeService noticeService;
     private final Board_TagMember_MapService boardTagMemberMapService;
+    private final NoticeBoardMapService noticeBoardMapService;
+    private final HashTagService hashTagService;
 
     // main
     @GetMapping("/main")
@@ -89,7 +95,7 @@ public class BoardController {
         List<String> tagMemberList = this.boardTagMemberMapService.extractMentionedWords(boardCreateForm.getContent());
 
         Board board = this.boardService.create(member, boardCreateForm.getContent(), location, boardCreateForm.isLikeHide(), boardCreateForm.isCommentDisable());
-
+//        HashTag hashTag = this.hashTagService.create(boardCreateForm.getHashTag());
         for (String memberMap : tagMemberList){
             Member tagMember = this.memberService.getMember(memberMap);
             this.boardTagMemberMapService.create(board, tagMember);
@@ -197,13 +203,13 @@ public class BoardController {
         BoardLikeMemberMap isBoardMemberLiked = this.boardLikeMemberMapService.exists(board, member);
 
         if (isBoardMemberLiked == null) {
-            this.boardLikeMemberMapService.create(board, member);
-            this.noticeService.createNotice(Enum_Data.BOARD_LIKE.getNumber(), member, board.getMember());
+            BoardLikeMemberMap boardLikeMemberMap = this.boardLikeMemberMapService.create(board, member);
+            Notice notice = this.noticeService.createNotice(Enum_Data.BOARD_LIKE.getNumber(), member, board.getMember());
+            this.noticeBoardMapService.createNoticeBoardLikeMember(boardLikeMemberMap, notice);
             result.put("result", true);
         } else {
             this.boardLikeMemberMapService.delete(isBoardMemberLiked);
             result.put("result", false);
-
         }
         return ResponseEntity.ok().body(result);
     }

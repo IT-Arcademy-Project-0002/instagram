@@ -13,8 +13,8 @@ import com.instargram.instargram.Member.Model.Entity.Member;
 import com.instargram.instargram.Member.Service.MemberService;
 import com.instargram.instargram.Notice.Model.Entitiy.Notice;
 import com.instargram.instargram.Notice.Model.Entitiy.Notice_Comment_Map;
-import com.instargram.instargram.Notice.Service.NoticeCommentMapService;
-import com.instargram.instargram.Notice.Service.NoticeService;
+//import com.instargram.instargram.Notice.Service.NoticeCommentMapService;
+//import com.instargram.instargram.Notice.Service.NoticeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -32,8 +32,8 @@ public class CommentController {
     private final CommentService commentService;
     private final MemberService memberService;
     private final Comment_Like_MapService commentLikeMapService;
-    private final NoticeService noticeService;
-    private final NoticeCommentMapService noticeCommentMapService;
+//    private final NoticeService noticeService;
+//    private final NoticeCommentMapService noticeCommentMapService;
 
     //댓글 작성
     @PostMapping("/create/{id}")
@@ -46,8 +46,8 @@ public class CommentController {
         Board board = this.boardService.getBoardById(id);
         if (member != null && board != null) {
             Comment comment = commentService.create(member, board, commentCreateForm.getContent());
-            Notice notice = noticeService.createNotice(Enum_Data.BOARD_COMMENT.getNumber(), member, board.getMember());
-            noticeCommentMapService.createNoticeComment(comment, notice);
+//            Notice notice = noticeService.createNotice(Enum_Data.BOARD_COMMENT.getNumber(), member, board.getMember());
+//            noticeCommentMapService.createNoticeComment(comment, notice);
         }
         return "redirect:/main";
     }

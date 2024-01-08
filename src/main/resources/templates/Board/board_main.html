@@ -82,37 +82,50 @@
                                  data-bs-touch="false"
                                  data-interval="false">
                                 <div class="carousel-inner">
-                                    <div th:each="img , iterStat :${feed.images()}" class="carousel-item"
+<!--                                    <div th:each="img , iterStat :${feed.images()}" class="carousel-item"-->
+<!--                                         style="position: relative; width: 37rem; height: 37rem;"-->
+<!--                                         th:classappend="${iterStat.index == 0} ? 'active'">-->
+<!--                                        <img th:id="${img.getId()}" th:src="@{|/resources/${img.name}|}" alt="..."-->
+<!--                                             class="shadow text-center rounded"-->
+<!--                                             style="width: 654px; height:100%;position: absolute; top: 0; left: 0; transform: translate(50,50); object-fit: cover; margin: auto">-->
+<!--                                    </div>-->
+<!--                                    <div th:each="video , iterStat :${feed.videos()}" class="carousel-item"-->
+<!--                                         style="position: relative; width: 37rem; height: 37rem;"-->
+<!--                                         th:classappend="${iterStat.index == 0} ? 'active'">-->
+<!--                                        <video controls>-->
+<!--                                            <source th:id="${video.getId()}" th:src="@{|/resources/${video.name}|}"-->
+<!--                                                    style="width: 654px; height:100%;position: absolute; top: 0; left: 0; transform: translate(50,50); object-fit: cover; margin: auto">-->
+<!--                                        </video>-->
+<!--                                    </div>-->
+
+
+                                    <div th:each="file , iterStat :${feed.fileDTOS()}" class="carousel-item"
                                          style="position: relative; width: 37rem; height: 37rem;"
                                          th:classappend="${iterStat.index == 0} ? 'active'">
-                                        <img th:id="${img.getId()}" th:src="@{|/resources/${img.name}|}" alt="..."
+                                        <img th:id="${file.image().getId()}" th:src="@{|/resources/${file.image().getName()}|}" alt="..."
                                              class="shadow text-center rounded"
                                              style="width: 654px; height:100%;position: absolute; top: 0; left: 0; transform: translate(50,50); object-fit: cover; margin: auto">
-                                    </div>
-                                    <div th:each="video , iterStat :${feed.videos()}" class="carousel-item"
-                                         style="position: relative; width: 37rem; height: 37rem;"
-                                         th:classappend="${iterStat.index == 0} ? 'active'">
-                                        <video th:id="${video.getId()}" th:src="@{|/resources/${video.name}|}" alt="..."
-                                             class="shadow text-center rounded"
-                                             style="width: 654px; height:100%;position: absolute; top: 0; left: 0; transform: translate(50,50); object-fit: cover; margin: auto">
+                                        <video controls>
+                                            <source th:id="${file.video().getId()}" th:src="@{|/resources/${file.video().getName()}|}"
+                                                    style="width: 100%; height:100%;">
+                                        </video>
                                     </div>
                                 </div>
                                 <button class="carousel-control-prev" type="button"
-                                        th:classappend="${#lists.size(feed.images()) == 1 }? 'visually-hidden'"
+                                        th:classappend="${#lists.size(feed.fileDTOS()) == 1 }? 'visually-hidden'"
                                         th:data-bs-target="'#carouselExampleControlsNoTouching'+${idx.index}"
                                         data-bs-slide="prev">
                                     <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                                     <span class="visually-hidden">Previous</span>
                                 </button>
                                 <button class="carousel-control-next" type="button"
-                                        th:classappend="${#lists.size(feed.images()) == 1 }? 'visually-hidden'"
+                                        th:classappend="${#lists.size(feed.fileDTOS()) == 1 }? 'visually-hidden'"
                                         th:data-bs-target="'#carouselExampleControlsNoTouching'+${idx.index}"
                                         data-bs-slide="next">
                                     <span class="carousel-control-next-icon" aria-hidden="true"></span>
                                     <span class="visually-hidden">Next</span>
                                 </button>
                             </div>
-
 
                             <div class="d-flex justify-content-between">
                                 <div class="d-flex">

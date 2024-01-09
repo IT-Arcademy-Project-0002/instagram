@@ -3,6 +3,8 @@ package com.instargram.instargram.Community.Board.Model.Entity;
 import com.instargram.instargram.Community.Comment.Model.Entity.Comment;
 import com.instargram.instargram.Community.Location.Model.Entity.Location;
 import com.instargram.instargram.Member.Model.Entity.Member;
+import com.instargram.instargram.Notice.Model.Entity.Notice;
+import com.instargram.instargram.Notice.Model.Entity.Notice_Board_Like_Member_Map;
 import com.instargram.instargram.Notice.Model.Entity.Notice_Board_Map;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -69,6 +71,9 @@ public class Board {
     // 해당 리스트에서 직접 접근하지 말 것
     @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private List<Board_Save_Map> boardSaveMaps;
+
+    @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    private List<Board_HashTag_Map> boardHashTagMaps;
 
     @OneToOne
     @JoinColumn(name="location_id")

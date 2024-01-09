@@ -50,7 +50,7 @@
                     <div class="ms-2" style="width: 244px">
                         <input type="hidden" th:value="${notice.requestMember.username}">
                         <span th:text="@{|${notice.requestMember.username}님이 회원님의 댓글을 좋아합니다: |}"></span>
-                        <span th:text="@{|${notice.commentLikeContent}|}"></span>
+                        <span th:text="@{|${notice.commentContent}|}"></span>
                         <span th:text="@{|${notice.createDate}|}" style="color: grey;"></span>
                     </div>
                     <div class="ms-2">
@@ -102,6 +102,18 @@
                 </a>
             </div>
             <div th:if="${notice.type == 9}">
+                <div class="d-flex">
+                    <div class="ms-2" style="width: 244px">
+                        <input type="hidden" th:value="${notice.requestMember.username}">
+                        <span th:text="@{|${notice.requestMember.username}님이 회원님을 언급했습니다.|}"></span>
+                        <span th:text="@{|${notice.createDate}|}" style="color: grey;"></span>
+                    </div>
+                    <div class="ms-2">
+                        <img th:src="@{|${notice.boardMainImage}|}"
+                             class="text-center"
+                             style="position: relative; top: 0; left: 0; transform: translate(50,50); width: 44px; height: 44px; object-fit: cover; margin: auto">
+                    </div>
+                </div>
             </div>
         </div>
     </div>

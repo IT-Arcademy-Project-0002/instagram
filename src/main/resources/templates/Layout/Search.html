@@ -14,10 +14,23 @@
                 <input type="text" class="search_box" placeholder="검색어를 입력해주세요." aria-describedby="basic-addon2"
                        id="keyword" name="keyword" size="15">
             </div>
-            <hr style="margin: 0; background-color: #dbdbdb">
-            <div class="" id="searchList"></div>
+
+            <hr class="search_line">
+
+            <div class="search-container">
+                <div class="d-flex search_category">
+                    <span class="search_category_text">최근 검색 항목</span>
+                    <button class="btn_search">모두 지우기</button>
+                </div>
+                <div class="search_list_layout">
+                    <div class="d-flex" style="padding: 5px; justify-content: space-between;">
+                        <a th:href="@{/location/search}" class="btn btn-secondary" style="margin-left: auto;"> 장소검색 (Beta) </a>
+                    </div>
+                    <div class="h-100" id="searchList"></div>
+                </div>
+            </div>
+            <div id="noResult"></div>
         </div>
-        <a th:href="@{/location/search}" class="btn btn-primary float-end"> 장소검색 (Beta) </a>
+        <script src="/search/js/search.js"></script>
     </div>
-    <script src="/search/js/search.js"></script>
 </div>

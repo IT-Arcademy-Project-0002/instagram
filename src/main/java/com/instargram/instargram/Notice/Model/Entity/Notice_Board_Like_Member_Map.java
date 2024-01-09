@@ -7,6 +7,8 @@ import lombok.Setter;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+import java.util.List;
+
 @Getter
 @Setter
 @Entity
@@ -16,13 +18,11 @@ public class Notice_Board_Like_Member_Map {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "notice_id")
-    @OnDelete(action = OnDeleteAction.CASCADE)
     private Notice notice;
 
     @ManyToOne
     @JoinColumn(name = "board_like_member_id")
-    @OnDelete(action = OnDeleteAction.CASCADE)
     private BoardLikeMemberMap boardLikeMember;
 }

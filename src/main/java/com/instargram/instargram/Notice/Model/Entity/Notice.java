@@ -50,4 +50,22 @@ public class Notice {
     @JoinColumn(name = "member_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Member member;
+
+    @OneToMany(mappedBy = "notice", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    private List<Notice_Board_Like_Member_Map> noticeBoardLikeMap;
+
+    @OneToMany(mappedBy = "notice", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    private List<Notice_Board_Map> noticeBoardMap;
+
+    @OneToMany(mappedBy = "notice", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    private List<Notice_Board_TagMember_Map> noticeBoardTagMemberMap;
+
+    @OneToMany(mappedBy = "notice", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    private List<Notice_Comment_Like_Map> noticeCommentLikeMap;
+
+    @OneToMany(mappedBy = "notice", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    private List<Notice_Comment_Map> noticeCommentMap;
+
+    @OneToMany(mappedBy = "notice", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    private List<Notice_Recomment_Map> noticeRecommentMap;
 }

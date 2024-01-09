@@ -20,9 +20,7 @@ public class NoticeDTO {
     private boolean follower;
 
 
-    // 게시글 좋아요 : 1
-
-    // 게시글 댓글 : 2 + 댓글 좋아요 : 3
+    // 게시글 좋아요 : 1 + 게시글 댓글 : 2 + 댓글 좋아요 : 3
     private String commentContent; // 댓글 내용
     private String boardMainImage; // 게시글 메인 이미지
 

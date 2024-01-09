@@ -2,11 +2,8 @@ package com.instargram.instargram.Community.Board.Controller;
 
 import com.instargram.instargram.Community.Board.Model.DTO.FeedDTO;
 import com.instargram.instargram.Community.Board.Model.DTO.FeedListDTO;
-import com.instargram.instargram.Community.Board.Model.Entity.BoardLikeMemberMap;
-import com.instargram.instargram.Community.Board.Model.Entity.Board_HashTag_Map;
-import com.instargram.instargram.Community.Board.Model.Entity.Board_Save_Map;
+import com.instargram.instargram.Community.Board.Model.Entity.*;
 import com.instargram.instargram.Community.Board.Model.Form.BoardCreateForm;
-import com.instargram.instargram.Community.Board.Model.Entity.Board;
 import com.instargram.instargram.Community.Board.Service.*;
 import com.instargram.instargram.Community.HashTag.Model.Entity.HashTag;
 import com.instargram.instargram.Community.HashTag.Service.HashTagService;
@@ -24,6 +21,7 @@ import com.instargram.instargram.Member.Model.Entity.Member;
 import com.instargram.instargram.Member.Service.MemberService;
 import com.instargram.instargram.Notice.Model.Entity.Notice;
 import com.instargram.instargram.Notice.Service.NoticeBoardMapService;
+import com.instargram.instargram.Notice.Service.NoticeBoardTagMemberMapService;
 import com.instargram.instargram.Notice.Service.NoticeService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -55,6 +53,7 @@ public class BoardController {
     private final NoticeBoardMapService noticeBoardMapService;
     private final HashTagService hashTagService;
     private final BoardHashTagMapService boardHashTagMapService;
+    private final NoticeBoardTagMemberMapService noticeBoardTagMemberMapService;
 
     // main
     @GetMapping("/main")
@@ -113,8 +112,9 @@ public class BoardController {
         List<String> tagMemberList = this.boardTagMemberMapService.extractMentionedWords(boardCreateForm.getContent());
         for (String memberMap : tagMemberList){
             Member tagMember = this.memberService.getMember(memberMap);
-            this.boardTagMemberMapService.create(board, tagMember);
-            this.noticeService.createNotice(Enum_Data.BOARD_TAGMEMBER.getNumber(), member, tagMember);
+            Board_TagMember_Map boardTagMemberMap = this.boardTagMemberMapService.create(board, tagMember);
+            Notice notice = this.noticeService.createNotice(Enum_Data.BOARD_TAGMEMBER.getNumber(), member, tagMember);
+            noticeBoardTagMemberMapService.createNoticeBoardTagMember(boardTagMemberMap, notice);
         }
 
         // file upload

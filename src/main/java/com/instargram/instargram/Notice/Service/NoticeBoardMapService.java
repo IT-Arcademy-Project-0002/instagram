@@ -8,7 +8,9 @@ import com.instargram.instargram.Community.Comment.Model.Entity.Comment;
 import com.instargram.instargram.Data.Image.ImageService;
 import com.instargram.instargram.Notice.Model.Entity.Notice;
 import com.instargram.instargram.Notice.Model.Entity.Notice_Board_Like_Member_Map;
+import com.instargram.instargram.Notice.Model.Entity.Notice_Board_TagMember_Map;
 import com.instargram.instargram.Notice.Model.Repository.Notice_Board_Like_Member_MapRepository;
+import com.instargram.instargram.Notice.Model.Repository.Notice_Board_TagMember_MapRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +24,7 @@ public class NoticeBoardMapService {
     private final ImageService imageService;
     private final Board_Data_MapRepository boardDataMapRepository;
     private final Notice_Board_Like_Member_MapRepository noticeBoardLikeMemberMapRepository;
+    private final Notice_Board_TagMember_MapRepository noticeBoardTagMemberMapRepository;
 
     public String getNoticeBoardImage(Long noticeId, Integer type) {
 
@@ -51,26 +54,35 @@ public class NoticeBoardMapService {
             }
         }
 
-        if (type == 2) {
+        if (type == 2 || type == 3) {
 
             for (Board_Data_Map dataMap : dataMapsForComment) {
                 if (dataMap.getDataType() != null && dataMap.getDataType() == 2) {
                 Long id = dataMap.getDataId();
                 imagePath = "/files/img/" + imageService.getImageByID(id).getName();
                 break; // 첫 번째 이미지만 필요하므로 루프 종료
+                }
             }
         }
 
-        } else if (type == 3) {
 
-            for (Board_Data_Map dataMap : dataMapsForComment) {
-                if (dataMap.getDataType() != null && dataMap.getDataType() == 2) {
-                    Long id = dataMap.getDataId();
-                    imagePath = "/files/img/" + imageService.getImageByID(id).getName();
-                    break; // 첫 번째 이미지만 필요하므로 루프 종료
+        if (type == 9) {
+
+
+            Notice_Board_TagMember_Map noticeBoardTagMemberMap = noticeBoardTagMemberMapRepository.findByNoticeId(noticeId);
+
+            if (noticeBoardTagMemberMap  != null) {
+                Board board = noticeBoardTagMemberMap .getBoardTagMember().getBoard();
+                List<Board_Data_Map> dataMaps = boardDataMapRepository.findByBoard(board);
+
+                for (Board_Data_Map dataMap : dataMaps) {
+                    if (dataMap.getDataType() != null && dataMap.getDataType() == 2) {
+                        Long id = dataMap.getDataId();
+                        imagePath = "/files/img/" + imageService.getImageByID(id).getName();
+                        break; // 첫 번째 이미지만 필요하므로 루프 종료
+                    }
                 }
             }
-
         }
 
         return imagePath;

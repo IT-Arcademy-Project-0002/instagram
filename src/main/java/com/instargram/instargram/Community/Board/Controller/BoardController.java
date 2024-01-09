@@ -34,6 +34,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.security.Principal;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Controller
@@ -70,11 +71,17 @@ public class BoardController {
 
         List<FeedListDTO> feedList = this.boardDataMapService.getFeed(allBoards);
         FeedDTO selectFeed = (FeedDTO) httpSession.getAttribute("selectFeed");
-
+        FeedDTO updateFeed = (FeedDTO) httpSession.getAttribute("updateFeed");
         if (selectFeed != null) {
             model.addAttribute("selectFeed", selectFeed);
             httpSession.removeAttribute("selectFeed");
         }
+
+        if (updateFeed != null) {
+            model.addAttribute("updateFeed", updateFeed);
+            httpSession.removeAttribute("updateFeed");
+        }
+
         System.out.println("===========================>" + selectFeed);
         model.addAttribute("feedList", feedList);
         return "Board/board_main";
@@ -96,7 +103,7 @@ public class BoardController {
         Board board = this.boardService.create(member, boardCreateForm.getContent(), location, boardCreateForm.isLikeHide(), boardCreateForm.isCommentDisable());
 
         // # HashTag
-        List<String> hashTagsList = this.hashTagService.extractMentionedWords(boardCreateForm.getHashTag());
+        List<String> hashTagsList = this.hashTagService.extractHashTagWords(boardCreateForm.getHashTag());
         for (String hashTag_name : hashTagsList) {
             HashTag ishashTag = this.hashTagService.exists(hashTag_name);
             HashTag hashTag;
@@ -109,7 +116,7 @@ public class BoardController {
         }
 
         // @ Mention
-        List<String> tagMemberList = this.boardTagMemberMapService.extractMentionedWords(boardCreateForm.getContent());
+        List<String> tagMemberList = this.boardTagMemberMapService.extractMentionedWords(boardCreateForm.getTagMember());
         for (String memberMap : tagMemberList){
             Member tagMember = this.memberService.getMember(memberMap);
             Board_TagMember_Map boardTagMemberMap = this.boardTagMemberMapService.create(board, tagMember);
@@ -148,7 +155,6 @@ public class BoardController {
         }
         return "redirect:/main";
     }
-
 
     @GetMapping("/board/detail/{id}")
     public String detail(@PathVariable("id") Long id, HttpSession httpSession) {
@@ -255,5 +261,13 @@ public class BoardController {
             }
         }
         return ResponseEntity.ok().body(result);
+    }
+
+    @GetMapping("/board/update/{id}")
+    public String update(@PathVariable("id") Long id, HttpSession httpSession){
+        Board board = this.boardService.getBoardById(id);
+        FeedDTO updateFeed = this.boardDataMapService.getFeedWithComments(board);
+        httpSession.setAttribute("updateFeed", updateFeed);
+        return "redirect:/main";
     }
 }

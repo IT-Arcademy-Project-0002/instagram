@@ -91,13 +91,8 @@ public class Board_Data_MapService {
             }
         }
 
-        return new FeedDTO(convertToBoardDTO(board), selectfileList, convertToCommentDTOs(comments));
+        return new FeedDTO(new BoardDTO(board), selectfileList, convertToCommentDTOs(comments));
     }
-
-    private BoardDTO convertToBoardDTO(Board board) {
-        return new BoardDTO(board);
-    }
-
     private List<CommentDTO> convertToCommentDTOs(List<Comment> comments) {
         List<CommentDTO> commentDTOS = new ArrayList<>();
         for (Comment comment : comments) {
@@ -106,9 +101,5 @@ public class Board_Data_MapService {
             commentDTOS.add(commentDTO);
         }
         return commentDTOS;
-    }
-
-    private ImageDTO convertToImageDTO(Image image) {
-        return new ImageDTO(image);
     }
 }

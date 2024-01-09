@@ -11,6 +11,7 @@ import java.util.List;
 @Setter
 public class BoardCreateForm {
     private String content;
+    private String TagMember;
     private String hashTag;
     private boolean likeHide;
     private boolean commentDisable;

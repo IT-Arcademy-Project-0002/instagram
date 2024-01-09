@@ -70,6 +70,9 @@ public class Board {
     @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private List<Board_Save_Map> boardSaveMaps;
 
+    @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    private List<Board_HashTag_Map> boardHashTagMaps;
+
     @OneToOne
     @JoinColumn(name="location_id")
     private Location location;

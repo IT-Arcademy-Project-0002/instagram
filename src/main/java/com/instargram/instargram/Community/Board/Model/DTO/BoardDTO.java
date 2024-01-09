@@ -2,14 +2,19 @@ package com.instargram.instargram.Community.Board.Model.DTO;
 
 import com.instargram.instargram.Community.Board.Model.Entity.Board;
 import com.instargram.instargram.Community.Board.Model.Entity.BoardLikeMemberMap;
+import com.instargram.instargram.Community.Board.Model.Entity.Board_HashTag_Map;
 import com.instargram.instargram.Community.Board.Model.Entity.Board_Save_Map;
+import com.instargram.instargram.Community.HashTag.Model.Entity.HashTag;
 import com.instargram.instargram.Member.Model.DTO.MemberDTO;
 import com.instargram.instargram.Member.Model.Entity.Member;
 import jakarta.transaction.Transactional;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.print.attribute.HashPrintJobAttributeSet;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,10 +32,10 @@ public class BoardDTO {
     private List<Long> boardLikeMemberIds;
     private List<Long> boardSaveIds;
     private boolean pin;
+    private List<String> boardHashTagMaps;
 
     @Transactional
-    public void setValue(Board board)
-    {
+    public void setValue(Board board) {
         this.id = board.getId();
         this.content = board.getContent();
         this.createDate = board.getCreateDate();
@@ -46,6 +51,9 @@ public class BoardDTO {
         if (board.getMember() != null) {
             this.memberDTO = new MemberDTO(board.getMember());
         }
+
+        this.boardHashTagMaps = board.getBoardHashTagMaps().stream().map(Board_HashTag_Map::getTag).map(HashTag::getName).collect(Collectors.toList());
+
         // BoardLikeMemberMap에서 필요한 데이터만 가져와서 저장
         this.boardLikeMemberIds = board.getBoardLikeMemberMaps().stream().map(BoardLikeMemberMap::getLikeMember).map(Member::getId).collect(Collectors.toList());
 
@@ -54,6 +62,6 @@ public class BoardDTO {
     }
 
     public BoardDTO(Board board) {
-       setValue(board);
+        setValue(board);
     }
 }

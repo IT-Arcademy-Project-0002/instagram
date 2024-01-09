@@ -54,7 +54,7 @@ public class BoardController {
     private final Board_TagMember_MapService boardTagMemberMapService;
     private final NoticeBoardMapService noticeBoardMapService;
     private final HashTagService hashTagService;
-    private final BoardHashTagMapService hashTagMapService;
+    private final BoardHashTagMapService boardHashTagMapService;
 
     // main
     @GetMapping("/main")
@@ -93,23 +93,31 @@ public class BoardController {
         Member member = this.memberService.getMember(principal.getName());
 
         Location location = this.locationService.create(locationDTO);
-
-        List<String> tagMemberList = this.boardTagMemberMapService.extractMentionedWords(boardCreateForm.getContent());
-
+        
         Board board = this.boardService.create(member, boardCreateForm.getContent(), location, boardCreateForm.isLikeHide(), boardCreateForm.isCommentDisable());
 
+        // # HashTag
         List<String> hashTagsList = this.hashTagService.extractMentionedWords(boardCreateForm.getHashTag());
         for (String hashTag_name : hashTagsList) {
-           HashTag hashTag = this.hashTagService.create(hashTag_name);
-            this.hashTagMapService.createBoardHashTag(board, hashTag);
+            HashTag ishashTag = this.hashTagService.exists(hashTag_name);
+            HashTag hashTag;
+            if (ishashTag == null) {
+                hashTag = this.hashTagService.create(hashTag_name);
+            }else{
+                hashTag = this.hashTagService.gethashTag(hashTag_name);
+            }
+            this.boardHashTagMapService.createBoardHashTag(board, hashTag);
         }
 
+        // @ Mention
+        List<String> tagMemberList = this.boardTagMemberMapService.extractMentionedWords(boardCreateForm.getContent());
         for (String memberMap : tagMemberList){
             Member tagMember = this.memberService.getMember(memberMap);
             this.boardTagMemberMapService.create(board, tagMember);
             this.noticeService.createNotice(Enum_Data.BOARD_TAGMEMBER.getNumber(), member, tagMember);
         }
 
+        // file upload
         for (MultipartFile multipartFile : multipartFiles) {
             if (!multipartFile.isEmpty()) {
                 String currName = multipartFile.getOriginalFilename();

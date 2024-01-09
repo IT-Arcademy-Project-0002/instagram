@@ -32,7 +32,7 @@ public class MessageMemberMapService {
         Message_Member_Map messageMemberMap = new Message_Member_Map();
         messageMemberMap.setMember(sender);
         messageMemberMap.setCreateDate(LocalDateTime.now());
-        messageMemberMap.setRoom(roomService.getRoom(Long.valueOf(msg.get("roomId").toString()));
+        messageMemberMap.setRoom(roomService.getRoom(Long.valueOf(msg.get("roomId").toString())));
         messageMemberMap.setDataId(message.getId());
         messageMemberMap.setDataType(1);
         messageMemberMap.setEmpathy(null);

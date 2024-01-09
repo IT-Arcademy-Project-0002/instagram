@@ -34,7 +34,7 @@ public class NoticeBoardMapService {
 
         if (type == 1) {
 
-            // 보드 자체를 알고 있을때의 로직
+            // 보드 자체를 알고 있을때의 로직 (null 예외 관련 추후 refactoring시 개선할 것)
             Notice_Board_Like_Member_Map noticeBoardLikeMemberMap = noticeBoardLikeMemberMapRepository.findByNoticeId(noticeId);
 
             if (noticeBoardLikeMemberMap != null) {

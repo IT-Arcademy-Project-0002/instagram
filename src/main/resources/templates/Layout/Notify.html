@@ -5,13 +5,12 @@
     <div th:each="notice : ${notices}">
         <div class="d-flex" th:id="@{|notice-${notice.id}|}">
             <div>
-                <div style="position: relative; width: 44px; height: 44px;"
-                     id="image_container">
-                    <img th:if="${notice.requestMember.Image == null}" id="none_user_img"
+                <div style="position: relative; width: 44px; height: 44px;">
+                    <img th:if="${notice.requestMember.Image == null}"
                          src="/files/designImg/noneuser.png"
                          class="rounded-circle text-center"
                          style="position: absolute; top: 0; left: 0; transform: translate(50,50); width: 100%; height: 100%; object-fit: cover; margin: auto">
-                    <img th:unless="${notice.requestMember.Image == null}" id="user_img"
+                    <img th:unless="${notice.requestMember.Image == null}"
                          th:src="@{|/resources/${notice.requestMember.Image.name}|}"
                          class="rounded-circle text-center"
                          style="position: absolute; top: 0; left: 0; transform: translate(50,50); width: 100%; height: 100%; object-fit: cover; margin: auto">

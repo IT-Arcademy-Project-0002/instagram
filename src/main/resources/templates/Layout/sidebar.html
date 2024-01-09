@@ -165,13 +165,12 @@
                         <li>
                             <a th:href="@{|/member/page/${loginMember.username}|}" class="item d-flex menu_list img">
                                 <div class="btn_side_menu p-0 menu_list_text">
-                                    <div style="position: relative; width: 1.5rem; height: 1.5rem;"
-                                         id="image_container">
-                                        <img th:if="${loginMember.Image == null}" id="none_user_img"
+                                    <div style="position: relative; width: 1.5rem; height: 1.5rem;">
+                                        <img th:if="${loginMember.Image == null}"
                                              src="/files/designImg/noneuser.png"
                                              class="rounded-circle text-center"
                                              style="position: absolute; top: 0; left: 0; transform: translate(50,50); width: 100%; height: 100%; object-fit: cover; margin: auto">
-                                        <img th:unless="${loginMember.Image == null}" id="user_img"
+                                        <img th:unless="${loginMember.Image == null}"
                                              th:src="@{|/resources/${loginMember.Image.name}|}"
                                              class="rounded-circle text-center"
                                              style="position: absolute; top: 0; left: 0; transform: translate(50,50); width: 100%; height: 100%; object-fit: cover; margin: auto">

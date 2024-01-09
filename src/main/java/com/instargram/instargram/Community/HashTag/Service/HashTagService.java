@@ -18,18 +18,18 @@ import java.util.regex.Pattern;
 public class HashTagService {
     private final HashTagRepository hashTagRepository;
 
-    public List<String> extractMentionedWords(String hashTag) {
-        List<String> mentionedWords = new ArrayList<>();
+    public List<String> extractHashTagWords(String hashTag) {
+        List<String> hashTagWords = new ArrayList<>();
 
         String[] hashTags = hashTag.split("\\s*#");
 
         for (String tag : hashTags) {
             if (!tag.trim().isEmpty()) {
-                mentionedWords.add("#" + tag.trim());
+                hashTagWords.add(tag.trim());
             }
         }
 
-        return mentionedWords;
+        return hashTagWords;
     }
 
     public HashTag create(String name) {

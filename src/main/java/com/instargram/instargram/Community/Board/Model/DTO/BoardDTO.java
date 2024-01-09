@@ -1,9 +1,6 @@
 package com.instargram.instargram.Community.Board.Model.DTO;
 
-import com.instargram.instargram.Community.Board.Model.Entity.Board;
-import com.instargram.instargram.Community.Board.Model.Entity.BoardLikeMemberMap;
-import com.instargram.instargram.Community.Board.Model.Entity.Board_HashTag_Map;
-import com.instargram.instargram.Community.Board.Model.Entity.Board_Save_Map;
+import com.instargram.instargram.Community.Board.Model.Entity.*;
 import com.instargram.instargram.Community.HashTag.Model.Entity.HashTag;
 import com.instargram.instargram.Member.Model.DTO.MemberDTO;
 import com.instargram.instargram.Member.Model.Entity.Member;
@@ -32,8 +29,8 @@ public class BoardDTO {
     private List<Long> boardLikeMemberIds;
     private List<Long> boardSaveIds;
     private boolean pin;
-    private List<String> boardHashTagMaps;
-
+    private List<String> boardHashTags;
+    private List<String> boardTagMembers;
     @Transactional
     public void setValue(Board board) {
         this.id = board.getId();
@@ -52,8 +49,8 @@ public class BoardDTO {
             this.memberDTO = new MemberDTO(board.getMember());
         }
 
-        this.boardHashTagMaps = board.getBoardHashTagMaps().stream().map(Board_HashTag_Map::getTag).map(HashTag::getName).collect(Collectors.toList());
-
+        this.boardHashTags = board.getBoardHashTagMaps().stream().map(Board_HashTag_Map::getTag).map(HashTag::getName).collect(Collectors.toList());
+        this.boardTagMembers = board.getBoardTagMemberMaps().stream().map(Board_TagMember_Map::getTagMember).map(Member::getUsername).collect(Collectors.toList());
         // BoardLikeMemberMap에서 필요한 데이터만 가져와서 저장
         this.boardLikeMemberIds = board.getBoardLikeMemberMaps().stream().map(BoardLikeMemberMap::getLikeMember).map(Member::getId).collect(Collectors.toList());
 

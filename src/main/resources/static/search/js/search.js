@@ -108,13 +108,23 @@ $(document).ready(function () {
                         '</a>'
                     );
                 }
-
                 newList.append(listItem);
             });
         } else {
+            var noResult = $('#noResult');
             var listItem = $('<div></div>');
             listItem.text('검색 결과가 없습니다.');
+
+            listItem.addClass('no_result_text');
+
+            newList.addClass('h-75');
+            newList.addClass('d-flex');
+            newList.addClass('align-items-center');
+            newList.addClass('justify-content-center');
+            newList.addClass('p-3');
+
             newList.append(listItem);
+
         }
 
         searchListBody.append(newList);

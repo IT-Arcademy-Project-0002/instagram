@@ -2,11 +2,8 @@ package com.instargram.instargram.Community.Board.Controller;
 
 import com.instargram.instargram.Community.Board.Model.DTO.FeedDTO;
 import com.instargram.instargram.Community.Board.Model.DTO.FeedListDTO;
-import com.instargram.instargram.Community.Board.Model.Entity.BoardLikeMemberMap;
-import com.instargram.instargram.Community.Board.Model.Entity.Board_HashTag_Map;
-import com.instargram.instargram.Community.Board.Model.Entity.Board_Save_Map;
+import com.instargram.instargram.Community.Board.Model.Entity.*;
 import com.instargram.instargram.Community.Board.Model.Form.BoardCreateForm;
-import com.instargram.instargram.Community.Board.Model.Entity.Board;
 import com.instargram.instargram.Community.Board.Service.*;
 import com.instargram.instargram.Community.HashTag.Model.Entity.HashTag;
 import com.instargram.instargram.Community.HashTag.Service.HashTagService;
@@ -24,6 +21,7 @@ import com.instargram.instargram.Member.Model.Entity.Member;
 import com.instargram.instargram.Member.Service.MemberService;
 import com.instargram.instargram.Notice.Model.Entity.Notice;
 import com.instargram.instargram.Notice.Service.NoticeBoardMapService;
+import com.instargram.instargram.Notice.Service.NoticeBoardTagMemberMapService;
 import com.instargram.instargram.Notice.Service.NoticeService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -36,6 +34,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.security.Principal;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Controller
@@ -55,6 +54,7 @@ public class BoardController {
     private final NoticeBoardMapService noticeBoardMapService;
     private final HashTagService hashTagService;
     private final BoardHashTagMapService boardHashTagMapService;
+    private final NoticeBoardTagMemberMapService noticeBoardTagMemberMapService;
 
     // main
     @GetMapping("/main")
@@ -71,11 +71,17 @@ public class BoardController {
 
         List<FeedListDTO> feedList = this.boardDataMapService.getFeed(allBoards);
         FeedDTO selectFeed = (FeedDTO) httpSession.getAttribute("selectFeed");
-
+        FeedDTO updateFeed = (FeedDTO) httpSession.getAttribute("updateFeed");
         if (selectFeed != null) {
             model.addAttribute("selectFeed", selectFeed);
             httpSession.removeAttribute("selectFeed");
         }
+
+        if (updateFeed != null) {
+            model.addAttribute("updateFeed", updateFeed);
+            httpSession.removeAttribute("updateFeed");
+        }
+
         System.out.println("===========================>" + selectFeed);
         model.addAttribute("feedList", feedList);
         return "Board/board_main";
@@ -97,7 +103,7 @@ public class BoardController {
         Board board = this.boardService.create(member, boardCreateForm.getContent(), location, boardCreateForm.isLikeHide(), boardCreateForm.isCommentDisable());
 
         // # HashTag
-        List<String> hashTagsList = this.hashTagService.extractMentionedWords(boardCreateForm.getHashTag());
+        List<String> hashTagsList = this.hashTagService.extractHashTagWords(boardCreateForm.getHashTag());
         for (String hashTag_name : hashTagsList) {
             HashTag ishashTag = this.hashTagService.exists(hashTag_name);
             HashTag hashTag;
@@ -110,11 +116,12 @@ public class BoardController {
         }
 
         // @ Mention
-        List<String> tagMemberList = this.boardTagMemberMapService.extractMentionedWords(boardCreateForm.getContent());
+        List<String> tagMemberList = this.boardTagMemberMapService.extractMentionedWords(boardCreateForm.getTagMember());
         for (String memberMap : tagMemberList){
             Member tagMember = this.memberService.getMember(memberMap);
-            this.boardTagMemberMapService.create(board, tagMember);
-            this.noticeService.createNotice(Enum_Data.BOARD_TAGMEMBER.getNumber(), member, tagMember);
+            Board_TagMember_Map boardTagMemberMap = this.boardTagMemberMapService.create(board, tagMember);
+            Notice notice = this.noticeService.createNotice(Enum_Data.BOARD_TAGMEMBER.getNumber(), member, tagMember);
+            noticeBoardTagMemberMapService.createNoticeBoardTagMember(boardTagMemberMap, notice);
         }
 
         // file upload
@@ -148,7 +155,6 @@ public class BoardController {
         }
         return "redirect:/main";
     }
-
 
     @GetMapping("/board/detail/{id}")
     public String detail(@PathVariable("id") Long id, HttpSession httpSession) {
@@ -255,5 +261,13 @@ public class BoardController {
             }
         }
         return ResponseEntity.ok().body(result);
+    }
+
+    @GetMapping("/board/update/{id}")
+    public String update(@PathVariable("id") Long id, HttpSession httpSession){
+        Board board = this.boardService.getBoardById(id);
+        FeedDTO updateFeed = this.boardDataMapService.getFeedWithComments(board);
+        httpSession.setAttribute("updateFeed", updateFeed);
+        return "redirect:/main";
     }
 }

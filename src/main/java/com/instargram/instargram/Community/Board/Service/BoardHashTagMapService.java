@@ -5,12 +5,8 @@ import com.instargram.instargram.Community.Board.Model.Entity.Board_HashTag_Map;
 import com.instargram.instargram.Community.Board.Model.Repository.Board_HashTag_MapRepository;
 import com.instargram.instargram.Community.HashTag.Model.Entity.HashTag;
 import com.instargram.instargram.Community.HashTag.Model.Repository.HashTagRepository;
-import com.instargram.instargram.Community.HashTag.Service.HashTagService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor

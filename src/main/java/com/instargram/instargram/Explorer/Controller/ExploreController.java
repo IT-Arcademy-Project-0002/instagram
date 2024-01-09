@@ -1,5 +1,10 @@
 package com.instargram.instargram.Explorer.Controller;
 
+import com.instargram.instargram.Community.Board.Model.Entity.Board_HashTag_Map;
+import com.instargram.instargram.Community.Board.Service.BoardHashTagMapService;
+import com.instargram.instargram.Community.Board.Service.Board_TagMember_MapService;
+import com.instargram.instargram.Community.HashTag.Model.Entity.HashTag;
+import com.instargram.instargram.Community.HashTag.Service.HashTagService;
 import com.instargram.instargram.Explorer.Model.DTO.ExploreDTO;
 import com.instargram.instargram.Community.Board.Model.Entity.Board;
 import com.instargram.instargram.Community.Board.Service.BoardService;
@@ -24,6 +29,8 @@ public class ExploreController {
     private final ExploreService exploreService;
     private final SearchService searchService;
     private final NoticeSSEService noticeSseService;
+    private final HashTagService hashTagService;
+    private final BoardHashTagMapService boardHashTagMapService;
 
     @GetMapping("")
     public String searchMain(Model model){
@@ -34,6 +41,11 @@ public class ExploreController {
         model.addAttribute("ExploreList", exploreList);
 
         this.noticeSseService.notifyUser(2L, "test message");
+
+        return "Explore/explore";
+    }
+    @GetMapping("/tags/{hashTag}")
+    public String searchHashTag(Model model, @PathVariable("hashTag") String hashTag){
 
         return "Explore/explore";
     }

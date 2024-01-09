@@ -19,7 +19,7 @@ public class MessageMemberMapService {
 
     private final MessageMemberMapRepository messageMemberMapRepository;
     private final MemberService memberService;
-    private final RoomService roomService;
+//    private final RoomService roomService;
 
     public List<Message_Member_Map> getList(Room room)
     {
@@ -28,15 +28,15 @@ public class MessageMemberMapService {
 
     public void create(Map<String, Object> msg, Message message)
     {
-        Member sender = memberService.getMember(msg.get("sender").toString());
-        Message_Member_Map messageMemberMap = new Message_Member_Map();
-        messageMemberMap.setMember(sender);
-        messageMemberMap.setCreateDate(LocalDateTime.now());
-        messageMemberMap.setRoom(roomService.getRoom(Long.valueOf(msg.get("roomId").toString())));
-        messageMemberMap.setDataId(message.getId());
-        messageMemberMap.setDataType(1);
-        messageMemberMap.setEmpathy(null);
-
-        messageMemberMapRepository.save(messageMemberMap);
+//        Member sender = memberService.getMember(msg.get("sender").toString());
+//        Message_Member_Map messageMemberMap = new Message_Member_Map();
+//        messageMemberMap.setMember(sender);
+//        messageMemberMap.setCreateDate(LocalDateTime.now());
+//        messageMemberMap.setRoom(roomService.getRoom(Long.valueOf(msg.get("roomId").toString())));
+//        messageMemberMap.setDataId(message.getId());
+//        messageMemberMap.setDataType(1);
+//        messageMemberMap.setEmpathy(null);
+//
+//        messageMemberMapRepository.save(messageMemberMap);
     }
 }

@@ -8,6 +8,8 @@ import lombok.Setter;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @Entity
@@ -15,6 +17,9 @@ public class Message_Member_Map {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    // 메세지 생성날짜
+    private LocalDateTime createDate;
 
     // 데이터 타입 ( 1 : 텍스트, 2 : 이미지, 3 : 비디오)
     private Integer dataType;
@@ -26,6 +31,8 @@ public class Message_Member_Map {
     private String Empathy;
 
     @ManyToOne
+    @JoinColumn(name="room_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Room room;
 
     // 메세지를 보낸 회원

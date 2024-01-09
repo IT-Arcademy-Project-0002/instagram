@@ -94,4 +94,5 @@ public class BoardService {
     public List<Board> getBoardsByMember(Member member) {
         return this.boardRepository.findByMember(member);
     }
+
 }

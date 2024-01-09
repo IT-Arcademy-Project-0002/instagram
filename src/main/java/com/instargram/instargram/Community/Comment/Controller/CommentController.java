@@ -44,7 +44,7 @@ public class CommentController {
         Member member = this.memberService.getMember(principal.getName());
         Board board = this.boardService.getBoardById(id);
         if (member != null && board != null) {
-            Comment comment = commentService.create(member, board, commentCreateForm.getContent());
+            Comment comment = commentService.create(member, board, commentCreateForm.getCommentContent());
             Notice notice = noticeService.createNotice(Enum_Data.BOARD_COMMENT.getNumber(), member, board.getMember());
             noticeCommentMapService.createNoticeComment(comment, notice);
         }

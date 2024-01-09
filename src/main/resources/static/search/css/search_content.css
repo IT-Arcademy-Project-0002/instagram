@@ -4,16 +4,17 @@ a {
 }
 
 .search-profile { /*검색 항목*/
-    margin-right: 10px;
+    margin-right: 12px;
 }
 
 .search-profile-image { /*검색 항목*/
-    height: 50px;
-    width: 50px;
+    height: 44px;
+    width: 44px;
 }
 
 .search-username { /*검색 항목*/
-    font-weight: bold;
+    font-weight: 600;
+    font-size: 14px;
 }
 
 .search-userintroduction { /*검색 항목*/
@@ -21,6 +22,9 @@ a {
     white-space: nowrap;       /* 텍스트가 줄 바꿈되지 않도록 설정 */
     overflow: hidden;          /* 넘치는 부분을 숨김 */
     text-overflow: ellipsis;   /* 넘치는 부분에 "..."을 추가 */
+    font-size: 14px;
+    font-weight: 400;
+    color: #939393;
 }
 
 .search-list-box:hover .search-profile img { /*검색 항목*/
@@ -42,16 +46,18 @@ a {
 
 .search-list-box { /*검색 항목*/
     display: flex;
-    padding: 10px;
+    padding: 8px 24px 8px 24px;
 }
 
 .search-content {
     width: 397px;
     height: 100%;
+    min-height: 100%;
 }
 
-.search-container {
+.search-container{
     height: 100%;
+    padding: 0 0 10px 0;
 }
 
 
@@ -91,4 +97,48 @@ a {
 .search_box:active, .search_box:focus {
     border: none;
     outline: none;
+    color: black;
 }
+.search_category {
+    margin: 6px 24px 6px 24px;
+    padding: 4px;
+    justify-content: space-between;
+}
+.search_category_text {
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.btn_search {
+    color: #ff3140;
+    font-size: 14px;
+    font-weight: 600;
+    border: none;
+    background-color: transparent;
+}
+.btn_search:hover {
+    color: black;
+}
+
+.search_list_layout {
+    height: 100%;
+    min-height: 100%;
+    padding-top: 8px;
+}
+
+.search_line {
+    margin: 0;
+    background-color: #dbdbdb;
+}
+
+.no_result_text {
+    color: #737373;
+    font-size: 15px;
+}
+.aaaa {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+

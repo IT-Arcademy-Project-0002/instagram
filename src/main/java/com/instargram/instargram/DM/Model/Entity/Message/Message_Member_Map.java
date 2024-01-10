@@ -40,4 +40,7 @@ public class Message_Member_Map {
     @JoinColumn(name = "member_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Member member;
+
+    //메세지를 읽은 멤버
+    private String seeMember;
 }

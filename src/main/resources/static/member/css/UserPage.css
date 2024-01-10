@@ -43,6 +43,16 @@
     flex-grow: 2;
     height: 100%;
     margin-right: 30px;
+
+}
+
+.userProfile_btn {
+    padding: 0;
+    margin: 0;
+    position: relative;
+    width: 150px;
+    height: 150px;
+    border: 1px solid #d5d4d2;
 }
 
 .userProfile_line {
@@ -63,7 +73,7 @@
     line-height: 25px;
     font-weight: 400;
     font-size: 20px;
-    padding-top: 5px;
+    padding-top: 7px;
 }
 
 .userInfo_btn {
@@ -75,4 +85,14 @@
 }
 .userInfo_btn:hover {
     background-color: #dbdbdb;
+}
+
+.highlight_btn {
+
+}
+
+.highlight_img {
+    color: #c7c7c7;
+    position: relative;
+    display: block;
 }

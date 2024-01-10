@@ -1,5 +1,6 @@
 .explore-container {
-    margin-left:350px;
+    margin-left:335px;
+    min-height: 100vh;
 }
 
 .explore-content {

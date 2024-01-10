@@ -1,4 +1,4 @@
-<html layout:decorate="~{Layout/layout_main}">
+<html layout:decorate="~{Layout/layout_main}" xmlns:th="http://www.thymeleaf.org">
 <head>
     <link rel="stylesheet" type="text/css" th:href="@{/dm/css/DirectInbox.css}">
     <title>User Page</title>
@@ -9,7 +9,7 @@
             <div class="col-3 overflow-scroll" style="width: 398px;">
                 <ul>
                     <li th:each="room:${roomList}">
-                        <a th:href="@{|/direct/${room.id}|}"
+                        <a th:href="@{|/direct/t/${room.id}|}"
                            th:text="${room.name}"></a>
                     </li>
                 </ul>
@@ -17,13 +17,14 @@
             <div class="col-9">
                 <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
                 <div>
-                    <h1 th:text="${nowRoom.name}"></h1>
-                    <input type="hidden" id="room-id" th:value="${nowRoom.id}">
+                    <h1 th:text="${nowRoomDTO.room.name}"></h1>
+                    <input type="hidden" id="room-id" th:value="${nowRoomDTO.room.id}">
                     <input type="hidden" id="loginUser-username" th:value="${loginMember.username}">
                 </div>
                 <div class="d-flex justify-content-center align-items-center h-75">
-                    <div>
-                        <div class="msgArea"></div>
+                    <div class="w-100 h-100">
+                        <div class="msgArea">
+                        </div>
                     </div>
                 </div>
                 <div class="d-flex">
@@ -35,6 +36,161 @@
         </div>
     </div>
 
-    <script th:src="@{/dm/js/DirectRoom.js}"></script>
+    <script th:inline="javascript">
+
+        var roomId = document.getElementById('room-id').value;
+        var username = document.getElementById('loginUser-username').value;
+        let msgArea = document.querySelector('.msgArea');
+        function enterRoom(socket){
+
+            var enterMsg=
+                {
+                    "type" : "ENTER",
+                    "roomId": roomId,
+                    "sender":username,
+                };
+
+            socket.send(JSON.stringify(enterMsg));
+        }
+        let socket = new WebSocket("ws://localhost:8888/ws/chat");
+
+        socket.onopen = function (e) {
+
+            console.log('open server!')
+            enterRoom(socket);
+        };
+        socket.onclose=function(e){
+
+            console.log('disconnet');
+        }
+
+        socket.onerror = function (e){
+
+            console.log(e);
+        }
+
+        //메세지 수신했을 때 이벤트.
+        socket.onmessage = function (e) {
+
+            console.log(e.data);
+
+            var data = JSON.parse(e.data);
+
+            if(data.type === 'TALK' && data.sender === username)
+            {
+                createMineMessage(data);
+            }
+            else if(data.type === 'TALK' && data.sender !== username)
+            {
+                createMessage(data);
+            }
+        }
+
+        function createMineMessage(data)
+        {
+            let newMsg = document.createElement('div');
+            newMsg.innerHTML =
+                '                           <div class="p-4">\n' +
+                '                                <div class="d-flex justify-content-end">\n' +
+                '                                    <div>\n' +
+                '                                        <div class="d-flex align-items-center my-2">\n' +
+                '                                            <div class="rounded-5 bg-primary text-light p-2 px-3">\n' +
+                                                                data.msg +
+                '                                            </div>\n' +
+                '                                            <div class="flex-fill">\n' +
+                '                                            </div>\n' +
+                '                                        </div>\n' +
+                '                                        <div class="read-check my-2 text-end">\n' +
+                '                                            읽음\n' +
+                '                                        </div>\n' +
+                '                                    </div>\n' +
+                '                                </div>\n' +
+                '                            </div>';
+            msgArea.appendChild(newMsg);
+        }
+
+        function createMessage(data)
+        {
+            debugger;
+            let newMsg = document.createElement('div');
+
+            var members = [[${nowRoomDTO.members}]];
+            var imgSrc = '';
+            var img  = members.get(data.sender).image;
+            if(img === null) {
+                imgSrc = 'src="/files/designImg/noneuser.png"\n';
+            }
+            else {
+                imgSrc = 'th:src="@{|/resources/'+img.name+'}|}"\n';
+            }
+            newMsg.innerHTML =
+                '                            <div class="p-4">\n' +
+                '                                <div class="my-2">\n' +
+                                                    data.sender +
+                '                                </div>\n' +
+                '                                <div class="d-flex align-items-center my-2">\n' +
+                '                                    <div style="position: relative; width: 3rem; height: 3rem;">\n' +
+                '                                        <img ' + imgSrc+
+                '                                             class="shadow-sm rounded-circle text-center"\n' +
+                '                                             style="position: absolute; top: 0; left: 0; transform: translate(50,50); width: 100%; height: 100%; object-fit: cover; margin: auto">\n' +
+                '                                    </div>\n' +
+                '                                    <div class="mx-3 rounded-5 bg-danger p-2 px-3">\n' +
+                                                        data.msg +
+                '                                    </div>\n' +
+                '                                    <div class="flex-fill">\n' +
+                '                                    </div>\n' +
+                '                                </div>\n' +
+                '                            </div>';
+            msgArea.appendChild(newMsg);
+        }
+
+
+        //메세지 보내기 버튼 눌렀을 떄..
+        function sendMsg() {
+
+            const csrfToken = document.querySelector('input[name="_csrf"]').value;
+
+            let content=document.querySelector('.content').value;
+            var talkMsg={
+                "type" : "TALK",
+                "roomId":roomId,
+                "sender":username,
+                "msg":content};
+
+            fetch('/message/create',
+                {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken
+                    },
+                    body: JSON.stringify(talkMsg)
+                })
+                .then(response =>{
+                    return response.json()
+                })
+                .then(data => {
+
+                })
+                .catch(error => console.error('데이터를 받지 못했습니다.', error));
+
+            socket.send(JSON.stringify(talkMsg));
+        }
+
+        function quit(){
+
+            var quitMsg={
+                "type" : "QUIT",
+                "roomId": roomId,
+                "sender":username};
+            socket.send(JSON.stringify(quitMsg));
+            socket.close();
+            location.href="/chat/chatList";
+        }
+
+        window.addEventListener('beforeunload', function (e) {
+            quit();
+        });
+    </script>
 </div>
 </html>

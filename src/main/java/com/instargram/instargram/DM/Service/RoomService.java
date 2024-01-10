@@ -116,4 +116,14 @@ public class RoomService {
     {
         return messageMemberMapService.getList(getRoom(id));
     }
+
+    public void readMessageState(Map<String, Object> quitMsg)
+    {
+        List<Message_Member_Map> map = getList(Long.valueOf(quitMsg.get("roomId").toString()));
+
+        for(Message_Member_Map message : map)
+        {
+
+        }
+    }
 }

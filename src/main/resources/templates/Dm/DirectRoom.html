@@ -41,6 +41,8 @@
         var roomId = document.getElementById('room-id').value;
         var username = document.getElementById('loginUser-username').value;
         let msgArea = document.querySelector('.msgArea');
+        var connectMember = [];
+
         function enterRoom(socket){
 
             var enterMsg=
@@ -55,12 +57,12 @@
         let socket = new WebSocket("ws://localhost:8888/ws/chat");
 
         socket.onopen = function (e) {
-
+            debugger;
             console.log('open server!')
             enterRoom(socket);
         };
-        socket.onclose=function(e){
 
+        socket.onclose=function(e){
             console.log('disconnet');
         }
 
@@ -71,6 +73,7 @@
 
         //메세지 수신했을 때 이벤트.
         socket.onmessage = function (e) {
+            debugger;
 
             console.log(e.data);
 
@@ -84,10 +87,67 @@
             {
                 createMessage(data);
             }
+            else if(data.type === 'ENTER' && data.sender !== username)
+            {
+                sendConnectState(socket);
+
+                connectMember.push(data.sender);
+
+                readMessage(data);
+            }
+            else if(data.type === 'CONNECT' && data.sender !== username)
+            {
+                connectMember.push(data.sender);
+            }
+            else if(data.type === 'DISCONNECT' && data.sender !== username)
+            {
+                let index = connectMember.indexOf(data.sender);
+                if (index !== -1) {
+                    connectMember.splice(index, 1);
+                }
+            }
+
+        }
+
+        function sendConnectState(socket)
+        {
+            debugger;
+            var enterMsg=
+                {
+                    "type" : "CONNECT",
+                    "roomId": roomId,
+                    "sender":username,
+                };
+
+            socket.send(JSON.stringify(enterMsg));
+        }
+
+        function readMessage(data)
+        {
+            var readCheck = document.getElementsByClassName('read-check');
+
+            for(var i = 0; i < readCheck.length; i++)
+            {
+                readCheck.item(i).textContent = data.sender + '님이 확인함';
+            }
         }
 
         function createMineMessage(data)
         {
+
+            var read = '';
+            for(var i = 0; i < connectMember.length; i++) {
+                read += connectMember[i] + '님';
+                if (i !== connectMember.length - 1)
+                {
+                    read += ',';
+                }
+                else
+                {
+                    read +='이 읽음';
+                }
+            }
+
             let newMsg = document.createElement('div');
             newMsg.innerHTML =
                 '                           <div class="p-4">\n' +
@@ -101,7 +161,7 @@
                 '                                            </div>\n' +
                 '                                        </div>\n' +
                 '                                        <div class="read-check my-2 text-end">\n' +
-                '                                            읽음\n' +
+                                                            read+
                 '                                        </div>\n' +
                 '                                    </div>\n' +
                 '                                </div>\n' +
@@ -116,12 +176,12 @@
 
             var members = [[${nowRoomDTO.members}]];
             var imgSrc = '';
-            var img  = members.get(data.sender).image;
+            var img  = members[data.sender].image;
             if(img === null) {
                 imgSrc = 'src="/files/designImg/noneuser.png"\n';
             }
             else {
-                imgSrc = 'th:src="@{|/resources/'+img.name+'}|}"\n';
+                imgSrc = 'src="/resources/'+img.name+'"\n';
             }
             newMsg.innerHTML =
                 '                            <div class="p-4">\n' +
@@ -129,16 +189,18 @@
                                                     data.sender +
                 '                                </div>\n' +
                 '                                <div class="d-flex align-items-center my-2">\n' +
-                '                                    <div style="position: relative; width: 3rem; height: 3rem;">\n' +
-                '                                        <img ' + imgSrc+
-                '                                             class="shadow-sm rounded-circle text-center"\n' +
-                '                                             style="position: absolute; top: 0; left: 0; transform: translate(50,50); width: 100%; height: 100%; object-fit: cover; margin: auto">\n' +
-                '                                    </div>\n' +
-                '                                    <div class="mx-3 rounded-5 bg-danger p-2 px-3">\n' +
+                '                                   <a href="/member/page/' +data.sender + '">\n' +
+                '                                       <div style="position: relative; width: 3rem; height: 3rem;">\n' +
+                '                                           <img ' + imgSrc+
+                '                                               class="shadow-sm rounded-circle text-center"\n' +
+                '                                               style="position: absolute; top: 0; left: 0; transform: translate(50,50); width: 100%; height: 100%; object-fit: cover; margin: auto">\n' +
+                '                                       </div>\n' +
+                '                                   </a>\n' +
+                '                                   <div class="mx-3 rounded-5 p-2 px-3" style="background: #b7b7b7">\n' +
                                                         data.msg +
-                '                                    </div>\n' +
-                '                                    <div class="flex-fill">\n' +
-                '                                    </div>\n' +
+                '                                   </div>\n' +
+                '                                   <div class="flex-fill">\n' +
+                '                                   </div>\n' +
                 '                                </div>\n' +
                 '                            </div>';
             msgArea.appendChild(newMsg);
@@ -178,14 +240,47 @@
         }
 
         function quit(){
+            sendDisconnectState(socket);
+
+            const csrfToken = document.querySelector('input[name="_csrf"]').value;
 
             var quitMsg={
                 "type" : "QUIT",
                 "roomId": roomId,
                 "sender":username};
+
+            fetch('/room/quit',
+                {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken
+                    },
+                    body: JSON.stringify(quitMsg)
+                })
+                .then(response =>{
+                    return response.json()
+                })
+                .then(data => {
+
+                })
+                .catch(error => console.error('데이터를 받지 못했습니다.', error));
+
             socket.send(JSON.stringify(quitMsg));
             socket.close();
             location.href="/chat/chatList";
+        }
+
+        function sendDisconnectState(socket)
+        {
+            var enterMsg=
+                {
+                    "type" : "DISCONNECT",
+                    "roomId": roomId,
+                    "sender":username,
+                };
+
+            socket.send(JSON.stringify(enterMsg));
         }
 
         window.addEventListener('beforeunload', function (e) {

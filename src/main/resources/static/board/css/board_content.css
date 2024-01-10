@@ -7,7 +7,7 @@
 
 .frag-main {
     height: 100vh;
-    background: #6f42c1;
+    /*background: #6f42c1;*/
 }
 
 .content-background {
@@ -19,14 +19,15 @@
     margin-top: 0;
     padding: 8px 0;
     height: 66px;
-    background-color: transparent;
+    /*background-color: transparent;*/
+    background: #6f42c1;
 }
 
 .frag-board {
     margin-top:16px;
     margin-right: 64px;
     padding: 16px 0;
-    background: #86b7fe;
+    /*background: #86b7fe;*/
 }
 
 .frag-profile {

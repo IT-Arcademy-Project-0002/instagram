@@ -262,10 +262,30 @@ public class BoardController {
     }
 
     @GetMapping("/board/update/{id}")
-    public String update(@PathVariable("id") Long id, HttpSession httpSession){
+    public String update(@PathVariable("id") Long id){
         Board board = this.boardService.getBoardById(id);
         FeedDTO updateFeed = this.boardDataMapService.getFeedWithComments(board);
-        httpSession.setAttribute("updateFeed", updateFeed);
-        return "redirect:/main";
+
+        return "Board/board_update";
+    }
+
+    @GetMapping("/board/search/{kw}")
+    public ResponseEntity<Map<String, List<Member>>> memberSearch(@PathVariable("kw") String kw)
+    {
+        Map<String, List<Member>> result = new HashMap<>();
+
+        result.put("result", memberService.searchMemberList(kw));
+
+        return ResponseEntity.ok().body(result);
+    }
+
+    @GetMapping("/board/search/HashTag/{kw}")
+    public ResponseEntity<Map<String, List<HashTag>>> hashTagSearch(@PathVariable("kw") String kw)
+    {
+        Map<String, List<HashTag>> result = new HashMap<>();
+
+        result.put("result", hashTagService.searchHashTagList(kw));
+
+        return ResponseEntity.ok().body(result);
     }
 }

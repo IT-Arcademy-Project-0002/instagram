@@ -103,11 +103,17 @@
                                     <p class="textCount p-0 m-0" style="font-size: smaller;">0자</p>
                                     <p class="textTotal p-0 m-0" style="font-size: smaller;">/2200자</p>
                                 </div>
-                                <div class="input-group">
-                                    <input type="text" class="form-control my-2" size="15" name="TagMember" id="TagMember" placeholder="@언급 추가해 주세요..." style="border:none; resize: none;">
+                                <div class="input-group d-flex flex-column">
+                                    <div class="d-flex align-items-center">
+                                        <input type="text" class="form-control my-2 flex-grow-1" name="TagMember" id="TagMember" placeholder="@언급 추가해 주세요..." style="border:none; resize: none;">
+                                    </div>
+                                    <div id="TagMember-container"></div>
                                 </div>
-                                <div class="input-group">
-                                    <input type="text" class="form-control my-2" size="15" name="hashTag" id="hashTag" placeholder="#해시태그를 입력하세요..." style="border:none; resize: none;">
+                                <div class="input-group d-flex flex-column">
+                                    <div class="d-flex align-items-center">
+                                        <input type="text" class="form-control my-2" size="14" name="hashTag" id="hashTag" placeholder="#해시태그를 입력하세요..." style="border:none; resize: none;">
+                                    </div>
+                                    <div id="hashTag-container"></div>
                                 </div>
                                 <div class="input-group">
                                     <input type="text" class="form-control" placeholder="위치 추가"

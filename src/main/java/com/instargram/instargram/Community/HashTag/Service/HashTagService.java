@@ -4,6 +4,7 @@ import com.instargram.instargram.Community.Board.Model.Entity.Board;
 import com.instargram.instargram.Community.HashTag.Model.Entity.HashTag;
 import com.instargram.instargram.Community.HashTag.Model.Repository.HashTagRepository;
 import com.instargram.instargram.DataNotFoundException;
+import com.instargram.instargram.Member.Model.Entity.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -45,5 +46,15 @@ public class HashTagService {
     public HashTag gethashTag(String hashTagName) {
         HashTag hashTag = this.hashTagRepository.findByName(hashTagName);
         return hashTag;
+    }
+
+    public List<HashTag> searchHashTagList(String kw) {
+        List<HashTag> results = new ArrayList<>();
+        results.addAll(searchMemberByUsername(kw));
+        return results;
+    }
+    public List<HashTag> searchMemberByUsername(String kw)
+    {
+        return this.hashTagRepository.findByNameContaining(kw);
     }
 }

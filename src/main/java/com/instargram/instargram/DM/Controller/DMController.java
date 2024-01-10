@@ -3,6 +3,7 @@ package com.instargram.instargram.DM.Controller;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.instargram.instargram.DM.Model.DTO.ChattingMemberDTO;
+import com.instargram.instargram.DM.Model.DTO.RoomDTO;
 import com.instargram.instargram.DM.Model.Entity.Message.Message_Member_Map;
 import com.instargram.instargram.DM.Model.Entity.Room.Room;
 import com.instargram.instargram.DM.Service.RoomService;
@@ -87,13 +88,13 @@ public class DMController {
     @GetMapping("/t/{id}")
     public String room(@PathVariable("id")Long id, Model model, Principal principal)
     {
-        Room room = roomService.getRoom(id);
-        List<Message_Member_Map> messageList = roomService.getList(room);
+        RoomDTO roomDTO = roomService.getRoomDTO(id);
+        List<Message_Member_Map> messageList = roomService.getList(id);
 
         model.addAttribute("messageList", messageList);
         List<Room> roomList = roomService.findByMember(memberService.getMember(principal.getName()));
         model.addAttribute("roomList",roomList);
-        model.addAttribute("nowRoom",room);
+        model.addAttribute("nowRoomDTO",roomDTO);
         return "Dm/DirectRoom";
     }
 }

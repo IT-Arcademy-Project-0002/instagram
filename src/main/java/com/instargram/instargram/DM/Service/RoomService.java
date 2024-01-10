@@ -1,5 +1,6 @@
 package com.instargram.instargram.DM.Service;
 
+import com.instargram.instargram.DM.Model.DTO.RoomDTO;
 import com.instargram.instargram.DM.Model.Entity.Message.Message_Member_Map;
 import com.instargram.instargram.DM.Model.Entity.Room.Room;
 import com.instargram.instargram.DM.Model.Entity.Room.Room_Member_Map;
@@ -9,8 +10,11 @@ import com.instargram.instargram.Member.Model.Entity.Member;
 import lombok.Builder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @Builder
@@ -30,6 +34,7 @@ public class RoomService {
         }
 
         room.setName(name);
+        room.setCreateDate(LocalDateTime.now());
 
         roomRepository.save(room);
 
@@ -90,8 +95,25 @@ public class RoomService {
         return roomRepository.findById(id).orElse(null);
     }
 
-    public List<Message_Member_Map> getList(Room room)
+    public RoomDTO getRoomDTO(Long id)
     {
-        return messageMemberMapService.getList(room);
+        Room room = getRoom(id);
+        return new RoomDTO(room, getMemberMapList(room));
+    }
+
+    private Map<String, Member> getMemberMapList(Room room) {
+        Map<String, Member> memberMap = new HashMap<>();
+
+        for (Room_Member_Map roomMemberMap : roomMemberMapRepository.findByRoom(room)) {
+            Member member = roomMemberMap.getMember();
+            memberMap.put(member.getUsername(), member);
+        }
+
+        return memberMap;
+    }
+
+    public List<Message_Member_Map> getList(Long id)
+    {
+        return messageMemberMapService.getList(getRoom(id));
     }
 }

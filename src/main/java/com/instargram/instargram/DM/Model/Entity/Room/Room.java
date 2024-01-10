@@ -7,6 +7,8 @@ import jakarta.persistence.Id;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @Entity
@@ -19,4 +21,7 @@ public class Room {
 
     // 방 이름
     private String name;
+
+    // 생성날짜
+    private LocalDateTime createDate;
 }

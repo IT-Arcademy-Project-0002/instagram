@@ -6,5 +6,5 @@ import lombok.Setter;
 @Getter
 @Setter
 public class CommentCreateForm {
-    private String CommentContent;
+    private String content;
 }

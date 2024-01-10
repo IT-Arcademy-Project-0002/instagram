@@ -77,11 +77,16 @@ public class NoticeCommentMapService {
             }
         }
 
+        return new Comment();
+    }
+
+    public Recomment getNoticeRecomment(Long noticeId, Integer type) {
+
         if (type == 4) {
 
             Notice_Recomment_Map recommentMap = this.noticeRecommentMapRepository.findByNoticeId(noticeId);
             if (recommentMap != null) {
-                return recommentMap.getRecomment().getComment();
+                return recommentMap.getRecomment();
             }
         }
 
@@ -89,10 +94,10 @@ public class NoticeCommentMapService {
 
             Notice_Recomment_Like_Map recommentLikeMap = this.noticeRecommentLikeMapRepository.findByNoticeId(noticeId);
             if (recommentLikeMap != null) {
-                return recommentLikeMap.getRecommentLike().getRecomment().getComment();
+                return recommentLikeMap.getRecommentLike().getRecomment();
             }
         }
 
-        return new Comment();
+        return new Recomment();
     }
 }

@@ -24,5 +24,6 @@ public class Notice_Board_Like_Member_Map {
 
     @ManyToOne
     @JoinColumn(name = "board_like_member_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private BoardLikeMemberMap boardLikeMember;
 }

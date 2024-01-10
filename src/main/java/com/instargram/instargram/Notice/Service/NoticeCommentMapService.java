@@ -3,11 +3,13 @@ package com.instargram.instargram.Notice.Service;
 import com.instargram.instargram.Community.Comment.Model.Entity.Comment;
 import com.instargram.instargram.Community.Comment.Model.Entity.Comment_Like_Map;
 import com.instargram.instargram.Community.Comment.Model.Repository.CommentRepository;
-import com.instargram.instargram.Notice.Model.Entity.Notice;
-import com.instargram.instargram.Notice.Model.Entity.Notice_Comment_Like_Map;
-import com.instargram.instargram.Notice.Model.Entity.Notice_Comment_Map;
+import com.instargram.instargram.Community.Recomment.Model.Entity.ReComment_Like_Map;
+import com.instargram.instargram.Community.Recomment.Model.Entity.Recomment;
+import com.instargram.instargram.Notice.Model.Entity.*;
 import com.instargram.instargram.Notice.Model.Repository.Notice_Comment_MapRepository;
 import com.instargram.instargram.Notice.Model.Repository.Notice_Comment_Like_MapRepository;
+import com.instargram.instargram.Notice.Model.Repository.Notice_Recomment_Like_MapRepository;
+import com.instargram.instargram.Notice.Model.Repository.Notice_Recomment_MapRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,8 +18,9 @@ import org.springframework.stereotype.Service;
 public class NoticeCommentMapService {
 
     private final Notice_Comment_MapRepository noticeCommentMapRepository;
-    private final CommentRepository commentRepository;
+    private final Notice_Recomment_MapRepository noticeRecommentMapRepository;
     private final Notice_Comment_Like_MapRepository noticeCommentLikeMapRepository;
+    private final Notice_Recomment_Like_MapRepository noticeRecommentLikeMapRepository;
 
     public void createNoticeComment(Comment comment, Notice notice) {
 
@@ -37,6 +40,25 @@ public class NoticeCommentMapService {
 
     }
 
+    public void createNoticeRecomment(Recomment recomment, Notice notice) {
+
+        Notice_Recomment_Map noticeRecommentMap = new Notice_Recomment_Map();
+        noticeRecommentMap.setRecomment(recomment);
+        noticeRecommentMap.setNotice(notice);
+        this.noticeRecommentMapRepository.save(noticeRecommentMap);
+
+    }
+
+    public void createNoticeRecommentLike(ReComment_Like_Map recommentLikeMap, Notice notice) {
+
+        Notice_Recomment_Like_Map noticeRecommentLikeMap = new Notice_Recomment_Like_Map();
+        noticeRecommentLikeMap.setRecommentLike(recommentLikeMap);
+        noticeRecommentLikeMap.setNotice(notice);
+        this.noticeRecommentLikeMapRepository.save(noticeRecommentLikeMap);
+
+    }
+
+
     public Comment getNoticeComment(Long noticeId, Integer type) {
 
         if (type == 2) {
@@ -52,6 +74,22 @@ public class NoticeCommentMapService {
             Notice_Comment_Like_Map commentLikeMap = this.noticeCommentLikeMapRepository.findByNoticeId(noticeId);
             if (commentLikeMap != null) {
                 return commentLikeMap.getCommentLike().getComment();
+            }
+        }
+
+        if (type == 4) {
+
+            Notice_Recomment_Map recommentMap = this.noticeRecommentMapRepository.findByNoticeId(noticeId);
+            if (recommentMap != null) {
+                return recommentMap.getRecomment().getComment();
+            }
+        }
+
+        if (type == 10) {
+
+            Notice_Recomment_Like_Map recommentLikeMap = this.noticeRecommentLikeMapRepository.findByNoticeId(noticeId);
+            if (recommentLikeMap != null) {
+                return recommentLikeMap.getRecommentLike().getRecomment().getComment();
             }
         }
 

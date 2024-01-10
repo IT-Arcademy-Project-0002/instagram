@@ -68,4 +68,7 @@ public class Notice {
 
     @OneToMany(mappedBy = "notice", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private List<Notice_Recomment_Map> noticeRecommentMap;
+
+    @OneToMany(mappedBy = "notice", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    private List<Notice_Recomment_Like_Map> noticeRecommentLikeMap;
 }

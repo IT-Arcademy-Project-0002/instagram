@@ -3,6 +3,7 @@ package com.instargram.instargram.Notice.Service;
 import com.instargram.instargram.Community.Board.Model.Entity.Board;
 import com.instargram.instargram.Community.Board.Model.Entity.BoardLikeMemberMap;
 import com.instargram.instargram.Community.Board.Model.Entity.Board_Data_Map;
+import com.instargram.instargram.Community.Board.Model.Entity.Board_TagMember_Map;
 import com.instargram.instargram.Community.Board.Model.Repository.Board_Data_MapRepository;
 import com.instargram.instargram.Community.Comment.Model.Entity.Comment;
 import com.instargram.instargram.Data.Image.ImageService;
@@ -25,6 +26,8 @@ public class NoticeBoardMapService {
     private final Board_Data_MapRepository boardDataMapRepository;
     private final Notice_Board_Like_Member_MapRepository noticeBoardLikeMemberMapRepository;
     private final Notice_Board_TagMember_MapRepository noticeBoardTagMemberMapRepository;
+
+
 
     public String getNoticeBoardImage(Long noticeId, Integer type) {
 
@@ -54,8 +57,7 @@ public class NoticeBoardMapService {
             }
         }
 
-        if (type == 2 || type == 3) {
-
+        if (type == 2 || type == 3 || type == 4) {
             for (Board_Data_Map dataMap : dataMapsForComment) {
                 if (dataMap.getDataType() != null && dataMap.getDataType() == 2) {
                 Long id = dataMap.getDataId();
@@ -67,8 +69,6 @@ public class NoticeBoardMapService {
 
 
         if (type == 9) {
-
-
             Notice_Board_TagMember_Map noticeBoardTagMemberMap = noticeBoardTagMemberMapRepository.findByNoticeId(noticeId);
 
             if (noticeBoardTagMemberMap  != null) {
@@ -98,14 +98,12 @@ public class NoticeBoardMapService {
         this.noticeBoardLikeMemberMapRepository.save(noticeBoardLikeMap);
 
     }
+    public void createNoticeBoardTagMember(Board_TagMember_Map boardTagMemberMap, Notice notice) {
 
-//    public void deleteNoticeBoardLikeMember(BoardLikeMemberMap map) {
-//
-//        this.noticeBoardLikeMemberMapRepository.delete(map.getNoticeBoardLikeMap());
-//
-//    }
-
-    public void createNoticeTagMember() {
+        Notice_Board_TagMember_Map noticeBoardTagMemberMap = new Notice_Board_TagMember_Map();
+        noticeBoardTagMemberMap.setBoardTagMember(boardTagMemberMap);
+        noticeBoardTagMemberMap.setNotice(notice);
+        this.noticeBoardTagMemberMapRepository.save(noticeBoardTagMemberMap);
 
     }
 

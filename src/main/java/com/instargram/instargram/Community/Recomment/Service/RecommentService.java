@@ -26,7 +26,8 @@ public class RecommentService {
         recomment.setMember(member);
         recomment.setContent(content);
         recomment.setCreateDate(LocalDateTime.now());
-        return this.recommentRepository.save(recomment);
+        this.recommentRepository.save(recomment);
+        return recomment;
     }
 
     public Recomment getRecommentById(Long id) {

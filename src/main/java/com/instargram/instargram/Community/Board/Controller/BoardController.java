@@ -21,7 +21,6 @@ import com.instargram.instargram.Member.Model.Entity.Member;
 import com.instargram.instargram.Member.Service.MemberService;
 import com.instargram.instargram.Notice.Model.Entity.Notice;
 import com.instargram.instargram.Notice.Service.NoticeBoardMapService;
-import com.instargram.instargram.Notice.Service.NoticeBoardTagMemberMapService;
 import com.instargram.instargram.Notice.Service.NoticeService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -54,7 +53,6 @@ public class BoardController {
     private final NoticeBoardMapService noticeBoardMapService;
     private final HashTagService hashTagService;
     private final BoardHashTagMapService boardHashTagMapService;
-    private final NoticeBoardTagMemberMapService noticeBoardTagMemberMapService;
 
     // main
     @GetMapping("/main")
@@ -121,7 +119,7 @@ public class BoardController {
             Member tagMember = this.memberService.getMember(memberMap);
             Board_TagMember_Map boardTagMemberMap = this.boardTagMemberMapService.create(board, tagMember);
             Notice notice = this.noticeService.createNotice(Enum_Data.BOARD_TAGMEMBER.getNumber(), member, tagMember);
-            noticeBoardTagMemberMapService.createNoticeBoardTagMember(boardTagMemberMap, notice);
+            noticeBoardMapService.createNoticeBoardTagMember(boardTagMemberMap, notice);
         }
 
         // file upload

@@ -21,7 +21,8 @@ public class Notice_Comment_Map {
     @JoinColumn(name = "notice_id")
     private Notice notice;
 
-    @ManyToOne(cascade = CascadeType.REMOVE)
+    @ManyToOne
     @JoinColumn(name = "comment_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Comment comment;
 }

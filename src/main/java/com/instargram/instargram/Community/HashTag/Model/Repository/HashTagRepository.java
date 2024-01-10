@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface HashTagRepository extends JpaRepository<HashTag, Long> {
     HashTag findByName(String hashTagName);
+
+    List<HashTag> findByNameContaining(String kw);
 }

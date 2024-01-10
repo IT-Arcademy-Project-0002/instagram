@@ -12,7 +12,7 @@ public class DMDTO {
 
     // 메시지 타입 : 입장, 채팅, 나감
     public enum MessageType {
-        ENTER, TALK,QUIT
+        ENTER, TALK, QUIT
     }
     private MessageType type; // 메시지 타입
     private Long roomId; // 방번호

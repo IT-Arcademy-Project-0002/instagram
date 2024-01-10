@@ -9,7 +9,7 @@
             <div class="col-3 overflow-scroll" style="width: 398px;">
                 <ul>
                     <li th:each="room:${roomList}">
-                        <a th:href="@{|/direct/${room.id}|}"
+                        <a th:href="@{|/direct/t/${room.id}|}"
                            th:text="${room.name}"></a>
                     </li>
                 </ul>

@@ -12,11 +12,12 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class Recomment_Like_MapService {
     private final ReComment_Like_MapRepository reCommentLikeMapRepository;
-    public void create(Recomment recomment, Member member) {
+    public ReComment_Like_Map create(Recomment recomment, Member member) {
         ReComment_Like_Map reCommentLikeMap = new ReComment_Like_Map();
         reCommentLikeMap.setRecomment(recomment);
         reCommentLikeMap.setMember(member);
         this.reCommentLikeMapRepository.save(reCommentLikeMap);
+        return reCommentLikeMap;
     }
 
     public void delete(ReComment_Like_Map map) {

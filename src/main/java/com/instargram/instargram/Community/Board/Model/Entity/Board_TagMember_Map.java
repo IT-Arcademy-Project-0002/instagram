@@ -24,13 +24,12 @@ public class Board_TagMember_Map {
     // 게시글
     @ManyToOne
     @JoinColumn(name="board_id")
-    @OnDelete(action = OnDeleteAction.CASCADE)
     private Board board;
 
     // 언급된 회원
     @ManyToOne
-    @JoinColumn(name="tag_member_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinColumn(name="tag_member_id")
     private Member tagMember;
 
     @OneToMany(mappedBy = "boardTagMember", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)

@@ -61,6 +61,19 @@
                 </div>
             </div>
             <div th:if="${notice.type == 4}">
+                <div class="d-flex">
+                    <div class="ms-2" style="width: 244px">
+                        <input type="hidden" th:value="${notice.requestMember.username}">
+                        <span th:text="@{|${notice.requestMember.username}님이 댓글을 남겼습니다.|}"></span>
+                        <span th:text="@{|${notice.recommentContent}|}"></span>
+                        <span th:text="@{|${notice.createDate}|}" style="color: grey;"></span>
+                    </div>
+                    <div class="ms-2">
+                        <img th:src="@{|${notice.boardMainImage}|}"
+                             class="text-center"
+                             style="position: relative; top: 0; left: 0; transform: translate(50,50); width: 44px; height: 44px; object-fit: cover; margin: auto">
+                    </div>
+                </div>
             </div>
             <div th:if="${notice.type == 8}">
                 <a th:href="@{'/member/page/' + ${notice.requestMember.username}}">
@@ -106,6 +119,21 @@
                     <div class="ms-2" style="width: 244px">
                         <input type="hidden" th:value="${notice.requestMember.username}">
                         <span th:text="@{|${notice.requestMember.username}님이 회원님을 언급했습니다.|}"></span>
+                        <span th:text="@{|${notice.createDate}|}" style="color: grey;"></span>
+                    </div>
+                    <div class="ms-2">
+                        <img th:src="@{|${notice.boardMainImage}|}"
+                             class="text-center"
+                             style="position: relative; top: 0; left: 0; transform: translate(50,50); width: 44px; height: 44px; object-fit: cover; margin: auto">
+                    </div>
+                </div>
+            </div>
+            <div th:if="${notice.type == 10}">
+                <div class="d-flex">
+                    <div class="ms-2" style="width: 244px">
+                        <input type="hidden" th:value="${notice.requestMember.username}">
+                        <span th:text="@{|${notice.requestMember.username}님이 회원님의 댓글을 좋아합니다: |}"></span>
+                        <span th:text="@{|${notice.recommentContent}|}"></span>
                         <span th:text="@{|${notice.createDate}|}" style="color: grey;"></span>
                     </div>
                     <div class="ms-2">

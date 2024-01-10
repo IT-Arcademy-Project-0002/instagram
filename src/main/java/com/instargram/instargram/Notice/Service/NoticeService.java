@@ -56,7 +56,7 @@ public class NoticeService {
         {
             NoticeDTO noticeDTO = new NoticeDTO();
 
-            // 공통 객체 + 팔로우 요청 : 8
+            // 공통 객체 : 모든 경우(ALL) + 팔로우 요청(8)
             noticeDTO.setRequestMember(notice.getRequestMember());
             noticeDTO.setType(notice.getType());
             noticeDTO.setId(notice.getId());
@@ -64,16 +64,14 @@ public class NoticeService {
             noticeDTO.setFollower(followMapService.isFollower(loginUser, notice.getRequestMember()));
             noticeDTO.setFollow(followMapService.isFollow(loginUser, notice.getRequestMember()));
 
-
-            //  (notice 타입을 식별자로 사용하여 코드 간소화 진행)
-
-            // 보드 이미지 : 게시글 좋아요(1), 게시글 댓글(2), 댓글 좋아요(3), 게시글 멤버태그(9)
+            // 보드 이미지 : 게시글 좋아요(1), 게시글 댓글(2), 댓글 좋아요(3), 댓글 대댓글(4), 게시글 멤버태그(9), 댓글 대댓글 좋아요(10)
             noticeDTO.setBoardMainImage(noticeBoardMapService.getNoticeBoardImage(notice.getId(), notice.getType()));
 
             // 댓글 내용 : 게시글 댓글(2), 댓글 좋아요(3)
             noticeDTO.setCommentContent(noticeCommentMapService.getNoticeComment(notice.getId(), notice.getType()).getContent());
 
-            // 댓글 대댓글 : 4
+            // 대댓글 내용 : 댓글 대댓글(4), 댓글 대댓글 좋아요(10)
+            noticeDTO.setRecommentContent(noticeCommentMapService.getNoticeRecomment(notice.getId(), notice.getType()).getContent());
 
             // 디엠 왔을 때 : 5
 

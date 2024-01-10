@@ -26,7 +26,9 @@ public enum Enum_Data {
     //    팔로우 요청 : 8
     FOLLOW_REQUEST(8),
     //     게시글 멤버태그 : 9
-    BOARD_TAGMEMBER(9);
+    BOARD_TAGMEMBER(9),
+    //     댓글 대댓글 좋아요 : 10
+    RECOMMENT_LIKE(10);
 
     Enum_Data(Integer number) {
         this.number = number;

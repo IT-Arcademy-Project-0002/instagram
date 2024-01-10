@@ -11,6 +11,8 @@ import com.instargram.instargram.Enum_Data;
 import com.instargram.instargram.Member.Model.Entity.Member;
 import com.instargram.instargram.Member.Service.MemberService;
 //import com.instargram.instargram.Notice.Service.NoticeService;
+import com.instargram.instargram.Notice.Model.Entity.Notice;
+import com.instargram.instargram.Notice.Service.NoticeCommentMapService;
 import com.instargram.instargram.Notice.Service.NoticeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -29,6 +31,7 @@ public class RecommentController {
     private final RecommentService recommentService;
     private final Recomment_Like_MapService recommentLikeMapService;
     private final NoticeService noticeService;
+    private final NoticeCommentMapService noticeCommentMapService;
 
     @PostMapping("/create/{id}")
     public String create(@PathVariable("id") Long id, RecommentCreateForm recommentCreateForm, BindingResult bindingResult, Principal principal){
@@ -38,8 +41,9 @@ public class RecommentController {
         Member member = this.memberService.getMember(principal.getName());
         Comment comment = this.commentService.getCommentById(id);
         if (member != null && comment != null) {
-            recommentService.create(member, comment, recommentCreateForm.getContent());
-            this.noticeService.createNotice(Enum_Data.COMMENT_RECOMMENT.getNumber(), member, comment.getMember());
+            Recomment recomment = recommentService.create(member, comment, recommentCreateForm.getContent());
+            Notice notice = this.noticeService.createNotice(Enum_Data.COMMENT_RECOMMENT.getNumber(), member, comment.getMember());
+            noticeCommentMapService.createNoticeRecomment(recomment, notice);
         }
         return "redirect:/main";
     }
@@ -51,7 +55,9 @@ public class RecommentController {
 
         ReComment_Like_Map isRecommentMemberLiked = this.recommentLikeMapService.exists(recomment, member);
         if (isRecommentMemberLiked == null) {
-            this.recommentLikeMapService.create(recomment, member);
+            ReComment_Like_Map reCommentLikeMap = this.recommentLikeMapService.create(recomment, member);
+            Notice notice = this.noticeService.createNotice(Enum_Data.RECOMMENT_LIKE.getNumber(), member,recomment.getMember());
+            noticeCommentMapService.createNoticeRecommentLike(reCommentLikeMap, notice);
         }else{
             this.recommentLikeMapService.delete(isRecommentMemberLiked);
         }

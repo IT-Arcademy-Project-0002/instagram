@@ -4,8 +4,8 @@
     <title>Hello Vector Tiles!</title>
 
     <!-- 이전 Mapbox GL JS v1은 무료 개방형 BSD3 라이센스로 계속 사용할 수 있지만 가장 중요한 보안 및 버그 수정을 제외하고는 개선되지 않습니다 -->
-    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.47.0/mapbox-gl.js'></script>
-    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.47.0/mapbox-gl.css' rel='stylesheet' />
+    <script th:src='@{/location/js/mapbox_gl.js}'></script>
+    <link rel="stylesheet" type="text/css" th:href="@{/location/css/mapbox_gl.css}">
     <link rel="stylesheet" type="text/css" th:href="@{/location/css/map_content.css}">
     <link rel="stylesheet" type="text/css" th:href="@{/location/css/location_content.css}">
 

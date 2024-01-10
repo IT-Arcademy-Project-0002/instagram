@@ -1,6 +1,6 @@
 .main-content
 {
-    margin-left: 350px;
+    margin-left: 335px;
     width: 100%;
     min-height:100vh;
     height:100vh;
@@ -26,4 +26,53 @@
 {
     background: rgba(152,152,152,0.2);
     padding: 8px 8px;
+}
+
+/* DaHee css */
+
+.userPage_layout {
+    padding: 30px 20px 0;
+    margin: 0 auto 30px;
+    /*margin-bottom: 0;*/
+    width: 950px;
+    max-width: 950px;
+    height: 100%;
+}
+
+.userProfile_img {
+    flex-grow: 2;
+    height: 100%;
+    margin-right: 30px;
+}
+
+.userProfile_line {
+    border: 1px solid #dbdbdb;
+}
+
+.userInfo {
+    flex-grow: 2;
+}
+
+.userInfo_header {
+    min-height: 40px;
+    height: 40px;
+    margin-bottom: 20px;
+}
+
+.userID {
+    line-height: 25px;
+    font-weight: 400;
+    font-size: 20px;
+    padding-top: 5px;
+}
+
+.userInfo_btn {
+    background-color: #efefef;
+    height: 32px;
+    border: 8px;
+    font-size: 14px;
+    font-weight: bold;
+}
+.userInfo_btn:hover {
+    background-color: #dbdbdb;
 }

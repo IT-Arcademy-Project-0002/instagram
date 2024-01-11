@@ -15,7 +15,7 @@ function ModifyBoard(id) {
             let imagePreviewArray = [];
             let videoPreviewArray = [];
             let filesArray = data.updateFeed.fileDTOS;
-            console.log('--->' + filesArray);
+            console.log(filesArray);
             var file = document.getElementById('file-container');
             for (let i = 0; i < filesArray.length; i++) {
                 var carouselItem = document.createElement("div");
@@ -38,7 +38,7 @@ function ModifyBoard(id) {
                 img.style.height = "100%";
                 img.style.objectFit = "cover";
                 img.style.margin = "auto";
-                img.src = filesArray[i].name;
+                img.src = "/files/img/" + filesArray[i].name;
 
                 console.log(img);
                 imagePreviewArray.push(decodeURIComponent(img.src));

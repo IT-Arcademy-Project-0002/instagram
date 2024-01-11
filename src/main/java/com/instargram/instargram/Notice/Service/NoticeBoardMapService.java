@@ -5,9 +5,11 @@ import com.instargram.instargram.Community.Board.Model.Entity.BoardLikeMemberMap
 import com.instargram.instargram.Community.Board.Model.Entity.Board_Data_Map;
 import com.instargram.instargram.Community.Board.Model.Entity.Board_TagMember_Map;
 import com.instargram.instargram.Community.Board.Model.Repository.Board_Data_MapRepository;
+import com.instargram.instargram.Community.Board.Model.Repository.Board_TagMember_MapRepository;
 import com.instargram.instargram.Community.Comment.Model.Entity.Comment;
 import com.instargram.instargram.Community.Recomment.Model.Entity.Recomment;
 import com.instargram.instargram.Data.Image.ImageService;
+import com.instargram.instargram.Member.Model.Entity.Member;
 import com.instargram.instargram.Notice.Model.Entity.Notice;
 import com.instargram.instargram.Notice.Model.Entity.Notice_Board_Like_Member_Map;
 import com.instargram.instargram.Notice.Model.Entity.Notice_Board_TagMember_Map;
@@ -16,6 +18,7 @@ import com.instargram.instargram.Notice.Model.Repository.Notice_Board_TagMember_
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -27,7 +30,36 @@ public class NoticeBoardMapService {
     private final Board_Data_MapRepository boardDataMapRepository;
     private final Notice_Board_Like_Member_MapRepository noticeBoardLikeMemberMapRepository;
     private final Notice_Board_TagMember_MapRepository noticeBoardTagMemberMapRepository;
+    private final Board_TagMember_MapRepository boardTagMemberMapRepository;
 
+
+
+    public String getBoardContent(Long noticeId, Integer type) {
+
+        String boardContent = " ";
+
+        if (type == 9) {
+            // 태그멤버로부터 보드를 찾는 비즈니스 로직
+            Notice_Board_TagMember_Map noticeBoardTagMemberMap = noticeBoardTagMemberMapRepository.findByNoticeId(noticeId);
+
+            if (noticeBoardTagMemberMap != null) {
+                Board board = noticeBoardTagMemberMap.getBoardTagMember().getBoard();
+                List<Board_TagMember_Map> boardTagMemberMapList = boardTagMemberMapRepository.findByBoardId(board.getId());
+
+                // boardTagMemberMapList에는 언급된 회원들의 리스트 배열이 있고 그 이름을 모두 가져와서 boardContent에 추가
+                for (Board_TagMember_Map boardTagMemberMap : boardTagMemberMapList) {
+                    boardContent += "@" + boardTagMemberMap.getTagMember().getUsername() + " ";
+                }
+
+                // 게시글 내용 가져오기
+                boardContent += board.getContent() + " ";
+
+                return boardContent;
+            }
+        }
+
+        return boardContent;
+    }
 
 
     public String getNoticeBoardImage(Long noticeId, Integer type) {
@@ -37,7 +69,7 @@ public class NoticeBoardMapService {
 
         if (type == 1) {
 
-            // 보드 자체를 알고 있을때의 로직 (null 예외 관련 추후 refactoring시 개선할 것)
+            // 보드 자체를 알고 있을때의 비즈니스 로직
             Notice_Board_Like_Member_Map noticeBoardLikeMemberMap = noticeBoardLikeMemberMapRepository.findByNoticeId(noticeId);
 
             if (noticeBoardLikeMemberMap != null) {
@@ -88,6 +120,7 @@ public class NoticeBoardMapService {
 
         if (type == 9) {
 
+            // 태그멤버로부터 보드를 찾는 비즈니스 로직
             Notice_Board_TagMember_Map noticeBoardTagMemberMap = noticeBoardTagMemberMapRepository.findByNoticeId(noticeId);
 
             if (noticeBoardTagMemberMap  != null) {

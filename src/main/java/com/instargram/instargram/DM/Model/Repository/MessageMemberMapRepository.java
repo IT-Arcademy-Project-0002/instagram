@@ -9,4 +9,6 @@ import java.util.List;
 public interface MessageMemberMapRepository extends JpaRepository<Message_Member_Map, Long> {
 
     List<Message_Member_Map> findAllByRoomOrderByCreateDateAsc(Room room);
+
+    List<Message_Member_Map> findByRoomAndMember_UsernameNotAndSeeMemberNotContainingOrderByCreateDateAsc(Room room, String username, String name);
 }

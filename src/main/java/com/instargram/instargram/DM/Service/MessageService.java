@@ -14,15 +14,17 @@ import java.util.Map;
 public class MessageService {
 
     private final MessageRepository messageRepository;
-    private final MessageMemberMapService messageMemberMapService;
 
-    public void create(Map<String, Object> msg, Room room)
+    public Message create(Map<String, Object> msg)
     {
         Message message = new Message();
         message.setContent(msg.get("msg").toString());
 
-        messageRepository.save(message);
+        return messageRepository.save(message);
+    }
 
-        messageMemberMapService.create(msg, message, room);
+    public Message getMessage(Long id)
+    {
+        return messageRepository.findById(id).orElse(null);
     }
 }

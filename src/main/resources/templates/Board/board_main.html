@@ -782,6 +782,85 @@
     <!-- Board Detail Modal End -->
 
     <!--Modify Board Modal -->
+    <div class="modal fade" id="ModifyBoardModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+         aria-labelledby="ModifyBoardModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header d-flex justify-content-between">
+                    <button type="button" class="btn btn-link">
+                        <svg viewBox="0 0 24 24" fill="currentColor" width="1em"
+                             height="1em" aria-hidden="true">
+                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                  d="M16.753 4.341a1 1 0 0 0-1.412-.094l-8 7a1 1 0 0 0 0 1.506l8 7a1 1 0 0 0 1.318-1.506L9.518 12l7.14-6.247a1 1 0 0 0 .094-1.412z"></path>
+                        </svg>
+                    </button>
+                    <h1 class="modal-title fs-5" id="Board_Create_ModalLabel2">게시물 수정</h1>
+                    <button type="submit" class="btn btn-link">수정하기</button>
+                </div>
+                <div class="modal-body p-0" style="width: 1138px; height: 800px;">
+                    <div class="d-flex">
+                        <div class="d-flex">
+                            <div style="width: 838px;">
+                                <div id="carouselExampleControlsNoTouching" class="carousel slide"
+                                     data-interval="false">
+                                    <div class="carousel-inner">
+                                        <div id="file-container">
+                                        </div>
+                                    </div>
+                                    <button class="carousel-control-prev" type="button"
+                                            data-bs-target="#carouselExampleControlsNoTouching"
+                                            data-bs-slide="prev">
+                                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                        <span class="visually-hidden">Previous</span>
+                                    </button>
+                                    <button class="carousel-control-next" type="button"
+                                            data-bs-target="#carouselExampleControlsNoTouching"
+                                            data-bs-slide="next">
+                                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                        <span class="visually-hidden">Next</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="d-flex flex-column p-3 modalInfo"
+                             style="width: 300px; overflow-y: auto; height: 800px;">
+                            <div class="d-flex">
+                                <div style="position: relative; width: 2.2rem; height: 2.2rem;">
+                                    <img th:if="${loginMember.Image == null}"
+                                         src="/files/designImg/noneuser.png"
+                                         class="shadow rounded-circle text-center"
+                                         style="position: absolute; top: 0; left: 0; transform: translate(50,50); width: 100%; height: 100%; object-fit: cover; margin: auto">
+                                    <img th:unless="${loginMember.Image == null}"
+                                         th:src="@{|/resources/${loginMember.Image.name}|}"
+                                         class="shadow rounded-circle text-center"
+                                         style="position: absolute; top: 0; left: 0; transform: translate(50,50); width: 100%; height: 100%; object-fit: cover; margin: auto">
+                                </div>
+                                <div class="d-flex justify-content-center align-items-center mx-2"
+                                     style="font-weight: bold; font-size: larger;"
+                                     th:text="${loginMember.username}"></div>
+                            </div>
+                            <textarea class="form-control border-0 mt-3 p-0"
+                                      style="resize: none; height: 200px;" name="content"
+                                      id="modalContent"
+                                      placeholder="문구를 입력하세요..."></textarea>
+                            <div class="textLengthWrap d-flex justify-content-end">
+                                <p class="textCount p-0 m-0" style="font-size: smaller;">0자</p>
+                                <p class="textTotal p-0 m-0" style="font-size: smaller;">/2200자</p>
+                            </div>
+
+                            <div class="input-group d-flex flex-column">
+                                <div class="d-flex align-items-center">
+                                    <input type="text" class="form-control my-2 flex-grow-1" name="TagMember" id="TagMember" placeholder="@언급 추가해 주세요..." style="border:none; resize: none;">
+                                </div>
+                                <div id="TagMember-container"></div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <!--Modify Board Modal End -->
 
     <!-- 작성자 Board Setting Modal -->
@@ -798,9 +877,8 @@
                             </a>
                         </div>
                         <div class="border-bottom text-center p-2">
-                            <a th:href="@{|/board/update/${selectFeed.board.id}|}">
-                                <button type="button" class="btn noneBtn btn-link text-primary">수정</button>
-                            </a>
+                            <button type="button" class="btn noneBtn btn-link text-primary"  th:onclick="@{|ModifyBoard(${selectFeed.board.id})|}">수정
+                            </button>
                         </div>
                         <div class="border-bottom text-center p-2">
                             <a th:href="@{|/board/likehide/${selectFeed.board.id}|}">
@@ -965,6 +1043,8 @@
     </div>
     <!-- 사용자 Recomment Modal End -->
 
+    <script th:src="@{/board/js/update_board.js}"></script>
+
     <!-- javascript -->
     <script th:inline="javascript">
         const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
@@ -1006,11 +1086,7 @@
             commedInput.value = id;
 
             var user = document.getElementById('comment-username' + id);
-            console.log(user);
-
             var input = document.getElementById('modal-content');
-            console.log(input);
-
             var isRecomment = document.getElementById('isRecomment');
 
             input.textContent = '@' + user.textContent + " ";
@@ -1025,11 +1101,7 @@
             recommedInput.value = recommentId;
 
             var user = document.getElementById('recomment-username' + recommentId);
-            console.log(user);
-
             var input = document.getElementById('modal-content');
-            console.log(input);
-
             var isRecomment = document.getElementById('isRecomment');
 
             input.textContent = '@' + user.textContent + " ";

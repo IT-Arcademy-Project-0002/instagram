@@ -93,7 +93,6 @@ inputElement.addEventListener('input', function () {
 
 
 // HashTag
-// HashTag
 const hashTagInputElement = document.getElementById('hashTag');
 const hashTagContainer = document.getElementById('hashTag-container');
 let hashTags = [];
@@ -114,7 +113,6 @@ hashTagInputElement.addEventListener('input', function () {
             .then(data => {
                 data.result.forEach((hashTag, index) => {
                     var resultHashTag = document.getElementsByClassName(hashTag.name);
-
                     if (resultHashTag.length !== 0 || hashTagNames.includes(hashTag.name)) {
                         return;
                     }

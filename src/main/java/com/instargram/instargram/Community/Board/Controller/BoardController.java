@@ -56,7 +56,7 @@ public class BoardController {
 
     // main
     @GetMapping("/main")
-    public String create(Model model, Principal principal, HttpSession httpSession) {
+    public String boardMain(Model model, Principal principal, HttpSession httpSession) {
         Member member = this.memberService.getMember(principal.getName());
 
         List<Board> memberBoards = this.boardService.getBoardsByMember(member);
@@ -69,16 +69,16 @@ public class BoardController {
 
         List<FeedListDTO> feedList = this.boardDataMapService.getFeed(allBoards);
         FeedDTO selectFeed = (FeedDTO) httpSession.getAttribute("selectFeed");
-        FeedDTO updateFeed = (FeedDTO) httpSession.getAttribute("updateFeed");
+//        FeedDTO updateFeed = (FeedDTO) httpSession.getAttribute("updateFeed");
         if (selectFeed != null) {
             model.addAttribute("selectFeed", selectFeed);
             httpSession.removeAttribute("selectFeed");
         }
-
-        if (updateFeed != null) {
-            model.addAttribute("updateFeed", updateFeed);
-            httpSession.removeAttribute("updateFeed");
-        }
+//
+//        if (updateFeed != null) {
+//            model.addAttribute("updateFeed", updateFeed);
+//            httpSession.removeAttribute("updateFeed");
+//        }
 
         System.out.println("===========================>" + selectFeed);
         model.addAttribute("feedList", feedList);
@@ -97,7 +97,7 @@ public class BoardController {
         Member member = this.memberService.getMember(principal.getName());
 
         Location location = this.locationService.create(locationDTO);
-        
+
         Board board = this.boardService.create(member, boardCreateForm.getContent(), location, boardCreateForm.isLikeHide(), boardCreateForm.isCommentDisable());
 
         // # HashTag
@@ -107,7 +107,7 @@ public class BoardController {
             HashTag hashTag;
             if (ishashTag == null) {
                 hashTag = this.hashTagService.create(hashTag_name);
-            }else{
+            } else {
                 hashTag = this.hashTagService.gethashTag(hashTag_name);
             }
             this.boardHashTagMapService.createBoardHashTag(board, hashTag);
@@ -115,7 +115,7 @@ public class BoardController {
 
         // @ Mention
         List<String> tagMemberList = this.boardTagMemberMapService.extractMentionedWords(boardCreateForm.getTagMember());
-        for (String memberMap : tagMemberList){
+        for (String memberMap : tagMemberList) {
             Member tagMember = this.memberService.getMember(memberMap);
             Board_TagMember_Map boardTagMemberMap = this.boardTagMemberMapService.create(board, tagMember);
             Notice notice = this.noticeService.createNotice(Enum_Data.BOARD_TAGMEMBER.getNumber(), member, tagMember);
@@ -141,10 +141,10 @@ public class BoardController {
                     if (fileExtension.equals("jpeg")) {
                         Image image = this.imageService.saveImage(multipartFile, nameWithoutExtension, fileExtension);
                         this.boardDataMapService.create(board, image, Enum_Data.IMAGE.getNumber());
-                    } else if(fileExtension.equals("png")){
+                    } else if (fileExtension.equals("png")) {
                         Image image = this.imageService.saveImage(multipartFile, nameWithoutExtension, fileExtension);
                         this.boardDataMapService.create(board, image, Enum_Data.IMAGE.getNumber());
-                    }else if(fileExtension.equals("mp4")){
+                    } else if (fileExtension.equals("mp4")) {
                         Video video = this.videoService.saveVideo(multipartFile, nameWithoutExtension, fileExtension);
                         this.boardDataMapService.create(board, video, Enum_Data.VIDEO.getNumber());
                     }
@@ -200,6 +200,18 @@ public class BoardController {
         return "redirect:/main";
     }
 
+    // board Update
+    @GetMapping("/board/update/{id}")
+    public ResponseEntity<Map<String, Object>> update(@PathVariable("id") Long id, HttpSession httpSession) {
+        Map<String, Object> result = new HashMap<>();
+
+        Board board = this.boardService.getBoardById(id);
+        FeedDTO updateFeed = this.boardDataMapService.getFeedWithComments(board);
+        result.put("updateFeed", updateFeed);
+
+        return ResponseEntity.ok().body(result);
+    }
+
     // board UserInfo
     @GetMapping("/board/feedMemberInfo/{id}")
     public String boardFeedMemberInfo(@PathVariable("id") Long id) {
@@ -212,6 +224,7 @@ public class BoardController {
             return "redirect:/main";
         }
     }
+
     // board like
     @GetMapping("/board/like/{id}")
     public ResponseEntity<Map<String, Object>> like(@PathVariable("id") Long id, Principal principal) {
@@ -261,17 +274,8 @@ public class BoardController {
         return ResponseEntity.ok().body(result);
     }
 
-    @GetMapping("/board/update/{id}")
-    public String update(@PathVariable("id") Long id){
-        Board board = this.boardService.getBoardById(id);
-        FeedDTO updateFeed = this.boardDataMapService.getFeedWithComments(board);
-
-        return "Board/board_update";
-    }
-
     @GetMapping("/board/search/{kw}")
-    public ResponseEntity<Map<String, List<Member>>> memberSearch(@PathVariable("kw") String kw)
-    {
+    public ResponseEntity<Map<String, List<Member>>> memberSearch(@PathVariable("kw") String kw) {
         Map<String, List<Member>> result = new HashMap<>();
 
         result.put("result", memberService.searchMemberList(kw));
@@ -280,8 +284,7 @@ public class BoardController {
     }
 
     @GetMapping("/board/search/HashTag/{kw}")
-    public ResponseEntity<Map<String, List<HashTag>>> hashTagSearch(@PathVariable("kw") String kw)
-    {
+    public ResponseEntity<Map<String, List<HashTag>>> hashTagSearch(@PathVariable("kw") String kw) {
         Map<String, List<HashTag>> result = new HashMap<>();
 
         result.put("result", hashTagService.searchHashTagList(kw));

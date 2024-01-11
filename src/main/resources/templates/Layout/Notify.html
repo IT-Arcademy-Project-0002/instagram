@@ -21,7 +21,7 @@
                     <div class="ms-2" style="width: 244px">
                         <input type="hidden" th:value="${notice.requestMember.username}">
                         <span th:text="@{|${notice.requestMember.username}님이 회원님의 사진을 좋아합니다.|}"></span>
-                        <span th:text="@{|${notice.createDate}|}" style="color: grey;"></span>
+                        <span th:text="@{|${notice.elapsedTime}|}" style="color: grey;"></span>
                     </div>
                     <div class="ms-2">
                         <img th:src="@{|${notice.boardMainImage}|}"
@@ -35,8 +35,8 @@
                     <div class="ms-2" style="width: 244px">
                         <input type="hidden" th:value="${notice.requestMember.username}">
                         <span th:text="@{|${notice.requestMember.username}님이 댓글을 남겼습니다.|}"></span>
-                        <span th:text="@{|${notice.commentContent}|}"></span>
-                        <span th:text="@{|${notice.createDate}|}" style="color: grey;"></span>
+                        <span th:utext="${notice.commentContent}"></span>
+                        <span th:text="@{|${notice.elapsedTime}|}" style="color: grey;"></span>
                     </div>
                     <div class="ms-2">
                         <img th:src="@{|${notice.boardMainImage}|}"
@@ -50,8 +50,8 @@
                     <div class="ms-2" style="width: 244px">
                         <input type="hidden" th:value="${notice.requestMember.username}">
                         <span th:text="@{|${notice.requestMember.username}님이 회원님의 댓글을 좋아합니다: |}"></span>
-                        <span th:text="@{|${notice.commentContent}|}"></span>
-                        <span th:text="@{|${notice.createDate}|}" style="color: grey;"></span>
+                        <span th:utext="@{|${notice.commentContent}|}"></span>
+                        <span th:text="@{|${notice.elapsedTime}|}" style="color: grey;"></span>
                     </div>
                     <div class="ms-2">
                         <img th:src="@{|${notice.boardMainImage}|}"
@@ -65,8 +65,8 @@
                     <div class="ms-2" style="width: 244px">
                         <input type="hidden" th:value="${notice.requestMember.username}">
                         <span th:text="@{|${notice.requestMember.username}님이 댓글을 남겼습니다.|}"></span>
-                        <span th:text="@{|${notice.recommentContent}|}"></span>
-                        <span th:text="@{|${notice.createDate}|}" style="color: grey;"></span>
+                        <span th:utext="@{|${notice.recommentContent}|}"></span>
+                        <span th:text="@{|${notice.elapsedTime}|}" style="color: grey;"></span>
                     </div>
                     <div class="ms-2">
                         <img th:src="@{|${notice.boardMainImage}|}"
@@ -81,7 +81,7 @@
                         <div class="ms-2" style="width: 200px">
                             <input type="hidden" th:value="${notice.requestMember.username}" id="username">
                             <span th:text="@{|${notice.requestMember.username}님이 팔로우를 요청했습니다.|}"></span>
-                            <span th:text="@{|${notice.createDate}|}" style="color: grey;"></span>
+                            <span th:text="@{|${notice.elapsedTime}|}" style="color: grey;"></span>
                         </div>
                         <div style="width: 140px" th:id="${notice.id}">
                             <div id="apply-container" th:if="${not notice.follower}" class="d-flex align-items-center">
@@ -118,8 +118,9 @@
                 <div class="d-flex">
                     <div class="ms-2" style="width: 244px">
                         <input type="hidden" th:value="${notice.requestMember.username}">
-                        <span th:text="@{|${notice.requestMember.username}님이 회원님을 언급했습니다.|}"></span>
-                        <span th:text="@{|${notice.createDate}|}" style="color: grey;"></span>
+                        <span th:text="@{|${notice.requestMember.username}님이 게시글에서 회원님을 언급했습니다.|}"></span>
+                        <span th:utext="@{|${notice.boardContent}|}"></span>
+                        <span th:text="@{|${notice.elapsedTime}|}" style="color: grey;"></span>
                     </div>
                     <div class="ms-2">
                         <img th:src="@{|${notice.boardMainImage}|}"
@@ -133,8 +134,8 @@
                     <div class="ms-2" style="width: 244px">
                         <input type="hidden" th:value="${notice.requestMember.username}">
                         <span th:text="@{|${notice.requestMember.username}님이 회원님의 댓글을 좋아합니다: |}"></span>
-                        <span th:text="@{|${notice.recommentContent}|}"></span>
-                        <span th:text="@{|${notice.createDate}|}" style="color: grey;"></span>
+                        <span th:utext="@{|${notice.recommentContent}|}"></span>
+                        <span th:text="@{|${notice.elapsedTime}|}" style="color: grey;"></span>
                     </div>
                     <div class="ms-2">
                         <img th:src="@{|${notice.boardMainImage}|}"

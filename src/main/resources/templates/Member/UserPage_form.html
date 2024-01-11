@@ -7,24 +7,22 @@
     <div class="d-flex">
         <div class="main-content d-flex justify-content-center">
             <!--mypage content-->
-            <div class="userPage_layout">
+            <div class="userPage_content">
                 <!--mypage content inner-->
-                <div style="height: 100%">
+                <div class="userPage_content_inner">
                     <!--header-->
-                    <div class="d-flex" style="min-height:150px; height: 150px; margin-bottom: 44px">
+                    <div class="user_header">
                         <!--user photo-->
-                        <div class="userProfile_img">
+                        <div class="user_photo">
                             <div class="d-flex h-100 justify-content-center align-items-center">
-                                <button class="btn btn-light rounded-circle p-0 m-0 userProfile_btn"
+                                <button class="btn btn-light rounded-circle userProfile_btn"
                                         data-bs-toggle="modal" data-bs-target="#ProfilePhotoModifyModal">
                                     <img th:if="${member.image == null}" id="none_user_img"
                                          src="/files/designImg/noneuser.png"
-                                         class="rounded-circle text-center smooth-update"
-                                         style="position: absolute; top: 0; left: 0; transform: translate(50,50); width: 100%; height: 100%; object-fit: cover; margin: auto">
+                                         class="rounded-circle text-center smooth-update userProfile_img">
                                     <img th:unless="${member.image == null}" id="user_img"
                                          th:src="@{|/resources/${member.image.name}|}"
-                                         class="rounded-circle text-center smooth-update"
-                                         style="position: absolute; top: 0; left: 0; transform: translate(50,50); width: 100%; height: 100%; object-fit: cover; margin: auto">
+                                         class="rounded-circle text-center smooth-update userProfile_img">
                                 </button>
 
                                 <!-- Modal -->
@@ -75,15 +73,15 @@
                                     <!-- mine page -->
                                     <div th:if="${userPageDTO.isMine()}" class="d-flex align-items-center">
                                         <!-- button -->
-                                        <div class="d-flex" style="width: 265px; margin-left: 20px;">
-                                            <a class="btn userInfo_btn" th:href="@{/member/account/edit}">프로필 편집</a>
-                                            <a class="btn userInfo_btn" style="margin-left: 8px">보관된 스토리 보기</a>
+                                        <div class="btn_area">
+                                            <a class="btn btn_userInfo" th:href="@{/member/account/edit}">프로필 편집</a>
+                                            <a class="btn btn_userInfo" style="margin-left: 8px">보관된 스토리 보기</a>
                                         </div>
                                         <!-- setting -->
-                                        <div style="width: 40px; margin-left: 5px;">
+                                        <div class="setting ">
                                             <svg aria-label="옵션" stroke="currentColor" fill="currentColor"
                                                  height="24" role="img" viewBox="0 0 24 24" width="24"
-                                                 ><title>옵션</title>
+                                            ><title>옵션</title>
                                                 <circle cx="12" cy="12" fill="none" r="8.635" stroke="currentColor"
                                                         stroke-linecap="round" stroke-linejoin="round"
                                                         stroke-width="2"></circle>
@@ -97,27 +95,34 @@
                                     <!-- not mine page-->
                                     <div th:unless="${userPageDTO.isMine()}" class="d-flex align-items-center">
                                         <!-- button -->
-                                        <div class="d-flex" style="width: 265px; margin-left: 20px;">
+                                        <div class="d-flex" style="margin-left: 20px;">
                                             <a class="btn" style="min-width: 74px;"
-                                               th:classappend="${userPageDTO.isFollow() or userPageDTO.isRequestFollow()}?'btn-outline-secondary' : 'btn-primary'"
+                                               th:classappend="${userPageDTO.isFollow() or userPageDTO.isRequestFollow()}?'btn-outline-secondary' : 'btn_follow'"
                                                onclick="clickFollow()">
-                                                <span id="follow-spin" class="visually-hidden spinner-border spinner-border-sm" aria-hidden="true"></span>
+                                                <span id="follow-spin"
+                                                      class="visually-hidden spinner-border spinner-border-sm"
+                                                      aria-hidden="true"></span>
                                                 <span th:if="${userPageDTO.isFollow()}" class="follow-text">팔로잉</span>
-                                                <span th:if="${not userPageDTO.isFollow() and userPageDTO.isFollower() and not userPageDTO.isRequestFollow()}" style="width: 140px" class="follow-text">맞팔로우 하기</span>
-                                                <span th:if="${userPageDTO.isRequestFollow()}" class="follow-text">요청됨</span>
-                                                <span th:if="${not userPageDTO.isRequestFollow() and not userPageDTO.isFollow() and not userPageDTO.isFollower()}" class="follow-text">팔로우</span>
+                                                <span th:if="${not userPageDTO.isFollow() and userPageDTO.isFollower() and not userPageDTO.isRequestFollow()}"
+                                                      style="width: 140px" class="follow-text">맞팔로우 하기</span>
+                                                <span th:if="${userPageDTO.isRequestFollow()}"
+                                                      class="follow-text">요청됨</span>
+                                                <span th:if="${not userPageDTO.isRequestFollow() and not userPageDTO.isFollow() and not userPageDTO.isFollower()}"
+                                                      class="follow-text">팔로우</span>
                                             </a>
-                                            <a th:if="${not userPageDTO.isFollower() or userPageDTO.isFollow()}" class="btn btn-primary" style="margin-left: 8px">메세지 보내기</a>
+                                            <a th:if="${not userPageDTO.isFollower() or userPageDTO.isFollow()}"
+                                               class="btn btn_message" style="margin-left: 8px">메세지 보내기</a>
                                         </div>
                                         <!-- setting -->
-                                        <div style="width: 40px; margin-left: 5px;">
-                                            <svg aria-label="옵션" fill="currentColor" stroke="currentColor"
-                                                 height="24" role="img" viewBox="0 0 24 24" width="24"
-                                                 style="color:#989898"><title>옵션</title>
-                                                <circle cx="12" cy="12" r="1.5"></circle>
-                                                <circle cx="6" cy="12" r="1.5"></circle>
-                                                <circle cx="18" cy="12" r="1.5"></circle>
-                                            </svg>
+                                        <div style="margin-left: 5px">
+                                            <div style="width: auto; padding: 8px">
+                                                <svg aria-label="옵션" fill="currentColor" height="32" role="img"
+                                                     viewBox="0 0 24 24" width="32"><title>옵션</title>
+                                                    <circle cx="12" cy="12" r="1.5"></circle>
+                                                    <circle cx="6" cy="12" r="1.5"></circle>
+                                                    <circle cx="18" cy="12" r="1.5"></circle>
+                                                </svg>
+                                            </div>
                                         </div>
                                     </div>
 
@@ -125,27 +130,30 @@
                             </div>
 
                             <!--user follow info-->
-                            <div class="d-flex" style="min-height:18px; height: 18px; margin-bottom: 20px; align-items: center;">
+                            <div class="d-flex"
+                                 style="min-height:18px; height: 18px; margin-bottom: 20px; align-items: center;">
                                 <div class="me-5">
                                     <span>게시물</span>
                                     <span style="font-weight: 600" th:text="${userPageDTO.feedSize}"></span>
                                 </div>
                                 <div class="me-5">
                                     <span>팔로워</span>
-                                    <span style="font-weight: 600" id="followers" th:text="${#lists.size(userPageDTO.followers)}"></span>
+                                    <span style="font-weight: 600" id="followers"
+                                          th:text="${#lists.size(userPageDTO.followers)}"></span>
                                 </div>
                                 <div>
                                     <span>팔로잉</span>
-                                    <span style="font-weight: 600" id="follows" th:text="${#lists.size(userPageDTO.followings)}"></span>
+                                    <span style="font-weight: 600" id="follows"
+                                          th:text="${#lists.size(userPageDTO.followings)}"></span>
                                 </div>
                             </div>
                             <!--user info interest-->
                             <div style="min-height:30px; height: 30px;"
                                  class="d-flex flex-column justify-content-between">
-                                <div style="font-size: 14px; margin-bottom: 0;">
+                                <div style="font-size: 14px; font-weight: bold;">
                                     <span th:text="${member.nickname}"></span>
                                 </div>
-                                <div style="font-size: 14px; margin-bottom: 0;">
+                                <div style="font-size: 14px; padding-top: 5px; margin-bottom: 0;">
                                     <span th:text="${member.introduction}"></span>
                                 </div>
                             </div>
@@ -153,35 +161,68 @@
                     </div>
 
                     <!--story highlight --> <!-- 'visually-hidden' -->
+
                     <div th:classappend="${#maps.isEmpty(userPageDTO.stories)} ? ''"
                          style="height: 130px; margin-bottom: 44px">
+                        <div style="height: 100%">
+                            <div class="d-flex" style="height: 100%">
+                                <div style="margin-left: 24px">
+                                    <!-- highlight modal -->
+                                    <div style="width: 115px; padding: 10px 15px 10px 15px">
+                                        <a type="button" data-bs-toggle="modal" data-bs-target="#highlightModal">
+                                            <div>
+                                                <div>
+                                                    <div class="highlight_line plus_icon">
+                                                        <div class="d-flex"
+                                                             style="width: 77px; height: 77px; justify-content: center; align-items: center;">
+                                                            <svg aria-label="+ 아이콘" class="highlight"
+                                                                 style="color: #c7c7c7; align-items: center;"
+                                                                 fill="currentColor" height="44"
+                                                                 role="img" viewBox="0 0 24 24" width="44"><title>+
+                                                                아이콘</title>
+                                                                <path d="M21 11.3h-8.2V3c0-.4-.3-.8-.8-.8s-.8.4-.8.8v8.2H3c-.4 0-.8.3-.8.8s.3.8.8.8h8.2V21c0 .4.3.8.8.8s.8-.3.8-.8v-8.2H21c.4 0 .8-.3.8-.8s-.4-.7-.8-.7z"></path>
+                                                            </svg>
+                                                        </div>
 
-                        <!-- highlight modal -->
-                        <a type="button" data-bs-toggle="modal" data-bs-target="#highlightModal">
-                            <div>
-                                <svg aria-label="+ 아이콘" class="highlight" fill="currentColor" height="44" role="img" viewBox="0 0 24 24" width="44"><title>+ 아이콘</title><path d="M21 11.3h-8.2V3c0-.4-.3-.8-.8-.8s-.8.4-.8.8v8.2H3c-.4 0-.8.3-.8.8s.3.8.8.8h8.2V21c0 .4.3.8.8.8s.8-.3.8-.8v-8.2H21c.4 0 .8-.3.8-.8s-.4-.7-.8-.7z"></path></svg>
+                                                    </div>
+                                                </div>
+                                                <div style=" padding-top: 10px;">
+                                                    <div style="font-weight: 600; font-size: 12px; text-align: center">
+                                                        신규
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
                             </div>
-                        </a>
+                        </div>
                     </div>
 
+
                     <!-- Modal -->
-                    <div class="modal fade" id="highlightModal" tabindex="-1" aria-labelledby="highlightModalLabel" aria-hidden="true">
+                    <div class="modal fade" id="highlightModal" tabindex="-1" aria-labelledby="highlightModalLabel"
+                         aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered">
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <h1 class="modal-title fs-5" id="highlightModalLabel">Modal title</h1>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
                                     ...
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close
+                                    </button>
                                     <button type="button" class="btn btn-primary">Save changes</button>
                                 </div>
                             </div>
                         </div>
                     </div>
+
+                    <div style="border-top-style: solid; border-top-width: 1px; border-top-color: #dbdbdb"></div>
 
                     <div th:if="${member.scope or userPageDTO.isMine()}">
                         <!--board list menu-->

@@ -60,9 +60,12 @@ public class NoticeService {
             noticeDTO.setRequestMember(notice.getRequestMember());
             noticeDTO.setType(notice.getType());
             noticeDTO.setId(notice.getId());
-            noticeDTO.setCreateDate(getElapsedTime(notice.getCreateDate()));
+            noticeDTO.setElapsedTime(getElapsedTime(notice.getCreateDate()));
             noticeDTO.setFollower(followMapService.isFollower(loginUser, notice.getRequestMember()));
             noticeDTO.setFollow(followMapService.isFollow(loginUser, notice.getRequestMember()));
+
+            // 보드 내용 : 보드내용에는 언급된 회원의 정보가 포함되도록 getBoardContent 내부에 로직을 작성하였음 (게시물 멤버태그(9))
+            noticeDTO.processContent(noticeBoardMapService.getBoardContent(notice.getId(), notice.getType()));
 
             // 보드 이미지 : 게시글 좋아요(1), 게시글 댓글(2), 댓글 좋아요(3), 댓글 대댓글(4), 게시글 멤버태그(9), 댓글 대댓글 좋아요(10)
             noticeDTO.setBoardMainImage(noticeBoardMapService.getNoticeBoardImage(notice.getId(), notice.getType()));
@@ -71,7 +74,7 @@ public class NoticeService {
             noticeDTO.setCommentContent(noticeCommentMapService.getNoticeComment(notice.getId(), notice.getType()).getContent());
 
             // 대댓글 내용 : 댓글 대댓글(4), 댓글 대댓글 좋아요(10)
-            noticeDTO.setRecommentContent(noticeCommentMapService.getNoticeRecomment(notice.getId(), notice.getType()).getContent());
+            noticeDTO.processRecommentContent(noticeCommentMapService.getNoticeRecomment(notice.getId(), notice.getType()).getContent());
 
             // 디엠 왔을 때 : 5
 

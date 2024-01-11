@@ -1,6 +1,8 @@
 package com.instargram.instargram.Community.Board.Service;
 
+import com.instargram.instargram.Community.Board.Model.DTO.FeedDTO;
 import com.instargram.instargram.Community.Board.Model.Entity.Board;
+import com.instargram.instargram.Community.Board.Model.Form.BoardCreateForm;
 import com.instargram.instargram.Community.Board.Model.Repository.BoardRepository;
 import com.instargram.instargram.Community.Location.Model.Entity.Location;
 import com.instargram.instargram.DataNotFoundException;
@@ -9,7 +11,9 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,6 +33,7 @@ public class BoardService {
         board.setCommentDisable(commentDisalbe);
         return this.boardRepository.save(board);
     }
+
     public List<Board> getBoard() {
         return this.boardRepository.findAll();
     }
@@ -95,4 +100,13 @@ public class BoardService {
         return this.boardRepository.findByMember(member);
     }
 
+    public Board convertFeedToBoardCreateForm(FeedDTO feedDTO) {
+        BoardCreateForm boardCreateForm = new BoardCreateForm();
+        boardCreateForm.setContent(feedDTO.board().getContent());
+        boardCreateForm.setTagMember(feedDTO.board().getBoardTagMembers().toString());
+        boardCreateForm.setHashTag(feedDTO.board().getBoardHashTags().toString());
+        boardCreateForm.setCommentDisable(feedDTO.board().getCommentDisable());
+        boardCreateForm.setLikeHide(feedDTO.board().getLikeHide());
+        return boardCreateForm;
+    }
 }

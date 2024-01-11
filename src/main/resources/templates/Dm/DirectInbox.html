@@ -6,7 +6,7 @@
 <div layout:fragment="content">
     <div class="d-flex">
         <div class="main-content d-flex">
-            <div class="col-3 overflow-scroll" style="width: 398px;">
+            <div class="col-3" style="width: 398px; overflow-y: scroll">
                 <ul>
                     <li th:each="room:${roomList}">
                         <a th:href="@{|/direct/t/${room.id}|}"

@@ -1,5 +1,6 @@
 package com.instargram.instargram.DM.Service;
 
+import com.instargram.instargram.DM.Model.DTO.MessageDTO;
 import com.instargram.instargram.DM.Model.DTO.RoomDTO;
 import com.instargram.instargram.DM.Model.Entity.Message.Message_Member_Map;
 import com.instargram.instargram.DM.Model.Entity.Room.Room;
@@ -26,11 +27,15 @@ public class RoomService {
     public Room create(Member openMember, List<Member> inviteMember)
     {
         Room room = new Room();
-        String name = openMember.getNickname() == null ? openMember.getUsername() : openMember.getNickname();
+        String name = "";
 
-        for(Member friend : inviteMember)
+        for(int i = 0 ; i < inviteMember.size(); i ++)
         {
-            name += friend.getNickname() == null ? friend.getUsername() : friend.getNickname();
+            name += inviteMember.get(i).getNickname() == null ? inviteMember.get(i).getUsername() : inviteMember.get(i).getNickname();
+            if(i != inviteMember.size() -1)
+            {
+                name += ", ";
+            }
         }
 
         room.setName(name);
@@ -117,13 +122,17 @@ public class RoomService {
         return messageMemberMapService.getList(getRoom(id));
     }
 
+    public List<MessageDTO> getMessageDTOList(Long id)
+    {
+        Room room = getRoom(id);
+
+        return messageMemberMapService.getMessageDTOList(room);
+    }
+
     public void readMessageState(Map<String, Object> quitMsg)
     {
-        List<Message_Member_Map> map = getList(Long.valueOf(quitMsg.get("roomId").toString()));
+        Room room = getRoom(Long.valueOf(quitMsg.get("roomId").toString()));
 
-        for(Message_Member_Map message : map)
-        {
-
-        }
+        messageMemberMapService.readMessageState(room, quitMsg.get("sender").toString());
     }
 }

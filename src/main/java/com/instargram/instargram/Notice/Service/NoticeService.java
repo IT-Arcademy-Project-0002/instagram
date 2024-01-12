@@ -46,6 +46,21 @@ public class NoticeService {
         return notice;
     }
 
+    public Notice createRecommentTagMemberNotice(Integer type, Member loginMember, Member member)
+    {
+        Notice notice = new Notice();
+
+        notice.setType(type);
+        notice.setRequestMember(loginMember);
+        notice.setMember(member);
+        notice.setChecked(false);
+        notice.setCreateDate(LocalDateTime.now());
+
+        noticeRepository.save(notice);
+
+        return notice;
+    }
+
     public List<NoticeDTO> getNoticeDTOsByMember(Member loginUser)
     {
         List<Notice> noticeList = this.noticeRepository.findByMember(loginUser);

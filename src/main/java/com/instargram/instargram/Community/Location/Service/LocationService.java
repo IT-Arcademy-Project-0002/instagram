@@ -1,10 +1,9 @@
 package com.instargram.instargram.Community.Location.Service;
 
-import com.instargram.instargram.Community.Board.Model.Entity.Board;
 import com.instargram.instargram.Community.Location.Model.DTO.LocationDTO;
 import com.instargram.instargram.Community.Location.Model.Entity.Location;
+import com.instargram.instargram.Community.Location.Model.Form.LocationForm;
 import com.instargram.instargram.Community.Location.Model.Repository.LocationRepository;
-import com.instargram.instargram.Member.Model.Entity.Member;
 import io.micrometer.common.util.StringUtils;
 import lombok.RequiredArgsConstructor;
 import org.json.JSONArray;
@@ -20,7 +19,6 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -63,6 +61,14 @@ public class LocationService {
                 StringUtils.isNotBlank(locationDTO.getAddressName()) &&
                 StringUtils.isNotBlank(locationDTO.getX()) &&
                 StringUtils.isNotBlank(locationDTO.getY());
+    }
+    private boolean isValidLocationForm(LocationForm locationForm) {
+        return locationForm != null &&
+                StringUtils.isNotBlank(locationForm.getModifyLocationId()) &&
+                StringUtils.isNotBlank(locationForm.getModifyPlaceName()) &&
+                StringUtils.isNotBlank(locationForm.getModifyAddressName()) &&
+                StringUtils.isNotBlank(locationForm.getModify_x()) &&
+                StringUtils.isNotBlank(locationForm.getModify_y());
     }
 
     public List<LocationDTO> getCoordinateByKeyword(String keyword) throws JSONException {
@@ -142,5 +148,21 @@ public class LocationService {
         String y = documents.getJSONObject(0).getString("y");
 
         return new LocationDTO(id, placeName, addressName, roadAddressName, x, y);
+    }
+
+    public Location modify(Location location, LocationForm locationForm, String locationId, String placeName, String addressName, String roadAddressName, String x, String y) {
+        if (isValidLocationForm(locationForm)) {
+            location.setLocationId(locationId);
+            location.setPlaceName(placeName);
+            if (roadAddressName != null) {
+                location.setAddress(roadAddressName);
+            } else {
+                location.setAddress(addressName);
+            }
+            location.setX(x);
+            location.setY(y);
+            return this.locationRepository.save(location);
+        }
+        return locationForm.toLocation();
     }
 }

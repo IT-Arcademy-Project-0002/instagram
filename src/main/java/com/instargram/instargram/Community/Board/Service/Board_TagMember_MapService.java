@@ -4,6 +4,7 @@ import com.instargram.instargram.Community.Board.Model.Entity.Board;
 import com.instargram.instargram.Community.Board.Model.Entity.Board_TagMember_Map;
 import com.instargram.instargram.Community.Board.Model.Repository.Board_TagMember_MapRepository;
 import com.instargram.instargram.Member.Model.Entity.Member;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -36,5 +37,9 @@ public class Board_TagMember_MapService {
         map.setBoard(board);
         map.setTagMember(tagMember);
         return this.boardTagMemberMapRepository.save(map);
+    }
+    public void delete(Board board) {
+        List<Board_TagMember_Map> existingAssociations = boardTagMemberMapRepository.findByBoard(board);
+        this.boardTagMemberMapRepository.deleteAll(existingAssociations);
     }
 }

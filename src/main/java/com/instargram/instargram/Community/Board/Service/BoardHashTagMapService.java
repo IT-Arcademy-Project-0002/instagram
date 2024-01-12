@@ -2,11 +2,14 @@ package com.instargram.instargram.Community.Board.Service;
 
 import com.instargram.instargram.Community.Board.Model.Entity.Board;
 import com.instargram.instargram.Community.Board.Model.Entity.Board_HashTag_Map;
+import com.instargram.instargram.Community.Board.Model.Entity.Board_TagMember_Map;
 import com.instargram.instargram.Community.Board.Model.Repository.Board_HashTag_MapRepository;
 import com.instargram.instargram.Community.HashTag.Model.Entity.HashTag;
 import com.instargram.instargram.Community.HashTag.Model.Repository.HashTagRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -20,7 +23,8 @@ public class BoardHashTagMapService {
         return this.boardHashTagMapRepository.save(map);
     }
 
-    public Board_HashTag_Map getHashTag(Board board) {
-        return this.boardHashTagMapRepository.findByBoard(board);
+    public void delete(Board board) {
+        List<Board_HashTag_Map> delete = boardHashTagMapRepository.findByBoard(board);
+        this.boardHashTagMapRepository.deleteAll(delete);
     }
 }

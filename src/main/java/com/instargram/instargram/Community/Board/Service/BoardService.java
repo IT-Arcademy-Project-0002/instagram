@@ -2,6 +2,8 @@ package com.instargram.instargram.Community.Board.Service;
 
 import com.instargram.instargram.Community.Board.Model.DTO.FeedDTO;
 import com.instargram.instargram.Community.Board.Model.Entity.Board;
+import com.instargram.instargram.Community.Board.Model.Entity.Board_HashTag_Map;
+import com.instargram.instargram.Community.Board.Model.Entity.Board_TagMember_Map;
 import com.instargram.instargram.Community.Board.Model.Form.BoardCreateForm;
 import com.instargram.instargram.Community.Board.Model.Repository.BoardRepository;
 import com.instargram.instargram.Community.Location.Model.Entity.Location;
@@ -100,13 +102,12 @@ public class BoardService {
         return this.boardRepository.findByMember(member);
     }
 
-    public Board convertFeedToBoardCreateForm(FeedDTO feedDTO) {
-        BoardCreateForm boardCreateForm = new BoardCreateForm();
-        boardCreateForm.setContent(feedDTO.board().getContent());
-        boardCreateForm.setTagMember(feedDTO.board().getBoardTagMembers().toString());
-        boardCreateForm.setHashTag(feedDTO.board().getBoardHashTags().toString());
-        boardCreateForm.setCommentDisable(feedDTO.board().getCommentDisable());
-        boardCreateForm.setLikeHide(feedDTO.board().getLikeHide());
-        return boardCreateForm;
+     public void modify(Board board, Location location, String content, Boolean likeHide, Boolean commentDisable) {
+        board.setContent(content);
+        board.setLocation(location);
+        board.setLikeHide(likeHide);
+        board.setCommentDisable(commentDisable);
+        board.setUpdateDate(LocalDateTime.now());
+        this.boardRepository.save(board);
     }
 }

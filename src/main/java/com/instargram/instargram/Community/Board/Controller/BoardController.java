@@ -4,11 +4,13 @@ import com.instargram.instargram.Community.Board.Model.DTO.FeedDTO;
 import com.instargram.instargram.Community.Board.Model.DTO.FeedListDTO;
 import com.instargram.instargram.Community.Board.Model.Entity.*;
 import com.instargram.instargram.Community.Board.Model.Form.BoardCreateForm;
+import com.instargram.instargram.Community.Board.Model.Form.BoardUpdateForm;
 import com.instargram.instargram.Community.Board.Service.*;
 import com.instargram.instargram.Community.HashTag.Model.Entity.HashTag;
 import com.instargram.instargram.Community.HashTag.Service.HashTagService;
 import com.instargram.instargram.Community.Location.Model.DTO.LocationDTO;
 import com.instargram.instargram.Community.Location.Model.Entity.Location;
+import com.instargram.instargram.Community.Location.Model.Form.LocationForm;
 import com.instargram.instargram.Community.Location.Service.LocationService;
 import com.instargram.instargram.Community.SaveGroup.Model.Entity.SaveGroup;
 import com.instargram.instargram.Community.SaveGroup.Service.SaveGroupService;
@@ -210,6 +212,54 @@ public class BoardController {
         result.put("updateFeed", updateFeed);
 
         return ResponseEntity.ok().body(result);
+    }
+
+    @PostMapping("/board/update/{id}")
+    public String update(@PathVariable("id") Long id, LocationForm locationForm, BindingResult bindingResult, BoardUpdateForm boardUpdateForm) {
+        if (bindingResult.hasErrors()) {
+            return "redirect:/main";
+        }
+
+        Board board = this.boardService.getBoardById(id);
+        Location tagetLocation = board.getLocation();
+
+        Location location = this.locationService.modify(tagetLocation, locationForm, locationForm.getModifyLocationId(), locationForm.getModifyPlaceName(), locationForm.getModifyAddressName(),
+                locationForm.getModifyRoadAddressName(), locationForm.getModify_x(), locationForm.getModify_y());
+
+        this.boardService.modify(board, location, boardUpdateForm.getModifyContent(), boardUpdateForm.isModifyLikeHide(), boardUpdateForm.isModifyCommentDisable());
+
+
+        // # HashTag
+        List<String> hashTagsList = Collections.emptyList();  // 기본적으로 빈 리스트로 초기화
+        this.boardHashTagMapService.delete(board);
+
+        if(boardUpdateForm.getModifyHashTag() != null){
+            hashTagsList = this.hashTagService.extractHashTagWords(boardUpdateForm.getModifyHashTag());
+        }
+        for (String hashTag_name : hashTagsList) {
+            HashTag ishashTag = this.hashTagService.exists(hashTag_name);
+            HashTag hashTag;
+            if (ishashTag == null) {
+                hashTag = this.hashTagService.create(hashTag_name);
+            } else {
+                hashTag = this.hashTagService.gethashTag(hashTag_name);
+            }
+            this.boardHashTagMapService.createBoardHashTag(board, hashTag);
+        }
+       
+       // @ mention
+        List<String> tagMemberList = Collections.emptyList();
+        this.boardTagMemberMapService.delete(board);
+
+        if (boardUpdateForm.getModifyTagMember() != null) {
+            tagMemberList = this.boardTagMemberMapService.extractMentionedWords(boardUpdateForm.getModifyTagMember());
+        }
+        // @ Mention  언급 재설정
+        for (String memberMap : tagMemberList) {
+            Member tagMember = this.memberService.getMember(memberMap);
+            this.boardTagMemberMapService.create(board, tagMember);
+        }
+        return "redirect:/main";
     }
 
     // board UserInfo

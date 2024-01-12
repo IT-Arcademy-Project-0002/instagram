@@ -16,5 +16,4 @@ public class BoardCreateForm extends Board {
     private String hashTag;
     private boolean likeHide;
     private boolean commentDisable;
-
 }

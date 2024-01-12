@@ -277,22 +277,32 @@ function ModifyBoard(id) {
             }
             boardHahTags.value = hashTag.join(' ').replace(/,/g, '');
 
-            console.log(data.updateFeed.board.location);
+            console.log(data.updateFeed.board.locationDTO);
             var location = document.getElementById('ModifyBoardkeyword');
             var ModifyLocationId = document.getElementById("ModifyLocationId");
             var ModifyPlaceName = document.getElementById("ModifyPlaceName");
             var ModifyRoadAddressName = document.getElementById("ModifyRoadAddressName");
             var ModifyAddressName = document.getElementById("ModifyAddressName");
-            var Modify_x = document.getElementById("Modify-x");
-            var Modify_y = document.getElementById("Modify-y");
-            location.value = data.updateFeed.board.locationDTO.placeName;
-            ModifyLocationId.value = data.updateFeed.board.locationDTO.locationId;
-            ModifyPlaceName.value = data.updateFeed.board.locationDTO.placeName;
-            ModifyRoadAddressName.value = data.updateFeed.board.locationDTO.roadAddressName;
-            ModifyAddressName.value = data.updateFeed.board.locationDTO.addressName;
-            Modify_x.value = data.updateFeed.board.locationDTO.x;
-            Modify_y.value = data.updateFeed.board.locationDTO.y;
+            var Modify_x = document.getElementById("Modify_x");
+            var Modify_y = document.getElementById("Modify_y");
 
+            if (data.updateFeed.board.locationDTO) {
+                location.value = data.updateFeed.board.locationDTO.placeName;
+                ModifyLocationId.value = data.updateFeed.board.locationDTO.locationId;
+                ModifyPlaceName.value = data.updateFeed.board.locationDTO.placeName;
+                ModifyRoadAddressName.value = data.updateFeed.board.locationDTO.roadAddressName;
+                ModifyAddressName.value = data.updateFeed.board.locationDTO.addressName;
+                Modify_x.value = data.updateFeed.board.locationDTO.x;
+                Modify_y.value = data.updateFeed.board.locationDTO.y;
+            } else {
+                location.value = "";
+                ModifyLocationId.value = "";
+                ModifyPlaceName.value = "";
+                ModifyRoadAddressName.value = "";
+                ModifyAddressName.value = "";
+                Modify_x.value = "";
+                Modify_y.value = "";
+            }
             console.log(data.updateFeed.board.likeHide);
             var ModifyLikeHide = document.getElementById('ModifyLikeHide');
             console.log(ModifyLikeHide);
@@ -404,7 +414,6 @@ $(document).ready(function () {
 
         ModifyLocationListBody.empty();
         ModifyHideLocationList();
-        debugger;
         $.ajax({
             url: '/location/modify/keyword',
             type: 'GET',
@@ -443,8 +452,8 @@ $(document).ready(function () {
                     document.getElementById('ModifyPlaceName').value = searchResult.placeName;
                     document.getElementById('ModifyRoadAddressName').value = searchResult.roadAddressName;
                     document.getElementById('ModifyAddressName').value = searchResult.addressName;
-                    document.getElementById('Modify-x').value = searchResult.x;
-                    document.getElementById('Modify-y').value = searchResult.y;
+                    document.getElementById('Modify_x').value = searchResult.x;
+                    document.getElementById('Modify_y').value = searchResult.y;
 
                     document.getElementById('ModifyBoardkeyword').value = searchResult.placeName;
 

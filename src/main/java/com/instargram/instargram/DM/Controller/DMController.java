@@ -7,22 +7,26 @@ import com.instargram.instargram.DM.Model.DTO.MessageDTO;
 import com.instargram.instargram.DM.Model.DTO.RoomDTO;
 import com.instargram.instargram.DM.Model.Entity.Message.Message_Member_Map;
 import com.instargram.instargram.DM.Model.Entity.Room.Room;
+import com.instargram.instargram.DM.Service.MessageMemberMapService;
+import com.instargram.instargram.DM.Service.RoomMemberMapService;
 import com.instargram.instargram.DM.Service.RoomService;
+import com.instargram.instargram.Data.Image.Image;
+import com.instargram.instargram.Data.Image.ImageService;
+import com.instargram.instargram.Enum_Data;
 import com.instargram.instargram.Member.Model.Entity.Member;
 import com.instargram.instargram.Member.Service.MemberService;
 import lombok.Builder;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 import java.security.Principal;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Controller
 @Builder
@@ -30,6 +34,9 @@ import java.util.List;
 public class DMController {
     private final RoomService roomService;
     private final MemberService memberService;
+
+    private final MessageMemberMapService messageMemberMapService;
+    private final ImageService imageService;
 
 
     @GetMapping("")
@@ -40,18 +47,9 @@ public class DMController {
     @GetMapping("/inbox")
     public String dmList(Model model, Principal principal){
 
-        List<Room> roomList = roomService.findByMember(memberService.getMember(principal.getName()));
+        List<RoomDTO> roomList = roomService.getRoomDTOList(memberService.getMember(principal.getName()));
         model.addAttribute("roomList",roomList);
         return "Dm/DirectInbox";
-    }
-
-    @GetMapping("/room")
-    public String dmRoom(Model model, @RequestParam("id")Long id)
-    {
-        List<Long> a = new ArrayList<>();
-        Room room = roomService.getRoom(id);
-        model.addAttribute("room", room);
-        return "testChat";
     }
 
     @GetMapping("/chatting")
@@ -89,13 +87,86 @@ public class DMController {
     @GetMapping("/t/{id}")
     public String room(@PathVariable("id")Long id, Model model, Principal principal)
     {
-        RoomDTO roomDTO = roomService.getRoomDTO(id);
+        Member loginUSer = memberService.getMember(principal.getName());
+        RoomDTO roomDTO = roomService.getRoomDTO(loginUSer, id);
         List<MessageDTO> messageList = roomService.getMessageDTOList(id);
 
         model.addAttribute("messageList", messageList);
-        List<Room> roomList = roomService.findByMember(memberService.getMember(principal.getName()));
+
+        List<RoomDTO> roomList = roomService.getRoomDTOList(memberService.getMember(principal.getName()));
         model.addAttribute("roomList",roomList);
         model.addAttribute("nowRoomDTO",roomDTO);
         return "Dm/DirectRoom";
+    }
+
+    @PostMapping("/file/upload")
+    public ResponseEntity<Map<String, Object>> createFile(@RequestParam("file-sender") List<MultipartFile> multipartFiles,
+                                             @RequestParam("talkMsg") String talkMsgJson,
+                                             Principal principal) throws IOException, NoSuchAlgorithmException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        Map<String, Object> talkMsg = objectMapper.readValue(talkMsgJson, new TypeReference<>() {});
+
+        List<String> msgs = new ArrayList<>();
+        for (MultipartFile multipartFile : multipartFiles) {
+            if (!multipartFile.isEmpty()) {
+                String currName = multipartFile.getOriginalFilename();
+                assert currName != null;
+
+                int lastDotIndex = currName.lastIndexOf('.');
+                String nameWithoutExtension = currName;
+
+                if (lastDotIndex != -1) {
+                    nameWithoutExtension = currName.substring(0, lastDotIndex);
+                }
+
+                String[] type = Objects.requireNonNull(multipartFile.getContentType()).split("/");
+                if (!type[type.length - 1].equals("octet-stream")) {
+                    String fileExtension = type[type.length - 1];
+                    Image image = this.imageService.saveImage(multipartFile, nameWithoutExtension, fileExtension);
+
+                    if(image != null)
+                    {
+                        Room room = roomService.getRoom(Long.valueOf(talkMsg.get("roomId").toString()));
+                        messageMemberMapService.createImageMap(talkMsg, image, room);
+                    }
+                    msgs.add(Objects.requireNonNull(image).getName());
+                }
+            }
+        }
+
+        talkMsg.put("dataType", Enum_Data.IMAGE.getNumber());
+        talkMsg.put("msg", msgs);
+
+
+        // 원하는 응답을 반환
+        return ResponseEntity.ok().body(talkMsg);
+    }
+
+    @PostMapping("/message/create")
+    public void create(
+            @RequestBody Map<String, Object> talkMsg)
+    {
+        Room room = roomService.getRoom(Long.valueOf(talkMsg.get("roomId").toString()));
+        messageMemberMapService.createMessage(talkMsg, room);
+    }
+
+    @PostMapping("/quit")
+    public ResponseEntity<Map<String, Object>> quit(
+            @RequestBody Map<String, Object> quitMsg)
+    {
+        Map<String, Object> result = new HashMap<>();
+
+        roomService.readMessageState(Long.valueOf(quitMsg.get("roomId").toString()),quitMsg.get("sender").toString());
+        return ResponseEntity.ok(result);
+    }
+
+    @PostMapping("/readMessage")
+    public ResponseEntity<Map<String, Object>> readMessage(
+            @RequestBody Map<String, Object> quitMsg, Principal principal)
+    {
+        Map<String, Object> result = new HashMap<>();
+
+        roomService.readMessageState(Long.valueOf(quitMsg.get("roomId").toString()), principal.getName());
+        return ResponseEntity.ok(result);
     }
 }

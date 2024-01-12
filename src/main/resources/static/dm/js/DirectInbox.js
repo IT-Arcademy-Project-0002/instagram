@@ -1,3 +1,13 @@
+var sideCheck = document.getElementById('expand-direct-menu');
+sideCheck.checked = true;
+
+var sidebar = document.getElementById('side_bar');
+sidebar.style.width = '4.5rem';
+
+var sidemenu = document.getElementById('side_menu');
+sidemenu.style.width = '4.5rem';
+
+
 const tagMember = document.querySelector('input[id=member-search-input]'),
     tagify = new Tagify(tagMember,  {
     }),

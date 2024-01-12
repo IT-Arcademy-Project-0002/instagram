@@ -9,6 +9,7 @@ import com.instargram.instargram.DM.Model.Repository.RoomMemberMapRepository;
 import com.instargram.instargram.DM.Model.Repository.RoomRepository;
 import com.instargram.instargram.Member.Model.Entity.Member;
 import lombok.Builder;
+import lombok.Getter;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -21,60 +22,36 @@ import java.util.Map;
 @Builder
 public class RoomService {
     private final RoomRepository roomRepository;
-    private final RoomMemberMapRepository roomMemberMapRepository;
+
+    @Getter
+    private final RoomMemberMapService roomMemberMapService;
 
     private final MessageMemberMapService messageMemberMapService;
     public Room create(Member openMember, List<Member> inviteMember)
     {
         Room room = new Room();
-        String name = "";
-
-        for(int i = 0 ; i < inviteMember.size(); i ++)
-        {
-            name += inviteMember.get(i).getNickname() == null ? inviteMember.get(i).getUsername() : inviteMember.get(i).getNickname();
-            if(i != inviteMember.size() -1)
-            {
-                name += ", ";
-            }
-        }
-
-        room.setName(name);
         room.setCreateDate(LocalDateTime.now());
 
         roomRepository.save(room);
 
-        createRoomMap(room, openMember);
+        roomMemberMapService.createRoomMap(room, openMember);
 
         for (Member friend : inviteMember)
         {
-            createRoomMap(room, friend);
+            roomMemberMapService.createRoomMap(room, friend);
         }
 
         return room;
     }
 
-    public void createRoomMap(Room room, Member member)
-    {
-        Room_Member_Map roomMemberMap = new Room_Member_Map();
-        roomMemberMap.setRoom(room);
-        roomMemberMap.setMember(member);
-
-        roomMemberMapRepository.save(roomMemberMap);
-    }
-
-    public List<Room> findByMember(Member member)
-    {
-        return roomMemberMapRepository.findByMember(member).stream().map(Room_Member_Map::getRoom).toList();
-    }
-
     public Room findRoom(Member loginMember, List<Member> chatMembers)
     {
-        List<Room> loginMemberRooms = findByMember(loginMember);
+        List<Room> loginMemberRooms = roomMemberMapService.findByMember(loginMember);
         List<List<Room>> chattingMemberRooms = new ArrayList<>();
 
         for(Member mem : chatMembers)
         {
-            chattingMemberRooms.add(findByMember(mem));
+            chattingMemberRooms.add(roomMemberMapService.findByMember(mem));
         }
 
         for(Room room : loginMemberRooms)
@@ -100,16 +77,29 @@ public class RoomService {
         return roomRepository.findById(id).orElse(null);
     }
 
-    public RoomDTO getRoomDTO(Long id)
+    public RoomDTO getRoomDTO(Member loginUSer, Long id)
     {
         Room room = getRoom(id);
-        return new RoomDTO(room, getMemberMapList(room));
+        return new RoomDTO(loginUSer, room, getMemberMapList(room));
+    }
+
+    public List<RoomDTO> getRoomDTOList(Member loginUSer)
+    {
+        List<Room> roomList = roomMemberMapService.findByMember(loginUSer);
+
+        List<RoomDTO> roomDTOList = new ArrayList<>();
+        for(Room room : roomList)
+        {
+            roomDTOList.add(new RoomDTO(loginUSer, room, getMemberMapList(room)));
+        }
+
+        return roomDTOList;
     }
 
     private Map<String, Member> getMemberMapList(Room room) {
         Map<String, Member> memberMap = new HashMap<>();
 
-        for (Room_Member_Map roomMemberMap : roomMemberMapRepository.findByRoom(room)) {
+        for (Room_Member_Map roomMemberMap : roomMemberMapService.getByRoom(room)) {
             Member member = roomMemberMap.getMember();
             memberMap.put(member.getUsername(), member);
         }
@@ -129,10 +119,10 @@ public class RoomService {
         return messageMemberMapService.getMessageDTOList(room);
     }
 
-    public void readMessageState(Map<String, Object> quitMsg)
+    public void readMessageState(Long id, String username)
     {
-        Room room = getRoom(Long.valueOf(quitMsg.get("roomId").toString()));
+        Room room = getRoom(id);
 
-        messageMemberMapService.readMessageState(room, quitMsg.get("sender").toString());
+        messageMemberMapService.readMessageState(room, username);
     }
 }

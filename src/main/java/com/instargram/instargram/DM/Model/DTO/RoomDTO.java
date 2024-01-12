@@ -14,11 +14,22 @@ public class RoomDTO {
 
     private Room room;
 
+    private String name = "";
+
     private Map<String, Member> members;
 
-    public RoomDTO(Room room, Map<String, Member> members)
+    public RoomDTO(Member loginUser, Room room, Map<String, Member> members)
     {
         this.room = room;
         this.members = members;
+
+        for(Map.Entry<String, Member> member : members.entrySet())
+        {
+            if(!member.getKey().equals(loginUser.getUsername()))
+            {
+                this.name += member.getValue().getNickname() == null ? member.getValue().getUsername() : member.getValue().getNickname();
+                this.name += " ";
+            }
+        }
     }
 }

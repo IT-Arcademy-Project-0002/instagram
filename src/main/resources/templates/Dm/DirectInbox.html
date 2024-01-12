@@ -5,16 +5,16 @@
 </head>
 <div layout:fragment="content">
     <div class="d-flex">
-        <div class="main-content d-flex">
+        <div class="main-content d-flex" style="margin-left: 4.5rem;">
             <div class="col-3" style="width: 398px; overflow-y: scroll">
                 <ul>
-                    <li th:each="room:${roomList}">
-                        <a th:href="@{|/direct/t/${room.id}|}"
-                           th:text="${room.name}"></a>
+                    <li th:each="dto:${roomList}">
+                        <a th:href="@{|/direct/t/${dto.room.id}|}"
+                           th:text="${dto.name}"></a>
                     </li>
                 </ul>
             </div>
-            <div class="col-9">
+            <div class="flex-fill">
                 <div class="d-flex justify-content-center align-items-center h-100">
                     <div class="text-center mb-5">
                         <div class="d-flex justify-content-center">

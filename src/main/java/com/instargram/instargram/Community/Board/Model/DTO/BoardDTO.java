@@ -2,6 +2,7 @@ package com.instargram.instargram.Community.Board.Model.DTO;
 
 import com.instargram.instargram.Community.Board.Model.Entity.*;
 import com.instargram.instargram.Community.HashTag.Model.Entity.HashTag;
+import com.instargram.instargram.Community.Location.Model.DTO.LocationDTO;
 import com.instargram.instargram.Member.Model.DTO.MemberDTO;
 import com.instargram.instargram.Member.Model.Entity.Member;
 import jakarta.transaction.Transactional;
@@ -25,7 +26,7 @@ public class BoardDTO {
     private MemberDTO memberDTO;
     private Boolean likeHide;
     private Boolean commentDisable;
-    private String location;
+    private LocationDTO locationDTO;
     private List<Long> boardLikeMemberIds;
     private List<Long> boardSaveIds;
     private boolean pin;
@@ -41,9 +42,10 @@ public class BoardDTO {
         this.commentDisable = board.isCommentDisable();
         this.pin = board.isPin();
         if (board.getLocation() != null) {
-            this.location = board.getLocation().getPlaceName();
+//            this.location = board.getLocation().getPlaceName();
+            this.locationDTO = new LocationDTO(board.getLocation());
         } else {
-            this.location = null;
+            this.locationDTO = null;
         }
         if (board.getMember() != null) {
             this.memberDTO = new MemberDTO(board.getMember());

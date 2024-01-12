@@ -4,6 +4,7 @@ $(document).ready(function () {
 
     var locationListBody = $('#locationList');
 
+    // 위치 등록
     function showLocationList() {
         // searchList 요소의 visibility 속성을 visible로 변경하여 보이게 함
         locationListBody.css('visibility', 'visible');
@@ -14,8 +15,8 @@ $(document).ready(function () {
         locationListBody.css('visibility', 'hidden');
     }
 
-
     // input 요소에 대한 keyup 이벤트 핸들러 등록
+    // 위치 등록
     $("#boardkeyword").keyup(function () {
         // 검색어를 가져오기
         var locationKeyword = $(this).val();
@@ -29,6 +30,7 @@ $(document).ready(function () {
             SearchKeyword(locationKeyword);
         }, 300);
     });
+
 
     // 검색창의 변화를 감지하여 완성된 단어를 순서대로 읽어 백엔드로 전달. 실시간으로 검색결과 전송
     function SearchKeyword(keyword) {

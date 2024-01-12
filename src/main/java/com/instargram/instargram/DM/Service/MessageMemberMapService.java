@@ -52,26 +52,40 @@ public class MessageMemberMapService {
         return messageMemberMapRepository.findByRoomAndMember_UsernameNotAndSeeMemberNotContainingOrderByCreateDateAsc(room, name, name);
     }
 
-    public void create(Map<String, Object> msg, Message message, Room room)
+    public void createDefault(Message_Member_Map messageMemberMap, Room room, Map<String, Object> msg)
     {
         Member sender = memberService.getMember(msg.get("sender").toString());
-        Message_Member_Map messageMemberMap = new Message_Member_Map();
         messageMemberMap.setMember(sender);
         messageMemberMap.setCreateDate(LocalDateTime.now());
         messageMemberMap.setRoom(room);
-        messageMemberMap.setDataId(message.getId());
-        messageMemberMap.setDataType(1);
         messageMemberMap.setEmpathy(null);
         messageMemberMap.setSeeMember("");
 
         messageMemberMapRepository.save(messageMemberMap);
+    }
+    public void createMessageMap(Map<String, Object> msg, Message message, Room room)
+    {
+        Message_Member_Map messageMemberMap = new Message_Member_Map();
+        messageMemberMap.setDataId(message.getId());
+        messageMemberMap.setDataType(Enum_Data.MESSAGE.getNumber());
+
+        createDefault(messageMemberMap, room, msg);
+    }
+
+    public void createImageMap(Map<String, Object> msg, Image image, Room room)
+    {
+        Message_Member_Map messageMemberMap = new Message_Member_Map();
+        messageMemberMap.setDataId(image.getId());
+        messageMemberMap.setDataType(Enum_Data.IMAGE.getNumber());
+
+        createDefault(messageMemberMap, room, msg);
     }
 
     public void createMessage(Map<String, Object> msg, Room room)
     {
         Message message = messageService.create(msg);
 
-        create(msg, message, room);
+        createMessageMap(msg, message, room);
     }
 
     public List<MessageDTO> getMessageDTOList(Room room)

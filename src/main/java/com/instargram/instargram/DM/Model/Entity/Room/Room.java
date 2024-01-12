@@ -19,9 +19,6 @@ public class Room {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // 방 이름
-    private String name;
-
     // 생성날짜
     private LocalDateTime createDate;
 }

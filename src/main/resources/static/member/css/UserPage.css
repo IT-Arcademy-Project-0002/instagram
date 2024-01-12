@@ -98,38 +98,48 @@
     padding-top: 7px;
 }
 
+.user_follow_info {
+    min-height: 18px;
+    height: 18px;
+    margin-bottom: 30px;
+}
+
 .btn_area {
     display: flex;
-    width: 265px;
+    width: 100%;
     margin-left: 20px;
 }
 
-.btn_userInfo, .btn_message {
+.btn_userInfo, .btn_message, .btn_following {
     background-color: #efefef;
-
+    padding: 6px 16px;
     height: 32px;
+    width: auto;
     border-radius: 8px;
     font-size: 14px;
     font-weight: bold;
+    white-space: nowrap;
 }
-.btn_userInfo:hover, .btn_message:hover {
+.btn_userInfo:hover, .btn_message:hover, .btn_following:hover {
     background-color: #dbdbdb;
 }
 
 .setting {
     width: 40px;
     margin-left: 5px;
+    padding: 8px;
+
 }
 
-.highlight_btn {
-    border: 1px solid #dbdbdb;
-}
+/*.highlight_btn {*/
+/*    border: 1px solid #dbdbdb;*/
+/*}*/
 
-.highlight_img {
-    color: #c7c7c7;
-    position: relative;
-    display: block;
-}
+/*.highlight_img {*/
+/*    color: #c7c7c7;*/
+/*    position: relative;*/
+/*    display: block;*/
+/*}*/
 
 .highlight_line {
     height: 87px;
@@ -138,9 +148,15 @@
     border-radius: 50%;
 }
 
-.plus_icon {
-    display: flex;
+.highlight_line_internal {
+    width: 77px;
+    height: 77px;
     justify-content: center;
+    align-items: center;
+}
+
+.highlight_icon {
+    color: #c7c7c7;
     align-items: center;
 }
 
@@ -163,4 +179,207 @@
     color: #fff;
     background-color: #1877f2;
     border-color: #1877f2;
+}
+
+.center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.new_text {
+    font-weight: 600;
+    font-size: 12px;
+    text-align: center;
+}
+
+
+
+
+
+
+
+
+
+/* padding */
+.pdT10 {
+    padding-top: 10px;
+}
+.pdT5 {
+    padding-top: 5px;
+}
+.pdR15 {
+    padding-right: 15px;
+}
+.pdB10 {
+    padding-bottom: 10px;
+}
+.pdL15 {
+    padding-left: 15px;
+}
+.pd8 {
+    padding: 8px;
+}
+/* padding */
+
+
+/* margin */
+.mga {
+    margin: auto;
+}
+.mgL5 {
+    margin-left: 5px;
+}
+.mgL8 {
+    margin-left: 8px;
+}
+.mgL20 {
+    margin-left: 20px;
+}
+.mgL24 {
+    margin-left: 24px;
+}
+.mgB0 {
+    margin-bottom: 0;
+}
+.mgB44 {
+    margin-bottom: 44px;
+}
+/* margin */
+
+
+/* min width */
+.mw74 {
+    min-width: 74px;
+}
+.mw30 {
+    min-width: 30px;
+}
+/* min width */
+
+
+/* min height */
+.mh30 {
+    min-height: 30px;
+}
+/* min height */
+
+
+
+/* width */
+.w_100 {
+    width: 100%;
+}
+.w300 {
+    width: 300px;
+}
+.w115 {
+    width: 115px;
+}
+.w140 {
+    width: 140px;
+}
+.w10r {
+    width: 10rem;
+}
+.wa {
+    width: auto;
+}
+/* width */
+
+
+
+/* height */
+.h_100 {
+    height: 100%;
+}
+.h300 {
+    height: 300px;
+}
+.h130 {
+    height: 130px;
+}
+.h55 {
+    height: 55px;
+}
+.h30 {
+    height: 30px;
+}
+.h10r {
+    height: 10rem;
+}
+/* height */
+
+
+/* cursor pointer */
+.cp {
+    cursor: pointer;
+}
+/* cursor pointer */
+
+
+.aIC {
+    align-items: center;
+}
+
+
+/* font weight */
+.fw600 {
+    font-weight: 600;
+}
+/* font weight */
+
+
+/* font size */
+.fs14 {
+    font-size: 14px;
+}
+/* font size */
+
+
+/* border width */
+.btw1 {
+    border-top-width: 1px;
+}
+/* border width */
+
+
+/* border style */
+.btsS {
+    border-top-style: solid;
+}
+/* border style */
+
+
+/* border color */
+.btcDB {
+    border-top-color: #dbdbdb;
+}
+/* border color */
+
+/* position */
+.pr {
+    position: relative;
+}
+.pa {
+    position: absolute;
+}
+/* position */
+
+/* top */
+.top0 {
+    top: 0;
+}
+/* top */
+
+
+/* left */
+.left0 {
+    left: 0;
+}
+/* left */
+
+
+.ofc {
+    object-fit: cover;
 }

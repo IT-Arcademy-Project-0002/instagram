@@ -5,6 +5,8 @@ import com.instargram.instargram.Community.Comment.Model.Entity.Comment_Like_Map
 import com.instargram.instargram.Community.Comment.Model.Repository.CommentRepository;
 import com.instargram.instargram.Community.Recomment.Model.Entity.ReComment_Like_Map;
 import com.instargram.instargram.Community.Recomment.Model.Entity.Recomment;
+import com.instargram.instargram.Member.Model.Entity.Member;
+import com.instargram.instargram.Member.Model.Repository.MemberRepository;
 import com.instargram.instargram.Notice.Model.Entity.*;
 import com.instargram.instargram.Notice.Model.Repository.Notice_Comment_MapRepository;
 import com.instargram.instargram.Notice.Model.Repository.Notice_Comment_Like_MapRepository;
@@ -20,6 +22,7 @@ import java.util.regex.Pattern;
 @Service
 public class NoticeCommentMapService {
 
+    private final MemberRepository memberRepository;
     private final Notice_Comment_MapRepository noticeCommentMapRepository;
     private final Notice_Recomment_MapRepository noticeRecommentMapRepository;
     private final Notice_Comment_Like_MapRepository noticeCommentLikeMapRepository;
@@ -59,6 +62,25 @@ public class NoticeCommentMapService {
         noticeRecommentLikeMap.setNotice(notice);
         this.noticeRecommentLikeMapRepository.save(noticeRecommentLikeMap);
 
+    }
+
+    public Member createTagMember(String recommentContent) {
+
+        if (recommentContent != null) {
+            // 정규표현식을 사용하여 '@' 뒤의 단어 추출
+            final String regex = "@(\\S+)";
+            final Pattern pattern = Pattern.compile(regex);
+            final Matcher matcher = pattern.matcher(recommentContent);
+
+            // '@' 뒤의 회원아이디를 찾기 전에 매치 확인
+            if (matcher.find()) {
+                final String username = matcher.group(1);
+
+                return this.memberRepository.findByUsername(username);
+            }
+        }
+
+        return new Member();
     }
 
 

@@ -75,85 +75,89 @@
                                         <!-- button -->
                                         <div class="btn_area">
                                             <a class="btn btn_userInfo" th:href="@{/member/account/edit}">프로필 편집</a>
-                                            <a class="btn btn_userInfo" style="margin-left: 8px">보관된 스토리 보기</a>
+                                            <a class="btn btn_userInfo mgL8">보관된 스토리 보기</a>
                                         </div>
                                         <!-- setting -->
-                                        <div class="setting ">
-                                            <svg aria-label="옵션" stroke="currentColor" fill="currentColor"
-                                                 height="24" role="img" viewBox="0 0 24 24" width="24"
-                                            ><title>옵션</title>
-                                                <circle cx="12" cy="12" fill="none" r="8.635" stroke="currentColor"
-                                                        stroke-linecap="round" stroke-linejoin="round"
-                                                        stroke-width="2"></circle>
-                                                <path d="M14.232 3.656a1.269 1.269 0 0 1-.796-.66L12.93 2h-1.86l-.505.996a1.269 1.269 0 0 1-.796.66m-.001 16.688a1.269 1.269 0 0 1 .796.66l.505.996h1.862l.505-.996a1.269 1.269 0 0 1 .796-.66M3.656 9.768a1.269 1.269 0 0 1-.66.796L2 11.07v1.862l.996.505a1.269 1.269 0 0 1 .66.796m16.688-.001a1.269 1.269 0 0 1 .66-.796L22 12.93v-1.86l-.996-.505a1.269 1.269 0 0 1-.66-.796M7.678 4.522a1.269 1.269 0 0 1-1.03.096l-1.06-.348L4.27 5.587l.348 1.062a1.269 1.269 0 0 1-.096 1.03m11.8 11.799a1.269 1.269 0 0 1 1.03-.096l1.06.348 1.318-1.317-.348-1.062a1.269 1.269 0 0 1 .096-1.03m-14.956.001a1.269 1.269 0 0 1 .096 1.03l-.348 1.06 1.317 1.318 1.062-.348a1.269 1.269 0 0 1 1.03.096m11.799-11.8a1.269 1.269 0 0 1-.096-1.03l.348-1.06-1.317-1.318-1.062.348a1.269 1.269 0 0 1-1.03-.096"
-                                                      fill="none" stroke="currentColor" stroke-linejoin="round"
-                                                      stroke-width="2"></path>
-                                            </svg>
-                                        </div>
+                                        <a style="cursor: pointer">
+                                            <div class="setting center">
+                                                <svg aria-label="옵션" stroke="currentColor" fill="currentColor"
+                                                     height="24" role="img" viewBox="0 0 24 24" width="24"><title>옵션</title>
+                                                    <circle cx="12" cy="12" fill="none" r="8.635" stroke="currentColor"
+                                                            stroke-linecap="round" stroke-linejoin="round"
+                                                            stroke-width="2"></circle>
+                                                    <path d="M14.232 3.656a1.269 1.269 0 0 1-.796-.66L12.93 2h-1.86l-.505.996a1.269 1.269 0 0 1-.796.66m-.001 16.688a1.269 1.269 0 0 1 .796.66l.505.996h1.862l.505-.996a1.269 1.269 0 0 1 .796-.66M3.656 9.768a1.269 1.269 0 0 1-.66.796L2 11.07v1.862l.996.505a1.269 1.269 0 0 1 .66.796m16.688-.001a1.269 1.269 0 0 1 .66-.796L22 12.93v-1.86l-.996-.505a1.269 1.269 0 0 1-.66-.796M7.678 4.522a1.269 1.269 0 0 1-1.03.096l-1.06-.348L4.27 5.587l.348 1.062a1.269 1.269 0 0 1-.096 1.03m11.8 11.799a1.269 1.269 0 0 1 1.03-.096l1.06.348 1.318-1.317-.348-1.062a1.269 1.269 0 0 1 .096-1.03m-14.956.001a1.269 1.269 0 0 1 .096 1.03l-.348 1.06 1.317 1.318 1.062-.348a1.269 1.269 0 0 1 1.03.096m11.799-11.8a1.269 1.269 0 0 1-.096-1.03l.348-1.06-1.317-1.318-1.062.348a1.269 1.269 0 0 1-1.03-.096"
+                                                          fill="none" stroke="currentColor" stroke-linejoin="round"
+                                                          stroke-width="2"></path>
+                                                </svg>
+                                            </div>
+                                        </a>
                                     </div>
 
                                     <!-- not mine page-->
                                     <div th:unless="${userPageDTO.isMine()}" class="d-flex align-items-center">
                                         <!-- button -->
-                                        <div class="d-flex" style="margin-left: 20px;">
-                                            <a class="btn" style="min-width: 74px;"
-                                               th:classappend="${userPageDTO.isFollow() or userPageDTO.isRequestFollow()}?'btn-outline-secondary' : 'btn_follow'"
+                                        <div class="d-flex mgL20">
+                                            <a class="btn mw74"
+                                               th:classappend="${userPageDTO.isFollow() or userPageDTO.isRequestFollow()}?'btn_following' : 'btn_follow'"
                                                onclick="clickFollow()">
                                                 <span id="follow-spin"
                                                       class="visually-hidden spinner-border spinner-border-sm"
                                                       aria-hidden="true"></span>
-                                                <span th:if="${userPageDTO.isFollow()}" class="follow-text">팔로잉</span>
+                                                <span th:if="${userPageDTO.isFollow()}" class="follow-text">팔로잉
+                                                    <svg aria-label="아래쪽 V자형 아이콘" class="d-inline-block" style="transform: rotate(180deg); color: black;" fill="currentColor" height="12" role="img" viewBox="0 0 24 24" width="12"><title>아래쪽 V자형 아이콘</title><path d="M21 17.502a.997.997 0 0 1-.707-.293L12 8.913l-8.293 8.296a1 1 0 1 1-1.414-1.414l9-9.004a1.03 1.03 0 0 1 1.414 0l9 9.004A1 1 0 0 1 21 17.502Z"></path></svg>
+                                                </span>
                                                 <span th:if="${not userPageDTO.isFollow() and userPageDTO.isFollower() and not userPageDTO.isRequestFollow()}"
-                                                      style="width: 140px" class="follow-text">맞팔로우 하기</span>
+                                                      class="follow-text w140">맞팔로우 하기</span>
                                                 <span th:if="${userPageDTO.isRequestFollow()}"
                                                       class="follow-text">요청됨</span>
                                                 <span th:if="${not userPageDTO.isRequestFollow() and not userPageDTO.isFollow() and not userPageDTO.isFollower()}"
                                                       class="follow-text">팔로우</span>
                                             </a>
                                             <a th:if="${not userPageDTO.isFollower() or userPageDTO.isFollow()}"
-                                               class="btn btn_message" style="margin-left: 8px">메세지 보내기</a>
+                                               class="btn btn_message mgL8">메세지 보내기</a>
                                         </div>
+
                                         <!-- setting -->
-                                        <div style="margin-left: 5px">
-                                            <div style="width: auto; padding: 8px">
-                                                <svg aria-label="옵션" fill="currentColor" height="32" role="img"
-                                                     viewBox="0 0 24 24" width="32"><title>옵션</title>
-                                                    <circle cx="12" cy="12" r="1.5"></circle>
-                                                    <circle cx="6" cy="12" r="1.5"></circle>
-                                                    <circle cx="18" cy="12" r="1.5"></circle>
-                                                </svg>
+                                        <a class="cp">
+                                            <div class="mgL5">
+                                                <div class="pd8 wa">
+                                                    <svg aria-label="옵션" fill="currentColor" height="32" role="img"
+                                                         viewBox="0 0 24 24" width="32"><title>옵션</title>
+                                                        <circle cx="12" cy="12" r="1.5"></circle>
+                                                        <circle cx="6" cy="12" r="1.5"></circle>
+                                                        <circle cx="18" cy="12" r="1.5"></circle>
+                                                    </svg>
+                                                </div>
                                             </div>
-                                        </div>
+                                        </a>
                                     </div>
 
                                 </div>
                             </div>
 
                             <!--user follow info-->
-                            <div class="d-flex"
-                                 style="min-height:18px; height: 18px; margin-bottom: 20px; align-items: center;">
+                            <div class="d-flex user_follow_info aIC">
                                 <div class="me-5">
                                     <span>게시물</span>
-                                    <span style="font-weight: 600" th:text="${userPageDTO.feedSize}"></span>
+                                    <span class="fw600" th:text="${userPageDTO.feedSize}"></span>
                                 </div>
                                 <div class="me-5">
                                     <span>팔로워</span>
-                                    <span style="font-weight: 600" id="followers"
+                                    <span class="fw600" id="followers"
                                           th:text="${#lists.size(userPageDTO.followers)}"></span>
                                 </div>
                                 <div>
                                     <span>팔로잉</span>
-                                    <span style="font-weight: 600" id="follows"
+                                    <span class="fw600" id="follows"
                                           th:text="${#lists.size(userPageDTO.followings)}"></span>
                                 </div>
                             </div>
                             <!--user info interest-->
-                            <div style="min-height:30px; height: 30px;"
-                                 class="d-flex flex-column justify-content-between">
-                                <div style="font-size: 14px; font-weight: bold;">
+                            <div class="d-flex flex-column justify-content-between mh30 h30">
+                                <div class="fs14 fw-bold pdT5">
                                     <span th:text="${member.nickname}"></span>
                                 </div>
-                                <div style="font-size: 14px; padding-top: 5px; margin-bottom: 0;">
+                                <div class="fs14 pdT5 mgB0">
                                     <span th:text="${member.introduction}"></span>
                                 </div>
                             </div>
@@ -162,32 +166,27 @@
 
                     <!--story highlight --> <!-- 'visually-hidden' -->
 
-                    <div th:classappend="${#maps.isEmpty(userPageDTO.stories)} ? ''"
-                         style="height: 130px; margin-bottom: 44px">
-                        <div style="height: 100%">
-                            <div class="d-flex" style="height: 100%">
-                                <div style="margin-left: 24px">
+                    <div class="h130 mgB44" th:classappend="${#maps.isEmpty(userPageDTO.stories)} ? ''">
+                        <div class="h_100">
+                            <div class="d-flex h_100">
+                                <div class="mgL24">
                                     <!-- highlight modal -->
-                                    <div style="width: 115px; padding: 10px 15px 10px 15px">
+                                    <div class="w115 pdT10 pdR15 pdB10 pdL15">
                                         <a type="button" data-bs-toggle="modal" data-bs-target="#highlightModal">
                                             <div>
                                                 <div>
-                                                    <div class="highlight_line plus_icon">
-                                                        <div class="d-flex"
-                                                             style="width: 77px; height: 77px; justify-content: center; align-items: center;">
-                                                            <svg aria-label="+ 아이콘" class="highlight"
-                                                                 style="color: #c7c7c7; align-items: center;"
+                                                    <div class="highlight_line center">
+                                                        <div class="d-flex highlight_line_internal">
+                                                            <svg aria-label="+ 아이콘" class="highlight_icon"
                                                                  fill="currentColor" height="44"
-                                                                 role="img" viewBox="0 0 24 24" width="44"><title>+
-                                                                아이콘</title>
+                                                                 role="img" viewBox="0 0 24 24" width="44"><title>+ 아이콘</title>
                                                                 <path d="M21 11.3h-8.2V3c0-.4-.3-.8-.8-.8s-.8.4-.8.8v8.2H3c-.4 0-.8.3-.8.8s.3.8.8.8h8.2V21c0 .4.3.8.8.8s.8-.3.8-.8v-8.2H21c.4 0 .8-.3.8-.8s-.4-.7-.8-.7z"></path>
                                                             </svg>
                                                         </div>
-
                                                     </div>
                                                 </div>
-                                                <div style=" padding-top: 10px;">
-                                                    <div style="font-weight: 600; font-size: 12px; text-align: center">
+                                                <div class="pdT10">
+                                                    <div class="new_text">
                                                         신규
                                                     </div>
                                                 </div>
@@ -222,12 +221,11 @@
                         </div>
                     </div>
 
-                    <div style="border-top-style: solid; border-top-width: 1px; border-top-color: #dbdbdb"></div>
+                    <div class="btsS btcDB btw1"></div>
 
                     <div th:if="${member.scope or userPageDTO.isMine()}">
                         <!--board list menu-->
-                        <div class="d-flex justify-content-center align-items-center"
-                             style="height: 55px;">
+                        <div class="d-flex justify-content-center align-items-center h55">
                             <div class="d-flex">
                                 <a class="btn" href="">게시물</a>
                                 <a class="btn" href="">저장됨</a>
@@ -240,11 +238,11 @@
                             <div class="row row-cols-3 mx-0 p-0">
                                 <div th:each="feed : ${userPageDTO.feeds}" class="col mb-1 p-0">
                                     <div class="d-flex justify-content-center">
-                                        <div style="position: relative; width: 300px; height: 300px;">
+                                        <div class="pr w300 h300">
                                             <img th:src="@{|/resources/${feed.fileDTOS().get(0).name}|}"
-                                                 class="shadow-sm text-center smooth-update userProfile_line"
-                                                 style="position: absolute; top: 0; left: 0; transform: translate(50,50); width: 100%; height: 100%; object-fit: cover; margin: auto">
-                                            <div style="width:10rem; height:10rem; position: absolute">
+                                                 class="shadow-sm text-center smooth-update userProfile_line pa top0 left0 w_100 h_100 mga ofc"
+                                                 style="transform: translate(50,50)">
+                                            <div class="w10r h10r pa">
                                                 <button class="btn btn-primary" th:value="${feed.board().id}"
                                                         onclick="boardPinChange(this)"
                                                         th:text="${feed.board().isPin()}?'상단고정 해제':'상단고정'"></button>

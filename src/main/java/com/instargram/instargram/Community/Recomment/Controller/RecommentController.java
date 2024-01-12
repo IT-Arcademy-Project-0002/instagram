@@ -44,6 +44,12 @@ public class RecommentController {
             Recomment recomment = recommentService.create(member, comment, recommentCreateForm.getContent());
             Notice notice = this.noticeService.createNotice(Enum_Data.COMMENT_RECOMMENT.getNumber(), member, comment.getMember());
             noticeCommentMapService.createNoticeRecomment(recomment, notice);
+            // 대댓글에서 TagMember를 언급할때 실제 회원이 존재한다면(tagMember != null) 알림을 보내는 비즈니스 로직임
+            Member tagMember = noticeCommentMapService.createTagMember(recommentCreateForm.getContent());
+            if (tagMember != null) {
+                Notice noticeForTabMember = this.noticeService.createRecommentTagMemberNotice(Enum_Data.COMMENT_RECOMMENT.getNumber(), member, tagMember);
+                noticeCommentMapService.createNoticeRecomment(recomment, noticeForTabMember);
+            }
         }
         return "redirect:/main";
     }

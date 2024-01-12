@@ -3,6 +3,7 @@
 <head>
     <link rel="stylesheet" type="text/css" th:href="@{/board/css/board_content.css}">
     <link rel="stylesheet" type="text/css" th:href="@{/board/css/modal.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/board/css/modify_location.css}">
 </head>
 <div layout:fragment="content">
     <!-- Feed list -->
@@ -15,8 +16,8 @@
                     </div>
                     <div class="frag-board mt-4">
                         <div th:each="feed, idx : ${feedList}" class="p-3 border-bottom">
-                            <!--location not null-->
-                            <div th:if="${feed.board.location == null}">
+                            <!--location null-->
+                            <div th:if="${feed.board.locationDTO == null}">
                                 <div class="d-flex" style="padding: 0 0 12px 4px;">
                                     <div style="position: relative; width: 2.5rem; height: 2.5rem;">
                                         <img th:if="${feed.board.memberDTO.imageDTO == null}"
@@ -44,8 +45,8 @@
                                 </div>
                             </div>
 
-                            <!--location null-->
-                            <div th:if="${feed.board.location != null}">
+                            <!--location not null-->
+                            <div th:if="${feed.board.locationDTO != null}">
                                 <div class="d-flex" style="padding: 0 0 12px 4px;">
                                     <div style="position: relative; width: 2.5rem; height: 2.5rem;">
                                         <img th:if="${feed.board.memberDTO.imageDTO == null}"
@@ -70,7 +71,7 @@
                                             </div>
                                         </div>
                                         <div class="d-flex" style="font-size: 0.8rem;">
-                                            <div th:text="${feed.board.location}"></div>
+                                            <div th:text="${feed.board.locationDTO.placeName}"></div>
                                         </div>
                                     </div>
                                 </div>
@@ -376,8 +377,8 @@
                                      style="padding: 14px 16px 14px 16px; height: 10%;">
                                     <div class="d-flex align-items-center" style="flex:6;">
 
-                                        <!--location not null-->
-                                        <div th:if="${selectFeed.board.location == null}">
+                                        <!--location null-->
+                                        <div th:if="${selectFeed.board.locationDTO == null}">
                                             <div class="d-flex">
                                                 <div style="position: relative; width: 2rem; height: 2rem;">
                                                     <img th:if="${selectFeed.board.memberDTO.imageDTO == null}"
@@ -398,8 +399,8 @@
                                             </div>
                                         </div>
 
-                                        <!--location null-->
-                                        <div th:if="${selectFeed.board.location != null}">
+                                        <!--location not null-->
+                                        <div th:if="${selectFeed.board.locationDTO != null}">
                                             <div class="d-flex">
                                                 <div style="position: relative; width: 2rem; height: 2rem;">
                                                     <img th:if="${selectFeed.board.memberDTO.imageDTO == null}"
@@ -417,7 +418,7 @@
                                                              th:text="${selectFeed.board.memberDTO.username}"></div>
                                                     </div>
                                                     <div class="d-flex" style="font-size: 0.8rem;">
-                                                        <div th:text="${selectFeed.board.location}"></div>
+                                                        <div th:text="${selectFeed.board.locationDTO.placeName}"></div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -801,20 +802,19 @@
                     <div class="d-flex">
                         <div class="d-flex">
                             <div style="width: 838px;">
-                                <div id="carouselExampleControlsNoTouching" class="carousel slide"
-                                     data-interval="false">
+                                <div id="modifyCarouselExampleControlsNoTouching" class="carousel slide">
                                     <div class="carousel-inner">
                                         <div id="file-container">
                                         </div>
                                     </div>
                                     <button class="carousel-control-prev" type="button"
-                                            data-bs-target="#carouselExampleControlsNoTouching"
+                                            data-bs-target="#modifyCarouselExampleControlsNoTouching"
                                             data-bs-slide="prev">
                                         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                                         <span class="visually-hidden">Previous</span>
                                     </button>
                                     <button class="carousel-control-next" type="button"
-                                            data-bs-target="#carouselExampleControlsNoTouching"
+                                            data-bs-target="#modifyCarouselExampleControlsNoTouching"
                                             data-bs-slide="next">
                                         <span class="carousel-control-next-icon" aria-hidden="true"></span>
                                         <span class="visually-hidden">Next</span>
@@ -841,20 +841,140 @@
                             </div>
                             <textarea class="form-control border-0 mt-3 p-0"
                                       style="resize: none; height: 200px;" name="content"
-                                      id="modalContent"
+                                      id="ModifyContent"
                                       placeholder="문구를 입력하세요..."></textarea>
                             <div class="textLengthWrap d-flex justify-content-end">
-                                <p class="textCount p-0 m-0" style="font-size: smaller;">0자</p>
-                                <p class="textTotal p-0 m-0" style="font-size: smaller;">/2200자</p>
+                                <p class="ModifyTextCount p-0 m-0" style="font-size: smaller;">0자</p>
+                                <p class="ModifyTextTotal p-0 m-0" style="font-size: smaller;">/2200자</p>
                             </div>
 
                             <div class="input-group d-flex flex-column">
                                 <div class="d-flex align-items-center">
-                                    <input type="text" class="form-control my-2 flex-grow-1" name="TagMember" id="TagMember" placeholder="@언급 추가해 주세요..." style="border:none; resize: none;">
+                                    <input type="text" class="form-control my-2 flex-grow-1" name="ModifyTagMember" id="ModifyTagMember" placeholder="@언급 추가해 주세요..." style="border:none; resize: none;">
                                 </div>
-                                <div id="TagMember-container"></div>
+                                <div id="ModifyTagMember-container"></div>
                             </div>
 
+                            <div class="input-group d-flex flex-column">
+                                <div class="d-flex align-items-center">
+                                    <input type="text" class="form-control my-2" size="14" name="ModifyHashTag" id="ModifyHashTag" placeholder="#해시태그를 입력하세요..." style="border:none; resize: none;">
+                                </div>
+                                <div id="ModifyHashTag-container"></div>
+                            </div>
+
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="위치 추가"
+                                       aria-describedby="basic-addon2" id="ModifyBoardkeyword" name="ModifyBoardkeyword"
+                                       size="15" autocomplete="off" style="border:none; resize: none;">
+                                <div class="d-flex justify-content-center align-items-center" style="border-top-left-radius: 0; border-bottom-left-radius: 0; background: transparent; border-color: #CCC;">
+                                    <svg aria-label="위치 추가" fill="currentColor"
+                                         height="24" role="img" viewBox="0 0 24 24" width="24"><title>위치 추가</title>
+                                        <path d="M12.053 8.105a1.604 1.604 0 1 0 1.604 1.604 1.604 1.604 0 0 0-1.604-1.604Zm0-7.105a8.684 8.684 0 0 0-8.708 8.66c0 5.699 6.14 11.495 8.108 13.123a.939.939 0 0 0 1.2 0c1.969-1.628 8.109-7.424 8.109-13.123A8.684 8.684 0 0 0 12.053 1Zm0 19.662C9.29 18.198 5.345 13.645 5.345 9.66a6.709 6.709 0 0 1 13.417 0c0 3.985-3.944 8.538-6.709 11.002Z"></path>
+                                    </svg>
+                                </div>
+                            </div>
+                            <div class="ModifyLocation-list" id="ModifyLocation-list">
+                            </div>
+                            <div>
+                                <input type="hidden" id="ModifyLocationId" name="ModifyLocationId" value=" " readonly>
+                                <input type="hidden" id="ModifyPlaceName" name="ModifyPlaceName" value=" " readonly>
+                                <input type="hidden" id="ModifyRoadAddressName" name="ModifyRoadAddressName" value=" " readonly>
+                                <input type="hidden" id="ModifyAddressName" name="ModifyAddressName" value=" " readonly>
+                                <input type="hidden" id="Modify-x" name="Modify-x" value=" " readonly>
+                                <input type="hidden" id="Modify-y" name="Modify-y" value=" " readonly>
+                            </div>
+                            <div class="d-flex flex-column mt-2">
+                                <!--접근성-->
+                                <div class="d-flex justify-content-between align-items-center"
+                                     id="ModifyAccessibilitySettingsToggle">
+                                    <div style="font-weight: bold;" th:text="접근성"></div>
+                                    <span id="ModifyAccessibilitycollapseArrow"
+                                          style="display: inline-block; transform: rotate(0deg);">
+                                        <svg aria-label="위쪽 V자형 아이콘" class="x1lliihq x1n2onr6 x5n08af"
+                                             fill="currentColor" height="16" role="img" viewBox="0 0 24 24"
+                                             width="16">
+                                            <title>아래쪽 V자형 아이콘</title>
+                                            <path d="M21 17.502a.997.997 0 0 1-.707-.293L12 8.913l-8.293 8.296a1 1 0 1 1-1.414-1.414l9-9.004a1.03 1.03 0 0 1 1.414 0l9 9.004A1 1 0 0 1 21 17.502Z"></path>
+                                        </svg>
+                                    </span>
+                                    <span id="ModifyAccessibilityexpandArrow"
+                                          style="display: none; transform: rotate(180deg);">
+                                        <svg aria-label="아래쪽 V자형 아이콘" class="x1lliihq x1n2onr6 x5n08af"
+                                             fill="currentColor" height="16" role="img" viewBox="0 0 24 24"
+                                             width="16">
+                                            <title>위쪽 V자형 아이콘</title>
+                                            <path d="M21 17.502a.997.997 0 0 1-.707-.293L12 8.913l-8.293 8.296a1 1 0 1 1-1.414-1.414l9-9.004a1.03 1.03 0 0 1 1.414 0l9 9.004A1 1 0 0 1 21 17.502Z"></path>
+                                        <</svg>
+                                    </span>
+                                </div>
+                                <div id="ModifyAccessibilitySettings" style="display: none;">
+                                    <div class="d-flex flex-column justify-content-between align-items-center w-100">
+                                        <div class="d-flex flex-column justify-content-between my-2 w-100">
+                                            <div class="text small" style="font-size: 0.8rem;">
+                                                대체 텍스트는 시각적으로 사진을 보기 어려운 사람들에게 사진 내용을 설명하는 텍스트입니다. 대체 텍스트는 회원님의 사진에
+                                                대해 자동으로 생성되며, 직접 입력할 수도 있습니다
+                                            </div>
+                                            <input type="text" class="form-control mt-2" placeholder="대체 텍스트 입력...">
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--접근성 End-->
+                            </div>
+                            <div class="d-flex flex-column mt-2">
+                                <!-- 고급설정 -->
+                                <div class="d-flex justify-content-between align-items-center"
+                                     id="ModifyAdvancedSettingsToggle">
+                                    <div style="font-weight: bold;" th:text="고급설정"></div>
+                                    <span id="ModifyAdvancedcollapseArrow"
+                                          style="display: inline-block; transform: rotate(0deg);">
+                                            <svg aria-label="위쪽 V자형 아이콘" class="x1lliihq x1n2onr6 x5n08af"
+                                                 fill="currentColor" height="16" role="img" viewBox="0 0 24 24"
+                                                 width="16">
+                                                <title>아래쪽 V자형 아이콘</title>
+                                                <path d="M21 17.502a.997.997 0 0 1-.707-.293L12 8.913l-8.293 8.296a1 1 0 1 1-1.414-1.414l9-9.004a1.03 1.03 0 0 1 1.414 0l9 9.004A1 1 0 0 1 21 17.502Z"></path>
+                                            </svg>
+                                        </span>
+                                    <span id="ModifyAdvancedexpandArrow"
+                                          style="display: none; transform: rotate(180deg);">
+                                            <svg aria-label="아래쪽 V자형 아이콘" class="x1lliihq x1n2onr6 x5n08af"
+                                                 fill="currentColor" height="16" role="img" viewBox="0 0 24 24"
+                                                 width="16">
+                                                <title>위쪽 V자형 아이콘</title>
+                                                <path d="M21 17.502a.997.997 0 0 1-.707-.293L12 8.913l-8.293 8.296a1 1 0 1 1-1.414-1.414l9-9.004a1.03 1.03 0 0 1 1.414 0l9 9.004A1 1 0 0 1 21 17.502Z"></path>
+                                            <</svg>
+                                        </span>
+                                </div>
+                                <div id="ModifyAdvancedSettings" style="display: none;">
+                                    <div class="d-flex flex-column justify-content-between align-items-center w-100">
+                                        <div class="d-flex justify-content-between my-2 w-100">
+                                            <div>이 게시물의 좋아요 수 <br> 숨기기</div>
+                                            <div class="form-check form-switch p-0 m-0" style="margin-top: 2px">
+                                                <label>
+                                                    <input class="form-check-input" type="checkbox" role="switch"
+                                                           id="ModifyLikeHide" name="ModifyLikeHide">
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="text small" style="font-size: 0.8rem;">
+                                            이 게시물의 총 좋아요는 회원님만 볼 수 있습니다. 나중에 게시물 상단에 있는 ··· 메뉴에서 이 설정을 변경할 수 있습니다.
+                                            다른 사람의 게시물에서 좋아요 수를 숨기려면 계정 설정으로 이동하세요.
+                                        </div>
+                                        <div class="d-flex justify-content-between my-2 w-100">
+                                            <div>댓글 기능 해제</div>
+                                            <div class="form-check form-switch p-0 m-0" style="margin-top: 2px">
+                                                <label>
+                                                    <input class="form-check-input" type="checkbox" role="switch"
+                                                           id="ModifyCommentDisable" name="ModifyCommentDisable">
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="text small" style="font-size: 0.8rem;">
+                                            나중에 게시물 상단의 메뉴(···)에서 이 설정을 변경할 수 있습니다.
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- 고급설정 End-->
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -1044,7 +1164,6 @@
     <!-- 사용자 Recomment Modal End -->
 
     <script th:src="@{/board/js/update_board.js}"></script>
-
     <!-- javascript -->
     <script th:inline="javascript">
         const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')

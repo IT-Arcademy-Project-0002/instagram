@@ -221,7 +221,7 @@ public class BoardController {
         }
 
         Board board = this.boardService.getBoardById(id);
-        Location tagetLocation = board.getLocation();
+        Location tagetLocation = (board.getLocation() != null) ? board.getLocation() : new Location();
 
         Location location = this.locationService.modify(tagetLocation, locationForm, locationForm.getModifyLocationId(), locationForm.getModifyPlaceName(), locationForm.getModifyAddressName(),
                 locationForm.getModifyRoadAddressName(), locationForm.getModify_x(), locationForm.getModify_y());

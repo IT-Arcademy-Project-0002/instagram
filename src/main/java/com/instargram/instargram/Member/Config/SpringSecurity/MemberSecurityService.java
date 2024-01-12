@@ -42,13 +42,6 @@ public class MemberSecurityService implements UserDetailsService {
             throw new UsernameNotFoundException("입력한 정보의 유저가 없습니다.");
         }
 
-        List<GrantedAuthority> authorities = new ArrayList<>();
-        if ("admin".equals(username)) {
-            authorities.add(new SimpleGrantedAuthority(UserRole.ADMIN.getValue()));
-        } else {
-            authorities.add(new SimpleGrantedAuthority(UserRole.USER.getValue()));
-        }
-
-        return new User(member.getUsername(), member.getPassword(), authorities);
+        return new PrincipalDetails(member);
     }
 }

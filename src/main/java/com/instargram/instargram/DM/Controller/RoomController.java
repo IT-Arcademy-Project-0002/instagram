@@ -35,8 +35,8 @@ public class RoomController {
         return "redirect:/test/chat";
     }
 
-    @PostMapping("/quit")
-    public ResponseEntity<Map<String, Object>> quitRoom(
+    @PostMapping("/readMessage")
+    public ResponseEntity<Map<String, Object>> readMessage(
             @RequestBody Map<String, Object> quitMsg)
     {
         Map<String, Object> result = new HashMap<>();

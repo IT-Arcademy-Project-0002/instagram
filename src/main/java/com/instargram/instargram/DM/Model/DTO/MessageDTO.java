@@ -50,6 +50,7 @@ public class MessageDTO {
         this.Empathy = map.getEmpathy();
         this.room = map.getRoom();
         this.member = map.getMember();
+        this.dataType = map.getDataType();
 
         if(map.getSeeMember().equals(""))
         {

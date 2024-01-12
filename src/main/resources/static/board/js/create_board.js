@@ -186,6 +186,7 @@ function clickFileUpload() {
 
             var files = document.getElementById("img-container");
             for (let i = 0; i < filesArray.length; i++) {
+                console.log(filesArray[i]);
                 var carouselItem = document.createElement("div");
                 carouselItem.classList.add("carousel-item");
 
@@ -235,6 +236,7 @@ function clickFileUpload() {
                 }
                 carouselItem.appendChild(imageContainer);
                 files.appendChild(carouselItem);
+                console.log(files);
             }
             var carousel = document.getElementById("carouselExampleControlsNoTouching");
             var prevButton = carousel.querySelector(".carousel-control-prev");
@@ -244,7 +246,7 @@ function clickFileUpload() {
                 prevButton.classList.add("visually-hidden")
                 nextButton.classList.add("visually-hidden")
             }
-            carouselItem.classList.add('active');
+            files.firstElementChild.classList.add('active');
             console.log(imagePreviewArray);
             console.log(videoPreviewArray);
             $(secondModal).modal('show'); // 두 번째 모달 활성화

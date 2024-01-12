@@ -34,4 +34,14 @@ public class LocationController {
 
         return locationResult;
     }
+
+    @GetMapping(value = "/modify/keyword", produces = "application/json")
+    @ResponseBody
+    public List<LocationDTO> modifyKeywordSearchJson(Model model, @RequestParam("keyword") String keyword) throws JSONException {
+
+        List<LocationDTO> locationResult = this.locationService.getCoordinateByKeyword(keyword);
+        model.addAttribute("locationResult", locationResult);
+
+        return locationResult;
+    }
 }

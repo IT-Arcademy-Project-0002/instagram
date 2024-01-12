@@ -6,7 +6,7 @@
 </head>
 <body>
 
-<form action="/room/create">
+<form action="/direct/room/create">
     <button type="submit">방 만들기</button>
 </form>
 <div th:if="${#lists.contains(roomList, ${roomList.get(0).id})}">

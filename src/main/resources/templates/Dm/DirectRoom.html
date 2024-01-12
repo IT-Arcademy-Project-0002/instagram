@@ -5,16 +5,16 @@
 </head>
 <div layout:fragment="content">
     <div class="d-flex">
-        <div class="main-content d-flex">
+        <div class="main-content d-flex" style="margin-left: 4.5rem;">
             <div class="col-3" style="width: 398px; overflow-y: scroll">
                 <ul>
-                    <li th:each="room:${roomList}">
-                        <a th:href="@{|/direct/t/${room.id}|}"
-                           th:text="${room.name}"></a>
+                    <li th:each="dto:${roomList}">
+                        <a th:href="@{|/direct/t/${dto.room.id}|}"
+                           th:text="${dto.name}"></a>
                     </li>
                 </ul>
             </div>
-            <div class="col-9">
+            <div class="flex-fill">
                 <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
                 <div>
                     <div class="d-flex align-items-center border-bottom" style="height: 75px; min-height: 75px; padding: 0 16px">
@@ -33,32 +33,39 @@
                                 </div>
                             </a>
                         </div>
-                        <span style="padding: 6px; font-size: 16px;" class="fw-bold" th:text="${nowRoomDTO.room.name}"></span>
+                        <span style="padding: 6px; font-size: 16px;" class="fw-bold" th:text="${nowRoomDTO.name}"></span>
                     </div>
                     <input type="hidden" id="room-id" th:value="${nowRoomDTO.room.id}">
                     <input type="hidden" id="loginUser-username" th:value="${loginMember.username}">
                 </div>
                 <div class="d-flex justify-content-center align-items-center" style="height: calc(100vh - 75px - 78px);">
-                    <div id="msg-container" class="w-100 h-100" style="overflow-y: scroll;">
+                    <div class="w-100 h-100 d-flex align-items-center justify-content-center" id="spin-container">
+                        <span class="spinner-border">
+
+                        </span>
+                    </div>
+                    <div id="msg-container" class="w-100 h-100" style="overflow-y: scroll; display: none;">
                         <div class="msgArea">
                             <div th:each="msg : ${messageList}">
-                                <div th:if="${msg.member.username == loginMember.username}" class="p-4">
+                                <div th:if="${msg.member.username == loginMember.username}" class="px-4 pt-1">
                                     <div class="d-flex justify-content-end">
                                         <div>
-                                            <div class="d-flex align-items-center my-2">
-                                                <div class="rounded-5 bg-primary text-light p-2 px-3"
+                                            <div class="d-flex align-items-center justify-content-end my-2">
+                                                <div th:if="${msg.dataType == 1}" class="rounded-5 bg-primary text-light p-2 px-3"
                                                      th:text="${msg.message.content}">
                                                 </div>
-                                                <div class="flex-fill">
+                                                <div th:if="${msg.dataType == 2}">
+                                                    <img th:src="@{|/resources/${msg.image.name}|}"
+                                                        style="width: 10rem; height: auto; border-radius: 22px 4px 22px 22px">
                                                 </div>
                                             </div>
                                             <div class="read-check my-2 text-end" th:text="${msg.seeMember}"></div>
                                         </div>
                                     </div>
                                 </div>
-                                <div th:unless="${msg.member.username == loginMember.username}" class="p-4">
+                                <div th:unless="${msg.member.username == loginMember.username}" class="px-4 pt-1">
                                     <div class="my-2" th:text="${msg.member.username}"></div>
-                                    <div class="d-flex align-items-center my-2">
+                                    <div class="d-flex my-2" th:classappend="${msg.dataType == 1}?'align-items-center'">
                                         <a th:href="@{|/member/page/${msg.member.username}|}">
                                             <div style="position: relative; width: 3rem; height: 3rem;">
                                                 <img th:if="${msg.member.image == null}"
@@ -71,8 +78,14 @@
                                                      style="position: absolute; top: 0; left: 0; transform: translate(50,50); width: 100%; height: 100%; object-fit: cover; margin: auto">
                                             </div>
                                         </a>
-                                        <div class="mx-3 rounded-5 p-2 px-3" style="background: #b7b7b7" th:text="${msg.message.content}">
+                                        <div th:if="${msg.dataType == 1}" class="mx-3 rounded-5 bg-primary text-light p-2 px-3"
+                                             th:text="${msg.message.content}">
                                         </div>
+                                        <div th:if="${msg.dataType == 2}" class="mx-3">
+                                            <img th:src="@{|/resources/${msg.image.name}|}"
+                                                 style="width: 10rem; height: auto; border-radius: 4px 22px 22px 22px">
+                                        </div>
+
                                         <div class="flex-fill">
                                         </div>
                                     </div>
@@ -84,27 +97,66 @@
                 <div class="d-flex align-items-center" style="height: 78px; min-height: 78px">
                     <div class="d-flex w-100 px-4 pe-5">
                         <div class="me-2 flex-fill">
-                            <input type="text" placeholder="보낼 메세지를 입력하세요." class="content form-control">
+                            <input type="text" placeholder="보낼 메세지를 입력하세요."
+                                   class="content form-control" oninput="inputMessage(this)" onkeydown="inputEnter(event)">
                         </div>
                         <div class="me-2">
-                            <button type="button" value="전송" class="sendBtn btn btn-primary" onclick="sendMsg()">전송</button>
+                            <button type="button" value="전송" id="send-btn" disabled
+                                    class="sendBtn btn btn-primary" onclick="sendMsg(this)">전송</button>
                         </div>
                         <div>
-                            <button type="button" value="방나가기" class="quit btn btn-primary" onclick="quit()">방 나가기</button>
+                            <button type="button" value="파일" class="quit btn btn-primary" onclick="clickFile()">파일</button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
+        <input type="file" accept="image/*, video/*" class="visually-hidden"
+               id="file-sender" multiple
+               name="file-sender" onchange="directFile(this);">
     </div>
 
     <script th:inline="javascript">
-        scrollEnd();
+        var sideCheck = document.getElementById('expand-direct-menu');
+        sideCheck.checked = true;
+
+        var sidebar = document.getElementById('side_bar');
+        sidebar.style.width = '4.5rem';
+
+        var sidemenu = document.getElementById('side_menu');
+        sidemenu.style.width = '4.5rem';
+
+        setTimeout(() => {
+
+            document.getElementById('spin-container').remove();
+            document.getElementById("msg-container").style.display='inline';
+            scrollEnd();
+        }, 1200);
 
         var roomId = document.getElementById('room-id').value;
         var username = document.getElementById('loginUser-username').value;
         let msgArea = document.querySelector('.msgArea');
         var connectMember = [];
+
+        function inputMessage(input)
+        {
+            var sendBtn = document.getElementById('send-btn');
+            sendBtn.disabled = input.value === '';
+        }
+
+        function inputEnter(event)
+        {
+            var sendBtn = document.getElementById('send-btn');
+            if(event.key === 'Enter')
+            {
+                
+                if(!sendBtn.disabled)
+                {
+                    sendBtn.click();
+                }
+            }
+        }
 
         function enterRoom(socket) {
 
@@ -118,7 +170,7 @@
             socket.send(JSON.stringify(enterMsg));
 
             const csrfToken = document.querySelector('input[name="_csrf"]').value;
-            fetch('/room/readMessage',
+            fetch('/direct/quit',
                 {
                     method: 'POST',
                     headers: {
@@ -132,7 +184,7 @@
         let socket = new WebSocket("ws://localhost:8888/ws/chat");
 
         socket.onopen = function (e) {
-            
+
             console.log('open server!')
             enterRoom(socket);
         };
@@ -148,7 +200,8 @@
 
         //메세지 수신했을 때 이벤트.
         socket.onmessage = function (e) {
-            
+
+            const csrfToken = document.querySelector('input[name="_csrf"]').value;
 
             console.log(e.data);
 
@@ -158,6 +211,19 @@
                 createMineMessage(data);
             } else if (data.type === 'TALK' && data.sender !== username) {
                 createMessage(data);
+
+                setTimeout(()=>{
+                    fetch('/direct/readMessage',
+                        {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': csrfToken
+                            },
+                            body: JSON.stringify(data)
+                        });
+                }, 100);
+
             } else if (data.type === 'ENTER' && data.sender !== username) {
                 sendConnectState(socket);
 
@@ -176,7 +242,7 @@
         }
 
         function sendConnectState(socket) {
-            
+
             var enterMsg =
                 {
                     "type": "CONNECT",
@@ -207,38 +273,53 @@
                 }
             }
 
+            var msgStr = '';
+            if(data.dataType === 1)
+            {
+                msgStr =
+                    '<div class="rounded-5 bg-primary text-light p-2 px-3">\n' +
+                        data.msg +
+                    '</div>\n';
+            }
+            else if(data.dataType === 2)
+            {
+                msgStr =
+                    '<div>\n' +
+                    '    <img src="/resources/'+ data.msg + '"style="width: 10rem; height: auto; border-radius: 22px 4px 22px 22px">\n' +
+                    '</div>';
+            }
+
+
+
             let newMsg = document.createElement('div');
             newMsg.innerHTML =
-                '                           <div class="p-4">\n' +
+                '                           <div class="px-4 pt-1">\n' +
                 '                                <div class="d-flex justify-content-end">\n' +
                 '                                    <div>\n' +
-                '                                        <div class="d-flex align-items-center my-2">\n' +
-                '                                            <div class="rounded-5 bg-primary text-light p-2 px-3">\n' +
-                data.msg +
-                '                                            </div>\n' +
-                '                                            <div class="flex-fill">\n' +
-                '                                            </div>\n' +
+                '                                        <div class="d-flex align-items-center justify-content-end my-2">\n' +
+                                                            msgStr +
                 '                                        </div>\n' +
                 '                                        <div class="read-check my-2 text-end">\n' +
-                read +
+                                                            read +
                 '                                        </div>\n' +
                 '                                    </div>\n' +
                 '                                </div>\n' +
                 '                            </div>';
             msgArea.appendChild(newMsg);
 
-            scrollEnd();
+            setTimeout(scrollEnd, 100);
         }
 
         function scrollEnd()
         {
+            debugger;
             var objDiv = document.getElementById("msg-container");
             objDiv.scrollTop = objDiv.scrollHeight;
         }
 
 
         function createMessage(data) {
-            
+
             let newMsg = document.createElement('div');
 
             var members = [[${nowRoomDTO.members}]];
@@ -249,12 +330,33 @@
             } else {
                 imgSrc = 'src="/resources/' + img.name + '"\n';
             }
+
+
+            var msgStr = '';
+            var align = '';
+            if(data.dataType === 1)
+            {
+                msgStr =
+                    '<div class="mx-3 rounded-5 bg-primary text-light p-2 px-3" style="background: #b7b7b7">\n' +
+                        data.msg +
+                    '</div>\n';
+
+                align = 'align-items-center';
+            }
+            else if(data.dataType === 2)
+            {
+                msgStr =
+                    '<div class="mx-3">\n' +
+                    '    <img src="/resources/'+ data.msg + '"style="width: 10rem; height: auto; border-radius: 4px 22px 22px 22px">\n' +
+                    '</div>';
+            }
+
             newMsg.innerHTML =
-                '                            <div class="p-4">\n' +
+                '                            <div class="px-4 pt-1">\n' +
                 '                                <div class="my-2">\n' +
                 data.sender +
                 '                                </div>\n' +
-                '                                <div class="d-flex align-items-center my-2">\n' +
+                '                                <div class="d-flex '+ align +' my-2">\n' +
                 '                                   <a href="/member/page/' + data.sender + '">\n' +
                 '                                       <div style="position: relative; width: 3rem; height: 3rem;">\n' +
                 '                                           <img ' + imgSrc +
@@ -262,21 +364,19 @@
                 '                                               style="position: absolute; top: 0; left: 0; transform: translate(50,50); width: 100%; height: 100%; object-fit: cover; margin: auto">\n' +
                 '                                       </div>\n' +
                 '                                   </a>\n' +
-                '                                   <div class="mx-3 rounded-5 p-2 px-3" style="background: #b7b7b7">\n' +
-                data.msg +
-                '                                   </div>\n' +
+                                                        msgStr +
                 '                                   <div class="flex-fill">\n' +
                 '                                    </div>\n' +
                 '                                </div>\n' +
                 '                            </div>';
             msgArea.appendChild(newMsg);
 
-            scrollEnd();
+            setTimeout(scrollEnd, 100);
         }
 
 
         //메세지 보내기 버튼 눌렀을 떄..
-        function sendMsg() {
+        function sendMsg(btn) {
 
             const csrfToken = document.querySelector('input[name="_csrf"]').value;
 
@@ -285,10 +385,11 @@
                 "type": "TALK",
                 "roomId": roomId,
                 "sender": username,
-                "msg": content.value
+                "msg": content.value,
+                "dataType":1,
             };
 
-            fetch('/message/create',
+            fetch('/direct/message/create',
                 {
                     method: 'POST',
                     headers: {
@@ -301,8 +402,9 @@
 
             socket.send(JSON.stringify(talkMsg));
 
-            debugger;
+            
             content.value = '';
+            btn.disabled = true;
         }
 
         function quit() {
@@ -310,14 +412,14 @@
 
             const csrfToken = document.querySelector('input[name="_csrf"]').value;
 
-            
+
             var quitMsg = {
                 "type": "QUIT",
                 "roomId": roomId,
                 "sender": username
             };
 
-            fetch('/room/readMessage',
+            fetch('/direct/quit',
                 {
                     method: 'POST',
                     headers: {
@@ -345,6 +447,69 @@
         window.addEventListener('beforeunload', function (e) {
             quit();
         });
+
+        function clickFile()
+        {
+            var input = document.getElementById('file-sender');
+
+            input.click();
+        }
+
+        function directFile(input) {
+            if (input.files && input.files[0]) {
+                sendImage(input);
+            }
+        }
+
+        function sendImage(input)
+        {
+            
+            const csrfToken = document.querySelector('input[name="_csrf"]').value;
+
+            const formData = new FormData();
+            for (const file of input.files) {
+                formData.append('file-sender', file);
+            }
+
+            var talkMsg = {
+                "type": "TALK",
+                "roomId": roomId,
+                "sender": username
+            };
+
+            formData.append('talkMsg', JSON.stringify(talkMsg));
+
+            fetch('/direct/file/upload',
+                {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': csrfToken
+                    },
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+
+                    data.msg.forEach( msg =>
+                        {
+                            
+                            var imgMsg = {
+                                "type": "TALK",
+                                "roomId": data.roomId,
+                                "sender": data.sender,
+                                "dataType": data.dataType,
+                                "msg": msg
+                            };
+
+                            socket.send(JSON.stringify(imgMsg));
+                        }
+                    )
+                })
+                .catch(error => {
+                    // 에러 처리
+                    console.error('Error:', error);
+                });
+        }
     </script>
 </div>
 </html>

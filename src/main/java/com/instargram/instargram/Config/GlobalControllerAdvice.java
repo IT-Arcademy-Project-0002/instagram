@@ -3,6 +3,7 @@ package com.instargram.instargram.Config;
 import com.instargram.instargram.Data.Image.ImageService;
 import com.instargram.instargram.Member.Model.Entity.Member;
 import com.instargram.instargram.Member.Service.MemberService;
+import com.instargram.instargram.Notice.Model.DTO.NoticeDTO;
 import com.instargram.instargram.Notice.Service.NoticeService;
 import lombok.Builder;
 import org.springframework.security.core.Authentication;
@@ -12,6 +13,8 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
 import java.security.Principal;
+import java.util.ArrayList;
+import java.util.List;
 
 @ControllerAdvice
 @Builder
@@ -29,7 +32,7 @@ public class GlobalControllerAdvice {
         {
 
             Member member = this.memberService.getMember(principal.getName());
-          model.addAttribute("notices", this.noticeService.getNoticeDTOsByMember(member));
+            model.addAttribute("notices", this.noticeService.createNoticeList(member));
 
             if(member != null)
             {

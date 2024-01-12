@@ -17,14 +17,16 @@ public class NoticeDTO {
     private Long id; // PK
     private Integer type; // 알림 타입
     private Member requestMember;
-    private String elapsedTime;
+    private LocalDateTime createTime; // 알림 헤더를 생성하기 위한 변수
+    private String elapsedTime; // 경과 시간을 알려주기 위한 변수
+    private Integer period; // 1 이번주, 2 이번달, 3 지난 기간 등...
 
     private boolean follow;
     private boolean follower;
 
     private String boardContent; // 보드 내용
 
-    // 게시글 좋아요(1) + 게시글 댓글(2) + 댓글 좋아요(3) + 댓글 대댓글(4) + 게시글 멤버태그(9)
+    // 게시글 좋아요(1) + 게시글 댓글(2) + 댓글 좋아요(3) + 댓글 대댓글(4) + 게시글 멤버태그(9) + 댓글 대댓글 좋아요(10)
     private String commentContent; // 댓글 내용
     private String boardMainImage; // 게시글 메인 이미지
 

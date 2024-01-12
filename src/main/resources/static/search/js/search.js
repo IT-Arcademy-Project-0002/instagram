@@ -107,6 +107,25 @@ $(document).ready(function () {
                         '</div>' +
                         '</a>'
                     );
+                } else if (searchResult.searchType == "3") {
+
+                    var listImageSrc = "/files/designImg/hashTag.jpg";
+
+                    var listItem = $(
+                        '<a href="/explore/tags/'+ searchResult.listHashTagId + '" target="_blank" class="link">' +
+                        '<div class="search-list-box">' +
+                        '<div class="search-profile">' +
+                        '<img src="'+ listImageSrc +'" class="search-profile-image rounded-circle text-center">' +
+                        '</div>' +
+                        '<div class="search-userinfo">' +
+                        '<div class="search-username">' + searchResult.listName + '</div>' +
+                        '<div class="search-userintroduction">' + searchResult.listIntroduction + '</div>' +
+                        '</div>' +
+                        '</div>' +
+                        '</a>'
+                    );
+
+
                 }
                 newList.append(listItem);
             });

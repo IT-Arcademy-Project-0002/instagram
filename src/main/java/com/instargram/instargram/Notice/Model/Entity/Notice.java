@@ -13,16 +13,17 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-
-// 알림 테이블
-// 최대 11주 보관
 public class Notice {
+
+    // 알림 테이블
+    // 최대 11주 보관
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     // 생성 날짜
-    private LocalDateTime CreateDate;
+    private LocalDateTime createDate;
 
     // 알림 타입
     //    게시글 좋아요 : 1 (프론트 : 하트)

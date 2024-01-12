@@ -1,5 +1,7 @@
 package com.instargram.instargram.Search.Service;
 
+import com.instargram.instargram.Community.HashTag.Model.Entity.HashTag;
+import com.instargram.instargram.Community.HashTag.Model.Repository.HashTagRepository;
 import com.instargram.instargram.Community.Location.Model.Entity.Location;
 import com.instargram.instargram.Community.Location.Model.Repository.LocationRepository;
 import com.instargram.instargram.Member.Model.Entity.Member;
@@ -31,6 +33,7 @@ public class SearchService {
 
     private final MemberRepository memberRepository;
     private final LocationRepository locationRepository;
+    private final HashTagRepository hashTagRepository;
 
     public List<SearchDTO> searchResult(String keyword) {
 
@@ -40,6 +43,7 @@ public class SearchService {
         List<Member> memberList2 = this.memberRepository.findByUsernameContaining(keyword);
         List<Member> memberList3 = this.memberRepository.findByIntroductionContaining(keyword);
         List<Location> locationList = this.locationRepository.findByPlaceNameContaining(keyword);
+        List<HashTag> hashTagList = this.hashTagRepository.findByNameContaining(keyword);
 
         // 모든 검색결과를 담기 위한 배열 (이 검색결과는 종류가 달라도, 리스트에 들어가는 정보를 의미한다.)
         List<SearchDTO> searchDTOList = new ArrayList<>();
@@ -88,6 +92,28 @@ public class SearchService {
             sd.setListName(location.getPlaceName());
             sd.setListImage("");
             sd.setListIntroduction(location.getAddress());
+            searchDTOList.add(sd);
+        }
+
+        // 특정 키워드를 가진 해시태그들을 모아둘 List
+        List<HashTag> matchingHashTags = new ArrayList<>();
+
+        // 특정 키워드를 가진 해시태그들을 찾아서 matchingHashTags에 추가
+        for (HashTag hashTag : hashTagList) {
+            if (hashTag.getName().contains(keyword)) {
+//            if (hashTag.getName().equals(keyword)) {
+                matchingHashTags.add(hashTag);
+            }
+        }
+
+        if (!matchingHashTags.isEmpty()) {
+            // 매칭된 해시태그가 존재하면 첫 번째 해시태그를 기준으로 SearchDTO를 생성
+            SearchDTO sd = new SearchDTO();
+            sd.setSearchType(SearchType.HASHTAG.getNumber());
+            sd.setListHashTagId(String.valueOf(matchingHashTags.get(0).getId()));
+            sd.setListName(matchingHashTags.get(0).getName());
+            sd.setListImage("");
+            sd.setListIntroduction("게시물 " + matchingHashTags.size() + "개");
             searchDTOList.add(sd);
         }
 

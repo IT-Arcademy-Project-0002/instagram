@@ -44,16 +44,17 @@ public class ExploreController {
 
         return "Explore/explore";
     }
-    @GetMapping("/tags/{hashTag}")
-    public String searchHashTag(Model model, @PathVariable("hashTag") String hashTag){
+    @GetMapping("/tags/{hashTagid}")
+    public String searchHashTag(Model model, @PathVariable("hashTagid") String hashTag){
 
-        return "Explore/explore";
+        model.addAttribute("hashTag", hashTag);
+
+        return "Explore/explore_hashTag";
     }
 
     @GetMapping("/location/{locationid}")
     public String searchLocation(@PathVariable Long locationid, Model model) {
 
-        // 예시: model에 데이터 추가
         model.addAttribute("locationId", locationid);
 
         return "Explore/explore_location";

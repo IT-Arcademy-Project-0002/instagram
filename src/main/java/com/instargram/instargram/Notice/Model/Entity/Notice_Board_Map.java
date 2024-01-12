@@ -17,11 +17,13 @@ public class Notice_Board_Map {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(cascade = CascadeType.REMOVE)
+    @ManyToOne
     @JoinColumn(name = "notice_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Notice notice;
 
     @ManyToOne
     @JoinColumn(name = "board_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Board board;
 }

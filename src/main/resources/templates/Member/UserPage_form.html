@@ -77,11 +77,14 @@
                                             <a class="btn btn_userInfo" th:href="@{/member/account/edit}">프로필 편집</a>
                                             <a class="btn btn_userInfo mgL8">보관된 스토리 보기</a>
                                         </div>
-                                        <!-- setting -->
-                                        <a style="cursor: pointer">
+
+                                        <!-- my page setting -->
+                                        <a class="cp hcb" type="button" data-bs-toggle="modal"
+                                           data-bs-target="#myPageSettingModal">
                                             <div class="setting center">
                                                 <svg aria-label="옵션" stroke="currentColor" fill="currentColor"
-                                                     height="24" role="img" viewBox="0 0 24 24" width="24"><title>옵션</title>
+                                                     height="24" role="img" viewBox="0 0 24 24" width="24"><title>
+                                                    옵션</title>
                                                     <circle cx="12" cy="12" fill="none" r="8.635" stroke="currentColor"
                                                             stroke-linecap="round" stroke-linejoin="round"
                                                             stroke-width="2"></circle>
@@ -91,6 +94,26 @@
                                                 </svg>
                                             </div>
                                         </a>
+                                    </div>
+
+                                    <!-- my page setting Modal -->
+                                    <div class="modal fade" id="myPageSettingModal" tabindex="-1"
+                                         aria-labelledby="myPageSettingModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered center">
+
+                                            <div class="modal-content w400 bn">
+                                                <a href="#" type="button" class="btn w-100 h50 center hfwb pdT4 pdB4 pdL8 pdR8 fs14"> 알림 </a>
+
+                                                <div class="btsS btw1 btcDB w400"></div>
+                                                <a href="#" type="button" class="btn w-100 h50 center hfwb pdT4 pdB4 pdL8 pdR8 fs14"> 설정 및 개인정보 </a>
+
+                                                <div class="btsS btw1 btcDB w400"></div>
+                                                <a href="/member/logout" class="btn w-100 h50 center hfwb pdT4 pdB4 pdL8 pdR8 fs14"> 로그아웃 </a>
+
+                                                <div class="btsS btw1 btcDB w400"></div>
+                                                    <button type="button" data-bs-dismiss="modal" class="btn w-100 h50 center hfwb pdT4 pdB4 pdL8 pdR8 fs14"> 취소</button>
+                                            </div>
+                                        </div>
                                     </div>
 
                                     <!-- not mine page-->
@@ -104,7 +127,11 @@
                                                       class="visually-hidden spinner-border spinner-border-sm"
                                                       aria-hidden="true"></span>
                                                 <span th:if="${userPageDTO.isFollow()}" class="follow-text">팔로잉
-                                                    <svg aria-label="아래쪽 V자형 아이콘" class="d-inline-block" style="transform: rotate(180deg); color: black;" fill="currentColor" height="12" role="img" viewBox="0 0 24 24" width="12"><title>아래쪽 V자형 아이콘</title><path d="M21 17.502a.997.997 0 0 1-.707-.293L12 8.913l-8.293 8.296a1 1 0 1 1-1.414-1.414l9-9.004a1.03 1.03 0 0 1 1.414 0l9 9.004A1 1 0 0 1 21 17.502Z"></path></svg>
+                                                    <svg aria-label="아래쪽 V자형 아이콘" class="d-inline-block"
+                                                         style="transform: rotate(180deg); color: black;"
+                                                         fill="currentColor" height="12" role="img" viewBox="0 0 24 24"
+                                                         width="12"><title>아래쪽 V자형 아이콘</title><path
+                                                            d="M21 17.502a.997.997 0 0 1-.707-.293L12 8.913l-8.293 8.296a1 1 0 1 1-1.414-1.414l9-9.004a1.03 1.03 0 0 1 1.414 0l9 9.004A1 1 0 0 1 21 17.502Z"></path></svg>
                                                 </span>
                                                 <span th:if="${not userPageDTO.isFollow() and userPageDTO.isFollower() and not userPageDTO.isRequestFollow()}"
                                                       class="follow-text w140">맞팔로우 하기</span>
@@ -117,8 +144,9 @@
                                                class="btn btn_message mgL8">메세지 보내기</a>
                                         </div>
 
-                                        <!-- setting -->
-                                        <a class="cp">
+                                        <!-- user page setting -->
+                                        <a class="cp hcb" type="button" data-bs-toggle="modal"
+                                           data-bs-target="#userPageSettingModal">
                                             <div class="mgL5">
                                                 <div class="pd8 wa">
                                                     <svg aria-label="옵션" fill="currentColor" height="32" role="img"
@@ -130,8 +158,29 @@
                                                 </div>
                                             </div>
                                         </a>
-                                    </div>
 
+                                        <!-- user page setting Modal -->
+                                        <div class="modal fade" id="userPageSettingModal" tabindex="-1"
+                                             aria-labelledby="userPageSettingModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-centered center">
+
+                                                <div class="modal-content w400 bn">
+                                                    <button class="btn w-100 h50 center hfwb pdT4 pdB4 pdL8 pdR8 fs14 hcr fcr fwb"> 차단 </button>
+
+                                                    <div class="btsS btw1 btcDB w400"></div>
+                                                    <button class="btn w-100 h50 center hfwb pdT4 pdB4 pdL8 pdR8 fs14 hcr fcr fwb"> 신고 </button>
+
+                                                    <div class="btsS btw1 btcDB w400"></div>
+                                                    <button type="button" data-bs-dismiss="modal" class="btn w-100 h50 center hfwb pdT4 pdB4 pdL8 pdR8 fs14"> 취소</button>
+
+
+
+
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
                                 </div>
                             </div>
 
@@ -152,6 +201,7 @@
                                           th:text="${#lists.size(userPageDTO.followings)}"></span>
                                 </div>
                             </div>
+
                             <!--user info interest-->
                             <div class="d-flex flex-column justify-content-between mh30 h30">
                                 <div class="fs14 fw-bold pdT5">
@@ -165,12 +215,10 @@
                     </div>
 
                     <!--story highlight --> <!-- 'visually-hidden' -->
-
                     <div class="h130 mgB44" th:classappend="${#maps.isEmpty(userPageDTO.stories)} ? ''">
                         <div class="h_100">
                             <div class="d-flex h_100">
                                 <div class="mgL24">
-                                    <!-- highlight modal -->
                                     <div class="w115 pdT10 pdR15 pdB10 pdL15">
                                         <a type="button" data-bs-toggle="modal" data-bs-target="#highlightModal">
                                             <div>
@@ -179,7 +227,8 @@
                                                         <div class="d-flex highlight_line_internal">
                                                             <svg aria-label="+ 아이콘" class="highlight_icon"
                                                                  fill="currentColor" height="44"
-                                                                 role="img" viewBox="0 0 24 24" width="44"><title>+ 아이콘</title>
+                                                                 role="img" viewBox="0 0 24 24" width="44"><title>+
+                                                                아이콘</title>
                                                                 <path d="M21 11.3h-8.2V3c0-.4-.3-.8-.8-.8s-.8.4-.8.8v8.2H3c-.4 0-.8.3-.8.8s.3.8.8.8h8.2V21c0 .4.3.8.8.8s.8-.3.8-.8v-8.2H21c.4 0 .8-.3.8-.8s-.4-.7-.8-.7z"></path>
                                                             </svg>
                                                         </div>
@@ -198,8 +247,7 @@
                         </div>
                     </div>
 
-
-                    <!-- Modal -->
+                    <!-- highlight Modal -->
                     <div class="modal fade" id="highlightModal" tabindex="-1" aria-labelledby="highlightModalLabel"
                          aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered">
@@ -252,7 +300,6 @@
                                             </div>
                                         </div>
                                     </div>
-
                                 </div>
                             </div>
                         </div>
@@ -268,7 +315,6 @@
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>

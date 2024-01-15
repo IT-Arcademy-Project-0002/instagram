@@ -226,7 +226,12 @@ public class BoardController {
         Location location = this.locationService.modify(tagetLocation, locationForm, locationForm.getModifyLocationId(), locationForm.getModifyPlaceName(), locationForm.getModifyAddressName(),
                 locationForm.getModifyRoadAddressName(), locationForm.getModify_x(), locationForm.getModify_y());
 
-        this.boardService.modify(board, location, boardUpdateForm.getModifyContent(), boardUpdateForm.isModifyLikeHide(), boardUpdateForm.isModifyCommentDisable());
+        // Location이 필요한 경우 명시적으로 저장 또는 병합
+        if (location.getId() == null) {
+            this.boardService.modify(board, null, boardUpdateForm.getModifyContent(), boardUpdateForm.isModifyLikeHide(), boardUpdateForm.isModifyCommentDisable());
+        } else {
+            this.boardService.modify(board, location, boardUpdateForm.getModifyContent(), boardUpdateForm.isModifyLikeHide(), boardUpdateForm.isModifyCommentDisable());
+        }
 
 
         // # HashTag

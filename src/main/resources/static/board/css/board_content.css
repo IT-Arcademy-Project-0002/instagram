@@ -32,6 +32,8 @@
 
 .frag-profile {
     width: 25%;
+    margin-top: 16px;
+    padding-left: 64px;
     background: #c5d7f2;
 }
 

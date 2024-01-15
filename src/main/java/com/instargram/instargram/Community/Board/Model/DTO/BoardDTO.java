@@ -10,6 +10,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.print.attribute.HashPrintJobAttributeSet;
+import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -42,7 +44,6 @@ public class BoardDTO {
         this.commentDisable = board.isCommentDisable();
         this.pin = board.isPin();
         if (board.getLocation() != null) {
-//            this.location = board.getLocation().getPlaceName();
             this.locationDTO = new LocationDTO(board.getLocation());
         } else {
             this.locationDTO = null;

@@ -205,14 +205,25 @@
 .pdT10 {
     padding-top: 10px;
 }
+.pdT4 {
+    padding-top: 4px;
+}.pdB4 {
+    padding-bottom: 4px;
+ }
 .pdT5 {
     padding-top: 5px;
+}
+.pdR8 {
+    padding-right: 8px;
 }
 .pdR15 {
     padding-right: 15px;
 }
 .pdB10 {
     padding-bottom: 10px;
+}
+.pdL8 {
+    padding-left: 8px;
 }
 .pdL15 {
     padding-left: 15px;
@@ -270,6 +281,9 @@
 .w_100 {
     width: 100%;
 }
+.w400 {
+    width: 400px;
+}
 .w300 {
     width: 300px;
 }
@@ -302,6 +316,9 @@
 .h55 {
     height: 55px;
 }
+.h50 {
+    height: 50px;
+}
 .h30 {
     height: 30px;
 }
@@ -327,6 +344,13 @@
 .fw600 {
     font-weight: 600;
 }
+.fwb {
+    font-weight: bold;
+}
+
+.fwb {
+    font-weight: bold;
+}
 /* font weight */
 
 
@@ -335,6 +359,20 @@
     font-size: 14px;
 }
 /* font size */
+
+
+/* font color */
+.fcr {
+    color: #ff3140;
+}
+/* font color */
+
+
+/* border none */
+.bn {
+    border: none;
+}
+/* border none */
 
 
 /* border width */
@@ -383,3 +421,22 @@
 .ofc {
     object-fit: cover;
 }
+
+/* hover */
+.hfwb:hover {
+    font-weight: bold;
+    transition: font-weight 0.3s;
+}
+.hfwb:active {
+    border: none;
+}
+
+.hcb:hover {
+    color: black;
+}
+
+.hcr:hover {
+    color: #7a1f25;
+}
+
+/* hover */

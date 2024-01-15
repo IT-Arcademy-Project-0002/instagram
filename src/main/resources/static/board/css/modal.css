@@ -11,3 +11,15 @@
     height: 800vh;
     overflow-y: auto; /* 세로 스크롤 적용 */
 }
+
+.content-container {
+    white-space: pre-wrap;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
+    max-height: 50px;
+}
+
+.show-more-button {
+    cursor: pointer;
+    display: none;
+}

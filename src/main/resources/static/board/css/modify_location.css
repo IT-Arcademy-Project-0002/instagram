@@ -10,7 +10,7 @@ a {
 
 .ModifyLocation-list {
     visibility:hidden;
-    height:10vh;
+    height:20vh;
     overflow-x: hidden;
     overflow-y: scroll;
 }

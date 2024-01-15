@@ -44,7 +44,8 @@ public class HashTagService {
     }
 
     public HashTag gethashTag(String hashTagName) {
-        HashTag hashTag = this.hashTagRepository.findByName(hashTagName);
+        HashTag hashTag;
+        hashTag = this.hashTagRepository.findByName(hashTagName);
         return hashTag;
     }
 

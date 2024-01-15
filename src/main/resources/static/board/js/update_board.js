@@ -5,6 +5,8 @@ const modifyContainer = document.getElementById('ModifyTagMember-container');
 let modifyMentionedUsernames = [];
 
 modifyInputElement.addEventListener('input', function (event) {
+    modifyMentionedUsernames = modifyInputElement.value.split(' ');
+    console.log(modifyMentionedUsernames);
     var inputValue = modifyInputElement.value;
     var usernames = inputValue.split(' ').map(username => username.replace(/^@/, ''));
 
@@ -65,11 +67,17 @@ modifyInputElement.addEventListener('input', function (event) {
                     div.appendChild(userInfo);
 
                     div.addEventListener('click', function () {
-                        modifyMentionedUsernames.push(`@${member.username}`);
+                        const clickedUsername = `@${member.username}`;
+                        modifyMentionedUsernames.push(clickedUsername);
                         modifyInputElement.value = modifyMentionedUsernames.join(' ');
                         modifyContainer.textContent = '';
+
+                        modifyMentionedUsernames = modifyMentionedUsernames.filter((element) => element !== `@` + username);
+                        modifyInputElement.value = modifyMentionedUsernames.join(' ');
                         console.log(modifyMentionedUsernames);
                     });
+
+
                     modifyContainer.appendChild(div);
                 });
             })
@@ -98,9 +106,11 @@ const modifyHashTagContainer = document.getElementById('ModifyHashTag-container'
 let modifyModifyHashTags = [];
 
 modifyHashTagInputElement.addEventListener('input', function () {
+    modifyModifyHashTags = modifyHashTagInputElement.value.split(' ');
+
     var inputValue = modifyHashTagInputElement.value;
     var hashTagNames = inputValue.split(' ').map(name => name.replace(/^#/, ''));
-    console.log("==============>"+hashTagNames);
+
     if (hashTagNames.includes('')) {
         modifyHashTagContainer.textContent = '';
         return;
@@ -138,7 +148,11 @@ modifyHashTagInputElement.addEventListener('input', function () {
                         modifyModifyHashTags.push(`#${hashTag.name}`);
                         modifyHashTagInputElement.value = modifyModifyHashTags.join(' ');
                         modifyHashTagContainer.textContent = '';
-                        console.log(modifyModifyHashTags);
+
+                        modifyModifyHashTags = modifyModifyHashTags.filter((element) => element !== `#` + name);
+                        modifyHashTagInputElement.value = modifyModifyHashTags.join(' ');
+
+                        console.log(modifyMentionedUsernames);
                     });
                     modifyHashTagContainer.appendChild(div);
                 });
@@ -217,7 +231,7 @@ function ModifyBoard(id) {
                 modifyVideo.style.height = "100%";
                 modifyVideo.style.objectFit = "cover";
                 modifyVideo.style.margin = "auto";
-                modifyVideo.src =  "/files/video/" + decodeURIComponent(filesArray[i].name);
+                modifyVideo.src = "/files/video/" + decodeURIComponent(filesArray[i].name);
                 modifyVideo.controls = true; // 비디오 컨트롤
                 modifyVideo.autoplay = true; // 자동 재생
                 modifyVideo.muted = true; // 음소거
@@ -233,7 +247,7 @@ function ModifyBoard(id) {
                 carouselItem.appendChild(fileContainer);
                 file.appendChild(carouselItem);
             }
-            
+
             // 버튼 사라지게 하는거
             var modifyCarousel = document.getElementById("modifyCarouselExampleControlsNoTouching");
             var prevButton = modifyCarousel.querySelector(".carousel-control-prev");
@@ -244,40 +258,53 @@ function ModifyBoard(id) {
                 nextButton.classList.add("visually-hidden")
             }
             file.firstElementChild.classList.add('active');
-            console.log(imagePreviewArray);
-            console.log(videoPreviewArray);
 
-            console.log(data.updateFeed.board.content);
             var contentTextarea = document.getElementById('ModifyContent');
-            console.log(contentTextarea);
             contentTextarea.value = data.updateFeed.board.content;
 
+            const modifyTextarea = document.getElementById('ModifyContent');
+            const modifyTextCount = document.querySelector('.ModifyTextCount');
+            const ModifyMaxLength = 2200;
+
+            updateTextCount();
+
+            modifyTextarea.addEventListener('input', function () {
+                updateTextCount();
+
+                const textLength = modifyTextarea.value.length;
+
+                if (textLength > ModifyMaxLength) {
+                    modifyTextarea.value = modifyTextarea.value.slice(0, ModifyMaxLength);
+                    updateTextCount();
+                }
+
+                if (textLength >= ModifyMaxLength) {
+                    modifyTextCount.style.color = 'red';
+                } else {
+                    modifyTextCount.style.color = 'initial';
+                }
+            });
+
+            function updateTextCount() {
+                modifyTextCount.textContent = `${modifyTextarea.value.length}자`;
+            }
+
             let members = data.updateFeed.board.boardTagMembers;
-            console.log(members);
             var boardTagMembers = document.getElementById('ModifyTagMember');
-            console.log(boardTagMembers);
             let tagMember = [];
             for (let i = 0; i < members.length; i++) {
-                console.log(members[i]);
                 tagMember.push('@' + members[i]);
-                console.log(tagMember);
             }
             boardTagMembers.value = tagMember.join(' ').replace(/,/g, '');
 
-            console.log(data.updateFeed.board.boardHashTags);
             let HashTags = data.updateFeed.board.boardHashTags;
-            console.log(HashTags);
             var boardHahTags = document.getElementById('ModifyHashTag');
-            console.log(boardHahTags);
             let hashTag = [];
             for (let i = 0; i < HashTags.length; i++) {
-                console.log(HashTags[i]);
                 hashTag.push('#' + HashTags[i]);
-                console.log(hashTag);
             }
             boardHahTags.value = hashTag.join(' ').replace(/,/g, '');
 
-            console.log(data.updateFeed.board.locationDTO);
             var location = document.getElementById('ModifyBoardkeyword');
             var ModifyLocationId = document.getElementById("ModifyLocationId");
             var ModifyPlaceName = document.getElementById("ModifyPlaceName");
@@ -303,43 +330,118 @@ function ModifyBoard(id) {
                 Modify_x.value = "";
                 Modify_y.value = "";
             }
-            console.log(data.updateFeed.board.likeHide);
             var ModifyLikeHide = document.getElementById('ModifyLikeHide');
-            console.log(ModifyLikeHide);
-            ModifyLikeHide.checked  = data.updateFeed.board.likeHide;
+            ModifyLikeHide.checked = data.updateFeed.board.likeHide;
 
 
-            console.log(data.updateFeed.board.commentDisable);
             var ModifyCommentDisable = document.getElementById('ModifyCommentDisable');
-            console.log(ModifyCommentDisable);
-            ModifyCommentDisable.checked  = data.updateFeed.board.commentDisable;
+            ModifyCommentDisable.checked = data.updateFeed.board.commentDisable;
 
+        })
+        .then(() => {
+            var keywordValue = document.getElementById('ModifyBoardkeyword');
+            if(keywordValue.value === ""){
+                var locationDelete = document.getElementById("locationDelete");
+                locationDelete.style.display = "none";
+            }
+            var locationSearchTimer; // 전역 변수로 선언
+
+            var ModifyLocationListBody = $('#ModifyLocation-list');
+
+            // 위치 수정
+            function ModifyShowLocationList() {
+                // searchList 요소의 visibility 속성을 visible로 변경하여 보이게 함
+                ModifyLocationListBody.css('visibility', 'visible');
+            }
+
+            function ModifyHideLocationList() {
+                // searchList 요소의 visibility 속성을 hidden으로 변경하여 숨김
+                ModifyLocationListBody.css('visibility', 'hidden');
+            }
+
+            // 위치 수정
+            $("#ModifyBoardkeyword").keyup(function () {
+                // 검색어를 가져오기
+                var locationKeyword = $(this).val();
+
+                if (locationSearchTimer) {
+                    clearTimeout(locationSearchTimer);
+                }
+
+                // 300밀리초(0.3초) 이후에 검색을 수행
+                locationSearchTimer = setTimeout(function () {
+                    ModifySearchKeyword(locationKeyword);
+                }, 300);
+            });
+
+            // 검색창의 변화를 감지하여 완성된 단어를 순서대로 읽어 백엔드로 전달. 실시간으로 검색결과 전송
+            // 위치 수정
+            function ModifySearchKeyword(keyword) {
+
+                ModifyLocationListBody.empty();
+                ModifyHideLocationList();
+                $.ajax({
+                    url: '/location/modify/keyword',
+                    type: 'GET',
+                    dataType: 'json',
+                    data: { // 쿼리 문자열로 변환, URL에 포함시켜 서버로 전달.
+                        keyword: keyword
+                    },
+                    success: function (data) {
+                        ModifyShowLocationList();
+                        displayModifySearchResults(data);
+                    },
+                    error: function (error) {
+                        console.error('Error:', error);
+                    }
+                });
+            }
+
+            function displayModifySearchResults(data) {
+                var newList = $('<div></div>');
+
+                if (data.length > 0) {
+                    data.forEach(searchResult => {
+                        var listItem = $(
+                            '<div class="ModifyLocation-box">' +
+                            '<div class="ModifyLocation-userinfo">' +
+                            '<div class="ModifyLocation-username">' + searchResult.placeName + '</div>' +
+                            '<div class="ModifyLocation-userintroduction">' + searchResult.addressName + '</div>' +
+                            '</div>' +
+                            '</div>'
+                        );
+
+                        listItem.on('click', function () {
+
+                            document.getElementById('ModifyLocationId').value = searchResult.locationId;
+                            document.getElementById('ModifyPlaceName').value = searchResult.placeName;
+                            document.getElementById('ModifyRoadAddressName').value = searchResult.roadAddressName;
+                            document.getElementById('ModifyAddressName').value = searchResult.addressName;
+                            document.getElementById('Modify_x').value = searchResult.x;
+                            document.getElementById('Modify_y').value = searchResult.y;
+
+                            document.getElementById('ModifyBoardkeyword').value = searchResult.placeName;
+
+                            var locationDelete = document.getElementById("locationDelete");
+                            locationDelete.style.display = "inline-block";
+
+                            ModifyLocationListBody.empty();
+                            ModifyHideLocationList();
+                        });
+
+                        newList.append(listItem);
+                    });
+                } else {
+                    var listItem = $('<div></div>');
+                    listItem.text('검색 결과가 없습니다.');
+                    newList.append(listItem);
+                }
+
+                ModifyLocationListBody.append(newList);
+            }
         })
         .catch(error => console.error('데이터를 받지 못했습니다.', error));
 }
-
-const modifyTextarea = document.getElementById('ModifyContent');
-const modifyTextCount = document.querySelector('.ModifyTextCount');
-const ModifyMaxLength = 2200;
-
-// 게시글 수정 시 초기 텍스트 길이 설정
-modifyTextCount.textContent = `${modifyTextarea.value.length}자`;
-
-modifyTextarea.addEventListener('input', function () {
-    const textLength = modifyTextarea.value.length;
-
-    if (textLength > ModifyMaxLength) {
-        modifyTextarea.value = modifyTextarea.value.slice(0, ModifyMaxLength);
-    }
-
-    modifyTextCount.textContent = `${textLength}자`;
-
-    if (textLength >= ModifyMaxLength) {
-        modifyTextCount.style.color = 'red';
-    } else {
-        modifyTextCount.style.color = 'initial';
-    }
-});
 
 // board 고급설정 js
 const ModifyAdvancedSettingsToggle = document.getElementById('ModifyAdvancedSettingsToggle');
@@ -377,98 +479,15 @@ ModifyAccessibilitySettingsToggle.addEventListener('click', function () {
     }
 });
 
-$(document).ready(function () {
-    var locationSearchTimer; // 전역 변수로 선언
+function deleteLocation() {
+    document.getElementById('ModifyBoardkeyword').value = "";
+    document.getElementById('ModifyLocationId').value = "";
+    document.getElementById('ModifyPlaceName').value = "";
+    document.getElementById('ModifyRoadAddressName').value = "";
+    document.getElementById('ModifyAddressName').value = "";
+    document.getElementById('Modify_x').value = "";
+    document.getElementById('Modify_y').value = "";
 
-    var ModifyLocationListBody = $('#ModifyLocation-list');
-
-    // 위치 수정
-    function ModifyShowLocationList() {
-        // searchList 요소의 visibility 속성을 visible로 변경하여 보이게 함
-        ModifyLocationListBody.css('visibility', 'visible');
-    }
-
-    function ModifyHideLocationList() {
-        // searchList 요소의 visibility 속성을 hidden으로 변경하여 숨김
-        ModifyLocationListBody.css('visibility', 'hidden');
-    }
-
-    // 위치 수정
-    $("#ModifyBoardkeyword").keyup(function () {
-        // 검색어를 가져오기
-        var locationKeyword = $(this).val();
-
-        if (locationSearchTimer) {
-            clearTimeout(locationSearchTimer);
-        }
-
-        // 300밀리초(0.3초) 이후에 검색을 수행
-        locationSearchTimer = setTimeout(function () {
-            ModifySearchKeyword(locationKeyword);
-        }, 300);
-    });
-
-    // 검색창의 변화를 감지하여 완성된 단어를 순서대로 읽어 백엔드로 전달. 실시간으로 검색결과 전송
-    // 위치 수정
-    function ModifySearchKeyword(keyword) {
-
-        ModifyLocationListBody.empty();
-        ModifyHideLocationList();
-        $.ajax({
-            url: '/location/modify/keyword',
-            type: 'GET',
-            dataType: 'json',
-            data: { // 쿼리 문자열로 변환, URL에 포함시켜 서버로 전달.
-                keyword: keyword
-            },
-            success: function (data) {
-                ModifyShowLocationList();
-                displayModifySearchResults(data);
-            },
-            error: function (error) {
-                console.error('Error:', error);
-            }
-        });
-    }
-
-    function displayModifySearchResults(data) {
-        var newList = $('<div></div>');
-
-        if (data.length > 0) {
-            data.forEach(searchResult => {
-
-                var listItem = $(
-                    '<div class="ModifyLocation-box">' +
-                    '<div class="ModifyLocation-userinfo">' +
-                    '<div class="ModifyLocation-username">' + searchResult.placeName + '</div>' +
-                    '<div class="ModifyLocation-userintroduction">' + searchResult.addressName + '</div>' +
-                    '</div>' +
-                    '</div>'
-                );
-
-                listItem.on('click', function () {
-
-                    document.getElementById('ModifyLocationId').value = searchResult.locationId;
-                    document.getElementById('ModifyPlaceName').value = searchResult.placeName;
-                    document.getElementById('ModifyRoadAddressName').value = searchResult.roadAddressName;
-                    document.getElementById('ModifyAddressName').value = searchResult.addressName;
-                    document.getElementById('Modify_x').value = searchResult.x;
-                    document.getElementById('Modify_y').value = searchResult.y;
-
-                    document.getElementById('ModifyBoardkeyword').value = searchResult.placeName;
-
-                    ModifyLocationListBody.empty();
-                    ModifyHideLocationList();
-                });
-
-                newList.append(listItem);
-            });
-        } else {
-            var listItem = $('<div></div>');
-            listItem.text('검색 결과가 없습니다.');
-            newList.append(listItem);
-        }
-
-        ModifyLocationListBody.append(newList);
-    }
-});
+    var locationDelete = document.getElementById("locationDelete");
+    locationDelete.style.display = "none";
+}

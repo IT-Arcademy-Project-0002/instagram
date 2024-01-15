@@ -57,4 +57,9 @@ public class HashTagService {
     {
         return this.hashTagRepository.findByNameContaining(kw);
     }
+
+    public HashTag getHashTagFindById(Long id) {
+        return this.hashTagRepository.findById(id)
+                .orElseThrow(() -> new DataNotFoundException("HashTag not found with id: " + id));
+    }
 }

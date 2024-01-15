@@ -1,15 +1,22 @@
 package com.instargram.instargram.Community.Location.Service;
 
+import com.instargram.instargram.Community.Board.Model.Entity.Board;
+import com.instargram.instargram.Community.Board.Model.Entity.Board_HashTag_Map;
+import com.instargram.instargram.Community.Board.Model.Repository.BoardRepository;
+import com.instargram.instargram.Community.Board.Model.Repository.Board_HashTag_MapRepository;
+import com.instargram.instargram.Community.HashTag.Model.Entity.HashTag;
 import com.instargram.instargram.Community.Location.Model.DTO.LocationDTO;
 import com.instargram.instargram.Community.Location.Model.Entity.Location;
 import com.instargram.instargram.Community.Location.Model.Form.LocationForm;
 import com.instargram.instargram.Community.Location.Model.Repository.LocationRepository;
+import com.instargram.instargram.DataNotFoundException;
 import io.micrometer.common.util.StringUtils;
 import lombok.RequiredArgsConstructor;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -21,6 +28,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -33,6 +41,25 @@ public class LocationService {
     private final String uri2 = "https://dapi.kakao.com/v2/local/search/address.json";
 
     private final LocationRepository locationRepository;
+    private final BoardRepository boardRepository;
+    private final Board_HashTag_MapRepository boardHashTagMapRepository;
+
+    public List<Location> getLocationFindById(String id) {
+
+        return this.locationRepository.findByLocationId(id);
+    }
+
+    public List<Board> getBoardFindByLocation(List<Location> location) {
+
+        return this.boardRepository.findByLocationIn(location);
+    }
+
+    public List<Board> getBoardFindByHashTag(HashTag hashtag) {
+
+//        return this.boardHashTagMapRepository.findByHashTagIn(hashtag);
+
+        return null;
+    }
 
     public Location create(LocationDTO locationDTO) {
         if (isValidLocationDTO(locationDTO)) {

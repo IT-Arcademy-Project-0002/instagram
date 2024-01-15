@@ -95,7 +95,7 @@ $(document).ready(function () {
                     var listImageSrc = "/files/designImg/locationBase.png";
 
                     var listItem = $(
-                        '<a href="/explore/location/'+ searchResult.listLocationId + '" target="_blank" class="link">' +
+                        '<a href="/explore/locations/'+ searchResult.listLocationId + '" target="_blank" class="link">' +
                         '<div class="search-list-box">' +
                         '<div class="search-profile">' +
                         '<img src="'+ listImageSrc +'" class="search-profile-image rounded-circle text-center">' +

@@ -4,7 +4,15 @@
 }
 
 .explore-content {
-    padding-top:25px;
+}
+
+
+.explore-hashtag-container {
+    width: 50vw;
+}
+
+.explore-hashtag-gallery {
+    width: 50vw;
 }
 
 .hovereffect {

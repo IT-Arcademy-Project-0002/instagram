@@ -1,5 +1,6 @@
 package com.instargram.instargram.Search.Service;
 
+import com.instargram.instargram.Community.Board.Model.Repository.Board_HashTag_MapRepository;
 import com.instargram.instargram.Community.HashTag.Model.Entity.HashTag;
 import com.instargram.instargram.Community.HashTag.Model.Repository.HashTagRepository;
 import com.instargram.instargram.Community.Location.Model.Entity.Location;
@@ -11,10 +12,8 @@ import com.instargram.instargram.Search.Model.DTO.SearchDTO;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Service;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+
+import java.util.*;
 
 @RequiredArgsConstructor
 @Service
@@ -34,24 +33,20 @@ public class SearchService {
     private final MemberRepository memberRepository;
     private final LocationRepository locationRepository;
     private final HashTagRepository hashTagRepository;
+    private final Board_HashTag_MapRepository boardHashTagMapRepository;
 
-    public List<SearchDTO> searchResult(String keyword) {
+    public List<SearchDTO> searchByMember(String keyword) {
 
+        List<Member> memberForNickname = this.memberRepository.findByNicknameContaining(keyword);
+        List<Member> memberForUsername = this.memberRepository.findByUsernameContaining(keyword);
+        List<Member> memberForIntroduction = this.memberRepository.findByIntroductionContaining(keyword);
 
-        // 중복되는 객체 처리해줘야함.
-        List<Member> memberList = this.memberRepository.findByNicknameContaining(keyword);
-        List<Member> memberList2 = this.memberRepository.findByUsernameContaining(keyword);
-        List<Member> memberList3 = this.memberRepository.findByIntroductionContaining(keyword);
-        List<Location> locationList = this.locationRepository.findByPlaceNameContaining(keyword);
-        List<HashTag> hashTagList = this.hashTagRepository.findByNameContaining(keyword);
-
-        // 모든 검색결과를 담기 위한 배열 (이 검색결과는 종류가 달라도, 리스트에 들어가는 정보를 의미한다.)
         List<SearchDTO> searchDTOList = new ArrayList<>();
 
         // 중복 체크를 위한 Set 생성
         Set<Long> addedMemberIds = new HashSet<>();
 
-        for (Member member : memberList) {
+        for (Member member : memberForNickname) {
             if (addedMemberIds.add(member.getId())) { // Set에 추가하고, 이미 존재하면 추가하지 않음
                 SearchDTO sd = new SearchDTO();
                 sd.setSearchType(SearchType.USER.getNumber());
@@ -62,7 +57,7 @@ public class SearchService {
             }
         }
 
-        for (Member member : memberList2) {
+        for (Member member : memberForUsername) {
             if (addedMemberIds.add(member.getId())) {
                 SearchDTO sd = new SearchDTO();
                 sd.setSearchType(SearchType.USER.getNumber());
@@ -73,7 +68,7 @@ public class SearchService {
             }
         }
 
-        for (Member member : memberList3) {
+        for (Member member : memberForIntroduction) {
             if (addedMemberIds.add(member.getId())) {
                 SearchDTO sd = new SearchDTO();
                 sd.setSearchType(SearchType.USER.getNumber());
@@ -84,39 +79,88 @@ public class SearchService {
             }
         }
 
+        return searchDTOList;
+    }
 
+    public List<SearchDTO> searchByLocation(String keyword) {
+
+        List<SearchDTO> searchDTOList = new ArrayList<>();
+
+        List<Location> locationList = this.locationRepository.findByPlaceNameContaining(keyword);
+
+        List<Location> matchingLocations = new ArrayList<>();
+
+        // 특정 키워드를 가진 장소를 찾아서 location에 추가
         for (Location location : locationList) {
+            if (location.getPlaceName().contains(keyword)) {
+                matchingLocations.add(location);
+            }
+        }
+
+        if (!matchingLocations.isEmpty()) {
             SearchDTO sd = new SearchDTO();
             sd.setSearchType(SearchType.LOCATION.getNumber());
-            sd.setListLocationId(location.getLocationId());
-            sd.setListName(location.getPlaceName());
+            sd.setListLocationId(matchingLocations.get(0).getLocationId());
+            sd.setListName(matchingLocations.get(0).getPlaceName());
             sd.setListImage("");
-            sd.setListIntroduction(location.getAddress());
-            searchDTOList.add(sd);
-        }
-
-        // 특정 키워드를 가진 해시태그들을 모아둘 List
-        List<HashTag> matchingHashTags = new ArrayList<>();
-
-        // 특정 키워드를 가진 해시태그들을 찾아서 matchingHashTags에 추가
-        for (HashTag hashTag : hashTagList) {
-            if (hashTag.getName().contains(keyword)) {
-//            if (hashTag.getName().equals(keyword)) {
-                matchingHashTags.add(hashTag);
-            }
-        }
-
-        if (!matchingHashTags.isEmpty()) {
-            // 매칭된 해시태그가 존재하면 첫 번째 해시태그를 기준으로 SearchDTO를 생성
-            SearchDTO sd = new SearchDTO();
-            sd.setSearchType(SearchType.HASHTAG.getNumber());
-            sd.setListHashTagId(String.valueOf(matchingHashTags.get(0).getId()));
-            sd.setListName(matchingHashTags.get(0).getName());
-            sd.setListImage("");
-            sd.setListIntroduction("게시물 " + matchingHashTags.size() + "개");
+            sd.setListIntroduction(matchingLocations.get(0).getAddress());
             searchDTOList.add(sd);
         }
 
         return searchDTOList;
+    }
+
+    public List<SearchDTO> searchByHashTags(String keyword) {
+
+        List<SearchDTO> searchDTOList = new ArrayList<>();
+
+        List<HashTag> hashTagList = this.hashTagRepository.findByNameContaining(keyword);
+
+        // Map을 사용하여 해시태그를 이름으로 그룹화
+        Map<String, List<HashTag>> hashTagGroups = new HashMap<>();
+
+        for (HashTag hashTag : hashTagList) {
+            // 키로 사용할 해시태그 이름 추출
+            String key = hashTag.getName();
+
+            // 동일한 이름의 해시태그를 그룹에 추가
+            hashTagGroups
+                    .computeIfAbsent(key, k -> new ArrayList<>())
+                    .add(hashTag);
+        }
+
+        // 그룹화된 해시태그에 대한 정보를 SearchDTO에 매핑하고 리스트에 추가
+        for (Map.Entry<String, List<HashTag>> entry : hashTagGroups.entrySet()) {
+            String hashTagName = entry.getKey();
+            List<HashTag> hashTagGroup = entry.getValue();
+
+            SearchDTO sd = new SearchDTO();
+            sd.setSearchType(SearchType.HASHTAG.getNumber());
+            sd.setListHashTagId(String.valueOf(hashTagGroup.get(0).getId()));
+            sd.setListName(hashTagName);
+            sd.setListImage("");
+            sd.setListIntroduction("게시물 " + formatBoardCount(getBoardCountByHashTag(hashTagGroup.get(0).getId())));
+
+            searchDTOList.add(sd);
+        }
+
+        return searchDTOList;
+    }
+
+    private long getBoardCountByHashTag(Long id) {
+        // 해당 해시태그를 참조하는 게시글 수 조회
+        return this.boardHashTagMapRepository.countByTag_Id(id);
+    }
+
+    // 해시태그 게시글 표기단위 적용함수 (1만 전후로 나뉨)
+    private String formatBoardCount(long count) {
+        if (count < 10000) {
+            // 1만 미만은 그냥 숫자만 반환
+            return String.valueOf(count);
+        } else {
+            // 1만 이상은 "만"을 붙이고, 천의 단위로 표현
+            double countInThousands = count / 1000.0;
+            return String.format("%.1f만", countInThousands);
+        }
     }
 }

@@ -11,5 +11,6 @@ import java.util.List;
 public interface LocationRepository extends JpaRepository<Location, Long> {
 
     List<Location> findByPlaceNameContaining(String keyword);
+    List<Location> findByLocationId(String id);
 
 }

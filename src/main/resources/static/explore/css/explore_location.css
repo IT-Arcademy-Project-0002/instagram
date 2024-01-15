@@ -4,7 +4,24 @@
 }
 
 .explore-content {
-    padding-top:25px;
+}
+
+.map-container{
+    display: flex;
+    width: calc(100vw - 335px);
+}
+
+#map {
+    width: 100%;
+    height: 25vh;
+}
+
+.explore-location-container {
+    width: 50vw;
+}
+
+.explore-location-gallery {
+    width: 50vw;
 }
 
 .hovereffect {

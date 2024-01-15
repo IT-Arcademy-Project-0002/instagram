@@ -1,10 +1,10 @@
 package com.instargram.instargram.Explorer.Controller;
 
-import com.instargram.instargram.Community.Board.Model.Entity.Board_HashTag_Map;
 import com.instargram.instargram.Community.Board.Service.BoardHashTagMapService;
-import com.instargram.instargram.Community.Board.Service.Board_TagMember_MapService;
 import com.instargram.instargram.Community.HashTag.Model.Entity.HashTag;
 import com.instargram.instargram.Community.HashTag.Service.HashTagService;
+import com.instargram.instargram.Community.Location.Model.Entity.Location;
+import com.instargram.instargram.Community.Location.Service.LocationService;
 import com.instargram.instargram.Explorer.Model.DTO.ExploreDTO;
 import com.instargram.instargram.Community.Board.Model.Entity.Board;
 import com.instargram.instargram.Community.Board.Service.BoardService;
@@ -13,9 +13,7 @@ import com.instargram.instargram.Notice.Service.NoticeSSEService;
 import com.instargram.instargram.Search.Service.SearchService;
 import lombok.Builder;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
 
 import java.util.List;
@@ -31,6 +29,7 @@ public class ExploreController {
     private final NoticeSSEService noticeSseService;
     private final HashTagService hashTagService;
     private final BoardHashTagMapService boardHashTagMapService;
+    private final LocationService locationService;
 
     @GetMapping("")
     public String searchMain(Model model){
@@ -40,23 +39,41 @@ public class ExploreController {
 
         model.addAttribute("ExploreList", exploreList);
 
-        this.noticeSseService.notifyUser(2L, "test message");
-
         return "Explore/explore";
     }
-    @GetMapping("/tags/{hashTagid}")
-    public String searchHashTag(Model model, @PathVariable("hashTagid") String hashTag){
+    @GetMapping("/tags/{hashTagId}")
+    public String searchHashTag(Model model, @PathVariable("hashTagId") Long hashTagId){
 
-        model.addAttribute("hashTag", hashTag);
+//        HashTag hashtag =  this.hashTagService.getHashTagFindById(hashTagId);
+//        List<Board> boardList = this.locationService.getBoardFindByHashTag(hashtag);
+//        List<ExploreDTO> exploreHashTagList = this.exploreService.initExplore(boardList);
+//
+//        model.addAttribute("exploreHashTagList", exploreHashTagList);
 
         return "Explore/explore_hashTag";
     }
 
-    @GetMapping("/location/{locationid}")
-    public String searchLocation(@PathVariable Long locationid, Model model) {
+    @GetMapping("/locations/{locationId}")
+    public String searchLocation(Model model, @PathVariable("locationId") String locationId) {
 
-        model.addAttribute("locationId", locationid);
+        List<Location> location = this.locationService.getLocationFindById(locationId);
+        List<Board> boardList = this.locationService.getBoardFindByLocation(location);
+        List<ExploreDTO> exploreLocationList = this.exploreService.initExplore(boardList);
+
+        model.addAttribute("location", location.get(0));
+        model.addAttribute("exploreLocationList", exploreLocationList);
 
         return "Explore/explore_location";
     }
+
+    @GetMapping(value = "/locations/locationMap", produces = "application/json")
+    @ResponseBody
+    public Location mapSearchLocation(@RequestParam("locationId") String locationId) {
+
+        // 해시태그 맵에 따른 보드를 return 해줘야함 get(0) 만으로는 부족함.
+
+        return this.locationService.getLocationFindById(locationId).get(0);
+    }
+
 }
+

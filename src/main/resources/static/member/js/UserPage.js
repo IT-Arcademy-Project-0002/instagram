@@ -1,3 +1,5 @@
+
+
 document.addEventListener('DOMContentLoaded', function() {
     debugger;
     const images = document.querySelectorAll('.smooth-update');

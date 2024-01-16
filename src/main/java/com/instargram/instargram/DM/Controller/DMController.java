@@ -10,8 +10,11 @@ import com.instargram.instargram.DM.Model.Entity.Room.Room;
 import com.instargram.instargram.DM.Service.MessageMemberMapService;
 import com.instargram.instargram.DM.Service.RoomMemberMapService;
 import com.instargram.instargram.DM.Service.RoomService;
+import com.instargram.instargram.Data.DataDTO;
 import com.instargram.instargram.Data.Image.Image;
 import com.instargram.instargram.Data.Image.ImageService;
+import com.instargram.instargram.Data.Video.Video;
+import com.instargram.instargram.Data.Video.VideoService;
 import com.instargram.instargram.Enum_Data;
 import com.instargram.instargram.Member.Model.Entity.Member;
 import com.instargram.instargram.Member.Service.MemberService;
@@ -37,6 +40,7 @@ public class DMController {
 
     private final MessageMemberMapService messageMemberMapService;
     private final ImageService imageService;
+    private final VideoService videoService;
 
 
     @GetMapping("")
@@ -106,7 +110,7 @@ public class DMController {
         ObjectMapper objectMapper = new ObjectMapper();
         Map<String, Object> talkMsg = objectMapper.readValue(talkMsgJson, new TypeReference<>() {});
 
-        List<String> msgs = new ArrayList<>();
+        List<DataDTO> msgs = new ArrayList<>();
         for (MultipartFile multipartFile : multipartFiles) {
             if (!multipartFile.isEmpty()) {
                 String currName = multipartFile.getOriginalFilename();
@@ -122,21 +126,28 @@ public class DMController {
                 String[] type = Objects.requireNonNull(multipartFile.getContentType()).split("/");
                 if (!type[type.length - 1].equals("octet-stream")) {
                     String fileExtension = type[type.length - 1];
-                    Image image = this.imageService.saveImage(multipartFile, nameWithoutExtension, fileExtension);
 
-                    if(image != null)
-                    {
-                        Room room = roomService.getRoom(Long.valueOf(talkMsg.get("roomId").toString()));
-                        messageMemberMapService.createImageMap(talkMsg, image, room);
+                    if (fileExtension.equals("jpeg") || fileExtension.equals("png")) {
+                        Image image = this.imageService.saveImage(multipartFile, nameWithoutExtension, fileExtension);
+                        if (image != null) {
+                            Room room = roomService.getRoom(Long.valueOf(talkMsg.get("roomId").toString()));
+                            Message_Member_Map map = messageMemberMapService.createImageMap(talkMsg, image, room);
+                            msgs.add(new DataDTO(Enum_Data.IMAGE.getNumber(), Objects.requireNonNull(image).getName(), map.getId()));
+                        }
                     }
-                    msgs.add(Objects.requireNonNull(image).getName());
+                    else if (fileExtension.equals("mp4")) {
+                        Video video = this.videoService.saveVideo(multipartFile, nameWithoutExtension, fileExtension);
+                        if (video != null) {
+                            Room room = roomService.getRoom(Long.valueOf(talkMsg.get("roomId").toString()));
+                            Message_Member_Map map = messageMemberMapService.createVideoMap(talkMsg, video, room);
+                            msgs.add(new DataDTO(Enum_Data.VIDEO.getNumber(), Objects.requireNonNull(video).getName(),map.getId()));
+                        }
+                    }
                 }
             }
         }
 
-        talkMsg.put("dataType", Enum_Data.IMAGE.getNumber());
         talkMsg.put("msg", msgs);
-
 
         // 원하는 응답을 반환
         return ResponseEntity.ok().body(talkMsg);

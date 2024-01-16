@@ -154,11 +154,13 @@ public class DMController {
     }
 
     @PostMapping("/message/create")
-    public void create(
+    public ResponseEntity<Map<String, Object>> create(
             @RequestBody Map<String, Object> talkMsg)
     {
         Room room = roomService.getRoom(Long.valueOf(talkMsg.get("roomId").toString()));
-        messageMemberMapService.createMessage(talkMsg, room);
+        Message_Member_Map map = messageMemberMapService.createMessage(talkMsg, room);
+        talkMsg.put("id", map.getId());
+        return ResponseEntity.ok().body(talkMsg);
     }
 
     @PostMapping("/quit")
@@ -179,5 +181,13 @@ public class DMController {
 
         roomService.readMessageState(Long.valueOf(quitMsg.get("roomId").toString()), principal.getName());
         return ResponseEntity.ok(result);
+    }
+
+    @GetMapping("/delete/{id}")
+    public ResponseEntity<String> deleteMap(@PathVariable("id")Long id)
+    {
+        messageMemberMapService.delete(id);
+
+        return ResponseEntity.ok("delete ok");
     }
 }

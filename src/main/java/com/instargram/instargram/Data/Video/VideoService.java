@@ -45,4 +45,9 @@ public class VideoService {
     public Video getVideoByID(Long id) {
         return this.videoRepository.findById(id).orElse(null);
     }
+
+    public void delete(Long id)
+    {
+        videoRepository.deleteById(id);
+    }
 }

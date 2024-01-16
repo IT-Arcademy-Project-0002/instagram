@@ -36,6 +36,11 @@ public class MessageMemberMapService {
         return messageMemberMapRepository.findAllByRoomOrderByCreateDateAsc(room);
     }
 
+    public Message_Member_Map getMap(Long id)
+    {
+        return messageMemberMapRepository.findById(id).orElse(null);
+    }
+
     public void readMessageState(Room room, String username)
     {
         List<Message_Member_Map> a =getNotReadMessage(room, username);
@@ -90,11 +95,11 @@ public class MessageMemberMapService {
         return createDefault(messageMemberMap, room, msg);
     }
 
-    public void createMessage(Map<String, Object> msg, Room room)
+    public Message_Member_Map createMessage(Map<String, Object> msg, Room room)
     {
         Message message = messageService.create(msg);
 
-        createMessageMap(msg, message, room);
+        return createMessageMap(msg, message, room);
     }
 
     public List<MessageDTO> getMessageDTOList(Room room)
@@ -121,5 +126,28 @@ public class MessageMemberMapService {
         }
 
         return messageDTOS;
+    }
+
+    public void delete(Long id)
+    {
+        Message_Member_Map map = getMap(id);
+
+        if(map != null)
+        {
+            if(Objects.equals(map.getDataType(), Enum_Data.MESSAGE.getNumber()))
+            {
+                messageService.delete(map.getDataId());
+            }
+            else if(Objects.equals(map.getDataType(), Enum_Data.IMAGE.getNumber()))
+            {
+                imageService.deleteImage(map.getDataId());
+            }
+            else if(Objects.equals(map.getDataType(), Enum_Data.VIDEO.getNumber()))
+            {
+                videoService.delete(map.getDataId());
+            }
+        }
+
+        messageMemberMapRepository.deleteById(id);
     }
 }

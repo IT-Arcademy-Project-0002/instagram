@@ -49,22 +49,22 @@
                             <div th:each="msg, iterStat : ${messageList}">
                                 <div th:id="'msg'+${msg.id}" th:if="${msg.member.username == loginMember.username}" class="px-4 pt-1">
                                     <div class="d-flex justify-content-end">
-                                        <div class="d-flex align-items-center" style="margin-right: 5px">
-                                            <div style="margin: 8px; color: #9f9f9f">
-                                                <button th:id="${msg.id}" type="button" class="btn" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="top" data-bs-target="popover" data-bs-html="true">
-                                                    <svg aria-label="더 보기" fill="currentColor" height="16" role="img" viewBox="0 0 24 24" width="16"><title>더 보기</title><circle cx="12" cy="12" r="1.5"></circle><circle cx="6" cy="12" r="1.5"></circle><circle cx="18" cy="12" r="1.5"></circle></svg>
-                                                </button>
-                                            </div>
-
-                                            <div style="margin: 8px; color: #9f9f9f">
-                                                <svg aria-label="답장" fill="currentColor" height="16" role="img" viewBox="0 0 24 24" width="16"><title>답장</title><path d="M14 8.999H4.413l5.294-5.292a1 1 0 1 0-1.414-1.414l-7 6.998c-.014.014-.019.033-.032.048A.933.933 0 0 0 1 9.998V10c0 .027.013.05.015.076a.907.907 0 0 0 .282.634l6.996 6.998a1 1 0 0 0 1.414-1.414L4.415 11H14a7.008 7.008 0 0 1 7 7v3.006a1 1 0 0 0 2 0V18a9.01 9.01 0 0 0-9-9Z"></path></svg>
-                                            </div>
-                                            <div style="margin: 8px; color: #9f9f9f">
-                                                <svg aria-label="공감" fill="currentColor" height="16" role="img" viewBox="0 0 24 24" width="16"><title>공감</title><path d="M15.83 10.997a1.167 1.167 0 1 0 1.167 1.167 1.167 1.167 0 0 0-1.167-1.167Zm-6.5 1.167a1.167 1.167 0 1 0-1.166 1.167 1.167 1.167 0 0 0 1.166-1.167Zm5.163 3.24a3.406 3.406 0 0 1-4.982.007 1 1 0 1 0-1.557 1.256 5.397 5.397 0 0 0 8.09 0 1 1 0 0 0-1.55-1.263ZM12 .503a11.5 11.5 0 1 0 11.5 11.5A11.513 11.513 0 0 0 12 .503Zm0 21a9.5 9.5 0 1 1 9.5-9.5 9.51 9.51 0 0 1-9.5 9.5Z"></path></svg>
-                                            </div>
-                                        </div>
                                         <div>
                                             <div class="d-flex align-items-center justify-content-end my-2">
+                                                <div class="d-flex align-items-center" style="margin-right: 5px">
+                                                    <div>
+                                                        <button th:id="${msg.id}" class="border-0" style="background: none; color: #9f9f9f" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="top" data-bs-target="popover" data-bs-html="true">
+                                                            <svg aria-label="더 보기" fill="currentColor" height="16" role="img" viewBox="0 0 24 24" width="16"><title>더 보기</title><circle cx="12" cy="12" r="1.5"></circle><circle cx="6" cy="12" r="1.5"></circle><circle cx="18" cy="12" r="1.5"></circle></svg>
+                                                        </button>
+                                                    </div>
+
+                                                    <div style="margin: 8px; color: #9f9f9f">
+                                                        <svg aria-label="답장" fill="currentColor" height="16" role="img" viewBox="0 0 24 24" width="16"><title>답장</title><path d="M14 8.999H4.413l5.294-5.292a1 1 0 1 0-1.414-1.414l-7 6.998c-.014.014-.019.033-.032.048A.933.933 0 0 0 1 9.998V10c0 .027.013.05.015.076a.907.907 0 0 0 .282.634l6.996 6.998a1 1 0 0 0 1.414-1.414L4.415 11H14a7.008 7.008 0 0 1 7 7v3.006a1 1 0 0 0 2 0V18a9.01 9.01 0 0 0-9-9Z"></path></svg>
+                                                    </div>
+                                                    <div style="margin: 8px; color: #9f9f9f">
+                                                        <svg aria-label="공감" fill="currentColor" height="16" role="img" viewBox="0 0 24 24" width="16"><title>공감</title><path d="M15.83 10.997a1.167 1.167 0 1 0 1.167 1.167 1.167 1.167 0 0 0-1.167-1.167Zm-6.5 1.167a1.167 1.167 0 1 0-1.166 1.167 1.167 1.167 0 0 0 1.166-1.167Zm5.163 3.24a3.406 3.406 0 0 1-4.982.007 1 1 0 1 0-1.557 1.256 5.397 5.397 0 0 0 8.09 0 1 1 0 0 0-1.55-1.263ZM12 .503a11.5 11.5 0 1 0 11.5 11.5A11.513 11.513 0 0 0 12 .503Zm0 21a9.5 9.5 0 1 1 9.5-9.5 9.51 9.51 0 0 1-9.5 9.5Z"></path></svg>
+                                                    </div>
+                                                </div>
                                                 <div th:if="${msg.dataType == 1}" class="rounded-5 bg-primary text-light p-2 px-3"
                                                      th:text="${msg.message.content}">
                                                 </div>
@@ -85,7 +85,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div th:unless="${msg.member.username == loginMember.username}" class="px-4 pt-1">
+                                <div th:unless="${msg.member.username == loginMember.username}" class="px-4 pt-1" th:id="'msg'+${msg.id}">
                                     <div class="my-2" th:text="${msg.member.username}"></div>
                                     <div class="d-flex my-2" th:classappend="${msg.dataType == 1}?'align-items-center'">
                                         <a th:href="@{|/member/page/${msg.member.username}|}">
@@ -179,12 +179,10 @@
         {
             $(document).on('click', '.delete-msg', function() {
             // 삭제 동작 수행
-            alert("메시지 삭제");
-            debugger;
-
-            var msgID = $(this).attr('id');
-            // Popover 닫기 (선택 사항)
-            deleteMsg(msgID);
+                var popID = $(this).parent().parent().parent().attr('id');
+                var msgID = $(this).attr('id');
+                // Popover 닫기 (선택 사항)
+                deleteMsg(msgID,popID);
             });
         }
 
@@ -275,6 +273,7 @@
 
             console.log(e.data);
 
+            debugger;
             var data = JSON.parse(e.data);
             if (data.type === 'TALK' && data.sender === username) {
                 createMineMessage(data);
@@ -306,6 +305,12 @@
                 if (index !== -1) {
                     connectMember.splice(index, 1);
                 }
+            }
+            else if(data.type==='DELETE' && data.sender !== username)
+            {
+                var msgContainer = document.getElementById('msg' + data.id);
+
+                msgContainer.remove();
             }
 
         }
@@ -351,40 +356,37 @@
             }
 
             var msgStr = '';
-            if(data.dataType === 1)
-            {
+            if (data.dataType === 1) {
                 msgStr =
                     '<div class="rounded-5 bg-primary text-light p-2 px-3">\n' +
-                        data.msg +
+                    data.msg +
                     '</div>\n';
-            }
-            else if(data.dataType === 2)
-            {
+            } else if (data.dataType === 2) {
                 msgStr =
                     '<div>\n' +
-                    '    <img src="/resources/'+ data.msg + '" style="width: 15rem; height: auto; border-radius: 22px 4px 22px 22px">\n' +
+                    '    <img src="/resources/' + data.msg + '" style="width: 15rem; height: auto; border-radius: 22px 4px 22px 22px">\n' +
                     '</div>';
-            }
-            else if(data.dataType === 3)
-            {
+            } else if (data.dataType === 3) {
                 msgStr =
                     '<div class="d-flex justify-content-end position-relative">\n' +
                     '       <span style="position: absolute;">\n' +
                     '             <img height="45" width="45" alt="" src="/files/designImg/playButton.png">\n' +
-                    '       </span>'+
-                    '       <video style="width: 15rem; height: auto; border-radius: 22px 4px 22px 22px" src="/resources/'+ data.msg + '">\n' +
-                    '       </video>'+
+                    '       </span>' +
+                    '       <video style="width: 15rem; height: auto; border-radius: 22px 4px 22px 22px" src="/resources/' + data.msg + '">\n' +
+                    '       </video>' +
                     '</div>';
             }
 
 
             let newMsg = document.createElement('div');
             newMsg.innerHTML =
-                '                           <div id="msg-' + data.id +'" class="px-4 pt-1">\n' +
+                '                           <div id="msg' + data.id + '" class="px-4 pt-1">\n' +
                 '                                <div class="d-flex justify-content-end">\n' +
+                '                                    <div>\n' +
+                '                                        <div class="d-flex align-items-center justify-content-end my-2">\n' +
                 '                                       <div class="d-flex align-items-center" style="margin-right: 5px">\n' +
-                '                                            <div style="margin: 8px; color: #9f9f9f">\n' +
-                '                                                <button id="'+data.id+'" type="button" class="btn" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="top" data-bs-target="popover" data-bs-html="true">\n' +
+                '                                            <div>\n' +
+                '                                                <button id="' + data.id + '" type="button" class="border-0" style="background: none; color: #9f9f9f" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="top" data-bs-target="popover" data-bs-html="true">\n' +
                 '                                                    <svg aria-label="더 보기" fill="currentColor" height="16" role="img" viewBox="0 0 24 24" width="16"><title>더 보기</title><circle cx="12" cy="12" r="1.5"></circle><circle cx="6" cy="12" r="1.5"></circle><circle cx="18" cy="12" r="1.5"></circle></svg>\n' +
                 '                                                </button>\n' +
                 '                                            </div>\n' +
@@ -394,13 +396,11 @@
                 '                                            <div style="margin: 8px; color: #9f9f9f">\n' +
                 '                                                <svg aria-label="공감" fill="currentColor" height="16" role="img" viewBox="0 0 24 24" width="16"><title>공감</title><path d="M15.83 10.997a1.167 1.167 0 1 0 1.167 1.167 1.167 1.167 0 0 0-1.167-1.167Zm-6.5 1.167a1.167 1.167 0 1 0-1.166 1.167 1.167 1.167 0 0 0 1.166-1.167Zm5.163 3.24a3.406 3.406 0 0 1-4.982.007 1 1 0 1 0-1.557 1.256 5.397 5.397 0 0 0 8.09 0 1 1 0 0 0-1.55-1.263ZM12 .503a11.5 11.5 0 1 0 11.5 11.5A11.513 11.513 0 0 0 12 .503Zm0 21a9.5 9.5 0 1 1 9.5-9.5 9.51 9.51 0 0 1-9.5 9.5Z"></path></svg>\n' +
                 '                                            </div>\n' +
-                '                                        </div>'+
-                '                                    <div>\n' +
-                '                                        <div class="d-flex align-items-center justify-content-end my-2">\n' +
-                                                            msgStr +
+                '                                        </div>' +
+                msgStr +
                 '                                        </div>\n' +
                 '                                        <div class="read-check my-2 text-end">\n' +
-                                                            read +
+                read +
                 '                                        </div>\n' +
                 '                                    </div>\n' +
                 '                                </div>\n' +
@@ -413,9 +413,8 @@
             setTimeout(scrollEnd, 100);
         }
 
-        function scrollEnd()
-        {
-        
+        function scrollEnd() {
+
             var objDiv = document.getElementById("msg-container");
             objDiv.scrollTop = objDiv.scrollHeight;
         }
@@ -466,7 +465,7 @@
             }
 
             newMsg.innerHTML =
-                '                            <div class="px-4 pt-1">\n' +
+                '                            <div id="msg' + data.id +'" class="px-4 pt-1">\n' +
                 '                                <div class="my-2">\n' +
                 data.sender +
                 '                                </div>\n' +
@@ -512,11 +511,18 @@
                     },
                     body: JSON.stringify(talkMsg)
                 })
+                .then(response => response.json())
+                .then(data => {
+                    talkMsg.id = data.id;
+
+                    socket.send(JSON.stringify(talkMsg));
+                })
+                .catch(error => {
+                    // 에러 처리
+                    console.error('Error:', error);
+                });
 
 
-            socket.send(JSON.stringify(talkMsg));
-
-            
             content.value = '';
             btn.disabled = true;
         }
@@ -603,7 +609,6 @@
                 })
                 .then(response => response.json())
                 .then(data => {
-
                     data.msg.forEach( msg =>
                         {
                             var imgMsg = {
@@ -625,8 +630,36 @@
                 });
         }
 
-        function deleteMsg(id)
+        function deleteMsg(id, popID)
         {
+            var res = confirm("전송을 취소하시겠습니까?");
+            if(res)
+            {
+                fetch("/direct/delete/"+id)
+                    .then(response => {
+                            var msgContainer = document.getElementById('msg' + id);
+
+                            msgContainer.remove();
+
+                            var a = document.getElementById(popID);
+                            a.remove();
+
+                            debugger;
+                            var msg = {
+                                "type": "DELETE",
+                                "roomId": roomId,
+                                "sender": username,
+                                "id": id
+                            };
+
+                            socket.send(JSON.stringify(msg));
+                        }
+                    )
+                    .catch(error => {
+                        // 에러 처리
+                        console.error('Error:', error);
+                    });
+            }
 
         }
     </script>

@@ -15,7 +15,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BoardHashTagMapService {
     private final Board_HashTag_MapRepository boardHashTagMapRepository;
-    private final HashTagRepository hashTagRepository;
+
     public Board_HashTag_Map createBoardHashTag(Board board, HashTag hashTag) {
         Board_HashTag_Map map = new Board_HashTag_Map();
         map.setBoard(board);
@@ -26,5 +26,9 @@ public class BoardHashTagMapService {
     public void delete(Board board) {
         List<Board_HashTag_Map> delete = boardHashTagMapRepository.findByBoard(board);
         this.boardHashTagMapRepository.deleteAll(delete);
+    }
+
+    public List<Board_HashTag_Map> getBoardFindByHashTag(HashTag hashtag) {
+        return this.boardHashTagMapRepository.findByTag(hashtag);
     }
 }

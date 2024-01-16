@@ -110,4 +110,10 @@ public class BoardService {
         board.setUpdateDate(LocalDateTime.now());
         this.boardRepository.save(board);
     }
+
+    public List<Board> findByBoardHashTagMaps (List<Board_HashTag_Map> boardHashTagMap) {
+
+        return this.boardRepository.findByBoardHashTagMapsIn(boardHashTagMap);
+    }
+
 }

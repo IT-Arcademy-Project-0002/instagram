@@ -54,11 +54,9 @@ public class LocationService {
         return this.boardRepository.findByLocationIn(location);
     }
 
-    public List<Board> getBoardFindByHashTag(HashTag hashtag) {
+    public List<Board_HashTag_Map> getBoardFindByHashTag(HashTag hashtag) {
 
-//        return this.boardHashTagMapRepository.findByHashTagIn(hashtag);
-
-        return null;
+        return this.boardHashTagMapRepository.findByTag(hashtag);
     }
 
     public Location create(LocationDTO locationDTO) {

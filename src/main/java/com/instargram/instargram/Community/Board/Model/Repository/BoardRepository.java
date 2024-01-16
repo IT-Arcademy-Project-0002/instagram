@@ -1,6 +1,7 @@
 package com.instargram.instargram.Community.Board.Model.Repository;
 
 import com.instargram.instargram.Community.Board.Model.Entity.Board;
+import com.instargram.instargram.Community.Board.Model.Entity.Board_HashTag_Map;
 import com.instargram.instargram.Community.Location.Model.Entity.Location;
 import com.instargram.instargram.Member.Model.Entity.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -22,4 +23,6 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
     List<Board> findByMember(Member member);
 
     List<Board> findByLocationIn(List<Location> locations);
+
+    List<Board> findByBoardHashTagMapsIn(List<Board_HashTag_Map> boardHashTagMap);
 }

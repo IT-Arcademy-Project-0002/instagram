@@ -257,15 +257,20 @@
                         </div>
                     </div>
 
+
+
                     <!-- highlight modal -->
                     <div class="modal fade" id="highlightModal" tabindex="-1"
-                         aria-labelledby="highlightModalLabel" aria-hidden="true">
+                         aria-labelledby="highlightModalLabel" aria-hidden="true" style="overflow: hidden;">
                         <div class="modal-dialog modal-dialog-centered center">
                             <div class="modal-content w400 bn">
+
                                 <div class="center">
                                     <div class="center fb48"></div>
                                     <div class="w-100 h50 center pdT4 pdB4 pdL8 pdR8 fs16 fwb" id="highlightModalLabel"> 새로운 하이라이트 </div>
-                                    <button type="button" class="btn-close pdT4 pdB4 pdL8 pdR20 fwb fs16" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    <button type="button" class="btn-close pdT4 pdB4 pdL8 pdR20 fwb fs16 bn"
+                                            data-bs-dismiss="modal" aria-label="Close">
+                                    </button>
                                 </div>
                                 <div class="bbsS bbw1 bbcDB w400"></div>
 
@@ -284,12 +289,12 @@
                     </div>
 
                     <!-- highlight list modal -->
-                    <div class="modal fade" id="highlightListModal"
-                         aria-hidden="true" aria-labelledby="highlightListModalToggleLabel" tabindex="-1">
+                    <div class="modal fade" id="highlightListModal" tabindex="-1"
+                         aria-labelledby="highlightListModalToggleLabel" aria-hidden="true" style="overflow: hidden;">
                         <div class="modal-dialog modal-dialog-centered center">
                             <div class="modal-content w400 bn">
-
                                 <div class="center">
+
                                     <div class="center fb48">
                                         <button type="button" class="btn_back pd8 fwb" data-bs-target="#highlightModal" data-bs-toggle="modal">
                                             <svg aria-label="돌아가기" class="" fill="currentColor" height="21" role="img"
@@ -305,7 +310,7 @@
                                     </div>
 
                                     <div class="center fb48">
-                                    <button type="button" class="btn-close pd8 fwb"
+                                    <button type="button" class="btn-close pd8 fwb bn"
                                             data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                 </div>
@@ -323,14 +328,13 @@
                         </div>
                     </div>
 
-
                     <!-- story cover choice -->
-                    <div class="modal fade" id="storyCoverChoiceModal"
-                         aria-hidden="true" aria-labelledby="storyCoverChoiceModalToggleLabel" tabindex="-1">
+                    <div class="modal fade" id="storyCoverChoiceModal" tabindex="-1"
+                         aria-labelledby="storyCoverChoiceModalToggleLabel" aria-hidden="true" style="overflow: hidden;">
                         <div class="modal-dialog modal-dialog-centered center">
                             <div class="modal-content w400 bn">
-
                                 <div class="center">
+
                                     <div class="center fb48">
                                         <button type="button" class="btn_back pd8 fwb" data-bs-target="#highlightListModal" data-bs-toggle="modal">
                                             <svg aria-label="돌아가기" class="" fill="currentColor" height="21" role="img"
@@ -346,7 +350,7 @@
                                     </div>
 
                                     <div class="center fb48">
-                                        <button type="button" class="btn-close pd8 fwb"
+                                        <button type="button" class="btn-close pd8 fwb bn"
                                                 data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                 </div>
@@ -363,11 +367,6 @@
                             </div>
                         </div>
                     </div>
-
-
-
-
-
 
                     <div class="btsS btcDB btw1"></div>
 
@@ -427,5 +426,8 @@
         <input type="hidden" id="keep" name="keep">
     </form>
     <script th:src="@{/member/js/UserPage.js}"></script>
+
+
+
 </div>
 </html>

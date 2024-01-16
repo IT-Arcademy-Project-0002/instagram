@@ -1,26 +1,45 @@
+function commentPin() {
+    var comment = document.querySelector("#BoardUserCommentModal");
+    console.log(comment);
+    var button = document.querySelector(".btn[data-bs-target='#BoardUserCommentModal']");
+    console.log(button);
 
-document.addEventListener('DOMContentLoaded', function () {
-    let commentModals = document.querySelectorAll('.modal');
+    var id = button.getAttribute('data-id');
+    console.log(id);
+    const commentPinLink = comment.querySelector('.comment-pin');
+    console.log(commentPinLink)
 
-    commentModals.forEach(function (modal) {
-        modal.addEventListener('show.bs.modal', function (event) {
-            const button = event.relatedTarget;
-            const id = button.getAttribute('data-id');
-            console.log(id);
+    commentPinLink.setAttribute('href', '/comment/pin/' + id);
+}
 
-            const recomment_deleteLink = modal.querySelector('.recomment-delete');
-            const deleteLink = modal.querySelector('.comment-delete');
-            console.log(deleteLink);
-            console.log(recomment_deleteLink);
+function commentDelete() {
+    var commentDelete = document.querySelector("#BoardUserCommentModal");
+    console.log(commentDelete);
+    var commentDeleteButton = document.querySelector(".btn[data-bs-target='#BoardUserCommentModal']");
+    console.log(commentDeleteButton);
 
-            if (deleteLink) {
-                deleteLink.setAttribute('href', '/comment/delete/' + id);
-            } else if (recomment_deleteLink) {
-                recomment_deleteLink.setAttribute('href', '/recomment/delete/' + id);
-            }
-        });
-    });
-});
+    var id = commentDeleteButton.getAttribute('data-id');
+    console.log(id);
+    const commentDeleteLink = commentDelete.querySelector('.comment-delete');
+    console.log(commentDeleteLink)
+
+    commentDeleteLink.setAttribute('href', '/comment/delete/' + id);
+}
+
+function recommentDelete() {
+    debugger;
+    var recommentDelete = document.querySelector("#ReCommentCreateUserModal");
+    console.log(recommentDelete);
+    var recommentDeleteButton = document.querySelector(".btn[data-bs-target='#ReCommentCreateUserModal']");
+    console.log(recommentDeleteButton);
+
+    var id = recommentDeleteButton.getAttribute('data-id');
+    console.log(id);
+    const recommentDeleteLink = recommentDelete.querySelector('.recomment-delete');
+    console.log(recommentDeleteLink)
+
+    recommentDeleteLink.setAttribute('href', '/recomment/delete/' + id);
+}
 
 function Comment(id) {
     var commedInput = document.getElementById('commentId');
@@ -107,6 +126,9 @@ function clickLike(id) {
                 notLike.classList.add('visually-hidden');
             }
         })
+        .then(data => {
+            setTimeout(reload,10);
+        })
         .catch(error => console.error('데이터를 받지 못했습니다.', error));
 }
 
@@ -176,12 +198,11 @@ function ModalclickSaveGroup(id) {
 $(document).ready(function () {
     $(".show-more-btn").each(function () {
         var contentContainer = $(this).prev(".content-container");
-        var buttonText = contentContainer.css("max-height") === "100px" ? "... 더보기" : "접기";
+        var buttonText = contentContainer.css("max-height") === "45px" ? "... 더보기" : "접기";
 
         $(this).text(buttonText);
 
-        // Check content length and hide the button if not needed
-        if (contentContainer[0].scrollHeight <= 100) {
+        if (contentContainer[0].scrollHeight <= 48) {
             $(this).hide();
         }
     });
@@ -189,13 +210,18 @@ $(document).ready(function () {
     $(".show-more-btn").click(function () {
         var contentContainer = $(this).prev(".content-container");
 
-        if (contentContainer.css("max-height") === "100px") {
+        if (contentContainer.css("max-height") === "45px") {
             contentContainer.css("max-height", "none");
             $(this).text("접기");
         } else {
-            contentContainer.css("max-height", "100px");
+            contentContainer.css("max-height", "45px");
             $(this).text("... 더보기");
         }
     });
 });
+
+function reload()
+{
+    window.location.reload();
+}
 

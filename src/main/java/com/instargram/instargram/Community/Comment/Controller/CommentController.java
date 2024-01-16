@@ -7,6 +7,7 @@ import com.instargram.instargram.Community.Comment.Model.Entity.Comment_Like_Map
 import com.instargram.instargram.Community.Comment.Model.Form.CommentCreateForm;
 import com.instargram.instargram.Community.Comment.Service.CommentService;
 import com.instargram.instargram.Community.Comment.Service.Comment_Like_MapService;
+import com.instargram.instargram.Community.Recomment.Service.RecommentService;
 import com.instargram.instargram.Enum_Data;
 import com.instargram.instargram.Member.Model.Entity.Member;
 import com.instargram.instargram.Member.Service.MemberService;
@@ -33,6 +34,7 @@ public class CommentController {
     private final Comment_Like_MapService commentLikeMapService;
     private final NoticeService noticeService;
     private final NoticeCommentMapService noticeCommentMapService;
+    private final RecommentService recommentService;
 
     //댓글 작성
     @PostMapping("/create/{id}")
@@ -74,4 +76,11 @@ public class CommentController {
         commentService.delete(comment);
         return "redirect:/main";
     }
+
+    @GetMapping("/pin/{id}")
+    public String commentPin(@PathVariable("id") Long id) {
+        commentService.PinStateChange(id);
+        return "redirect:/main";
+    }
+
 }

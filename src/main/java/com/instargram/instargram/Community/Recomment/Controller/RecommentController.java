@@ -74,6 +74,7 @@ public class RecommentController {
     public String delete(@PathVariable("id") Long id){
         Recomment recomment = this.recommentService.getRecommentById(id);
         recommentService.delete(recomment);
+        System.out.println("gggggggggggggggggggggggggggggggg");
         return "redirect:/main";
     }
 }

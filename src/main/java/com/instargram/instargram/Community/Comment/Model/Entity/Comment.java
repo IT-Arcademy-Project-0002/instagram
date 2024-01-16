@@ -31,6 +31,9 @@ public class Comment {
     // 댓글 내용
     private String content;
 
+    // 상단 고정 여부(true : 상단 고정, false : 일반 게시글)
+    private boolean pin;
+
     // 댓글의 부모 게시글
     @ManyToOne
     @JoinColumn(name="board_id")

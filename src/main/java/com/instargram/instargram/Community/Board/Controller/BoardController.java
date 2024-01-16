@@ -71,16 +71,10 @@ public class BoardController {
 
         List<FeedListDTO> feedList = this.boardDataMapService.getFeed(allBoards);
         FeedDTO selectFeed = (FeedDTO) httpSession.getAttribute("selectFeed");
-//        FeedDTO updateFeed = (FeedDTO) httpSession.getAttribute("updateFeed");
         if (selectFeed != null) {
             model.addAttribute("selectFeed", selectFeed);
             httpSession.removeAttribute("selectFeed");
         }
-//
-//        if (updateFeed != null) {
-//            model.addAttribute("updateFeed", updateFeed);
-//            httpSession.removeAttribute("updateFeed");
-//        }
 
         System.out.println("===========================>" + selectFeed);
         model.addAttribute("feedList", feedList);

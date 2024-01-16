@@ -90,14 +90,17 @@ public class NoticeBoardMapService {
 
             // 댓글로부터 보드를 찾는 비즈니스 로직
             Comment comment = noticeCommentMapService.getNoticeComment(noticeId, type);
-            Board boardForComment = comment.getBoard();
-            List<Board_Data_Map> dataMapsForComment = boardDataMapRepository.findByBoard(boardForComment);
 
-            for (Board_Data_Map dataMap : dataMapsForComment) {
-                if (dataMap.getDataType() != null && dataMap.getDataType() == 2) {
-                Long id = dataMap.getDataId();
-                imagePath = "/files/img/" + imageService.getImageByID(id).getName();
-                break; // 첫 번째 이미지만 필요하므로 루프 종료
+            if (comment != null) {
+                Board boardForComment = comment.getBoard();
+                List<Board_Data_Map> dataMapsForComment = boardDataMapRepository.findByBoard(boardForComment);
+
+                for (Board_Data_Map dataMap : dataMapsForComment) {
+                    if (dataMap.getDataType() != null && dataMap.getDataType() == 2) {
+                        Long id = dataMap.getDataId();
+                        imagePath = "/files/img/" + imageService.getImageByID(id).getName();
+                        break; // 첫 번째 이미지만 필요하므로 루프 종료
+                    }
                 }
             }
         }
@@ -106,16 +109,23 @@ public class NoticeBoardMapService {
 
             // 대댓글로부터 보드를 찾는 비즈니스 로직
             Recomment recomment = noticeCommentMapService.getNoticeRecomment(noticeId, type);
-            Board boardForRecomment = recomment.getComment().getBoard();
-            List<Board_Data_Map> dataMapsForRecomment = boardDataMapRepository.findByBoard(boardForRecomment);
 
-            for (Board_Data_Map dataMap : dataMapsForRecomment) {
-                if (dataMap.getDataType() != null && dataMap.getDataType() == 2) {
-                    Long id = dataMap.getDataId();
-                    imagePath = "/files/img/" + imageService.getImageByID(id).getName();
-                    break; // 첫 번째 이미지만 필요하므로 루프 종료
+            if (recomment != null && recomment.getComment() != null) {
+                Comment commentForRecomment = recomment.getComment();
+                Board boardForRecomment = commentForRecomment.getBoard();
+
+                if (boardForRecomment != null) {
+                    List<Board_Data_Map> dataMapsForRecomment = boardDataMapRepository.findByBoard(boardForRecomment);
+
+                    for (Board_Data_Map dataMap : dataMapsForRecomment) {
+                        if (dataMap.getDataType() != null && dataMap.getDataType() == 2) {
+                            Long id = dataMap.getDataId();
+                            imagePath = "/files/img/" + imageService.getImageByID(id).getName();
+                            break; // 첫 번째 이미지만 필요하므로 루프 종료
+                        }
+                    }
                 }
-            }
+            } 
         }
 
         if (type == 9) {
@@ -124,7 +134,7 @@ public class NoticeBoardMapService {
             Notice_Board_TagMember_Map noticeBoardTagMemberMap = noticeBoardTagMemberMapRepository.findByNoticeId(noticeId);
 
             if (noticeBoardTagMemberMap  != null) {
-                Board board = noticeBoardTagMemberMap .getBoardTagMember().getBoard();
+                Board board = noticeBoardTagMemberMap.getBoardTagMember().getBoard();
                 List<Board_Data_Map> dataMaps = boardDataMapRepository.findByBoard(board);
 
                 for (Board_Data_Map dataMap : dataMaps) {

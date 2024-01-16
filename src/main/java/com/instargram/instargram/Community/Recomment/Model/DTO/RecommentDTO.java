@@ -6,6 +6,7 @@ import com.instargram.instargram.Community.Comment.Model.Entity.Comment_Like_Map
 import com.instargram.instargram.Community.Recomment.Model.Entity.ReComment_Like_Map;
 import com.instargram.instargram.Community.Recomment.Model.Entity.Recomment;
 import com.instargram.instargram.Member.Model.DTO.MemberDTO;
+import com.instargram.instargram.Member.Model.Entity.Member;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -32,8 +33,6 @@ public class RecommentDTO {
             memberDTO = new MemberDTO(recomment.getMember());
         }
         // BoardLikeMemberMap에서 필요한 데이터만 가져와서 저장
-        recommentLikeMemberIds = recomment.getReCommentLikeMembers().stream()
-                .map(ReComment_Like_Map::getId)
-                .collect(Collectors.toList());
+        this.recommentLikeMemberIds = recomment.getReCommentLikeMembers().stream().map(ReComment_Like_Map::getMember).map(Member::getId).collect(Collectors.toList());
     }
 }

@@ -1,10 +1,7 @@
 package com.instargram.instargram.Community.Board.Service;
 
-import com.instargram.instargram.Community.Board.Model.DTO.FeedDTO;
 import com.instargram.instargram.Community.Board.Model.Entity.Board;
 import com.instargram.instargram.Community.Board.Model.Entity.Board_HashTag_Map;
-import com.instargram.instargram.Community.Board.Model.Entity.Board_TagMember_Map;
-import com.instargram.instargram.Community.Board.Model.Form.BoardCreateForm;
 import com.instargram.instargram.Community.Board.Model.Repository.BoardRepository;
 import com.instargram.instargram.Community.Location.Model.Entity.Location;
 import com.instargram.instargram.DataNotFoundException;
@@ -13,9 +10,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.Duration;
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 
@@ -115,5 +110,4 @@ public class BoardService {
 
         return this.boardRepository.findByBoardHashTagMapsIn(boardHashTagMap);
     }
-
 }

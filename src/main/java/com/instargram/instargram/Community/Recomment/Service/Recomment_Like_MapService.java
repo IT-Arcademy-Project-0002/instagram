@@ -8,6 +8,8 @@ import com.instargram.instargram.Member.Model.Entity.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class Recomment_Like_MapService {
@@ -26,5 +28,10 @@ public class Recomment_Like_MapService {
 
     public ReComment_Like_Map exists(Recomment recomment, Member member) {
         return this.reCommentLikeMapRepository.findByRecommentAndMember(recomment, member);
+    }
+
+    public int countLikesForReComment(Recomment recomment) {
+        List<ReComment_Like_Map> likeMaps = reCommentLikeMapRepository.findByRecomment(recomment);
+        return likeMaps.size();
     }
 }

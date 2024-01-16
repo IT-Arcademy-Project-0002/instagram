@@ -29,4 +29,9 @@ public class BoardLikeMemberMapService {
     public void delete(BoardLikeMemberMap map) {
         this.boardLikeMemberMapRepository.delete(map);
     }
+
+    public int countLikesForBoard(Board board) {
+        List<BoardLikeMemberMap> likeMaps = boardLikeMemberMapRepository.findByBoard(board);
+        return likeMaps.size();
+    }
 }

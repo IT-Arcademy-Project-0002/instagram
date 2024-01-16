@@ -57,6 +57,11 @@ public class ImageService {
         }
     }
 
+    public void deleteImage(Long id) {
+
+        this.imageRepository.deleteById(id);
+    }
+
     public Image memberImageChange(Image image, MultipartFile multipartFile,
                                    String nameWithoutExtension, String fileExtension) throws IOException {
         if(image != null)

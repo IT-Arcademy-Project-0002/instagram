@@ -23,3 +23,24 @@
     cursor: pointer;
     color: inherit;
 }
+
+.comment-container .commentBtn {
+    visibility: hidden;
+}
+
+.comment-container:hover .commentBtn {
+    visibility: visible;
+}
+
+.recomment-container .recommentBtn {
+    visibility: hidden;
+}
+
+.recomment-container:hover .recommentBtn {
+    visibility: visible;
+}
+
+.stop-scroll{
+    height: 100%;
+    overflow: hidden;
+}

@@ -9,4 +9,6 @@ import java.util.List;
 
 public interface BoardLikeMemberMapRepository extends JpaRepository<BoardLikeMemberMap, Long> {
     BoardLikeMemberMap findByBoardAndLikeMember(Board board, Member member);
+
+    List<BoardLikeMemberMap> findByBoard(Board board);
 }

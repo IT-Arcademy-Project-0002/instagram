@@ -175,10 +175,27 @@ public class BoardController {
     }
 
     // board like Hidden
+//    @GetMapping("/board/likehide/{id}")
+//    public String boardLikeHide(@PathVariable("id") Long id) {
+//        this.boardService.LikeStateChange(id);
+//        return "redirect:/main";
+//    }
+
     @GetMapping("/board/likehide/{id}")
-    public String boardLikeHide(@PathVariable("id") Long id) {
+    public ResponseEntity<Map<String, Object>> boardLikeHide(@PathVariable("id") Long id) {
+        Map<String, Object> result = new HashMap<>();
         this.boardService.LikeStateChange(id);
-        return "redirect:/main";
+
+        Board board = this.boardService.getBoardById(id);
+        if(!board.isLikeHide()){
+            int likeCount = this.boardLikeMemberMapService.countLikesForBoard(board);
+
+            result.put("likehide", false);
+            result.put("likeCount", likeCount);
+        }else{
+            result.put("likehide", true);
+        }
+        return ResponseEntity.ok().body(result);
     }
 
     // board Comment disable
@@ -288,13 +305,21 @@ public class BoardController {
             BoardLikeMemberMap boardLikeMemberMap = this.boardLikeMemberMapService.create(board, member);
             Notice notice = this.noticeService.createNotice(Enum_Data.BOARD_LIKE.getNumber(), member, board.getMember());
             this.noticeBoardMapService.createNoticeBoardLikeMember(boardLikeMemberMap, notice);
+
+            int likeCount = this.boardLikeMemberMapService.countLikesForBoard(board);
             result.put("result", true);
+            result.put("likeCount", likeCount);
         } else {
             this.boardLikeMemberMapService.delete(isBoardMemberLiked);
+
+            int likeCount = this.boardLikeMemberMapService.countLikesForBoard(board);
             result.put("result", false);
+            result.put("likeCount", likeCount);
         }
+        result.put("like_hide", board.isLikeHide());
         return ResponseEntity.ok().body(result);
     }
+
 
     // board SaveGroup
     @GetMapping("/board/saveGroup/{boardId}")

@@ -1,6 +1,7 @@
 package com.instargram.instargram.Community.Comment.Controller;
 
 import com.instargram.instargram.Community.Board.Model.Entity.Board;
+import com.instargram.instargram.Community.Board.Model.Entity.BoardLikeMemberMap;
 import com.instargram.instargram.Community.Board.Service.BoardService;
 import com.instargram.instargram.Community.Comment.Model.Entity.Comment;
 import com.instargram.instargram.Community.Comment.Model.Entity.Comment_Like_Map;
@@ -17,12 +18,15 @@ import com.instargram.instargram.Notice.Model.Entity.Notice;
 import com.instargram.instargram.Notice.Service.NoticeCommentMapService;
 import com.instargram.instargram.Notice.Service.NoticeService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.HashMap;
+import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
@@ -55,19 +59,30 @@ public class CommentController {
     
     // 댓글 좋아요
     @GetMapping("/like/{id}")
-    public String like(@PathVariable("id") Long id, Principal principal, Model model) {
+    public ResponseEntity<Map<String, Object>> like(@PathVariable("id") Long id, Principal principal) {
+        Map<String, Object> result = new HashMap<>();
+
         Comment comment = this.commentService.getCommentById(id);
         Member member = this.memberService.getMember(principal.getName());
 
         Comment_Like_Map isCommentMemberLiked = this.commentLikeMapService.exists(comment, member);
+
         if (isCommentMemberLiked == null) {
             Comment_Like_Map commentLikeMap = this.commentLikeMapService.create(comment, member);
             Notice notice = this.noticeService.createNotice(Enum_Data.COMMENT_LIKE.getNumber(), member,comment.getMember());
             noticeCommentMapService.createNoticeCommentLike(commentLikeMap, notice);
-        }else{
+
+            int commentLikeCount = this.commentLikeMapService.countLikesForComment(comment);
+            result.put("result", true);
+            result.put("commentLikeCount", commentLikeCount);
+        } else {
             this.commentLikeMapService.delete(isCommentMemberLiked);
+
+            int commentLikeCount = this.commentLikeMapService.countLikesForComment(comment);
+            result.put("result", false);
+            result.put("commentLikeCount", commentLikeCount);
         }
-        return "redirect:/main";
+        return ResponseEntity.ok().body(result);
     }
 
     @GetMapping("/delete/{id}")

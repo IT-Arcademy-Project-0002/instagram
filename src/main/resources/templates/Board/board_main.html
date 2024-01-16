@@ -36,8 +36,8 @@
                                                      th:text="${feed.board.memberDTO.username}"></div>
                                             </div>
                                             <div class="d-flex" style="font-size: smaller;">
-                                                    <span class="mx-2" dir="auto"
-                                                          style="line-height: var(--base-line-clamp-line-height); --base-line-clamp-line-height: 18px;">•</span>
+                                                <span class="mx-2" dir="auto"
+                                                      style="line-height: var(--base-line-clamp-line-height); --base-line-clamp-line-height: 18px;">•</span>
                                                 <div th:text="${#temporals.format(feed.board.createDate, 'yyyy-MM-dd HH:mm:ss')}"></div>
                                             </div>
                                         </div>
@@ -255,7 +255,7 @@
                                 <div class="px-2" th:text="${feed.board.memberDTO.username}"></div>
                                 <div class="d-flex flex-column">
                                     <div class="content-container" th:text="${feed.board.content}"></div>
-                                    <div class="show-more-button btn noneBtn btn-link border-top p-0" onclick="showMore()">... 더보기</div>
+                                    <div class="btn noneBtn btn-link border-top p-0 show-more-btn">... 더보기</div>
                                 </div>
                             </div>
                             <div class="d-flex px-2" style="width: 100%;"
@@ -908,12 +908,12 @@
                                     <div class="ModifyLocation-list" id="ModifyLocation-list">
                                     </div>
                                     <div>
-                                        <input type="text" id="ModifyLocationId" name="ModifyLocationId" value=" " readonly>
-                                        <input type="text" id="ModifyPlaceName" name="ModifyPlaceName" value=" " readonly>
-                                        <input type="text" id="ModifyRoadAddressName" name="ModifyRoadAddressName" value=" " readonly>
-                                        <input type="text" id="ModifyAddressName" name="ModifyAddressName" value=" " readonly>
-                                        <input type="text" id="Modify_x" name="Modify_x" value=" " readonly>
-                                        <input type="text" id="Modify_y" name="Modify_y" value=" " readonly>
+                                        <input type="hidden" id="ModifyLocationId" name="ModifyLocationId" value=" " readonly>
+                                        <input type="hidden" id="ModifyPlaceName" name="ModifyPlaceName" value=" " readonly>
+                                        <input type="hidden" id="ModifyRoadAddressName" name="ModifyRoadAddressName" value=" " readonly>
+                                        <input type="hidden" id="ModifyAddressName" name="ModifyAddressName" value=" " readonly>
+                                        <input type="hidden" id="Modify_x" name="Modify_x" value=" " readonly>
+                                        <input type="hidden" id="Modify_y" name="Modify_y" value=" " readonly>
                                     </div>
                                     <div class="d-flex flex-column mt-2">
                                         <!--접근성-->

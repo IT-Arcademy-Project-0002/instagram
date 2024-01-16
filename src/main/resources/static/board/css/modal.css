@@ -13,13 +13,12 @@
 }
 
 .content-container {
-    white-space: pre-wrap;
+    max-height: 100px;
     overflow: hidden;
-    transition: max-height 0.3s ease-out;
-    max-height: 50px;
+    transition: max-height 0.5s ease;
 }
 
-.show-more-button {
+.show-more-btn {
     cursor: pointer;
-    display: none;
+    color: blue;
 }

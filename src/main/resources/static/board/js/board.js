@@ -173,43 +173,28 @@ function ModalclickSaveGroup(id) {
         .catch(error => console.error('데이터를 받지 못했습니다.', error));
 }
 
-function showMore() {
-    var contentContainer = document.querySelector('.content-container');
-    var showMoreButton = document.querySelector('.show-more-button');
+$(document).ready(function () {
+    $(".show-more-btn").each(function () {
+        var contentContainer = $(this).prev(".content-container");
+        var buttonText = contentContainer.css("max-height") === "100px" ? "... 더보기" : "접기";
 
-    if (contentContainer.style.maxHeight === '' || contentContainer.style.maxHeight === 'none') {
-        // 높이가 넘어가는 경우
-        contentContainer.style.maxHeight = '100%';
-        showMoreButton.textContent = '접기';
-    } else {
-        // 높이가 넘어가지 않는 경우
-        contentContainer.style.maxHeight = '100px';
-        showMoreButton.textContent = '... 더보기';
-    }
-}
+        $(this).text(buttonText);
 
-// 페이지 로드 시 높이에 따라 버튼을 표시 또는 감추기
-document.addEventListener('DOMContentLoaded', function () {
-    var posts = document.querySelectorAll('.feedList');
-    console.log(posts);
+        // Check content length and hide the button if not needed
+        if (contentContainer[0].scrollHeight <= 100) {
+            $(this).hide();
+        }
+    });
 
-    posts.forEach(function(post) {
-        var contentContainer = post.querySelector('.content-container');
-        console.log(contentContainer);
-        var showMoreButton = post.querySelector('.show-more-button');
-        console.log(showMoreButton);
+    $(".show-more-btn").click(function () {
+        var contentContainer = $(this).prev(".content-container");
 
-        var lineHeight = parseFloat(window.getComputedStyle(contentContainer).lineHeight);
-        console.log(lineHeight);
-        var contentHeight = contentContainer.scrollHeight;
-        console.log(contentHeight);
-        var lineCount = contentHeight / lineHeight;
-        console.log(lineCount);
-
-        if (lineCount = 3) {
-            showMoreButton.style.display = 'inline';
+        if (contentContainer.css("max-height") === "100px") {
+            contentContainer.css("max-height", "none");
+            $(this).text("접기");
         } else {
-            showMoreButton.style.display = 'none';
+            contentContainer.css("max-height", "100px");
+            $(this).text("... 더보기");
         }
     });
 });

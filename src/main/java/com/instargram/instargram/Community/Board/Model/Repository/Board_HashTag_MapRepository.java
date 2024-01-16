@@ -11,8 +11,8 @@ import java.util.List;
 public interface Board_HashTag_MapRepository extends JpaRepository<Board_HashTag_Map, Long> {
     List<Board_HashTag_Map> findByBoard(Board board);
 
-//    List<Board> findByHashTagIn(HashTag hashTag);
-
     long countByTag_Id(Long tagId);
+
+    List<Board_HashTag_Map> findByTag(HashTag tag);
 
 }

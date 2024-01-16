@@ -1,5 +1,6 @@
 package com.instargram.instargram.Explorer.Controller;
 
+import com.instargram.instargram.Community.Board.Model.Entity.Board_HashTag_Map;
 import com.instargram.instargram.Community.Board.Service.BoardHashTagMapService;
 import com.instargram.instargram.Community.HashTag.Model.Entity.HashTag;
 import com.instargram.instargram.Community.HashTag.Service.HashTagService;
@@ -44,11 +45,12 @@ public class ExploreController {
     @GetMapping("/tags/{hashTagId}")
     public String searchHashTag(Model model, @PathVariable("hashTagId") Long hashTagId){
 
-//        HashTag hashtag =  this.hashTagService.getHashTagFindById(hashTagId);
-//        List<Board> boardList = this.locationService.getBoardFindByHashTag(hashtag);
-//        List<ExploreDTO> exploreHashTagList = this.exploreService.initExplore(boardList);
-//
-//        model.addAttribute("exploreHashTagList", exploreHashTagList);
+        HashTag hashtag =  this.hashTagService.getHashTagFindById(hashTagId);
+        List<Board_HashTag_Map> boardHashTagMaps = this.boardHashTagMapService.getBoardFindByHashTag(hashtag);
+        List<Board> boardList = this.boardService.findByBoardHashTagMaps(boardHashTagMaps);
+        List<ExploreDTO> exploreHashTagList = this.exploreService.initExplore(boardList);
+
+        model.addAttribute("exploreHashTagList", exploreHashTagList);
 
         return "Explore/explore_hashTag";
     }
@@ -70,8 +72,7 @@ public class ExploreController {
     @ResponseBody
     public Location mapSearchLocation(@RequestParam("locationId") String locationId) {
 
-        // 해시태그 맵에 따른 보드를 return 해줘야함 get(0) 만으로는 부족함.
-
+        // 업로드 된 보드는 모두 동일한 장소를 가지기 때문에 1번 Index는 무조건 존재하게 된다. 따라서 get(0)
         return this.locationService.getLocationFindById(locationId).get(0);
     }
 

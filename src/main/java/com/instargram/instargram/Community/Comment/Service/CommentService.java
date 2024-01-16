@@ -39,4 +39,12 @@ public class CommentService {
     public void delete(Comment comment) {
         this.commentRepository.delete(comment);
     }
+
+    public void PinStateChange(Long id) {
+        Comment comment = getCommentById(id);
+
+        comment.setPin(!comment.isPin());
+
+        commentRepository.save(comment);
+    }
 }

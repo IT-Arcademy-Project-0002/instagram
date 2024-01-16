@@ -18,9 +18,8 @@ public class Notice_Board_Like_Member_Map {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "notice_id")
-    @OnDelete(action = OnDeleteAction.CASCADE)
     private Notice notice;
 
     @ManyToOne

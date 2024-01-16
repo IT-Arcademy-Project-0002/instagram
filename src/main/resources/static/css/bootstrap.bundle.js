@@ -5977,27 +5977,33 @@
   class Popover extends Tooltip {
     // Getters
     static get Default() {
+      
       return Default$2;
     }
 
     static get NAME() {
+      
       return NAME$3;
     }
 
     static get Event() {
+      
       return Event$1;
     }
 
     static get DefaultType() {
+      
       return DefaultType$2;
     } // Overrides
 
 
     isWithContent() {
+      
       return this.getTitle() || this._getContent();
     }
 
     getTipElement() {
+      
       if (this.tip) {
         return this.tip;
       }
@@ -6016,6 +6022,7 @@
     }
 
     setContent() {
+      
       const tip = this.getTipElement(); // we use append for html objects to maintain js events
 
       this.setElementContent(SelectorEngine.findOne(SELECTOR_TITLE, tip), this.getTitle());
@@ -6032,10 +6039,12 @@
 
 
     _addAttachmentClass(attachment) {
+      
       this.getTipElement().classList.add(`${CLASS_PREFIX}-${this.updateAttachment(attachment)}`);
     }
 
     _getContent() {
+      
       return this._element.getAttribute('data-bs-content') || this._config.content;
     }
 
@@ -6050,6 +6059,7 @@
 
 
     static jQueryInterface(config) {
+      
       return this.each(function () {
         const data = Popover.getOrCreateInstance(this, config);
 

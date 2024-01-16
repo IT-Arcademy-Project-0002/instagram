@@ -52,7 +52,7 @@ public class MessageMemberMapService {
         return messageMemberMapRepository.findByRoomAndMember_UsernameNotAndSeeMemberNotContainingOrderByCreateDateAsc(room, name, name);
     }
 
-    public void createDefault(Message_Member_Map messageMemberMap, Room room, Map<String, Object> msg)
+    public Message_Member_Map createDefault(Message_Member_Map messageMemberMap, Room room, Map<String, Object> msg)
     {
         Member sender = memberService.getMember(msg.get("sender").toString());
         messageMemberMap.setMember(sender);
@@ -61,24 +61,33 @@ public class MessageMemberMapService {
         messageMemberMap.setEmpathy(null);
         messageMemberMap.setSeeMember("");
 
-        messageMemberMapRepository.save(messageMemberMap);
+        return messageMemberMapRepository.save(messageMemberMap);
     }
-    public void createMessageMap(Map<String, Object> msg, Message message, Room room)
+    public Message_Member_Map createMessageMap(Map<String, Object> msg, Message message, Room room)
     {
         Message_Member_Map messageMemberMap = new Message_Member_Map();
         messageMemberMap.setDataId(message.getId());
         messageMemberMap.setDataType(Enum_Data.MESSAGE.getNumber());
 
-        createDefault(messageMemberMap, room, msg);
+        return createDefault(messageMemberMap, room, msg);
     }
 
-    public void createImageMap(Map<String, Object> msg, Image image, Room room)
+    public Message_Member_Map createImageMap(Map<String, Object> msg, Image image, Room room)
     {
         Message_Member_Map messageMemberMap = new Message_Member_Map();
         messageMemberMap.setDataId(image.getId());
         messageMemberMap.setDataType(Enum_Data.IMAGE.getNumber());
 
-        createDefault(messageMemberMap, room, msg);
+        return createDefault(messageMemberMap, room, msg);
+    }
+
+    public Message_Member_Map createVideoMap(Map<String, Object> msg, Video video, Room room)
+    {
+        Message_Member_Map messageMemberMap = new Message_Member_Map();
+        messageMemberMap.setDataId(video.getId());
+        messageMemberMap.setDataType(Enum_Data.VIDEO.getNumber());
+
+        return createDefault(messageMemberMap, room, msg);
     }
 
     public void createMessage(Map<String, Object> msg, Room room)

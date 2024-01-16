@@ -30,14 +30,14 @@
     margin-bottom: 19px;
 }
 
-.sm_logo_img {
-    background-image: url(../files/designImg/Logo.png);
-    background-position: 0 -52px;
-    background-repeat: no-repeat;
-    width: 200px;
-    height: 52px;
-    display: inline-block;
-}
+/*.sm_logo_img {*/
+/*    background-image: url(../files/designImg/Logo.png);*/
+/*    background-position: 0 -52px;*/
+/*    background-repeat: no-repeat;*/
+/*    width: 200px;*/
+/*    height: 52px;*/
+/*    display: inline-block;*/
+/*}*/
 
 .logo_layout {
     position: absolute;

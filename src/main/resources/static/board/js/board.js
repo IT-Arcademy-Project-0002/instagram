@@ -110,6 +110,8 @@ function ReCommentContainerToggleReplies(commentId) {
 
 // /board/like/{id}
 function clickLike(id) {
+    var likeCount = document.getElementById("likeCount");
+    console.log(likeCount);
     fetch("/board/like/" + id)
         .then(response => {
             return response.json()
@@ -117,17 +119,24 @@ function clickLike(id) {
         .then(data => {
             var liked = document.getElementById('liked-svg' + id);
             var notLike = document.getElementById('not-like-svg' + id);
-
+            console.log(data.likeCount);
             if (data.result) {
                 liked.classList.add('visually-hidden');
                 notLike.classList.remove('visually-hidden');
+                if(data.like_hide){
+                    document.getElementById('likeCount').innerHTML = `<div>좋아요 여러개 입니다.</div>`;
+                }else{
+                    document.getElementById('likeCount').innerHTML = `<div>좋아요 ${data.likeCount}개</div>`;
+                }
             } else {
                 liked.classList.remove('visually-hidden');
                 notLike.classList.add('visually-hidden');
+                if(data.like_hide){
+                    document.getElementById('likeCount').innerHTML = `<div>좋아요 여러개 입니다.</div>`;
+                }else{
+                    document.getElementById('likeCount').innerHTML = `<div>좋아요 ${data.likeCount}개</div>`;
+                }
             }
-        })
-        .then(data => {
-            setTimeout(reload,10);
         })
         .catch(error => console.error('데이터를 받지 못했습니다.', error));
 }
@@ -146,9 +155,71 @@ function ModalclickLike(id) {
             if (data.result) {
                 modalLiked.classList.add('visually-hidden');
                 modalNotLike.classList.remove('visually-hidden');
+                if(data.like_hide){
+                    document.getElementById('modalLikeCount').innerHTML = `<div>좋아요 여러개 입니다.</div>`;
+                }else{
+                    document.getElementById('modalLikeCount').innerHTML = `<div>좋아요 ${data.likeCount}개</div>`;
+                }
             } else {
                 modalLiked.classList.remove('visually-hidden');
                 modalNotLike.classList.add('visually-hidden');
+                if(data.like_hide){
+                    document.getElementById('modalLikeCount').innerHTML = `<div>좋아요 여러개 입니다.</div>`;
+                }else{
+                    document.getElementById('modalLikeCount').innerHTML = `<div>좋아요 ${data.likeCount}개</div>`;
+                }
+            }
+        })
+        .catch(error => console.error('데이터를 받지 못했습니다.', error));
+}
+
+function ModalCommentClickLike(id){
+    fetch("/comment/like/" + id)
+        .then(response => {
+            return response.json()
+        })
+        .then(data => {
+            var modal_comment = document.getElementById('FeedCommentModal');
+            var modal_comment_Liked = modal_comment.querySelector('#modal-comment-liked-svg' + id);
+            console.log(modal_comment_Liked);
+            var modal_comment_NotLike = modal_comment.querySelector('#modal-comment-not-like-svg' + id);
+            console.log(modal_comment_NotLike);
+
+            if (data.result) {
+                modal_comment_Liked.classList.add('visually-hidden');
+                modal_comment_NotLike.classList.remove('visually-hidden');
+                document.getElementById('modalCommentLikeCount' + id).innerHTML = `<div>좋아요 ${data.commentLikeCount}개</div>`;
+
+            } else {
+                modal_comment_Liked.classList.remove('visually-hidden');
+                modal_comment_NotLike.classList.add('visually-hidden');
+                document.getElementById('modalCommentLikeCount' + id).innerHTML = `<div>좋아요 ${data.commentLikeCount}개</div>`;
+            }
+        })
+        .catch(error => console.error('데이터를 받지 못했습니다.', error));
+}
+
+function ModalRecommentClickLike(id){
+    fetch("/recomment/like/" + id)
+        .then(response => {
+            return response.json()
+        })
+        .then(data => {
+            var modal_recomment = document.getElementById('FeedCommentModal');
+            var modal_recomment_Liked = modal_recomment.querySelector('#modal-recomment-liked-svg' + id);
+            console.log(modal_recomment_Liked);
+            var modal_recomment_NotLike = modal_recomment.querySelector('#modal-recomment-not-like-svg' + id);
+            console.log(modal_recomment_NotLike);
+
+            if (data.result) {
+                modal_recomment_Liked.classList.add('visually-hidden');
+                modal_recomment_NotLike.classList.remove('visually-hidden');
+                document.getElementById('modalRecommentLikeCount' + id).innerHTML = `<div>좋아요 ${data.recommentLikeCount}개</div>`;
+
+            } else {
+                modal_recomment_Liked.classList.remove('visually-hidden');
+                modal_recomment_NotLike.classList.add('visually-hidden');
+                document.getElementById('modalRecommentLikeCount' + id).innerHTML = `<div>좋아요 ${data.recommentLikeCount}개</div>`;
             }
         })
         .catch(error => console.error('데이터를 받지 못했습니다.', error));
@@ -166,9 +237,11 @@ function clickSaveGroup(id) {
             if (data.result) {
                 saved.classList.add('visually-hidden');
                 notSave.classList.remove('visually-hidden');
+                alert("게시글 저장 완료");
             } else {
                 saved.classList.remove('visually-hidden');
                 notSave.classList.add('visually-hidden');
+                alert("게시글 저장 해지");
             }
         })
         .catch(error => console.error('데이터를 받지 못했습니다.', error));
@@ -187,10 +260,38 @@ function ModalclickSaveGroup(id) {
             if (data.result) {
                 modalsaved.classList.add('visually-hidden');
                 modalnotSave.classList.remove('visually-hidden');
+                alert("게시글 저장 완료");
             } else {
                 modalsaved.classList.remove('visually-hidden');
                 modalnotSave.classList.add('visually-hidden');
+                alert("게시글 저장 해지");
             }
+        })
+        .catch(error => console.error('데이터를 받지 못했습니다.', error));
+}
+
+function likehide(id){
+    fetch("/board/likehide/" + id)
+        .then(response => {
+            return response.json()
+        })
+        .then(data => {
+            if (data.likehide) {
+                document.getElementById("modalLikeCount").innerHTML = `<div>좋아요 여러개 입니다.</div>`;
+                let likehideBtn = document.getElementById("likehideBtn");
+                if( likehideBtn != null) {
+                    document.getElementById("likehideBtn").innerText = "좋아요 수 숨기기 취소";
+                }
+            } else {
+                document.getElementById('modalLikeCount').innerHTML = `<div>좋아요 ${data.likeCount}개</div>`;
+                let likehideBtn = document.getElementById("likehideBtn");
+                if( likehideBtn != null) {
+                    document.getElementById("likehideBtn").innerText = "좋아요 수 숨기기";
+                }
+            }
+        })
+        .then(() =>{
+            $('#CreateUserBoardSettingModal').modal('hide')
         })
         .catch(error => console.error('데이터를 받지 못했습니다.', error));
 }
@@ -219,9 +320,3 @@ $(document).ready(function () {
         }
     });
 });
-
-function reload()
-{
-    window.location.reload();
-}
-

@@ -5,7 +5,10 @@ import com.instargram.instargram.Community.Recomment.Model.Entity.Recomment;
 import com.instargram.instargram.Member.Model.Entity.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
+
 public interface ReComment_Like_MapRepository extends JpaRepository<ReComment_Like_Map, Long> {
     ReComment_Like_Map findByRecommentAndMember(Recomment recomment, Member member);
 
+    List<ReComment_Like_Map> findByRecomment(Recomment recomment);
 }

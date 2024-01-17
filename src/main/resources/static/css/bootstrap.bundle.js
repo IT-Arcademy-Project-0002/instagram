@@ -4486,12 +4486,12 @@
 
 
     toggle(relatedTarget) {
-      
+
       return this.show(relatedTarget);
     }
 
     show(relatedTarget) {
-      
+      debugger;
 
       if (this._isShown || this._isTransitioning) {
         return;
@@ -4708,7 +4708,7 @@
 
         this._resetAdjustments();
 
-        this._scrollBar.reset();
+        //this._scrollBar.reset();
 
         EventHandler.trigger(this._element, EVENT_HIDDEN$3);
       });

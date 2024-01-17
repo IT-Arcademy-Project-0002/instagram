@@ -55,7 +55,7 @@ public class Comment {
     private List<Recomment> recommentList;
 
     // 댓글의 좋아요 한 사람 목록
-    @OneToMany(mappedBy = "comment", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "comment", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private List<Comment_Like_Map> commentLikeMembers;
 
     @OneToMany(mappedBy = "comment", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)

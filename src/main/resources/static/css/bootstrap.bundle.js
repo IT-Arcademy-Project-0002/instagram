@@ -4491,8 +4491,6 @@
     }
 
     show(relatedTarget) {
-      
-
       if (this._isShown || this._isTransitioning) {
         return;
       }

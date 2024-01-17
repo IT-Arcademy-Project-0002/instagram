@@ -42,13 +42,15 @@ public class RecommentController {
         Comment comment = this.commentService.getCommentById(id);
         if (member != null && comment != null) {
             Recomment recomment = recommentService.create(member, comment, recommentCreateForm.getContent());
-            Notice notice = this.noticeService.createNotice(Enum_Data.COMMENT_RECOMMENT.getNumber(), member, comment.getMember());
-            noticeCommentMapService.createNoticeRecomment(recomment, notice);
-            // 대댓글에서 TagMember를 언급할때 실제 회원이 존재한다면(tagMember != null) 알림을 보내는 비즈니스 로직임
-            Member tagMember = noticeCommentMapService.createTagMember(recommentCreateForm.getContent());
-            if (tagMember != null) {
-                Notice noticeForTabMember = this.noticeService.createRecommentTagMemberNotice(Enum_Data.COMMENT_RECOMMENT.getNumber(), member, tagMember);
-                noticeCommentMapService.createNoticeRecomment(recomment, noticeForTabMember);
+            if (member != comment.getMember() || member != recomment.getMember()) {
+                Notice notice = this.noticeService.createNotice(Enum_Data.COMMENT_RECOMMENT.getNumber(), member, comment.getMember());
+                noticeCommentMapService.createNoticeRecomment(recomment, notice);
+                // 댓글, 대댓글 회원이 아닌 다른 TagMember를 언급할때 실제 회원이 존재한다면(tagMember != null) 알림을 보내는 비즈니스 로직
+                Member tagMember = noticeCommentMapService.createTagMember(recommentCreateForm.getContent());
+                if (member != comment.getMember() && member != recomment.getMember() && tagMember != null) {
+                    Notice noticeForTabMember = this.noticeService.createRecommentTagMemberNotice(Enum_Data.COMMENT_RECOMMENT.getNumber(), member, tagMember);
+                    noticeCommentMapService.createNoticeRecomment(recomment, noticeForTabMember);
+                }
             }
         }
         return "redirect:/main";
@@ -62,8 +64,10 @@ public class RecommentController {
         ReComment_Like_Map isRecommentMemberLiked = this.recommentLikeMapService.exists(recomment, member);
         if (isRecommentMemberLiked == null) {
             ReComment_Like_Map reCommentLikeMap = this.recommentLikeMapService.create(recomment, member);
-            Notice notice = this.noticeService.createNotice(Enum_Data.RECOMMENT_LIKE.getNumber(), member,recomment.getMember());
-            noticeCommentMapService.createNoticeRecommentLike(reCommentLikeMap, notice);
+                if (member != recomment.getMember()) {
+                    Notice notice = this.noticeService.createNotice(Enum_Data.RECOMMENT_LIKE.getNumber(), member, recomment.getMember());
+                    noticeCommentMapService.createNoticeRecommentLike(reCommentLikeMap, notice);
+                }
         }else{
             this.recommentLikeMapService.delete(isRecommentMemberLiked);
         }

@@ -169,15 +169,11 @@
                                         <div class="modal fade" id="userPageSettingModal" tabindex="-1"
                                              aria-labelledby="userPageSettingModalLabel" aria-hidden="true">
                                             <div class="modal-dialog modal-dialog-centered center">
-
                                                 <div class="modal-content w400 bn">
-                                                    <button class="btn w-100 h50 center hfwb pdT4 pdB4 pdL8 pdR8 fs14 hcr fcr fwb">
-                                                        차단
-                                                    </button>
 
-                                                    <div class="btsS btw1 btcDB w400"></div>
-                                                    <button class="btn w-100 h50 center hfwb pdT4 pdB4 pdL8 pdR8 fs14 hcr fcr fwb">
-                                                        신고
+                                                    <button class="btn w-100 h50 center hfwb pdT4 pdB4 pdL8 pdR8 fs14 hfcRed fcRed fwb"
+                                                            data-bs-target="#userBlockModal" data-bs-toggle="modal">
+                                                        차단
                                                     </button>
 
                                                     <div class="btsS btw1 btcDB w400"></div>
@@ -185,12 +181,40 @@
                                                             class="btn w-100 h50 center hfwb pdT4 pdB4 pdL8 pdR8 fs14">
                                                         취소
                                                     </button>
-
-
                                                 </div>
                                             </div>
                                         </div>
 
+                                        <!-- user block modal -->
+                                        <div class="modal fade" id="userBlockModal" tabindex="-1"
+                                             aria-labelledby="userBlockModalToggleLabel" aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-centered center">
+                                                <div class="modal-content w400 bn">
+                                                    <div class="center">
+                                                        <div class="w-100 h-100 center mg32 fs14 fcGray"
+                                                             id="userBlockModalToggleLabel">
+                                                            <div class="text-center">
+                                                                <span class="pdB16 fs20 fw600 fcBlack">님을 차단하시겠어요? <br></span>
+                                                                상대방은 Instagram에서 회원님의 프로필, 게시물 및 <br>
+                                                                스토리를 찾을 수 없게 됩니다. Instagram은 회원님이 <br>
+                                                                차단한 사실을 상대방에게 알리지 않습니다.
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="btsS btw1 btcDB w400"></div>
+                                                    <button class="btn w-100 h50 center hfwb pdT4 pdB4 pdL8 pdR8 fs14 hfcRed fcRed fwb">
+                                                        차단
+                                                    </button>
+
+                                                    <div class="btsS btw1 btcDB w400"></div>
+                                                    <button type="button" data-bs-dismiss="modal"
+                                                            class="btn w-100 h50 center hfwb pdT4 pdB4 pdL8 pdR8 fs14">
+                                                        취소
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -238,7 +262,8 @@
                                                         <div class="d-flex highlight_line_internal">
                                                             <svg aria-label="+ 아이콘" class="highlight_icon"
                                                                  fill="currentColor" height="44"
-                                                                 role="img" viewBox="0 0 24 24" width="44"><title>+ 아이콘</title>
+                                                                 role="img" viewBox="0 0 24 24" width="44"><title>+
+                                                                아이콘</title>
                                                                 <path d="M21 11.3h-8.2V3c0-.4-.3-.8-.8-.8s-.8.4-.8.8v8.2H3c-.4 0-.8.3-.8.8s.3.8.8.8h8.2V21c0 .4.3.8.8.8s.8-.3.8-.8v-8.2H21c.4 0 .8-.3.8-.8s-.4-.7-.8-.7z"></path>
                                                             </svg>
                                                         </div>
@@ -257,20 +282,22 @@
                         </div>
                     </div>
 
-
-
                     <!-- highlight modal -->
                     <div class="modal fade" id="highlightModal" tabindex="-1"
-                         aria-labelledby="highlightModalLabel" aria-hidden="true" style="overflow: hidden;">
+                         aria-labelledby="highlightModalLabel" aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered center">
                             <div class="modal-content w400 bn">
 
                                 <div class="center">
                                     <div class="center fb48"></div>
-                                    <div class="w-100 h50 center pdT4 pdB4 pdL8 pdR8 fs16 fwb" id="highlightModalLabel"> 새로운 하이라이트 </div>
-                                    <button type="button" class="btn-close pdT4 pdB4 pdL8 pdR20 fwb fs16 bn"
-                                            data-bs-dismiss="modal" aria-label="Close">
-                                    </button>
+                                    <div class="w-100 h50 center pdT4 pdB4 pdL8 pdR8 fs16 fwb" id="highlightModalLabel">
+                                        새로운 하이라이트
+                                    </div>
+                                    <div class="center fb48">
+                                        <button type="button" class="btn-close pd8 fwb bn"
+                                                data-bs-dismiss="modal" aria-label="Close">
+                                        </button>
+                                    </div>
                                 </div>
                                 <div class="bbsS bbw1 bbcDB w400"></div>
 
@@ -282,21 +309,23 @@
                                 </div>
 
                                 <div class="btsS btw1 btcDB w400"></div>
-                                    <button class="btn w-100 h50 center hfwb pdT4 pdB4 pdL8 pdR8 fs14"
-                                            data-bs-target="#highlightListModal" data-bs-toggle="modal"> 다음 </button>
+                                <button class="btn w-100 h50 center hfwb pdT4 pdB4 pdL8 pdR8 fs14"
+                                        data-bs-target="#highlightListModal" data-bs-toggle="modal"> 다음
+                                </button>
                             </div>
                         </div>
                     </div>
 
                     <!-- highlight list modal -->
                     <div class="modal fade" id="highlightListModal" tabindex="-1"
-                         aria-labelledby="highlightListModalToggleLabel" aria-hidden="true" style="overflow: hidden;">
+                         aria-labelledby="highlightListModalToggleLabel" aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered center">
                             <div class="modal-content w400 bn">
                                 <div class="center">
 
                                     <div class="center fb48">
-                                        <button type="button" class="btn_back pd8 fwb" data-bs-target="#highlightModal" data-bs-toggle="modal">
+                                        <button type="button" class="btn_back pd8 fwb" data-bs-target="#highlightModal"
+                                                data-bs-toggle="modal">
                                             <svg aria-label="돌아가기" class="" fill="currentColor" height="21" role="img"
                                                  viewBox="0 0 24 24" width="21"><title>돌아가기</title>
                                                 <path d="M21 17.502a.997.997 0 0 1-.707-.293L12 8.913l-8.293 8.296a1 1 0 1 1-1.414-1.414l9-9.004a1.03 1.03 0 0 1 1.414 0l9 9.004A1 1 0 0 1 21 17.502Z"
@@ -310,8 +339,8 @@
                                     </div>
 
                                     <div class="center fb48">
-                                    <button type="button" class="btn-close pd8 fwb bn"
-                                            data-bs-dismiss="modal" aria-label="Close"></button>
+                                        <button type="button" class="btn-close pd8 fwb bn"
+                                                data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                 </div>
                                 <div class="bbsS bbw1 bbcDB w400"></div>
@@ -330,13 +359,14 @@
 
                     <!-- story cover choice -->
                     <div class="modal fade" id="storyCoverChoiceModal" tabindex="-1"
-                         aria-labelledby="storyCoverChoiceModalToggleLabel" aria-hidden="true" style="overflow: hidden;">
+                         aria-labelledby="storyCoverChoiceModalToggleLabel" aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered center">
                             <div class="modal-content w400 bn">
                                 <div class="center">
 
                                     <div class="center fb48">
-                                        <button type="button" class="btn_back pd8 fwb" data-bs-target="#highlightListModal" data-bs-toggle="modal">
+                                        <button type="button" class="btn_back pd8 fwb"
+                                                data-bs-target="#highlightListModal" data-bs-toggle="modal">
                                             <svg aria-label="돌아가기" class="" fill="currentColor" height="21" role="img"
                                                  viewBox="0 0 24 24" width="21"><title>돌아가기</title>
                                                 <path d="M21 17.502a.997.997 0 0 1-.707-.293L12 8.913l-8.293 8.296a1 1 0 1 1-1.414-1.414l9-9.004a1.03 1.03 0 0 1 1.414 0l9 9.004A1 1 0 0 1 21 17.502Z"
@@ -361,7 +391,7 @@
                                 </div>
 
                                 <div class="btsS btw1 btcDB w400"></div>
-                                <button class="btn w-100 h50 center hfwb pdT4 pdB4 pdL8 pdR8 fs14 fcb"
+                                <button class="btn w-100 h50 center hfwb pdT4 pdB4 pdL8 pdR8 fs14 fcBlue"
                                         data-bs-dismiss="modal"> 완료
                                 </button>
                             </div>
@@ -372,11 +402,62 @@
 
                     <div th:if="${member.scope or userPageDTO.isMine()}">
                         <!--board list menu-->
-                        <div class="d-flex justify-content-center align-items-center h55">
+                        <div class="d-flex justify-content-center align-items-center h53">
                             <div class="d-flex">
-                                <a class="btn" href="">게시물</a>
-                                <a class="btn" href="">저장됨</a>
-                                <a class="btn" href="">태그됨</a>
+                                <div class="center h52 mgR60 hfcBlack">
+                                    <a class="center btn pd0 mgL6 fs12 fwb fcGray bn hfcBlack" href="">
+                                        <svg aria-label="" fill="currentColor" height="12" role="img"
+                                             viewBox="0 0 24 24" width="12"><title></title>
+                                            <rect fill="none" height="18" stroke="currentColor" stroke-linecap="round"
+                                                  stroke-linejoin="round" stroke-width="2" width="18" x="3"
+                                                  y="3"></rect>
+                                            <line fill="none" stroke="currentColor" stroke-linecap="round"
+                                                  stroke-linejoin="round" stroke-width="2" x1="9.015" x2="9.015" y1="3"
+                                                  y2="21"></line>
+                                            <line fill="none" stroke="currentColor" stroke-linecap="round"
+                                                  stroke-linejoin="round" stroke-width="2" x1="14.985" x2="14.985"
+                                                  y1="3" y2="21"></line>
+                                            <line fill="none" stroke="currentColor" stroke-linecap="round"
+                                                  stroke-linejoin="round" stroke-width="2" x1="21" x2="3" y1="9.015"
+                                                  y2="9.015"></line>
+                                            <line fill="none" stroke="currentColor" stroke-linecap="round"
+                                                  stroke-linejoin="round" stroke-width="2" x1="21" x2="3" y1="14.985"
+                                                  y2="14.985"></line>
+                                        </svg>
+                                        <div class="mgL6">게시물</div>
+
+                                    </a>
+                                </div>
+
+                                <div class="center h52 mgR60">
+                                    <a class="center btn pd0 mgL6 fs12 fwb fcGray bn hfcBlack" href="">
+                                        <svg aria-label="" fill="currentColor" height="12" role="img"
+                                             viewBox="0 0 24 24" width="12"><title></title>
+                                            <polygon fill="none" points="20 21 12 13.44 4 21 4 3 20 3 20 21"
+                                                     stroke="currentColor" stroke-linecap="round"
+                                                     stroke-linejoin="round" stroke-width="2"></polygon>
+                                        </svg>
+                                        <div class="mgL6"> 저장됨</div>
+                                    </a>
+                                </div>
+
+                                <div class="center h52">
+                                    <a class="center btn pd0 mgL6 fs12 fwb fcGray bn hfcBlack" href="">
+                                        <svg aria-label="" fill="currentColor" height="12" role="img"
+                                             viewBox="0 0 24 24" width="12"><title></title>
+                                            <path d="M10.201 3.797 12 1.997l1.799 1.8a1.59 1.59 0 0 0 1.124.465h5.259A1.818 1.818 0 0 1 22 6.08v14.104a1.818 1.818 0 0 1-1.818 1.818H3.818A1.818 1.818 0 0 1 2 20.184V6.08a1.818 1.818 0 0 1 1.818-1.818h5.26a1.59 1.59 0 0 0 1.123-.465Z"
+                                                  fill="none" stroke="currentColor" stroke-linecap="round"
+                                                  stroke-linejoin="round" stroke-width="2"></path>
+                                            <path d="M18.598 22.002V21.4a3.949 3.949 0 0 0-3.948-3.949H9.495A3.949 3.949 0 0 0 5.546 21.4v.603"
+                                                  fill="none" stroke="currentColor" stroke-linecap="round"
+                                                  stroke-linejoin="round" stroke-width="2"></path>
+                                            <circle cx="12.072" cy="11.075" fill="none" r="3.556" stroke="currentColor"
+                                                    stroke-linecap="round" stroke-linejoin="round"
+                                                    stroke-width="2"></circle>
+                                        </svg>
+                                        <div class="mgL6"> 태그됨</div>
+                                    </a>
+                                </div>
                             </div>
                         </div>
 
@@ -404,6 +485,12 @@
                         </div>
                     </div>
 
+                    <div>
+                        <footer>
+                            ggg
+                        </footer>
+                    </div>
+
                     <div th:unless="${member.scope or userPageDTO.isMine()}">
                         <div class="border border-1 rounded-3 p-5 my-4">
                             <div class="text-center py-2">
@@ -426,7 +513,6 @@
         <input type="hidden" id="keep" name="keep">
     </form>
     <script th:src="@{/member/js/UserPage.js}"></script>
-
 
 
 </div>

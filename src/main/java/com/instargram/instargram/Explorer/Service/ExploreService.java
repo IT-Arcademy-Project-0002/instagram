@@ -37,4 +37,15 @@ public class ExploreService {
         }
         return exploreDTOS;
     }
+    public String formatHashTagCount(long count) {
+        if (count < 10000) {
+            // 1만 미만은 그냥 숫자만 반환
+            return String.valueOf(count);
+        } else {
+            // 1만 이상은 "만"을 붙이고, 천의 단위로 표현
+            double countInThousands = count / 10000.0;
+            return String.format("%.1f만", countInThousands);
+        }
+    }
+
 }

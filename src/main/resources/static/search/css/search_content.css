@@ -99,7 +99,9 @@ a {
     outline: none;
     color: black;
 }
-.search_category {
+
+#searchListInit {
+    display: flex;
     margin: 6px 24px 6px 24px;
     padding: 4px;
     justify-content: space-between;

@@ -17,6 +17,24 @@ $(document).ready(function () {
         searchListBody.css('visibility', 'hidden');
     }
 
+    function toggleSearchList(keyword) {
+
+        console.log("토글에 들어온 키워드" + keyword)
+
+        var menuWrap1 = document.getElementById("searchListInit");
+        var menuWrap2 = document.getElementById("searchListResult");
+
+        //searchList 요소의 초기화면을 제어 -> keyword가 undefined이거나 비어있을 때의 처리 추가
+        if (!keyword || keyword.trim() === "") {
+            menuWrap1.style.display = "flex";
+            menuWrap1.style.justifyContent = "space-between";
+            menuWrap2.style.display = "none";
+        } else {
+            menuWrap1.style.display = "none";
+            menuWrap2.style.display = "block";
+        }
+    }
+
     // input 요소에 대한 keyup 이벤트 핸들러 등록
     $("#keyword").keyup(function () {
         // 검색어를 가져오기
@@ -38,6 +56,8 @@ $(document).ready(function () {
     // 검색창의 변화를 감지하여 완성된 단어를 순서대로 읽어 백엔드로 전달. 실시간으로 검색결과 전송
     function SearchKeyword(keyword) {
 
+        toggleSearchList(keyword);
+
         $.ajax({
             url: '/search/keyword',
             type: 'GET',
@@ -49,7 +69,7 @@ $(document).ready(function () {
 
                 searchListBody.empty();
 
-                if (keyword.trim() === "") {
+                if (keyword.trim() == "") {
                     hideSearchList();
                     searchListBody.text('');
                 } else {

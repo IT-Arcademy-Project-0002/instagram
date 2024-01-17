@@ -4491,7 +4491,7 @@
     }
 
     show(relatedTarget) {
-      debugger;
+      
 
       if (this._isShown || this._isTransitioning) {
         return;

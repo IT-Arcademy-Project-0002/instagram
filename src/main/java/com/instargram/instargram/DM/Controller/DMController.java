@@ -163,6 +163,17 @@ public class DMController {
         return ResponseEntity.ok().body(talkMsg);
     }
 
+    @PostMapping("/comment/create")
+    public ResponseEntity<Map<String, Object>> commentCreate(
+            @RequestBody Map<String, Object> talkMsg)
+    {
+        Room room = roomService.getRoom(Long.valueOf(talkMsg.get("roomId").toString()));
+        Message_Member_Map map = messageMemberMapService.createCommentMessage(talkMsg, room);
+        talkMsg.put("id", map.getId());
+        return ResponseEntity.ok().body(talkMsg);
+    }
+
+
     @PostMapping("/quit")
     public ResponseEntity<Map<String, Object>> quit(
             @RequestBody Map<String, Object> quitMsg)

@@ -50,6 +50,10 @@ public class ExploreController {
         List<Board> boardList = this.boardService.findByBoardHashTagMaps(boardHashTagMaps);
         List<ExploreDTO> exploreHashTagList = this.exploreService.initExplore(boardList);
 
+        String hashtagSize = this.exploreService.formatHashTagCount(exploreHashTagList.size());
+
+        model.addAttribute("hashTag", hashtag);
+        model.addAttribute("hashTagSize", hashtagSize);
         model.addAttribute("exploreHashTagList", exploreHashTagList);
 
         return "Explore/explore_hashTag";

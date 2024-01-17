@@ -159,7 +159,7 @@ public class SearchService {
             return String.valueOf(count);
         } else {
             // 1만 이상은 "만"을 붙이고, 천의 단위로 표현
-            double countInThousands = count / 1000.0;
+            double countInThousands = count / 10000.0;
             return String.format("%.1f만", countInThousands);
         }
     }

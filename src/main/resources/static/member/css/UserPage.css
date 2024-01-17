@@ -3,7 +3,6 @@
     margin-left: 335px;
     width: 100%;
     min-height:100vh;
-    height:100vh;
 }
 
 .smooth-update {
@@ -206,6 +205,15 @@
     border: 1px solid #b0b0b0;
 }
 
+.btn_back {
+    color: #7f7f7f;
+    background-color: transparent;
+    border: none;
+}
+.btn_back:hover {
+    color: black;
+}
+
 
 
 
@@ -216,14 +224,22 @@
 
 
 /* padding */
+.pd0 {
+    padding: 0;
+}
 .pdT10 {
     padding-top: 10px;
 }
 .pdT4 {
     padding-top: 4px;
-}.pdB4 {
+}
+.pdB4 {
     padding-bottom: 4px;
- }
+}
+.pdB16 {
+    padding-bottom: 16px;
+}
+
 .pdT5 {
     padding-top: 5px;
 }
@@ -264,6 +280,9 @@
 .mgL5 {
     margin-left: 5px;
 }
+.mgL6 {
+    margin-left: 6px;
+}
 .mgL8 {
     margin-left: 8px;
 }
@@ -273,14 +292,26 @@
 .mgL24 {
     margin-left: 24px;
 }
+.mgR4 {
+    margin-right: 4px;
+}
+.mgR60 {
+    margin-right: 60px;
+}
 .mgB0 {
     margin-bottom: 0;
+}
+.mgB4 {
+    margin-bottom: 4px;
 }
 .mgB44 {
     margin-bottom: 44px;
 }
 .mg20 {
     margin: 20px;
+}
+.mg32 {
+    margin: 32px;
 }
 /* margin */
 
@@ -304,8 +335,14 @@
 
 
 /* width */
+.w908 {
+    width: 908px;
+}
 .w400 {
     width: 400px;
+}
+.w309 {
+    width: 309px;
 }
 .w300 {
     width: 300px;
@@ -336,6 +373,9 @@
 .h600 {
     height: 600px;
 }
+.h309 {
+    height: 309px;
+}
 .h300 {
     height: 300px;
 }
@@ -344,6 +384,12 @@
 }
 .h55 {
     height: 55px;
+}
+.h53 {
+    height: 53px;
+}
+.h52 {
+    height: 52px;
 }
 .h50 {
     height: 50px;
@@ -373,6 +419,9 @@
 .fw600 {
     font-weight: 600;
 }
+.fw500 {
+    font-weight: 500;
+}
 .fwb {
     font-weight: bold;
 }
@@ -384,24 +433,36 @@
 
 
 /* font size */
+.fs20 {
+    font-size: 20px;
+}
 .fs16 {
     font-size: 16px;
 }
 .fs14 {
     font-size: 14px;
 }
+.fs12 {
+    font-size: 12px;
+}
 /* font size */
 
 
 /* font color */
-.fcr {
+.fcRed {
     color: #ff3140;
 }
-.fcb {
+.fcBlue {
     color: #0095f6;
 }
-.fcb:hover {
+.fcBlue:hover {
     color: #0095f6;
+}
+.fcGray {
+    color: #737373;
+}
+.fcBlack {
+    color: black;
 }
 /* font color */
 
@@ -409,6 +470,9 @@
 /* border none */
 .bn {
     border: none;
+}
+.bn:focus, .bn:active {
+    box-shadow: none;
 }
 /* border none */
 
@@ -478,12 +542,13 @@
     border: none;
 }
 
-.hcb:hover {
+.hfcBlack:hover {
     color: black;
 }
 
-.hcr:hover {
-    color: #7a1f25;
+.hfcRed:hover {
+    font-size: 16px;
+    color: #ff3140;
 }
 /* hover */
 
@@ -494,16 +559,3 @@
 /* flex */
 
 
-.asd {
-    background-color: white;
-    border: none;
-}
-
-.btn_back {
-    color: #7f7f7f;
-    background-color: transparent;
-    border: none;
-}
-.btn_back:hover {
-    color: black;
-}

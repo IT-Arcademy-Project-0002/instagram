@@ -53,8 +53,10 @@ public class CommentController {
         Board board = this.boardService.getBoardById(id);
         if (member != null && board != null) {
             Comment comment = commentService.create(member, board, commentCreateForm.getContent());
-            Notice notice = noticeService.createNotice(Enum_Data.BOARD_COMMENT.getNumber(), member, board.getMember());
-            noticeCommentMapService.createNoticeComment(comment, notice);
+            if (member != board.getMember()) {
+                Notice notice = noticeService.createNotice(Enum_Data.BOARD_COMMENT.getNumber(), member, board.getMember());
+                noticeCommentMapService.createNoticeComment(comment, notice);
+            }
         }
         return "redirect:/main";
     }
@@ -101,8 +103,10 @@ public class CommentController {
 
         if (isCommentMemberLiked == null) {
             Comment_Like_Map commentLikeMap = this.commentLikeMapService.create(comment, member);
-            Notice notice = this.noticeService.createNotice(Enum_Data.COMMENT_LIKE.getNumber(), member, comment.getMember());
-            noticeCommentMapService.createNoticeCommentLike(commentLikeMap, notice);
+            if (member != comment.getMember()) {
+                Notice notice = this.noticeService.createNotice(Enum_Data.COMMENT_LIKE.getNumber(), member, comment.getMember());
+                noticeCommentMapService.createNoticeCommentLike(commentLikeMap, notice);
+            }
 
             int commentLikeCount = this.commentLikeMapService.countLikesForComment(comment);
             result.put("result", true);

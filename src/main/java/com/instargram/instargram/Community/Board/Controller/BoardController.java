@@ -113,8 +113,10 @@ public class BoardController {
         for (String memberMap : tagMemberList) {
             Member tagMember = this.memberService.getMember(memberMap);
             Board_TagMember_Map boardTagMemberMap = this.boardTagMemberMapService.create(board, tagMember);
-            Notice notice = this.noticeService.createNotice(Enum_Data.BOARD_TAGMEMBER.getNumber(), member, tagMember);
-            noticeBoardMapService.createNoticeBoardTagMember(boardTagMemberMap, notice);
+            if (member != tagMember) {
+                Notice notice = this.noticeService.createNotice(Enum_Data.BOARD_TAGMEMBER.getNumber(), member, tagMember);
+                noticeBoardMapService.createNoticeBoardTagMember(boardTagMemberMap, notice);
+            }
         }
 
         // file upload
@@ -303,10 +305,15 @@ public class BoardController {
 
         if (isBoardMemberLiked == null) {
             BoardLikeMemberMap boardLikeMemberMap = this.boardLikeMemberMapService.create(board, member);
-            Notice notice = this.noticeService.createNotice(Enum_Data.BOARD_LIKE.getNumber(), member, board.getMember());
-            this.noticeBoardMapService.createNoticeBoardLikeMember(boardLikeMemberMap, notice);
+
+            if (member != board.getMember()) {
+                Notice notice = this.noticeService.createNotice(Enum_Data.BOARD_LIKE.getNumber(), member, board.getMember());
+                this.noticeBoardMapService.createNoticeBoardLikeMember(boardLikeMemberMap, notice);
+            }
+
 
             int likeCount = this.boardLikeMemberMapService.countLikesForBoard(board);
+
             result.put("result", true);
             result.put("likeCount", likeCount);
         } else {

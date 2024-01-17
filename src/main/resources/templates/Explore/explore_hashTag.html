@@ -6,10 +6,16 @@
 </head>
 <div class="explore-container" layout:fragment="content">
     <div class="explore-content">
-        <div class="explore-hashtag-container mt-4 mx-auto">
-            <img class="col-3" src = "/files/designImg/hashTag.jpg" style = "width:150px; height:150px;"/>
-            이곳은 해시태그의 탐색페이지입니다!.
-            <p>HashTag ID: <span th:text="${hashTag}"></span></p>
+        <div class="explore-hashtag-container pt-4 mx-auto row">
+            <div class="explore-hashtag-container-image col-3">
+                <img class="rounded-circle border border-secondary" th:src="@{|/resources/${exploreHashTagList.get(0).images().get(0).name}|}" style="width:150px; height:150px;"/>
+            </div>
+            <div class="explore-hashtag-container-info col-9">
+                <span class="fs-2">#<span th:text="${hashTag.name}"></span></span>
+                <span class="d-block" th:text="'게시물'"></span>
+                <span class="d-block fw-bold" th:text="${hashTagSize}"></span>
+                <button type="button" class="btn btn-primary btn-sm btn-block w-100 mt-3"> 팔로우(미작동) </button>
+            </div>
         </div>
         <div class="explore-hashtag-gallery text-center mt-4 mx-auto">
             <div class="row row-cols-3">

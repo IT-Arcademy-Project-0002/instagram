@@ -2,6 +2,7 @@ package com.instargram.instargram.Notice.Model.Entity;
 
 
 import com.instargram.instargram.Community.Comment.Model.Entity.Comment;
+import com.instargram.instargram.Member.Model.Entity.Member;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -25,4 +26,5 @@ public class Notice_Comment_Map {
     @JoinColumn(name = "comment_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Comment comment;
+
 }

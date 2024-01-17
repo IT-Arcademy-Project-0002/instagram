@@ -18,12 +18,14 @@
             <hr class="search_line">
 
             <div class="search-container">
-                <div class="d-flex search_category">
-                    <span class="search_category_text">최근 검색 항목</span>
-                    <button class="btn_search">모두 지우기</button>
-                </div>
                 <div class="search_list_layout">
-                    <div class="h-100" id="searchList"></div>
+                    <div id="searchListInit" style="">
+                        <span class="search_category_text">최근 검색 항목</span>
+                        <button class="btn_search float-right">모두 지우기</button>
+                    </div>
+                    <div id="searchListResult" style="">
+                        <div class="h-100" id="searchList"></div>
+                    </div>
                 </div>
             </div>
             <div id="noResult"></div>

@@ -35,7 +35,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.security.Principal;
-import java.time.LocalDateTime;
 import java.util.*;
 
 @Controller
@@ -174,36 +173,37 @@ public class BoardController {
         return "redirect:/member/page/" + principal.getName();
     }
 
-    // board like Hidden
-//    @GetMapping("/board/likehide/{id}")
-//    public String boardLikeHide(@PathVariable("id") Long id) {
-//        this.boardService.LikeStateChange(id);
-//        return "redirect:/main";
-//    }
-
     @GetMapping("/board/likehide/{id}")
     public ResponseEntity<Map<String, Object>> boardLikeHide(@PathVariable("id") Long id) {
         Map<String, Object> result = new HashMap<>();
         this.boardService.LikeStateChange(id);
 
         Board board = this.boardService.getBoardById(id);
-        if(!board.isLikeHide()){
+        if (!board.isLikeHide()) {
             int likeCount = this.boardLikeMemberMapService.countLikesForBoard(board);
 
             result.put("likehide", false);
             result.put("likeCount", likeCount);
-        }else{
+        } else {
             result.put("likehide", true);
         }
         return ResponseEntity.ok().body(result);
     }
 
-    // board Comment disable
     @GetMapping("/board/comment_disable/{id}")
-    public String boardCommentDisable(@PathVariable("id") Long id) {
+    public ResponseEntity<Map<String, Object>> boardCommentDisable(@PathVariable("id") Long id) {
+        Map<String, Object> result = new HashMap<>();
         this.boardService.CommentDisableStateChange(id);
-        return "redirect:/main";
+
+        Board board = this.boardService.getBoardById(id);
+        if (!board.isCommentDisable()) {
+            result.put("commentDisable", false);
+        } else {
+            result.put("commentDisable", true);
+        }
+        return ResponseEntity.ok().body(result);
     }
+
 
     // board Delete
     @GetMapping("/beard/delete/{id}")
@@ -249,7 +249,7 @@ public class BoardController {
         List<String> hashTagsList = Collections.emptyList();  // 기본적으로 빈 리스트로 초기화
         this.boardHashTagMapService.delete(board);
 
-        if(boardUpdateForm.getModifyHashTag() != null){
+        if (boardUpdateForm.getModifyHashTag() != null) {
             hashTagsList = this.hashTagService.extractHashTagWords(boardUpdateForm.getModifyHashTag());
         }
         for (String hashTag_name : hashTagsList) {
@@ -262,8 +262,8 @@ public class BoardController {
             }
             this.boardHashTagMapService.createBoardHashTag(board, hashTag);
         }
-       
-       // @ mention
+
+        // @ mention
         List<String> tagMemberList = Collections.emptyList();
         this.boardTagMemberMapService.delete(board);
 

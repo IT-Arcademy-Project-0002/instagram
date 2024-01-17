@@ -3,6 +3,7 @@ package com.instargram.instargram.Community.Comment.Controller;
 import com.instargram.instargram.Community.Board.Model.Entity.Board;
 import com.instargram.instargram.Community.Board.Model.Entity.BoardLikeMemberMap;
 import com.instargram.instargram.Community.Board.Service.BoardService;
+import com.instargram.instargram.Community.Comment.Model.DTO.CommentDTO;
 import com.instargram.instargram.Community.Comment.Model.Entity.Comment;
 import com.instargram.instargram.Community.Comment.Model.Entity.Comment_Like_Map;
 import com.instargram.instargram.Community.Comment.Model.Form.CommentCreateForm;
@@ -25,6 +26,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -56,7 +58,37 @@ public class CommentController {
         }
         return "redirect:/main";
     }
-    
+
+    @PostMapping("/modalCreate/{id}")
+    public ResponseEntity<Map<String, Object>> modalCreate(@PathVariable("id") Long id, @RequestBody CommentCreateForm commentCreateForm,
+                                                    BindingResult bindingResult, Principal principal) {
+        Map<String, Object> result = new HashMap<>();
+
+        if (bindingResult.hasErrors()) {
+            result.put("result", false);
+        }
+
+        Member member = this.memberService.getMember(principal.getName());
+        Board board = this.boardService.getBoardById(id);
+
+        if (member != null && board != null) {
+            Comment comment = commentService.create(member, board, commentCreateForm.getContent());
+            Notice notice = noticeService.createNotice(Enum_Data.BOARD_COMMENT.getNumber(), member, board.getMember());
+            noticeCommentMapService.createNoticeComment(comment, notice);
+
+            // 서버에서 날짜를 원하는 형식으로 포맷
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM월dd일 HH:mm");
+            String formattedDate = comment.getCreateDate().format(formatter);
+
+            // 포맷된 날짜를 클라이언트에 전달
+            result.put("formattedDate", formattedDate);
+            result.put("comment", new CommentDTO(comment));
+        }
+
+        return ResponseEntity.ok().body(result);
+    }
+
+
     // 댓글 좋아요
     @GetMapping("/like/{id}")
     public ResponseEntity<Map<String, Object>> like(@PathVariable("id") Long id, Principal principal) {
@@ -69,7 +101,7 @@ public class CommentController {
 
         if (isCommentMemberLiked == null) {
             Comment_Like_Map commentLikeMap = this.commentLikeMapService.create(comment, member);
-            Notice notice = this.noticeService.createNotice(Enum_Data.COMMENT_LIKE.getNumber(), member,comment.getMember());
+            Notice notice = this.noticeService.createNotice(Enum_Data.COMMENT_LIKE.getNumber(), member, comment.getMember());
             noticeCommentMapService.createNoticeCommentLike(commentLikeMap, notice);
 
             int commentLikeCount = this.commentLikeMapService.countLikesForComment(comment);
@@ -86,7 +118,7 @@ public class CommentController {
     }
 
     @GetMapping("/delete/{id}")
-    public String delete(@PathVariable("id") Long id){
+    public String delete(@PathVariable("id") Long id) {
         Comment comment = this.commentService.getCommentById(id);
         commentService.delete(comment);
         return "redirect:/main";

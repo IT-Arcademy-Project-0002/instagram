@@ -179,7 +179,7 @@ modifyHashTagInputElement.addEventListener('input', function () {
 // /board/update/{id}
 function ModifyBoard(id) {
     // 모달 제거
-    $('#FeedCommentModal').modal('hide');
+    $('#BoardDetailModal').modal('hide');
     $('#CreateUserBoardSettingModal').modal('hide');
     $('#ModifyBoardModal').modal('show');
 

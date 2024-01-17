@@ -1,5 +1,6 @@
 package com.instargram.instargram.DM.Model.DTO;
 
+import com.instargram.instargram.DM.Model.Entity.Message.CommentMessage;
 import com.instargram.instargram.DM.Model.Entity.Message.Message;
 import com.instargram.instargram.DM.Model.Entity.Message.Message_Member_Map;
 import com.instargram.instargram.DM.Model.Entity.Room.Room;
@@ -42,6 +43,8 @@ public class MessageDTO {
     private Image image;
 
     private Video video;
+
+    private CommentMessage comment;
 
     private void setData(Message_Member_Map map)
     {
@@ -87,5 +90,26 @@ public class MessageDTO {
     {
         setData(map);
         this.video=video;
+    }
+
+    public MessageDTO(Message_Member_Map map, CommentMessage comment, Message message)
+    {
+        setData(map);
+        this.comment = comment;
+        this.message = message;
+    }
+
+    public MessageDTO(Message_Member_Map map, CommentMessage comment, Image image)
+    {
+        setData(map);
+        this.comment = comment;
+        this.image = image;
+    }
+
+    public MessageDTO(Message_Member_Map map, CommentMessage comment, Video video)
+    {
+        setData(map);
+        this.comment = comment;
+        this.video = video;
     }
 }

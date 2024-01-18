@@ -65,7 +65,7 @@ public class MessageMemberMapService {
         messageMemberMap.setMember(sender);
         messageMemberMap.setCreateDate(LocalDateTime.now());
         messageMemberMap.setRoom(room);
-        messageMemberMap.setEmpathy(null);
+        messageMemberMap.setEmpathy("");
         messageMemberMap.setSeeMember("");
 
         return messageMemberMapRepository.save(messageMemberMap);
@@ -75,6 +75,7 @@ public class MessageMemberMapService {
         Message_Member_Map messageMemberMap = new Message_Member_Map();
         messageMemberMap.setDataId(message.getId());
         messageMemberMap.setDataType(Enum_Data.MESSAGE.getNumber());
+        messageMemberMap.setComment(false);
 
         return createDefault(messageMemberMap, room, msg);
     }
@@ -82,8 +83,9 @@ public class MessageMemberMapService {
     public Message_Member_Map createCommentMessageMap(Map<String, Object> msg, CommentMessage commentMessage, Room room)
     {
         Message_Member_Map messageMemberMap = new Message_Member_Map();
-        messageMemberMap.setDataId(commentMessage.getId());
-        messageMemberMap.setDataType(Enum_Data.COMMENT_MESSAGE.getNumber());
+        messageMemberMap.setDataId(commentMessage.getMessage().getId());
+        messageMemberMap.setDataType(Enum_Data.MESSAGE.getNumber());
+        messageMemberMap.setComment(true);
 
         return createDefault(messageMemberMap, room, msg);
     }
@@ -93,6 +95,7 @@ public class MessageMemberMapService {
         Message_Member_Map messageMemberMap = new Message_Member_Map();
         messageMemberMap.setDataId(image.getId());
         messageMemberMap.setDataType(Enum_Data.IMAGE.getNumber());
+        messageMemberMap.setComment(false);
 
         return createDefault(messageMemberMap, room, msg);
     }
@@ -102,6 +105,7 @@ public class MessageMemberMapService {
         Message_Member_Map messageMemberMap = new Message_Member_Map();
         messageMemberMap.setDataId(video.getId());
         messageMemberMap.setDataType(Enum_Data.VIDEO.getNumber());
+        messageMemberMap.setComment(false);
 
         return createDefault(messageMemberMap, room, msg);
     }
@@ -118,6 +122,28 @@ public class MessageMemberMapService {
         Message_Member_Map map = getMap(Long.valueOf(msg.get("mapId").toString()));
         CommentMessage comment = messageService.createComment(msg, map);
 
+        msg.put("commentUserText",
+                map.getMember().getNickname().isEmpty()?
+                        map.getMember().getUsername() :
+                        map.getMember().getNickname());
+        msg.put("commentUsername", map.getMember().getUsername());
+
+        if(Objects.equals(map.getDataType(), Enum_Data.MESSAGE.getNumber()))
+        {
+            msg.put("commentDataType", Enum_Data.MESSAGE.getNumber());
+            msg.put("commentContent", messageService.getMessage(map.getDataId()).getContent());
+        }
+        else if(Objects.equals(map.getDataType(), Enum_Data.IMAGE.getNumber()))
+        {
+            msg.put("commentDataType", Enum_Data.IMAGE.getNumber());
+            msg.put("commentContent", imageService.getImageByID(map.getDataId()).getName());
+        }
+        else if(Objects.equals(map.getDataType(), Enum_Data.VIDEO.getNumber()))
+        {
+            msg.put("commentDataType", Enum_Data.VIDEO.getNumber());
+            msg.put("commentContent", videoService.getVideoByID(map.getDataId()).getName());
+        }
+
         return createCommentMessageMap(msg, comment, room);
     }
 
@@ -127,7 +153,7 @@ public class MessageMemberMapService {
 
         for(Message_Member_Map map : getList(room))
         {
-            if(map.getDataType().equals(Enum_Data.MESSAGE.getNumber()))
+            if(map.getDataType().equals(Enum_Data.MESSAGE.getNumber()) &&!map.isComment())
             {
                 Message message = messageService.getMessage(map.getDataId());
                 messageDTOS.add(new MessageDTO(map, message));
@@ -142,7 +168,7 @@ public class MessageMemberMapService {
                 Video video = videoService.getVideoByID(map.getDataId());
                 messageDTOS.add(new MessageDTO(map, video));
             }
-            else if(map.getDataType().equals(Enum_Data.COMMENT_MESSAGE.getNumber()))
+            else if(map.getDataType().equals(Enum_Data.MESSAGE.getNumber()) && map.isComment())
             {
                 CommentMessage commentMessage = messageService.getCommentMessage(map.getDataId());
 

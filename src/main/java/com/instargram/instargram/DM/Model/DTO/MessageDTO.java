@@ -38,6 +38,7 @@ public class MessageDTO {
 
     private String seeMember;
 
+    private boolean commented;
     private Message message;
 
     private Image image;
@@ -54,8 +55,9 @@ public class MessageDTO {
         this.room = map.getRoom();
         this.member = map.getMember();
         this.dataType = map.getDataType();
+        this.commented = map.isComment();
 
-        if(map.getSeeMember().equals(""))
+        if(map.getSeeMember().isEmpty())
         {
             this.seeMember = "";
             return;

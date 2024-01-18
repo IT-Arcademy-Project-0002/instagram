@@ -62,7 +62,7 @@ public class ExploreController {
     @GetMapping("/locations/{locationId}")
     public String searchLocation(Model model, @PathVariable("locationId") String locationId) {
 
-        List<Location> location = this.locationService.getLocationFindById(locationId);
+        List<Location> location = this.locationService.getLocationListFindById(locationId);
         List<Board> boardList = this.locationService.getBoardFindByLocation(location);
         List<ExploreDTO> exploreLocationList = this.exploreService.initExplore(boardList);
 
@@ -77,7 +77,7 @@ public class ExploreController {
     public Location mapSearchLocation(@RequestParam("locationId") String locationId) {
 
         // 업로드 된 보드는 모두 동일한 장소를 가지기 때문에 1번 Index는 무조건 존재하게 된다. 따라서 get(0)
-        return this.locationService.getLocationFindById(locationId).get(0);
+        return this.locationService.getLocationListFindById(locationId).get(0);
     }
 
 }

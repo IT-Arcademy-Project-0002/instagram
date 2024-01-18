@@ -20,8 +20,54 @@
             <div class="search-container">
                 <div class="search_list_layout">
                     <div id="searchListInit">
-                        <span class="search_category_text">최근 검색 항목</span>
-                        <button class="btn_search float-right">모두 지우기</button>
+                        <div class="searchListInitHeader">
+                            <span class="search_category_text">최근 검색 항목</span>
+                            <button class="btn_search">모두 지우기</button>
+                        </div>
+                        <div class="searchListInitBody">
+                            <div th:each="searchResult : ${searches}">
+                                <div th:if="${searchResult.searchType == 1}">
+                                    <a th:href="'/member/page/' + ${searchResult.listName}" target="_blank" class="link">
+                                        <div class="search-list-box">
+                                            <div class="search-profile">
+                                                <img th:if="${searchResult.listImage != null and searchResult.listImage != ''}" th:src="@{'/resources/' + ${searchResult.listImage}}" class="search-profile-image rounded-circle text-center" />
+                                                <img th:unless="${searchResult.listImage != null and searchResult.listImage != ''}" src="/files/designImg/noneuser.png" class="search-profile-image rounded-circle text-center" />
+                                            </div>
+                                            <div class="search-userinfo">
+                                                <div class="search-username" th:text="${searchResult.listName}"></div>
+                                                <div class="search-userintroduction" th:text="${searchResult.listIntroduction}"></div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div th:if="${searchResult.searchType == 2}">
+                                    <a th:href="@{'/explore/locations/' + ${searchResult.listLocationId}}" target="_blank" class="link">
+                                        <div class="search-list-box">
+                                            <div class="search-profile">
+                                                <img src="/files/designImg/locationBase.png" class="search-profile-image rounded-circle text-center" />
+                                            </div>
+                                            <div class="search-userinfo">
+                                                <div class="search-username" th:text="${searchResult.listName}"></div>
+                                                <div class="search-userintroduction" th:text="${searchResult.listIntroduction}"></div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div th:if="${searchResult.searchType == 3}">
+                                    <a th:href="@{'/explore/tags/' + ${searchResult.listHashTagId}}" target="_blank" class="link">
+                                        <div class="search-list-box">
+                                            <div class="search-profile">
+                                                <img src="/files/designImg/hashTag.jpg" class="search-profile-image rounded-circle text-center" />
+                                            </div>
+                                            <div class="search-userinfo">
+                                                <div class="search-username" th:text="${searchResult.listName}"></div>
+                                                <div class="search-userintroduction" th:text="${searchResult.listIntroduction}"></div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div id="searchListResult">
                         <div class="h-100" id="searchList"></div>

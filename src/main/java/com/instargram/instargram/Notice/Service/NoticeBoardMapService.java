@@ -32,13 +32,11 @@ public class NoticeBoardMapService {
     private final Notice_Board_TagMember_MapRepository noticeBoardTagMemberMapRepository;
     private final Board_TagMember_MapRepository boardTagMemberMapRepository;
 
-
-
     public String getBoardContent(Long noticeId, Integer type) {
 
         String boardContent = " ";
 
-        if (type == 9) {
+        if (type == 6) {
             // 태그멤버로부터 보드를 찾는 비즈니스 로직
             Notice_Board_TagMember_Map noticeBoardTagMemberMap = noticeBoardTagMemberMapRepository.findByNoticeId(noticeId);
 

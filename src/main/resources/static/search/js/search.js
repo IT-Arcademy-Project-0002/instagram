@@ -19,8 +19,6 @@ $(document).ready(function () {
 
     function toggleSearchList(keyword) {
 
-        console.log("토글에 들어온 키워드" + keyword)
-
         var menuWrap1 = document.getElementById("searchListInit");
         var menuWrap2 = document.getElementById("searchListResult");
 
@@ -110,6 +108,11 @@ $(document).ready(function () {
                         '</div>' +
                         '</a>'
                     );
+
+                    listItem.on("click", function() {
+                        searchFavoriteCrate(searchResult.searchType, searchResult.listName);
+                    });
+
                 } else if (searchResult.searchType == "2") {
 
                     var listImageSrc = "/files/designImg/locationBase.png";
@@ -127,6 +130,11 @@ $(document).ready(function () {
                         '</div>' +
                         '</a>'
                     );
+
+                    listItem.on("click", function() {
+                        searchFavoriteCrate(searchResult.searchType, searchResult.listLocationId);
+                    });
+
                 } else if (searchResult.searchType == "3") {
 
                     var listImageSrc = "/files/designImg/hashTag.jpg";
@@ -145,6 +153,9 @@ $(document).ready(function () {
                         '</a>'
                     );
 
+                    listItem.on("click", function() {
+                        searchFavoriteCrate(searchResult.searchType, searchResult.listName);
+                    });
 
                 }
                 newList.append(listItem);
@@ -169,4 +180,33 @@ $(document).ready(function () {
         searchListBody.append(newList);
     }
 
+
+    function searchFavoriteCrate(searchType, specificName) {
+
+        var token = $("input[name='_csrf']").attr("value");
+        var header = $("input[name='_csrf_header']").attr("value");
+
+        var body = JSON.stringify({
+            favoriteType: searchType,
+            specificName: specificName
+        });
+
+        fetch('/search/favorite/create', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json; charset=utf-8',
+                [header]: token
+            },
+            body: body
+        })
+        .then(response => {
+            // 응답 처리 (예: 성공 시 콘솔에 로그 출력)
+            console.log('POST 요청 성공:', response);
+        })
+        .catch(error => {
+            // 오류 처리
+            console.error('POST 요청 실패:', error);
+        });
+
+    }
 });

@@ -115,7 +115,7 @@ public class NoticeCommentMapService {
             }
         }
 
-        if (type == 10) {
+        if (type == 5) {
 
             Notice_Recomment_Like_Map recommentLikeMap = this.noticeRecommentLikeMapRepository.findByNoticeId(noticeId);
             if (recommentLikeMap != null) {

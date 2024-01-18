@@ -102,10 +102,17 @@ a {
 
 #searchListInit {
     display: flex;
+    flex-direction: column;
     margin: 6px 24px 6px 24px;
     padding: 4px;
+}
+
+.searchListInitHeader {
+    margin-bottom: 10px;
+    display: flex;
     justify-content: space-between;
 }
+
 .search_category_text {
     font-size: 16px;
     font-weight: 600;
@@ -118,6 +125,7 @@ a {
     border: none;
     background-color: transparent;
 }
+
 .btn_search:hover {
     color: black;
 }

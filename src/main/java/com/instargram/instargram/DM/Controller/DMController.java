@@ -149,7 +149,7 @@ public class DMController {
 
         Member sender =memberService.getMember(talkMsg.get("sender").toString());
         talkMsg.put("msg", msgs);
-        talkMsg.put("userText", sender.getNickname() == null?sender.getUsername(): sender.getNickname());
+        talkMsg.put("userText", sender.getNickname().isEmpty()?sender.getUsername(): sender.getNickname());
 
         // 원하는 응답을 반환
         return ResponseEntity.ok().body(talkMsg);
@@ -162,7 +162,7 @@ public class DMController {
         Room room = roomService.getRoom(Long.valueOf(talkMsg.get("roomId").toString()));
         Message_Member_Map map = messageMemberMapService.createMessage(talkMsg, room);
         talkMsg.put("id", map.getId());
-        talkMsg.put("userText", map.getMember().getNickname() == null?map.getMember().getUsername():map.getMember().getNickname());
+        talkMsg.put("userText", map.getMember().getNickname().isEmpty()?map.getMember().getUsername():map.getMember().getNickname());
         talkMsg.put("commented", "false");
         return ResponseEntity.ok().body(talkMsg);
     }
@@ -175,7 +175,7 @@ public class DMController {
         Message_Member_Map map = messageMemberMapService.createCommentMessage(talkMsg, room);
         talkMsg.put("id", map.getId());
 
-        talkMsg.put("userText", map.getMember().getNickname() == null?map.getMember().getUsername():map.getMember().getNickname());
+        talkMsg.put("userText", map.getMember().getNickname().isEmpty()?map.getMember().getUsername():map.getMember().getNickname());
         talkMsg.put("commented", "true");
         return ResponseEntity.ok().body(talkMsg);
     }

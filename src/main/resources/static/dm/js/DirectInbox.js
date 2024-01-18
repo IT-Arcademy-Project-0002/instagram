@@ -163,7 +163,7 @@ function inputMember()
 
                         var div41 = document.createElement('div');
                         div41.classList='fw-bold';
-                        if(member.nickname === null)
+                        if(member.nickname === '')
                         {
                             div41.textContent=member.username;
                         }

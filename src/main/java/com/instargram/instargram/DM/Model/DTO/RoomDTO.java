@@ -27,7 +27,7 @@ public class RoomDTO {
         {
             if(!member.getKey().equals(loginUser.getUsername()))
             {
-                this.name += member.getValue().getNickname() == null ? member.getValue().getUsername() : member.getValue().getNickname();
+                this.name += member.getValue().getNickname().isEmpty() ? member.getValue().getUsername() : member.getValue().getNickname();
                 this.name += " ";
             }
         }

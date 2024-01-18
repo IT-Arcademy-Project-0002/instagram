@@ -25,14 +25,20 @@
                                          class="rounded-circle text-center smooth-update userProfile_img">
                                 </button>
 
-                                <!-- Modal -->
+                                <!-- profile photo change modal -->
                                 <div class="modal fade" id="ProfilePhotoModifyModal" tabindex="-1"
                                      aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                    <div class="modal-dialog modal-dialog-centered">
-                                        <div class="modal-content">
-                                            <div class="modal-header justify-content-center">
-                                                <h5 class="modal-title">프로필 사진 바꾸기</h5>
+                                    <div class="modal-dialog modal-dialog-centered center">
+                                        <div class="modal-content w400 bn">
+
+                                            <div class="center">
+                                                <div class="center"></div>
+                                                <div class="w-100 h50 center fs20 mg16">
+                                                        프로필 사진 바꾸기
+                                                </div>
                                             </div>
+                                            <div class="bbsS bbw1 bbcDB w400"></div>
+
                                             <div class="modal-body p-0">
                                                 <div class="btn-group-vertical w-100" role="group"
                                                      aria-label="Vertical button group">
@@ -44,13 +50,19 @@
                                                     </form>
                                                     <form th:action="@{|/member/profile/delete|}" method="post"
                                                           id="img-delete-form"></form>
-                                                    <button type="button" class="btn btn-light rounded-0"
+                                                    <button type="button" class="btn w-100 h50 center hfwb pdT4 pdB4 pdL8 pdR8 fs14 fcBlue fwb hfcBlue hfwb"
                                                             onclick="clickProfilePhotoChange()">사진 업로드
                                                     </button>
-                                                    <button type="submit" class="btn btn-light" form="img-delete-form">
+
+                                                    <div class="btsS btw1 btcDB w400"></div>
+                                                    <button type="submit" form="img-delete-form"
+                                                            class="btn w-100 h50 center hfwb pdT4 pdB4 pdL8 pdR8 fs14 fcRed fwb hfcRed hfwb">
                                                         현재 사진 삭제
                                                     </button>
-                                                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">
+
+                                                    <div class="btsS btw1 btcDB w400"></div>
+                                                    <button type="button" data-bs-dismiss="modal"
+                                                            class="btn w-100 h50 center hfwb pdT4 pdB4 pdL8 pdR8 fs14">
                                                         취소
                                                     </button>
                                                 </div>
@@ -74,14 +86,14 @@
                                     <div th:if="${userPageDTO.isMine()}" class="d-flex align-items-center">
                                         <!-- button -->
                                         <div class="btn_area">
-                                            <a class="btn btn_userInfo" th:href="@{/member/account/edit}">프로필 편집</a>
-                                            <a class="btn btn_userInfo mgL8">보관된 스토리 보기</a>
+                                            <a class="btn btn_userInfo bn" th:href="@{/member/account/edit}">프로필 편집</a>
+                                            <a class="btn btn_userInfo mgL8 bn">보관된 스토리 보기</a>
                                         </div>
 
                                         <!-- my page setting -->
                                         <a class="cp hcb" type="button" data-bs-toggle="modal"
                                            data-bs-target="#myPageSettingModal">
-                                            <div class="setting center">
+                                            <div class="setting center hfcBlack">
                                                 <svg aria-label="옵션" stroke="currentColor" fill="currentColor"
                                                      height="24" role="img" viewBox="0 0 24 24" width="24"><title>
                                                     옵션</title>
@@ -154,7 +166,7 @@
                                         <a class="cp hcb" type="button" data-bs-toggle="modal"
                                            data-bs-target="#userPageSettingModal">
                                             <div class="mgL5">
-                                                <div class="pd8 wa">
+                                                <div class="pd8 wa hfcBlack">
                                                     <svg aria-label="옵션" fill="currentColor" height="32" role="img"
                                                          viewBox="0 0 24 24" width="32"><title>옵션</title>
                                                         <circle cx="12" cy="12" r="1.5"></circle>
@@ -171,7 +183,7 @@
                                             <div class="modal-dialog modal-dialog-centered center">
                                                 <div class="modal-content w400 bn">
 
-                                                    <button class="btn w-100 h50 center hfwb pdT4 pdB4 pdL8 pdR8 fs14 hfcRed fcRed fwb"
+                                                    <button class="btn w-100 h50 center hfwb pdT4 pdB4 pdL8 pdR8 fs14 hfcBlock fcRed fwb"
                                                             data-bs-target="#userBlockModal" data-bs-toggle="modal">
                                                         차단
                                                     </button>

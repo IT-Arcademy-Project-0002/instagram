@@ -84,29 +84,41 @@
                                         <div class="modal fade" id="ProfileModifyModal" role="dialog"
                                              aria-hidden="true" aria-labelledby="ProfileModifyModalLabel" tabindex="-1">
                                             <div class="modal-dialog modal-dialog-centered">
-                                                <div class="modal-content">
-                                                    <div class="modal-header justify-content-center">
-                                                        <h1 class="modal-title fs-5" id="ProfileModifyModalLabel">계정 관리</h1>
-                                                        <div class="position-absolute d-flex justify-content-end w-100 p-3">
-                                                            <button type="button" class="btn-close m-0"
-                                                                    data-bs-dismiss="modal" aria-label="Close"></button>
+                                                <div class="modal-content w400 bn">
+
+                                                    <div class="center">
+                                                        <div class="center"></div>
+                                                        <div class="w-100 h50 center fs20 mg16 fwb">
+                                                            계정 관리
                                                         </div>
                                                     </div>
+                                                    <div class="bbsS bbw1 bbcDB w400"></div>
+
                                                     <div class="modal-body p-0">
                                                         <div class="btn-group-vertical w-100" role="group"
                                                              aria-label="Vertical button group">
 
-                                                            <button class="btn btn-light" data-bs-toggle="modal"
+                                                            <button class="btn w-100 h50 center hfwb pdT4 pdB4 pdL8 pdR8 fs14 bn" data-bs-toggle="modal"
                                                                     data-bs-target="#NameModifyModal">
                                                                 이름
                                                             </button>
-                                                            <button class="btn btn-light" data-bs-toggle="modal"
+
+                                                            <div class="btsS btw1 btcDB w400"></div>
+                                                            <button class="btn w-100 h50 center hfwb pdT4 pdB4 pdL8 pdR8 fs14 bn" data-bs-toggle="modal"
                                                                     data-bs-target="#UserNameModifyModal">
                                                                 사용자 이름
                                                             </button>
-                                                            <button class="btn btn-light" data-bs-toggle="modal"
+
+                                                            <div class="btsS btw1 btcDB w400"></div>
+                                                            <button class="btn w-100 h50 center hfwb pdT4 pdB4 pdL8 pdR8 fs14 bn" data-bs-toggle="modal"
                                                                     data-bs-target="#PhotoModifyModal">
                                                                 프로필 사진
+                                                            </button>
+
+                                                            <div class="btsS btw1 btcDB w400"></div>
+                                                            <button type="button" data-bs-dismiss="modal"
+                                                                    class="btn w-100 h50 center hfwb pdT4 pdB4 pdL8 pdR8 fs14 bn">
+                                                                취소
                                                             </button>
                                                         </div>
                                                     </div>
@@ -119,34 +131,43 @@
                                         <div class="modal fade" id="NameModifyModal" role="dialog"
                                              aria-hidden="true" aria-labelledby="NameModifyModalLabel" tabindex="-1">
                                             <div class="modal-dialog modal-dialog-centered">
-                                                <div class="modal-content">
-                                                    <div class="modal-header justify-content-between align-content-center">
-                                                        <button class="btn btn-light p-0" data-bs-toggle="modal"
-                                                                style="width: 32px; height: 32px"
+                                                <div class="modal-content w400 bn">
+
+                                                    <div class="center">
+                                                        <button class="btn btn_back pd8 fwb" data-bs-toggle="modal"
                                                                 data-bs-target="#ProfileModifyModal">
-                                                            <svg viewBox="0 0 24 24" fill="currentColor" width="1em"
-                                                                 height="1em" aria-hidden="true">
-                                                                <path fill-rule="evenodd" clip-rule="evenodd"
-                                                                      d="M16.753 4.341a1 1 0 0 0-1.412-.094l-8 7a1 1 0 0 0 0 1.506l8 7a1 1 0 0 0 1.318-1.506L9.518 12l7.14-6.247a1 1 0 0 0 .094-1.412z"></path>
+                                                            <svg aria-label="돌아가기" class="" fill="currentColor" height="21" role="img"
+                                                                 viewBox="0 0 24 24" width="21"><title>돌아가기</title>
+                                                                <path d="M21 17.502a.997.997 0 0 1-.707-.293L12 8.913l-8.293 8.296a1 1 0 1 1-1.414-1.414l9-9.004a1.03 1.03 0 0 1 1.414 0l9 9.004A1 1 0 0 1 21 17.502Z"
+                                                                      transform="rotate(-90 12 12)"></path>
                                                             </svg>
                                                         </button>
 
-                                                        <h5 class="m-0">이름 변경</h5>
+                                                        <div class="w-100 h50 center pdT4 pdB4 pdL8 pdR8 fs16 fwb"> 이름 변경
+                                                        </div>
 
-                                                        <button type="button" class="btn-close m-0" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        <div class="center fb48">
+                                                            <button type="button" class="btn-close pd8 fwb bn"
+                                                                    data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
                                                     </div>
-                                                    <div class="modal-body">
+                                                    <div class="bbsS bbw1 bbcDB w400"></div>
+
+                                                    <div>
                                                         <form action="/member/changeName" id="name-form">
-                                                            <div class="d-flex flex-column" style="height: 175px">
-                                                                <input id="now-name" name="now-name" type="hidden" th:value="${loginMember.nickname}">
-                                                                <label for="new-name"
-                                                                       class="form-label fw-bold">이름</label>
-                                                                <div class="flex-fill">
-                                                                    <input type="text" id="new-name" name="new-name"
-                                                                           class="form-control" th:value="${loginMember.nickname}"
-                                                                           placeholder="변경할 이름을 입력해주세요." oninput="inputName()">
-                                                                </div>
-                                                                <button id="name-btn" class="btn btn-primary" disabled="disabled" onclick="changeName()">완료</button>
+                                                            <div class="d-flex flex-column">
+                                                                    <input id="now-name" name="now-name" type="hidden" th:value="${loginMember.nickname}">
+
+                                                                    <div class="flex-fill mg20">
+                                                                        <input type="text" id="new-name" name="new-name"
+                                                                               class="highlight_input" th:value="${loginMember.nickname}"
+                                                                               placeholder="변경할 이름을 입력해주세요." oninput="inputName()">
+                                                                    </div>
+
+                                                                <div class="btsS btw1 btcDB w400"></div>
+                                                                <button class="btn w-100 h50 center hfwb pdT4 pdB4 pdL8 pdR8 fs14 fcBlue hfcBlue bn"
+                                                                        data-bs-dismiss="modal" id="name-btn" disabled="disabled" onclick="changeName()"> 완료
+                                                                </button>
                                                             </div>
                                                         </form>
                                                     </div>
@@ -159,40 +180,53 @@
                                         <div class="modal fade" id="UserNameModifyModal" role="dialog"
                                              aria-hidden="true" aria-labelledby="UserNameModifyModalLabel" tabindex="-1">
                                             <div class="modal-dialog modal-dialog-centered">
-                                                <div class="modal-content">
-                                                    <div class="modal-header justify-content-between align-content-center">
-                                                        <button class="btn btn-light p-0" data-bs-toggle="modal"
-                                                                style="width: 32px; height: 32px"
+                                                <div class="modal-content w400 bn">
+
+                                                    <div class="center">
+                                                        <button class="btn btn_back pd8 fwb" data-bs-toggle="modal"
                                                                 data-bs-target="#ProfileModifyModal">
-                                                            <svg viewBox="0 0 24 24" fill="currentColor" width="1em"
-                                                                 height="1em" aria-hidden="true">
-                                                                <path fill-rule="evenodd" clip-rule="evenodd"
-                                                                      d="M16.753 4.341a1 1 0 0 0-1.412-.094l-8 7a1 1 0 0 0 0 1.506l8 7a1 1 0 0 0 1.318-1.506L9.518 12l7.14-6.247a1 1 0 0 0 .094-1.412z"></path>
+                                                            <svg aria-label="돌아가기" class="" fill="currentColor" height="21" role="img"
+                                                                 viewBox="0 0 24 24" width="21"><title>돌아가기</title>
+                                                                <path d="M21 17.502a.997.997 0 0 1-.707-.293L12 8.913l-8.293 8.296a1 1 0 1 1-1.414-1.414l9-9.004a1.03 1.03 0 0 1 1.414 0l9 9.004A1 1 0 0 1 21 17.502Z"
+                                                                      transform="rotate(-90 12 12)"></path>
                                                             </svg>
                                                         </button>
 
-                                                        <h5 class="m-0">사용자 이름 변경</h5>
+                                                        <div class="w-100 h50 center pdT4 pdB4 pdL8 pdR8 fs16 fwb"> 이름 변경
+                                                        </div>
 
-                                                        <button type="button" class="btn-close m-0" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        <div class="center fb48">
+                                                            <button type="button" class="btn-close pd8 fwb bn"
+                                                                    data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
                                                     </div>
-                                                    <div class="modal-body">
+                                                    <div class="bbsS bbw1 bbcDB w400"></div>
+
+                                                    <div>
                                                         <form action="/member/changeUsername" id="username-form">
-                                                            <div class="d-flex flex-column" style="height: 175px">
+                                                            <div class="d-flex flex-column">
                                                                 <input id="now-username" name="now-username" type="hidden" th:value="${loginMember.username}">
-                                                                <span class="form-label fw-bold">사용자 이름</span>
                                                                 <div class="flex-fill">
                                                                     <div class="position-relative">
-                                                                        <input type="text" id="new-username" name="new-username"
-                                                                               autocomplete='off'
-                                                                               class="form-control" th:value="${loginMember.username}"
-                                                                               placeholder="변경할 이름을 입력해주세요." oninput="inputUserName()"
-                                                                               onchange="changeStopUserName()">
+                                                                        <div class="flex-fill mg20">
+                                                                            <input type="text" id="new-username" name="new-username"
+                                                                                   autocomplete='off'
+                                                                                   class="highlight_input" th:value="${loginMember.username}"
+                                                                                   placeholder="변경할 이름을 입력해주세요." oninput="inputUserName()"
+                                                                                   onchange="changeStopUserName()">
+                                                                        </div>
                                                                         <span id="username-spin" class="visually-hidden spinner-border spinner-grow-sm
                                                                         text-secondary position-absolute" style="top:11px; right:11px;"></span>
                                                                     </div>
-                                                                    <p id="username-error" class="text-danger mt-2"></p>
+                                                                    <div>
+                                                                        <p id="username-error" class="text-danger mgB20 fs11 pdL20 pdR20"></p>
+                                                                    </div>
                                                                 </div>
-                                                                <button id="username-btn" class="btn btn-primary" disabled="disabled" onclick="changeUserName()">완료</button>
+                                                                <div class="btsS btw1 btcDB w400"></div>
+                                                                <button class="btn w-100 h50 center hfwb pdT4 pdB4 pdL8 pdR8 fs14 fcBlue hfcBlue bn"
+                                                                        data-bs-dismiss="modal" id="username-btn" disabled="disabled" onclick="changeUserName()"> 완료
+                                                                </button>
+
                                                             </div>
                                                         </form>
                                                     </div>

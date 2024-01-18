@@ -30,6 +30,9 @@ public class Message_Member_Map {
     // 감정 (null 일 수 있음)
     private String Empathy;
 
+    // 댓글 여부 (데이터 타입이 1이면서 댓글 여부가 참일 때 코멘트)
+    private boolean comment;
+
     @ManyToOne
     @JoinColumn(name="room_id")
     @OnDelete(action = OnDeleteAction.CASCADE)

@@ -36,7 +36,7 @@ public class MessageService {
 
     public CommentMessage getCommentMessage(Long id)
     {
-        return commentMessageRepository.findById(id).orElse(null);
+        return commentMessageRepository.findByMessage(getMessage(id));
     }
 
     public void delete(Long id)
@@ -46,8 +46,13 @@ public class MessageService {
 
     public CommentMessage createComment(Map<String, Object> msg, Message_Member_Map map)
     {
+        Message message = new Message();
+        message.setContent(msg.get("msg").toString());
+
+        messageRepository.save(message);
+
         CommentMessage commentMessage = new CommentMessage();
-        commentMessage.setContent(msg.get("msg").toString());
+        commentMessage.setMessage(message);
         commentMessage.setMessageMap(map);
 
         return commentMessageRepository.save(commentMessage);

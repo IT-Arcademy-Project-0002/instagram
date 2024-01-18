@@ -49,30 +49,73 @@
                     </div>
                     <div id="msg-container" class="w-100 h-100" style="overflow-y: scroll; display: none;">
                         <div class="msgArea">
+                            <div style="height: 16px">
+
+                            </div>
                             <div th:each="msg, iterStat : ${messageList}">
                                 <div th:id="'msg'+${msg.id}" th:if="${msg.member.username == loginMember.username}"
-                                     class="px-4 pt-1">
+                                     style="margin-top: 7px;">
                                     <div class="d-flex justify-content-end">
                                         <div>
-                                            <div th:if="${msg.dataType == 4}" style="margin-right: 6px;">
-                                                <div>
-
+                                            <div th:if="${msg.dataType == 1 && msg.commented}"
+                                                 style="margin-right: 6px; margin-bottom: 6px;">
+                                                <div th:if="${msg.comment.messageMap.member.username == loginMember.username}">
+                                                    <div class="text-end mb-2"
+                                                         style="font-size: 12px; color: #797979; padding: 10px 8px 0 0">
+                                                        회원님이 자신에게 보낸 답장
+                                                    </div>
+                                                </div>
+                                                <div th:unless="${msg.comment.messageMap.member.username == loginMember.username}">
+                                                    <div th:if="${msg.comment.messageMap.member.nickname == null}"
+                                                         class="text-end mb-2"
+                                                         style="font-size: 12px; color: #797979; padding: 10px 8px 0 0"
+                                                         th:text="@{|회원님이 ${msg.comment.messageMap.member.username}님에게 보낸 답장|}">
+                                                    </div>
+                                                    <div th:unless="${msg.comment.messageMap.member.nickname == null}"
+                                                         class="text-end mb-2"
+                                                         style="font-size: 12px; color: #797979; padding: 10px 8px 0 0"
+                                                         th:text="@{|회원님이 ${msg.comment.messageMap.member.nickname}님에게 보낸 답장|}">
+                                                    </div>
                                                 </div>
                                                 <div>
                                                     <div class="d-flex justify-content-end">
                                                         <div th:if="${msg.comment.messageMap.dataType == 1}"
-                                                             style="background:#efefef; margin-right: 8px; font-size: 14px;"
-                                                             class="rounded-5 p-2 px-3"
+                                                             style="background:#efefef; font-size: 14px; padding: 8px 12px"
+                                                             class="rounded-5 mx-2"
                                                              th:text="${msg.message.content}">
                                                         </div>
 
-                                                        <div style="background:#efefef; width: 4px; min-height: 40px;">
+                                                        <div th:if="${msg.comment.messageMap.dataType == 2}"
+                                                             onclick="clickShowImage(this)"
+                                                             th:data-id="${msg.image.name}"
+                                                             class="mx-2" type="button"
+                                                             data-bs-toggle="modal" data-bs-target="#showDataModal">
+                                                            <img th:src="@{|/resources/${msg.image.name}|}"
+                                                                 style="width: 10rem; height: auto; border-radius: 22px">
+                                                        </div>
+
+                                                        <div th:if="${msg.comment.messageMap.dataType == 3}"
+                                                             th:data-id="${msg.video.name}"
+                                                             onclick="clickShowVideo(this)"
+                                                             type="button"
+                                                             data-bs-toggle="modal" data-bs-target="#showDataModal"
+                                                             class="mx-2 d-flex justify-content-end position-relative">
+                                                            <span style="position: absolute;">
+                                                                <img height="45" width="45" alt=""
+                                                                     src="/files/designImg/playButton.png">
+                                                            </span>
+                                                            <video style="width: 10rem; height: auto; border-radius: 22px"
+                                                                   th:src="@{|/resources/${msg.video.name}|}">
+                                                            </video>
+                                                        </div>
+
+                                                        <div style="background:#efefef; width: 4px; min-height: 34px">
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
 
-                                            <div class="d-flex align-items-center justify-content-end my-2">
+                                            <div class="d-flex align-items-center justify-content-end">
                                                 <div class="d-flex align-items-center" style="margin-right: 5px">
                                                     <div>
                                                         <button th:id="${msg.id}" data-user="true" class="border-0"
@@ -93,6 +136,7 @@
                                                     <div style="margin: 8px; color: #9f9f9f">
                                                         <button th:id="${msg.id}" data-user="true"
                                                                 th:data-user-name="${msg.member.username}"
+                                                                th:data-msg-content="${msg.dataType == 1}?${msg.message.content}:''"
                                                                 th:data-type="${msg.dataType}"
                                                                 class="border-0" onclick="clickComment(this)"
                                                                 style="background: none; color: #9f9f9f"
@@ -111,12 +155,19 @@
                                                         </svg>
                                                     </div>
                                                 </div>
-                                                <div th:if="${msg.dataType == 1}"
-                                                     class="rounded-5 bg-primary text-light p-2 px-3"
+                                                <div th:if="${msg.dataType == 1 && !msg.commented}"
+                                                     class="rounded-5 text-light"
+                                                     style="padding: 7px 12px; background: #3797F0; font-size: 15px"
                                                      th:text="${msg.message.content}">
                                                 </div>
+                                                <div th:if="${msg.dataType == 1 && msg.commented}">
+                                                    <div class="rounded-5 text-light"
+                                                         style="padding: 7px 12px; background: #3797F0; font-size: 15px"
+                                                         th:text="${msg.comment.message.content}">
+                                                    </div>
+                                                </div>
                                                 <div th:if="${msg.dataType == 2}"
-                                                     th:id="${msg.image.name}"
+                                                     th:data-id="${msg.image.name}"
                                                      onclick="clickShowImage(this)"
                                                      type="button"
                                                      data-bs-toggle="modal" data-bs-target="#showDataModal">
@@ -137,23 +188,86 @@
                                                            th:src="@{|/resources/${msg.video.name}|}">
                                                     </video>
                                                 </div>
-                                                <div th:if="${msg.dataType == 4}">
-                                                    <div class="rounded-5 bg-primary text-light p-2 px-3"
-                                                         th:text="${msg.comment.content}">
-                                                    </div>
-                                                </div>
                                             </div>
-                                            <div th:classappend="${iterStat.last}?'read-check'" class="my-2 text-end"
+                                            <div th:classappend="${iterStat.last}?'read-check'" class="text-end"
                                                  th:text="${iterStat.last}?${msg.seeMember}:''"></div>
+                                        </div>
+                                        <div style="width: 16px">
+
                                         </div>
                                     </div>
                                 </div>
-                                <div th:unless="${msg.member.username == loginMember.username}" class="px-4 pt-1"
+                                <div th:unless="${msg.member.username == loginMember.username}"
+                                     style="margin-top: 7px;"
                                      th:id="'msg'+${msg.id}">
-                                    <div class="my-2" th:text="${msg.member.username}"></div>
-                                    <div class="d-flex my-2" th:classappend="${msg.dataType == 1}?'align-items-center'">
+                                    <div th:if="${!msg.commented}"
+                                         style="margin-left: 44px; margin-top:10px; padding: 0 0 6px 12px; font-size: 12px; color: #737373"
+                                         th:text="${msg.member.nickname==null}?${msg.member.username}:${msg.member.nickname}"></div>
+
+                                    <div th:if="${msg.dataType == 1 && msg.commented}"
+                                         style="margin-right: 6px; margin-left: 44px; margin-bottom: 6px;">
+                                        <div th:if="${msg.comment.messageMap.member.username == msg.member.username}"
+                                             style="padding: 10px 0 0 8px;">
+                                            <div th:if="${msg.member.nickname == null}"
+                                                 class="mb-2" style="font-size: 12px; color: #797979"
+                                                 th:text="@{|${msg.member.username}님이 자신에게 보낸 답장|}">
+                                            </div>
+                                            <div th:unless="${msg.member.nickname == null}"
+                                                 class="mb-2" style="font-size: 12px; color: #797979"
+                                                 th:text="@{|${msg.member.nickname}님이 자신에게 보낸 답장|}">
+                                            </div>
+                                        </div>
+                                        <div th:unless="${msg.comment.messageMap.member.username == msg.member.username}"
+                                             style="padding: 10px 0 0 8px;">
+                                            <div th:if="${msg.comment.messageMap.member.nickname == null}"
+                                                 class="mb-2" style="font-size: 12px; color: #797979"
+                                                 th:text="@{|${msg.member.nickname==null?msg.member.username:msg.member.nickname}님이 ${msg.comment.messageMap.member.username}님에게 보낸 답장|}">
+                                            </div>
+                                            <div th:unless="${msg.comment.messageMap.member.nickname == null}"
+                                                 class="mb-2" style="font-size: 12px; color: #797979"
+                                                 th:text="@{|${msg.member.nickname==null?msg.member.username:msg.member.nickname}님이 ${msg.comment.messageMap.member.nickname}님에게 보낸 답장|}">
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <div class="d-flex">
+                                                <div style="background:#efefef; width: 4px; min-height: 34px">
+                                                </div>
+                                                <div th:if="${msg.comment.messageMap.dataType == 1}"
+                                                     style="background:#efefef; font-size: 14px; padding: 8px 12px"
+                                                     class="rounded-5 mx-2"
+                                                     th:text="${msg.message.content}">
+                                                </div>
+
+                                                <div th:if="${msg.comment.messageMap.dataType == 2}"
+                                                     onclick="clickShowImage(this)"
+                                                     th:data-id="${msg.image.name}"
+                                                     class="mx-2" type="button"
+                                                     data-bs-toggle="modal" data-bs-target="#showDataModal">
+                                                    <img th:src="@{|/resources/${msg.image.name}|}"
+                                                         style="width: 10rem; height: auto; border-radius: 22px">
+                                                </div>
+
+                                                <div th:if="${msg.comment.messageMap.dataType == 3}"
+                                                     th:data-id="${msg.video.name}"
+                                                     onclick="clickShowVideo(this)"
+                                                     type="button"
+                                                     data-bs-toggle="modal" data-bs-target="#showDataModal"
+                                                     class="mx-2 d-flex justify-content-end position-relative">
+                                                            <span style="position: absolute;">
+                                                                <img height="45" width="45" alt=""
+                                                                     src="/files/designImg/playButton.png">
+                                                            </span>
+                                                    <video style="width: 10rem; height: auto; border-radius: 22px"
+                                                           th:src="@{|/resources/${msg.video.name}|}">
+                                                    </video>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="d-flex" th:classappend="${msg.dataType == 1}?'align-items-center'">
                                         <a th:href="@{|/member/page/${msg.member.username}|}">
-                                            <div style="position: relative; width: 3rem; height: 3rem;">
+                                            <div style="position: relative; width: 28px; height: 28px; margin:0 8px 0 14px">
                                                 <img th:if="${msg.member.image == null}"
                                                      src="/files/designImg/noneuser.png"
                                                      class="shadow-sm rounded-circle text-center"
@@ -164,15 +278,20 @@
                                                      style="position: absolute; top: 0; left: 0; transform: translate(50,50); width: 100%; height: 100%; object-fit: cover; margin: auto">
                                             </div>
                                         </a>
-                                        <div th:if="${msg.dataType == 1}" th:id="@{|text${msg.id}|}"
-                                             class="mx-3 rounded-5 p-2 px-3"
-                                             style="background:#efefef;"
+                                        <div th:if="${msg.dataType == 1 && !msg.commented}" th:id="@{|text${msg.id}|}"
+                                             class="rounded-5"
+                                             style="background:#efefef; font-size: 15px; padding: 7px 12px; "
                                              th:text="${msg.message.content}">
+                                        </div>
+                                        <div th:if="${msg.dataType == 1 && msg.commented}" th:id="@{|text${msg.id}|}"
+                                             class="rounded-5"
+                                             style="background:#efefef; font-size: 15px; padding: 7px 12px;"
+                                             th:text="${msg.comment.message.content}">
                                         </div>
                                         <div th:if="${msg.dataType == 2}"
                                              th:id="${msg.image.name}"
                                              onclick="clickShowImage(this)"
-                                             class="mx-3" type="button"
+                                             type="button"
                                              data-bs-toggle="modal" data-bs-target="#showDataModal">
                                             <img th:src="@{|/resources/${msg.image.name}|}"
                                                  style="width: 15rem; height: auto; border-radius: 4px 22px 22px 22px">
@@ -181,7 +300,7 @@
                                              th:id="${msg.video.name}"
                                              onclick="clickShowVideo(this)"
                                              data-bs-toggle="modal" data-bs-target="#showDataModal"
-                                             class="mx-3 d-flex justify-content-end position-relative">
+                                             class="d-flex justify-content-end position-relative">
                                             <span style="position: absolute;">
                                                 <img height="45" width="45" alt=""
                                                      src="/files/designImg/playButton.png">
@@ -242,7 +361,7 @@
                             <div id="comment-msg-name" class="fw-bold" style="font-size: 14px">
 
                             </div>
-                            <div style="font-size: 14px">
+                            <div id="comment-user" style="font-size: 14px">
                                 님에게 답장 보내는 중
                             </div>
                         </div>
@@ -275,7 +394,8 @@
                             </button>
                         </div>
                         <div>
-                            <button type="button" value="파일" class="quit btn btn-primary" onclick="clickFile()">파일
+                            <button type="button" value="파일" id="file-send-btn"
+                                    class="quit btn btn-primary" onclick="clickFile()">파일
                             </button>
                         </div>
                     </div>
@@ -302,6 +422,8 @@
 
     <script th:inline="javascript">
 
+
+        debugger;
         let popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]');
         let popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl));
 
@@ -350,8 +472,40 @@
                 var msgID = $(this).attr('id');
                 // Popover 닫기 (선택 사항)
                 deleteMsg(msgID, popID);
+
+                closeCommentArea();
             });
         }
+
+        function closeCommentArea() {
+            document.getElementById('msg-send-input').dataset.type = 'msg';
+            var area = document.getElementById('comment-msg-area');
+            area.dataset.id = '';
+
+            if (!area.classList.contains("hidden")) {
+                area.classList.add("hidden");
+
+                var msgArea = document.getElementById('msg-area-container');
+                msgArea.style.height = 'calc(100vh - 75px - 78px)';
+            }
+            document.getElementById('file-send-btn').disabled = false;
+        }
+
+        function openCommentArea(id) {
+            document.getElementById('msg-send-input').dataset.type = 'comment';
+            var area = document.getElementById('comment-msg-area');
+            area.dataset.id = id;
+
+            if (area.classList.contains("hidden")) {
+                area.classList.remove("hidden");
+
+                var msgArea = document.getElementById('msg-area-container');
+                msgArea.style.height = 'calc(100vh - 75px - 116px)';
+            }
+
+            document.getElementById('file-send-btn').disabled = true;
+        }
+
 
         function resendMsgTrigger() {
             $(document).on('click', '.resend-msg', function () {
@@ -364,7 +518,7 @@
         }
 
         function copyMsgTrigger() {
-            debugger;
+
             $(document).on('click', '.copy-msg', function () {
                 // 삭제 동작 수행
                 var msgID = $(this).attr('id');
@@ -374,19 +528,23 @@
         }
 
         function clickComment(data) {
-            var msgArea = document.getElementById('msg-area-container');
-            msgArea.style.height = 'calc(100vh - 75px - 135.5px)';
-            var area = document.getElementById('comment-msg-area');
-            area.classList.remove('hidden');
+
+            openCommentArea(data.id);
+
+            var name = document.getElementById('comment-msg-name');
 
             debugger;
-            area.dataset.id = data.id;
-            var name = document.getElementById('comment-msg-name');
-            name.textContent = data.dataset.userName;
+            if (data.dataset.user === 'true') {
+                name.textContent = '';
+                document.getElementById('comment-user').textContent = "나에게 답장 보내는 중";
+            } else {
+                document.getElementById('comment-user').textContent = "님에게 답장 보내는 중";
+                name.textContent = data.dataset.userName;
+            }
 
             var content = document.getElementById('comment-msg-data');
 
-            debugger;
+
             var dataType = data.dataset.type;
             if (dataType === '1') {
                 content.textContent = data.dataset.msgContent;
@@ -395,16 +553,10 @@
             } else if (dataType === '3') {
                 content.textContent = '동영상';
             }
-
-            document.getElementById('msg-send-input').dataset.type = 'comment';
         }
 
         function clickCommentCansel() {
-            var msgArea = document.getElementById('msg-area-container');
-            msgArea.style.height = 'calc(100vh - 75px - 78px)';
-            var area = document.getElementById('comment-msg-area');
-            area.classList.add('hidden');
-            area.dataset.id = '';
+            closeCommentArea();
         }
 
         var sideCheck = document.getElementById('expand-direct-menu');
@@ -532,7 +684,7 @@
 
         function clickShowImage(div) {
             var image = document.getElementById('modal-image');
-            image.setAttribute('src', '/resources/' + div.id);
+            image.setAttribute('src', '/resources/' + div.dataset.id);
             image.classList.remove('hidden');
 
             var video = document.getElementById('modal-video');
@@ -542,7 +694,7 @@
 
         function clickShowVideo(div) {
             var video = document.getElementById('modal-video');
-            video.setAttribute('src', '/resources/' + div.id);
+            video.setAttribute('src', '/resources/' + div.dataset.id);
             video.classList.remove('hidden');
 
             var image = document.getElementById('modal-image');
@@ -592,13 +744,77 @@
 
             var msgStr = '';
             var modal = '';
+            var comment = '';
+
+
             if (data.dataType === 1) {
                 msgStr =
-                    '<div class="rounded-5 bg-primary text-light p-2 px-3">\n' +
+                    '<div class="rounded-5 text-light" style="padding: 7px 12px; background: #3797F0; font-size: 15px">\n' +
                     data.msg +
                     '</div>\n';
+
+                if (data.commented === 'true') {
+
+                    var userText = '';
+                    if (data.commentUsername === username) {
+                        userText =
+                            '            <div class="text-end mb-2" style="font-size: 12px; color: #797979; padding: 10px 8px 0 0">\n' +
+                            '                회원님이 자신에게 보낸 답장\n' +
+                            '            </div>\n';
+                    } else {
+                        userText =
+                            '            <div class="text-end mb-2" style="font-size: 12px; color: #797979; padding: 10px 8px 0 0">\n' +
+                            '회원님이 ' + data.commentUserText + '님에게 보낸 답장' +
+                            '            </div>\n';
+                    }
+
+                    var commentContent = '';
+
+                    if (data.commentDataType === 1) {
+                        commentContent =
+                            '                <div style="background:#efefef; font-size: 14px; padding: 8px 12px"\n' +
+                            '                     class="rounded-5 mx-2">\n' +
+                            data.commentContent +
+                            '                </div>\n';
+                    } else if (data.commentDataType === 2) {
+                        commentContent =
+                            '                <div onclick="clickShowImage(this)"\n' +
+                            '                     data-id="' + data.commentContent + '"\n' +
+                            '                     class="mx-2" type="button"\n' +
+                            '                     data-bs-toggle="modal" data-bs-target="#showDataModal">\n' +
+                            '                    <img src="/resources/' + data.commentContent + '"\n' +
+                            '                         style="width: 10rem; height: auto; border-radius: 22px">\n' +
+                            '                </div>\n';
+                    } else if (data.commentDataType === 3) {
+                        commentContent =
+                            '                <div data-id="' + data.commentContent + '"\n' +
+                            '                     onclick="clickShowVideo(this)"\n' +
+                            '                     type="button"\n' +
+                            '                     data-bs-toggle="modal" data-bs-target="#showDataModal"\n' +
+                            '                     class="mx-2 d-flex justify-content-end position-relative">\n' +
+                            '                    <span style="position: absolute;">\n' +
+                            '                        <img height="45" width="45" alt=""\n' +
+                            '                             src="/files/designImg/playButton.png">\n' +
+                            '                    </span>\n' +
+                            '                    <video style="width: 10rem; height: auto; border-radius: 22px"\n' +
+                            '                           src="/resources/' + data.commentContent + '">\n' +
+                            '                    </video>\n' +
+                            '                </div>\n';
+                    }
+                    comment =
+                        '   <div style="margin-right: 6px;  margin-bottom: 6px;">\n' +
+                        userText +
+                        '        <div>\n' +
+                        '            <div class="d-flex justify-content-end">\n' +
+                        commentContent +
+                        '                <div style="background:#efefef; width: 4px; min-height: 34px">\n' +
+                        '                </div>\n' +
+                        '            </div>\n' +
+                        '        </div>\n' +
+                        '    </div>';
+                }
             } else if (data.dataType === 2) {
-                modal = ' id="' + data.msg + '"\n' +
+                modal = ' data-id="' + data.msg + '"\n' +
                     ' onclick="clickShowImage(this)"' +
                     ' type="button" data-bs-toggle="modal" data-bs-target="#showDataModal"';
                 msgStr =
@@ -606,7 +822,7 @@
                     '    <img src="/resources/' + data.msg + '" style="width: 15rem; height: auto; border-radius: 22px 4px 22px 22px">\n' +
                     '</div>';
             } else if (data.dataType === 3) {
-                modal = ' id="' + data.msg + '"\n' +
+                modal = ' data-id="' + data.msg + '"\n' +
                     ' onclick="clickShowVideo(this)"' +
                     ' type="button" data-bs-toggle="modal" data-bs-target="#showDataModal"';
                 msgStr =
@@ -622,28 +838,43 @@
 
             let newMsg = document.createElement('div');
             newMsg.innerHTML =
-                '                           <div id="msg' + data.id + '" class="px-4 pt-1">\n' +
+                '                           <div id="msg' + data.id + '" style="margin-top: 7px;">\n' +
                 '                                <div class="d-flex justify-content-end">\n' +
                 '                                    <div>\n' +
-                '                                        <div class="d-flex align-items-center justify-content-end my-2">\n' +
+                comment +
+                '                                        <div class="d-flex align-items-center justify-content-end">\n' +
                 '                                       <div class="d-flex align-items-center" style="margin-right: 5px">\n' +
                 '                                            <div>\n' +
-                '                                                <button id="' + data.id + '" type="button" class="border-0" style="background: none; color: #9f9f9f" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="top" data-bs-target="popover" data-bs-html="true">\n' +
+                '                                                <button id="' + data.id + '" data-user="true" data-type="' + data.dataType + '"  type="button" class="border-0" style="background: none; color: #9f9f9f" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="top" data-bs-target="popover" data-bs-html="true">\n' +
                 '                                                    <svg aria-label="더 보기" fill="currentColor" height="16" role="img" viewBox="0 0 24 24" width="16"><title>더 보기</title><circle cx="12" cy="12" r="1.5"></circle><circle cx="6" cy="12" r="1.5"></circle><circle cx="18" cy="12" r="1.5"></circle></svg>\n' +
                 '                                                </button>\n' +
                 '                                            </div>\n' +
                 '                                            <div style="margin: 8px; color: #9f9f9f">\n' +
-                '                                                <svg aria-label="답장" fill="currentColor" height="16" role="img" viewBox="0 0 24 24" width="16"><title>답장</title><path d="M14 8.999H4.413l5.294-5.292a1 1 0 1 0-1.414-1.414l-7 6.998c-.014.014-.019.033-.032.048A.933.933 0 0 0 1 9.998V10c0 .027.013.05.015.076a.907.907 0 0 0 .282.634l6.996 6.998a1 1 0 0 0 1.414-1.414L4.415 11H14a7.008 7.008 0 0 1 7 7v3.006a1 1 0 0 0 2 0V18a9.01 9.01 0 0 0-9-9Z"></path></svg>\n' +
-                '                                            </div>\n' +
+                '                                                <button id="' + data.id + '" data-user="true"\n' +
+                '                                                  data-user-name=' + username + '\n' +
+                '                                                  data-type="' + data.dataType + '"\n' +
+                '                                                  data-msg-content="' + data.msg + '"' +
+                '                                                  class="border-0" onclick="clickComment(this)"\n' +
+                '                                                  style="background: none; color: #9f9f9f"\n' +
+                '                                                  data-bs-container="body">\n' +
+                '                                                    <svg aria-label="답장" fill="currentColor" height="16"\n' +
+                '                                                       role="img" viewBox="0 0 24 24" width="16"><title>\n' +
+                '                                                       답장</title>\n' +
+                '                                                       <path d="M14 8.999H4.413l5.294-5.292a1 1 0 1 0-1.414-1.414l-7 6.998c-.014.014-.019.033-.032.048A.933.933 0 0 0 1 9.998V10c0 .027.013.05.015.076a.907.907 0 0 0 .282.634l6.996 6.998a1 1 0 0 0 1.414-1.414L4.415 11H14a7.008 7.008 0 0 1 7 7v3.006a1 1 0 0 0 2 0V18a9.01 9.01 0 0 0-9-9Z"></path>\n' +
+                '                                                    </svg>\n' +
+                '                                                 </button>\n' +
+                '                                            </div>' +
                 '                                            <div style="margin: 8px; color: #9f9f9f">\n' +
                 '                                                <svg aria-label="공감" fill="currentColor" height="16" role="img" viewBox="0 0 24 24" width="16"><title>공감</title><path d="M15.83 10.997a1.167 1.167 0 1 0 1.167 1.167 1.167 1.167 0 0 0-1.167-1.167Zm-6.5 1.167a1.167 1.167 0 1 0-1.166 1.167 1.167 1.167 0 0 0 1.166-1.167Zm5.163 3.24a3.406 3.406 0 0 1-4.982.007 1 1 0 1 0-1.557 1.256 5.397 5.397 0 0 0 8.09 0 1 1 0 0 0-1.55-1.263ZM12 .503a11.5 11.5 0 1 0 11.5 11.5A11.513 11.513 0 0 0 12 .503Zm0 21a9.5 9.5 0 1 1 9.5-9.5 9.51 9.51 0 0 1-9.5 9.5Z"></path></svg>\n' +
                 '                                            </div>\n' +
                 '                                        </div>' +
                 msgStr +
                 '                                        </div>\n' +
-                '                                        <div class="read-check my-2 text-end">\n' +
+                '                                        <div class="read-check text-end">\n' +
                 read +
                 '                                        </div>\n' +
+                '                                    </div>\n' +
+                '                                    <div style="width: 16px">\n' +
                 '                                    </div>\n' +
                 '                                </div>\n' +
                 '                            </div>';
@@ -675,31 +906,100 @@
                 imgSrc = 'src="/resources/' + img.name + '"\n';
             }
 
+            debugger;
+            var userText =
+                '                                <div style="margin-left: 44px; margin-top:10px; padding: 0 0 6px 12px; font-size: 12px; color: #797979">\n' +
+                data.userText +
+                '                                </div>\n';
 
             var msgStr = '';
             var align = '';
             var modal = '';
+            var comment = '';
             if (data.dataType === 1) {
+
                 msgStr =
-                    '<div class="mx-3 rounded-5 bg-primary text-light p-2 px-3" style="background: #b7b7b7">\n' +
+                    '<div id="text' + data.id + '" class="rounded-5" style="background:#efefef; font-size: 15px; padding: 7px 12px;">' +
                     data.msg +
-                    '</div>\n';
+                    '</div>'
 
                 align = 'align-items-center';
+
+                if (data.commented === 'true') {
+                    if (data.commentUsername === data.sender) {
+                        userText =
+                            '            <div class="mb-2" style="font-size: 12px; color: #797979; padding: 10px 0 0 8px">\n' +
+                            '                ' + data.commentUserText + '님이 자신에게 보낸 답장\n' +
+                            '            </div>\n';
+                    } else {
+                        userText =
+                            '            <div class="mb-2" style="font-size: 12px; color: #797979; padding: 10px 0 0 8px">'
+                            + data.userText + '님이 ' + data.commentUserText + '님에게 보낸 답장' +
+                            '            </div>\n';
+                    }
+
+                    debugger;
+                    var commentContent = '';
+
+                    if (data.commentDataType === 1) {
+                        commentContent =
+                            '                <div style="background:#efefef; font-size: 14px; padding: 8px 12px"\n' +
+                            '                     class="rounded-5 mx-2">\n' +
+                            data.commentContent +
+                            '                </div>\n';
+                    } else if (data.commentDataType === 2) {
+                        commentContent =
+                            '                <div onclick="clickShowImage(this)"\n' +
+                            '                     data-id="' + data.commentContent + '"\n' +
+                            '                     class="mx-2" type="button"\n' +
+                            '                     data-bs-toggle="modal" data-bs-target="#showDataModal">\n' +
+                            '                    <img src="/resources/' + data.commentContent + '"\n' +
+                            '                         style="width: 10rem; height: auto; border-radius: 22px">\n' +
+                            '                </div>\n';
+                    } else if (data.commentDataType === 3) {
+                        commentContent =
+                            '                <div data-id="' + data.commentContent + '"\n' +
+                            '                     onclick="clickShowVideo(this)"\n' +
+                            '                     type="button"\n' +
+                            '                     data-bs-toggle="modal" data-bs-target="#showDataModal"\n' +
+                            '                     class="mx-2 d-flex justify-content-end position-relative">\n' +
+                            '                    <span style="position: absolute;">\n' +
+                            '                        <img height="45" width="45" alt=""\n' +
+                            '                             src="/files/designImg/playButton.png">\n' +
+                            '                    </span>\n' +
+                            '                    <video style="width: 10rem; height: auto; border-radius: 22px"\n' +
+                            '                           src="/resources/' + data.commentContent + '">\n' +
+                            '                    </video>\n' +
+                            '                </div>\n';
+                    }
+                    comment =
+                        '   <div style="margin-right: 6px; margin-left: 44px; margin-bottom: 6px;">\n' +
+                        userText +
+                        '        <div>\n' +
+                        '            <div class="d-flex">\n' +
+                        '                <div style="background:#efefef; width: 4px; min-height: 34px">\n' +
+                        '                </div>\n' +
+                        commentContent +
+                        '            </div>\n' +
+                        '        </div>\n' +
+                        '    </div>';
+                    userText = '';
+                }
             } else if (data.dataType === 2) {
-                modal = ' id="' + data.msg + '"\n' +
+                modal = ' data-id="' + data.msg + '"\n' +
                     ' onclick="clickShowImage(this)"' +
                     ' type="button" data-bs-toggle="modal" data-bs-target="#showDataModal"';
                 msgStr =
-                    '<div class="mx-3" ' + modal + '>\n' +
+                    '<div ' + modal + '>\n' +
                     '    <img src="/resources/' + data.msg + '" style="width: 15rem; height: auto; border-radius: 4px 22px 22px 22px">\n' +
                     '</div>';
             } else if (data.dataType === 3) {
-                modal = ' id="' + data.msg + '"\n' +
+
+                modal = ' data-id="' + data.msg + '"\n' +
                     ' onclick="clickShowVideo(this)"' +
                     ' type="button" data-bs-toggle="modal" data-bs-target="#showDataModal"';
                 msgStr =
-                    '<div class="mx-3 d-flex justify-content-end position-relative" ' + modal + '>' +
+                    '<div class="d-flex justify-content-end position-relative" ' + modal + '>' +
                     '       <span style="position: absolute;">\n' +
                     '             <img height="45" width="45" alt="" src="/files/designImg/playButton.png">\n' +
                     '       </span>' +
@@ -709,19 +1009,41 @@
             }
 
             newMsg.innerHTML =
-                '                            <div id="msg' + data.id + '" class="px-4 pt-1">\n' +
-                '                                <div class="my-2">\n' +
-                data.sender +
-                '                                </div>\n' +
-                '                                <div class="d-flex ' + align + ' my-2">\n' +
+                '                            <div id="msg' + data.id + '" style="margin-top: 7px;">\n' +
+                userText +
+                comment +
+                '                                <div class="d-flex ' + align + '">\n' +
                 '                                   <a href="/member/page/' + data.sender + '">\n' +
-                '                                       <div style="position: relative; width: 3rem; height: 3rem;">\n' +
+                '                                       <div style="position: relative; width: 28px; height: 28px; margin:0 8px 0 14px">\n' +
                 '                                           <img ' + imgSrc +
                 '                                               class="shadow-sm rounded-circle text-center"\n' +
                 '                                               style="position: absolute; top: 0; left: 0; transform: translate(50,50); width: 100%; height: 100%; object-fit: cover; margin: auto">\n' +
                 '                                       </div>\n' +
                 '                                   </a>\n' +
                 msgStr +
+                '                                   <div class="d-flex align-items-center" style="margin-left: 5px">\n' +
+                '                                            <div style="margin: 8px; color: #9f9f9f">\n' +
+                '                                                <svg aria-label="공감" fill="currentColor" height="16" role="img" viewBox="0 0 24 24" width="16"><title>공감</title>\n' +
+                '                                                    <path d="M15.83 10.997a1.167 1.167 0 1 0 1.167 1.167 1.167 1.167 0 0 0-1.167-1.167Zm-6.5 1.167a1.167 1.167 0 1 0-1.166 1.167 1.167 1.167 0 0 0 1.166-1.167Zm5.163 3.24a3.406 3.406 0 0 1-4.982.007 1 1 0 1 0-1.557 1.256 5.397 5.397 0 0 0 8.09 0 1 1 0 0 0-1.55-1.263ZM12 .503a11.5 11.5 0 1 0 11.5 11.5A11.513 11.513 0 0 0 12 .503Zm0 21a9.5 9.5 0 1 1 9.5-9.5 9.51 9.51 0 0 1-9.5 9.5Z"></path>\n' +
+                '                                                </svg>\n' +
+                '                                            </div>\n' +
+                '                                            <div style="margin: 8px; color: #9f9f9f">\n' +
+                '                                                <button id="' + data.id + '" data-user="false" data-user-name="' + data.sender + '" data-msg-content="' + data.msg + '" data-type="' + data.dataType + '" onclick="clickComment(this)" class="border-0" style="background: none; color: #9f9f9f" data-bs-container="body">\n' +
+                '                                                    <svg aria-label="답장" fill="currentColor" height="16" role="img" viewBox="0 0 24 24" width="16"><title>답장</title>\n' +
+                '                                                        <path d="M14 8.999H4.413l5.294-5.292a1 1 0 1 0-1.414-1.414l-7 6.998c-.014.014-.019.033-.032.048A.933.933 0 0 0 1 9.998V10c0 .027.013.05.015.076a.907.907 0 0 0 .282.634l6.996 6.998a1 1 0 0 0 1.414-1.414L4.415 11H14a7.008 7.008 0 0 1 7 7v3.006a1 1 0 0 0 2 0V18a9.01 9.01 0 0 0-9-9Z"></path>\n' +
+                '                                                    </svg>\n' +
+                '                                                </button>\n' +
+                '                                            </div>\n' +
+                '                                            <div>\n' +
+                '                                                <button id="' + data.id + '" data-user="false" data-type="' + data.dataType + '" class="border-0" style="background: none; color: #9f9f9f" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="top" data-bs-target="popover" data-bs-html="true" data-bs-original-title="" title="">\n' +
+                '                                                    <svg aria-label="더 보기" fill="currentColor" height="16" role="img" viewBox="0 0 24 24" width="16"><title>더 보기</title>\n' +
+                '                                                        <circle cx="12" cy="12" r="1.5"></circle>\n' +
+                '                                                        <circle cx="6" cy="12" r="1.5"></circle>\n' +
+                '                                                        <circle cx="18" cy="12" r="1.5"></circle>\n' +
+                '                                                    </svg>\n' +
+                '                                                </button>\n' +
+                '                                            </div>\n' +
+                '                                        </div>' +
                 '                                   <div class="flex-fill">\n' +
                 '                                    </div>\n' +
                 '                                </div>\n' +
@@ -741,17 +1063,17 @@
 
             var area = document.getElementById('comment-msg-area');
 
-            debugger;
 
             var talkMsg = {
                 "type": "TALK",
                 "roomId": roomId,
                 "sender": username,
                 "msg": content.value,
+                "dataType": 1
             };
 
             if (input.dataset.type === 'msg') {
-                talkMsg.dataType = 1;
+
                 fetch('/direct/message/create',
                     {
                         method: 'POST',
@@ -764,6 +1086,7 @@
                     .then(response => response.json())
                     .then(data => {
                         talkMsg.id = data.id;
+                        talkMsg.userText = data.userText;
 
                         socket.send(JSON.stringify(talkMsg));
                     })
@@ -772,7 +1095,8 @@
                         console.error('Error:', error);
                     });
             } else if (input.dataset.type === 'comment') {
-                talkMsg.dataType = 4;
+
+                debugger;
                 talkMsg.mapId = area.dataset.id;
                 fetch('/direct/comment/create',
                     {
@@ -786,6 +1110,12 @@
                     .then(response => response.json())
                     .then(data => {
                         talkMsg.id = data.id;
+                        talkMsg.commentContent = data.commentContent;
+                        talkMsg.commentDataType = data.commentDataType;
+                        talkMsg.commentUsername = data.commentUsername;
+                        talkMsg.commentUserText = data.commentUserText;
+                        talkMsg.commented = data.commented;
+                        talkMsg.userText = data.userText;
 
                         socket.send(JSON.stringify(talkMsg));
                     })
@@ -797,6 +1127,7 @@
 
             content.value = '';
             btn.disabled = true;
+            closeCommentArea();
         }
 
         function quit() {
@@ -886,7 +1217,8 @@
                                 "sender": data.sender,
                                 "dataType": msg.type,
                                 "msg": msg.name,
-                                "id": msg.id
+                                "id": msg.id,
+                                "userText": data.userText,
                             };
 
                             socket.send(JSON.stringify(imgMsg));
@@ -934,7 +1266,7 @@
         }
 
         function copyMsg(id) {
-            debugger;
+
             var divElement = document.getElementById('text' + id);
 
             var range = document.createRange();

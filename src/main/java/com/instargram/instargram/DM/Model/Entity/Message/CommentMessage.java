@@ -12,8 +12,9 @@ public class CommentMessage {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String content;
-
     @OneToOne
+    private Message message;
+
+    @ManyToOne
     private Message_Member_Map messageMap;
 }

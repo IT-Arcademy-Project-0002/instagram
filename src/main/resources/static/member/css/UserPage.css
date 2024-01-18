@@ -263,6 +263,7 @@
 }
 
 
+
 .pdB4 {
     padding-bottom: 4px;
 }
@@ -285,6 +286,7 @@
 .pdL20 {
     padding-left: 20px;
 }
+
 /* padding */
 
 
@@ -315,6 +317,9 @@
 }
 .mgB4 {
     margin-bottom: 4px;
+}
+.mgB20 {
+    margin-bottom: 20px;
 }
 .mgB44 {
     margin-bottom: 44px;
@@ -468,6 +473,9 @@
 
 
 /* font size */
+.fs11 {
+    font-size: 11px;
+}
 .fs12 {
     font-size: 12px;
 }

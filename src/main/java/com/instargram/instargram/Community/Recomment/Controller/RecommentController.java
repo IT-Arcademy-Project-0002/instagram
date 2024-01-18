@@ -1,10 +1,12 @@
 package com.instargram.instargram.Community.Recomment.Controller;
 
+import com.instargram.instargram.Community.Board.Model.DTO.BoardDTO;
 import com.instargram.instargram.Community.Board.Model.Entity.Board;
 import com.instargram.instargram.Community.Board.Model.Entity.BoardLikeMemberMap;
 import com.instargram.instargram.Community.Comment.Model.DTO.CommentDTO;
 import com.instargram.instargram.Community.Comment.Model.Entity.Comment;
 import com.instargram.instargram.Community.Comment.Service.CommentService;
+import com.instargram.instargram.Community.Recomment.Model.DTO.RecommentDTO;
 import com.instargram.instargram.Community.Recomment.Model.Entity.ReComment_Like_Map;
 import com.instargram.instargram.Community.Recomment.Model.Entity.Recomment;
 import com.instargram.instargram.Community.Recomment.Model.Form.RecommentCreateForm;
@@ -25,7 +27,10 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -61,29 +66,44 @@ public class RecommentController {
 //        return "redirect:/main";
 //    }
 
-    @PostMapping("/recomment/create/{id}")
-    public ResponseEntity<Map<String, Object>> create(@PathVariable("id") Long id, RecommentCreateForm recommentCreateForm,  BindingResult bindingResult, Principal principal){
+    @PostMapping("/create/{id}")
+    public ResponseEntity<Map<String, Object>> create(@PathVariable("id") Long id, @RequestBody RecommentCreateForm recommentCreateForm,
+                                                      BindingResult bindingResult, Principal principal) {
         Map<String, Object> result = new HashMap<>();
         if (bindingResult.hasErrors()) {
             result.put("result", false);
+            return ResponseEntity.badRequest().body(result);
         }
-        Member member = this.memberService.getMember(principal.getName());
-        Comment comment = this.commentService.getCommentById(id);
+        Member member = memberService.getMember(principal.getName());
+        Comment comment = commentService.getCommentById(id);
+
         if (member != null && comment != null) {
             Recomment recomment = recommentService.create(member, comment, recommentCreateForm.getContent());
-            Notice notice = this.noticeService.createNotice(Enum_Data.COMMENT_RECOMMENT.getNumber(), member, comment.getMember());
+            Notice notice = noticeService.createNotice(Enum_Data.COMMENT_RECOMMENT.getNumber(), member, comment.getMember());
             noticeCommentMapService.createNoticeRecomment(recomment, notice);
-            // 대댓글에서 TagMember를 언급할때 실제 회원이 존재한다면(tagMember != null) 알림을 보내는 비즈니스 로직임
             Member tagMember = noticeCommentMapService.createTagMember(recommentCreateForm.getContent());
             if (tagMember != null) {
-                Notice noticeForTabMember = this.noticeService.createRecommentTagMemberNotice(Enum_Data.COMMENT_RECOMMENT.getNumber(), member, tagMember);
-                noticeCommentMapService.createNoticeRecomment(recomment, noticeForTabMember);
+                Notice noticeForTagMember = noticeService.createRecommentTagMemberNotice(Enum_Data.COMMENT_RECOMMENT.getNumber(), member, tagMember);
+                noticeCommentMapService.createNoticeRecomment(recomment, noticeForTagMember);
             }
 
-            result.put("recomment",new CommentDTO(comment));
+            // 서버에서 날짜를 원하는 형식으로 포맷
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM월dd일 HH:mm");
+            String formattedDate = recomment.getCreateDate().format(formatter);
+
+            comment.getRecommentList().add(recomment);
+            this.commentService.updateComment(comment);
+
+            result.put("comment", new CommentDTO(comment));
+            result.put("formattedDate", formattedDate);
+            result.put("recommentSize", comment.getRecommentList().size());
+        } else {
+            result.put("result", false);
+            return ResponseEntity.badRequest().body(result);
         }
         return ResponseEntity.ok().body(result);
     }
+
 
     @GetMapping("/like/{id}")
     public ResponseEntity<Map<String, Object>> like(@PathVariable("id") Long id, Principal principal) {
@@ -96,11 +116,15 @@ public class RecommentController {
 
         if (isRecommentMemberLiked == null) {
             ReComment_Like_Map reCommentLikeMap = this.recommentLikeMapService.create(recomment, member);
-                if (member != recomment.getMember()) {
-                    Notice notice = this.noticeService.createNotice(Enum_Data.RECOMMENT_LIKE.getNumber(), member, recomment.getMember());
-                    noticeCommentMapService.createNoticeRecommentLike(reCommentLikeMap, notice);
-                }
-        }else{
+            if (member != recomment.getMember()) {
+                Notice notice = this.noticeService.createNotice(Enum_Data.RECOMMENT_LIKE.getNumber(), member, recomment.getMember());
+                noticeCommentMapService.createNoticeRecommentLike(reCommentLikeMap, notice);
+            }
+
+            int recommentLikeCount = this.recommentLikeMapService.countLikesForReComment(recomment);
+            result.put("result", true);
+            result.put("recommentLikeCount", recommentLikeCount);
+        } else {
 
             this.recommentLikeMapService.delete(isRecommentMemberLiked);
 
@@ -112,7 +136,7 @@ public class RecommentController {
     }
 
     @GetMapping("/delete/{id}")
-    public String delete(@PathVariable("id") Long id){
+    public String delete(@PathVariable("id") Long id) {
         Recomment recomment = this.recommentService.getRecommentById(id);
         recommentService.delete(recomment);
         System.out.println("gggggggggggggggggggggggggggggggg");

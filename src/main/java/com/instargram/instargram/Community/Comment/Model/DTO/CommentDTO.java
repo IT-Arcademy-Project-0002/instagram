@@ -54,7 +54,5 @@ public class CommentDTO {
         }else{
             this.recommentDTOS = comment.getRecommentList().stream().map(RecommentDTO::new).collect(Collectors.toList());
         }
-
-
     }
 }

@@ -47,4 +47,8 @@ public class CommentService {
 
         commentRepository.save(comment);
     }
+
+    public void updateComment(Comment comment) {
+        this.commentRepository.save(comment);
+    }
 }

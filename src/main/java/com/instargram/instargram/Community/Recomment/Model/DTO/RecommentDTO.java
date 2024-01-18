@@ -32,7 +32,12 @@ public class RecommentDTO {
         if (recomment.getMember() != null){
             memberDTO = new MemberDTO(recomment.getMember());
         }
+
         // BoardLikeMemberMap에서 필요한 데이터만 가져와서 저장
-        this.recommentLikeMemberIds = recomment.getReCommentLikeMembers().stream().map(ReComment_Like_Map::getMember).map(Member::getId).collect(Collectors.toList());
+        if(recomment.getReCommentLikeMembers() == null){
+            this.recommentLikeMemberIds = null;
+        }else{
+            this.recommentLikeMemberIds = recomment.getReCommentLikeMembers().stream().map(ReComment_Like_Map::getMember).map(Member::getId).collect(Collectors.toList());
+        }
     }
 }

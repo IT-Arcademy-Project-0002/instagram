@@ -45,7 +45,7 @@ public class CommentController {
     //댓글 작성
     @PostMapping("/create/{id}")
     public String create(@PathVariable("id") Long id, CommentCreateForm commentCreateForm,
-                         BindingResult bindingResult, Principal principal){
+                         BindingResult bindingResult, Principal principal) {
         if (bindingResult.hasErrors()) {
             return "redirect:/main";
         }
@@ -63,11 +63,12 @@ public class CommentController {
 
     @PostMapping("/modalCreate/{id}")
     public ResponseEntity<Map<String, Object>> modalCreate(@PathVariable("id") Long id, @RequestBody CommentCreateForm commentCreateForm,
-                                                    BindingResult bindingResult, Principal principal) {
+                                                           BindingResult bindingResult, Principal principal) {
         Map<String, Object> result = new HashMap<>();
 
         if (bindingResult.hasErrors()) {
             result.put("result", false);
+            return ResponseEntity.badRequest().body(result);
         }
 
         Member member = this.memberService.getMember(principal.getName());
@@ -85,8 +86,10 @@ public class CommentController {
             // 포맷된 날짜를 클라이언트에 전달
             result.put("formattedDate", formattedDate);
             result.put("comment", new CommentDTO(comment));
+        } else {
+            result.put("result", false);
+            return ResponseEntity.badRequest().body(result);
         }
-
         return ResponseEntity.ok().body(result);
     }
 

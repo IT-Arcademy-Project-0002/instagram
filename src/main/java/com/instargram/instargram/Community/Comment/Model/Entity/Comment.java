@@ -50,7 +50,7 @@ public class Comment {
     private Member member;
 
     // 댓글의 대댓글 목록
-    @OneToMany(mappedBy = "comment",cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "comment",cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private List<Recomment> recommentList;
 
     // 댓글의 좋아요 한 사람 목록

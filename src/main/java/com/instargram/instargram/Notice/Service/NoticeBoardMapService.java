@@ -105,7 +105,7 @@ public class NoticeBoardMapService {
             }
         }
 
-        if (type == 4 || type == 10) {
+        if (type == 4 || type == 5) {
 
             // 대댓글로부터 보드를 찾는 비즈니스 로직
             Recomment recomment = noticeCommentMapService.getNoticeRecomment(noticeId, type);
@@ -128,7 +128,7 @@ public class NoticeBoardMapService {
             } 
         }
 
-        if (type == 9) {
+        if (type == 6) {
 
             // 태그멤버로부터 보드를 찾는 비즈니스 로직
             Notice_Board_TagMember_Map noticeBoardTagMemberMap = noticeBoardTagMemberMapRepository.findByNoticeId(noticeId);

@@ -277,6 +277,15 @@
 .mga {
     margin: auto;
 }
+.mg16 {
+    margin: 16px;
+}
+.mg20 {
+    margin: 20px;
+}
+.mg32 {
+    margin: 32px;
+}
 .mgL5 {
     margin-left: 5px;
 }
@@ -306,12 +315,6 @@
 }
 .mgB44 {
     margin-bottom: 44px;
-}
-.mg20 {
-    margin: 20px;
-}
-.mg32 {
-    margin: 32px;
 }
 /* margin */
 
@@ -472,6 +475,7 @@
     border: none;
 }
 .bn:focus, .bn:active {
+    border: none;
     box-shadow: none;
 }
 /* border none */
@@ -546,9 +550,16 @@
     color: black;
 }
 
-.hfcRed:hover {
+.hfcBlue:hover {
+    color: #0270b8;
+}
+
+.hfcBlock:hover {
     font-size: 16px;
     color: #ff3140;
+}
+.hfcRed:hover {
+    color: #b7242f;
 }
 /* hover */
 

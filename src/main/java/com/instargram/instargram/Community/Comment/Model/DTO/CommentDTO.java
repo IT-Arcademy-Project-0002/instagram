@@ -42,9 +42,19 @@ public class CommentDTO {
         }
 
         // BoardLikeMemberMap에서 필요한 데이터만 가져와서 저장
-        this.commentLikeMemberIds = comment.getCommentLikeMembers().stream().map(Comment_Like_Map::getMember).map(Member::getId).collect(Collectors.toList());
+        if (comment.getCommentLikeMembers() == null){
+            this.commentLikeMemberIds = null;
+        } else{
+            this.commentLikeMemberIds = comment.getCommentLikeMembers().stream().map(Comment_Like_Map::getMember).map(Member::getId).collect(Collectors.toList());
+        }
 
         // RecommentDTO로 매핑
-        this.recommentDTOS = comment.getRecommentList().stream().map(RecommentDTO::new).collect(Collectors.toList());
+        if(comment.getRecommentList() == null){
+            this.recommentDTOS = null;
+        }else{
+            this.recommentDTOS = comment.getRecommentList().stream().map(RecommentDTO::new).collect(Collectors.toList());
+        }
+
+
     }
 }

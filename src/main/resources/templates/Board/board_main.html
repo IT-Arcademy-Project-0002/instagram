@@ -6,6 +6,9 @@
     <link rel="stylesheet" type="text/css" th:href="@{/board/css/modify_location.css}">
 </head>
 <div layout:fragment="content">
+    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+    <input type="hidden" th:name="_csrf_header" th:value="${_csrf.headerName}" />
+
     <!-- Feed list -->
     <div class="d-flex">
         <div class="main-content d-flex justify-content-center">
@@ -279,11 +282,11 @@
                             </div>
 
 
-                            <!-- button show FeedCommentModal -->
+                            <!-- button show BoardDetailModal -->
                             <a th:href="@{|/board/detail/${feed.board.id}|}">
                                 <button type="button" class="btn noneBtn btn-link px-2 py-0"
                                         data-bs-toggle="modal"
-                                        data-bs-target="#FeedCommentModal"
+                                        data-bs-target="#BoardDetailModal"
                                         th:text="${'댓글 ' + #lists.size(feed.comments)}+'개 보기'"></button>
                             </a>
 
@@ -331,13 +334,14 @@
     </div>
     <!-- Feed list End-->
 
+
     <!--Board Detail Modal -->
-    <div class="modal fade" id="FeedCommentModal" data-bs-backdrop="static"
+    <div class="modal fade" id="BoardDetailModal" data-bs-backdrop="static"
          data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="reloadPage()"></button>
                 </div>
                 <div class="modal-body p-0">
                     <div th:if="${selectFeed}">
@@ -523,8 +527,11 @@
                                     <div th:classappend="${selectFeed.board.getCommentDisable() == true} ? 'visually-hidden'">
                                         <!-- Comment List -->
                                         <div th:each="comment, loop : ${selectFeed.commentDTOS}">
-                                            <div class="d-flex comment-container" style="padding: 16px;">
-                                                <div class="d-flex justify-content-center align-items-center">
+
+                                            <div id="commentList"></div>
+
+                                            <div class="d-flex comment-container"  style="padding: 16px;">
+                                                <div class="d-flex justify-content-center">
                                                     <div class="me-3"
                                                          style="position: relative; width: 2rem; height: 2rem;">
                                                         <img th:if="${comment.memberDTO.imageDTO == null || comment.memberDTO.imageDTO.name == null || comment.memberDTO.imageDTO.name.isEmpty()}"
@@ -566,7 +573,7 @@
                                                                     data-bs-toggle="modal"
                                                                     th:data-id="${comment.id}"
                                                                     th:attr="data-bs-target=(${comment.memberDTO.username} == ${loginMember.username}) ? '#BoardUserCommentModal' : '#UserCommentModal'">
-                                                                <svg aria-label="옵션 더 보기" class="x1lliihq x1n2onr6 x5n08af"
+                                                                <svg aria-label="옵션 더 보기"
                                                                      fill="currentColor" height="24" role="img" viewBox="0 0 24 24"
                                                                      width="24"><title>옵션 더 보기</title>
                                                                     <circle cx="12" cy="12" r="1.5"></circle>
@@ -849,21 +856,21 @@
                                     </div>
                                 </div>
                                 <div style="height: 10%">
-                                    <div th:classappend="${selectFeed.board.getCommentDisable() == true}?'visually-hidden'">
-                                        <form id="comment-form"
-                                              th:action="@{|/comment/create/${selectFeed.board.id}|}"
-                                              method="post">
-                                        </form>
+                                    <div id="ModalCommentDisable" th:classappend="${selectFeed.board.getCommentDisable() == true}?'visually-hidden'">
+                                        <div id="boardID" th:text="${selectFeed.board.id}" style="display: none;"></div>
+
+                                        <input type="text" id="commentID" name="commentID"></input>
+                                        <input type="text" id="recommentID" name="recommentID"></input>
+<!--                                        <form id="comment-form"-->
+<!--                                              th:action="@{|/comment/create/${selectFeed.board.id}|}"-->
+<!--                                              method="post">-->
+<!--                                        </form>-->
                                         <form th:action id="recomment-form" method="post"
                                               onsubmit="return false;">
-                                            <input type="hidden" id="commentId"
-                                                   name="commentId">
-                                            <input type="hidden" id="recommentId"
-                                                   name="recommentId">
                                         </form>
                                         <div class="d-flex m-2">
-                                            <input id="isRecomment" type="hidden">
-                                            <textarea class="form-control border-0 me-2"
+                                            <input id="isRecomment" type="text">
+                                            <textarea class="form-control border-0 me-2 modal-textarea-content"
                                                       style="resize: none;" name="content"
                                                       id="modal-content"
                                                       placeholder="댓글 달기..."></textarea>
@@ -882,6 +889,7 @@
         </div>
     </div>
     <!-- Board Detail Modal End -->
+
 
     <!--Modify Board Modal -->
     <div class="modal fade" id="ModifyBoardModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
@@ -1108,6 +1116,7 @@
     </div>
     <!--Modify Board Modal End -->
 
+
     <!-- 작성자 Board Setting Modal -->
     <div class="modal fade" id="CreateUserBoardSettingModal" data-bs-backdrop="static" data-bs-keyboard="false"
          tabindex="-1" aria-labelledby="CreateUserBoardSettingModalLabel"
@@ -1137,13 +1146,11 @@
                             </a>
                         </div>
                         <div class="border-bottom text-center p-2">
-                            <a th:href="@{|/board/comment_disable/${selectFeed.board.id}|}">
-                                <button type="button"
-                                        th:if="${selectFeed.board.getCommentDisable() == false}"
+                            <a th:onclick="@{|comment_disable(${selectFeed.board.id})|}">
+                                <button id="commentDisableBtn" type="button" th:if="${selectFeed.board.getCommentDisable() == false}"
                                         class="btn noneBtn btn-link text-dark">댓글 비활성화
                                 </button>
-                                <button type="button"
-                                        th:if="${selectFeed.board.getCommentDisable() == true}"
+                                <button id="commentDisableBtn" type="button" th:if="${selectFeed.board.getCommentDisable() == true}"
                                         class="btn noneBtn btn-link text-dark">댓글 활성화
                                 </button>
                             </a>
@@ -1158,6 +1165,7 @@
         </div>
     </div>
     <!-- 작성자 Board Setting Modal End -->
+
 
     <!-- 사용자 Board Setting Modal -->
     <div class="modal fade" id="UserBoardSettingModal" data-bs-backdrop="static" data-bs-keyboard="false"
@@ -1186,6 +1194,7 @@
         </div>
     </div>
     <!-- 사용자 Board Setting Modal End -->
+
 
     <!-- 작성자 Comment Modal -->
     <div class="modal fade" id="BoardUserCommentModal" data-bs-backdrop="static" data-bs-keyboard="false"
@@ -1295,18 +1304,21 @@
         </div>
     </div>
     <!-- 사용자 Recomment Modal End -->
-    <script th:src="@{/board/js/update_board.js}"></script>
-    <script th:src="@{/board/js/board.js}"></script>
 
     <!-- javascript -->
+    <script th:src="@{/board/js/update_board.js}"></script>
+
+    <script th:src="@{/board/js/board.js}"></script>
+
     <script th:inline="javascript">
         const selectFeed = /*[[${selectFeed}]]*/ null;
-        const myModal = new bootstrap.Modal('#FeedCommentModal', {
+        const myModal = new bootstrap.Modal('#BoardDetailModal', {
             keyboard: true
         })
         if (selectFeed != null) {
             myModal.show();
         }
     </script>
+    <!-- javascript End-->
 </div>
 </html>

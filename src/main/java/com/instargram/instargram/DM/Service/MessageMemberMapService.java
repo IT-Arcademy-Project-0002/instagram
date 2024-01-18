@@ -1,6 +1,8 @@
 package com.instargram.instargram.DM.Service;
 
+import com.instargram.instargram.Community.Comment.Model.Entity.Comment;
 import com.instargram.instargram.DM.Model.DTO.MessageDTO;
+import com.instargram.instargram.DM.Model.Entity.Message.CommentMessage;
 import com.instargram.instargram.DM.Model.Entity.Message.Message;
 import com.instargram.instargram.DM.Model.Entity.Message.Message_Member_Map;
 import com.instargram.instargram.DM.Model.Entity.Room.Room;
@@ -77,6 +79,15 @@ public class MessageMemberMapService {
         return createDefault(messageMemberMap, room, msg);
     }
 
+    public Message_Member_Map createCommentMessageMap(Map<String, Object> msg, CommentMessage commentMessage, Room room)
+    {
+        Message_Member_Map messageMemberMap = new Message_Member_Map();
+        messageMemberMap.setDataId(commentMessage.getId());
+        messageMemberMap.setDataType(Enum_Data.COMMENT_MESSAGE.getNumber());
+
+        return createDefault(messageMemberMap, room, msg);
+    }
+
     public Message_Member_Map createImageMap(Map<String, Object> msg, Image image, Room room)
     {
         Message_Member_Map messageMemberMap = new Message_Member_Map();
@@ -102,6 +113,14 @@ public class MessageMemberMapService {
         return createMessageMap(msg, message, room);
     }
 
+    public Message_Member_Map createCommentMessage(Map<String, Object>msg, Room room)
+    {
+        Message_Member_Map map = getMap(Long.valueOf(msg.get("mapId").toString()));
+        CommentMessage comment = messageService.createComment(msg, map);
+
+        return createCommentMessageMap(msg, comment, room);
+    }
+
     public List<MessageDTO> getMessageDTOList(Room room)
     {
         List<MessageDTO> messageDTOS = new ArrayList<>();
@@ -122,6 +141,27 @@ public class MessageMemberMapService {
             {
                 Video video = videoService.getVideoByID(map.getDataId());
                 messageDTOS.add(new MessageDTO(map, video));
+            }
+            else if(map.getDataType().equals(Enum_Data.COMMENT_MESSAGE.getNumber()))
+            {
+                CommentMessage commentMessage = messageService.getCommentMessage(map.getDataId());
+
+                Message_Member_Map commentMap = commentMessage.getMessageMap();
+                if(commentMap.getDataType().equals(Enum_Data.MESSAGE.getNumber()))
+                {
+                    Message message = messageService.getMessage(commentMap.getDataId());
+                    messageDTOS.add(new MessageDTO(map, commentMessage, message));
+                }
+                else if(commentMap.getDataType().equals(Enum_Data.IMAGE.getNumber()))
+                {
+                    Image image = imageService.getImageByID(commentMap.getDataId());
+                    messageDTOS.add(new MessageDTO(map, commentMessage, image));
+                }
+                else if(commentMap.getDataType().equals(Enum_Data.VIDEO.getNumber()))
+                {
+                    Video video = videoService.getVideoByID(commentMap.getDataId());
+                    messageDTOS.add(new MessageDTO(map, commentMessage, video));
+                }
             }
         }
 

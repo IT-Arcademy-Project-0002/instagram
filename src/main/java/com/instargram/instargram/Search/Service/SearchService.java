@@ -7,8 +7,17 @@ import com.instargram.instargram.Community.Location.Model.Entity.Location;
 import com.instargram.instargram.Community.Location.Model.Repository.LocationRepository;
 import com.instargram.instargram.Member.Model.Entity.Member;
 import com.instargram.instargram.Member.Model.Repository.MemberRepository;
+import com.instargram.instargram.Notice.Model.DTO.NoticeDTO;
 import com.instargram.instargram.Search.Config.Enum.SearchType;
 import com.instargram.instargram.Search.Model.DTO.SearchDTO;
+
+import com.instargram.instargram.Search.Model.Entity.SearchHashTagMap;
+import com.instargram.instargram.Search.Model.Entity.SearchLocationMap;
+import com.instargram.instargram.Search.Model.Entity.SearchMemberMap;
+import com.instargram.instargram.Search.Model.Repository.SearchHashTagMapRepository;
+import com.instargram.instargram.Search.Model.Repository.SearchLocationMapRepository;
+import com.instargram.instargram.Search.Model.Repository.SearchMemberMapRepository;
+
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Service;
@@ -30,10 +39,115 @@ public class SearchService {
     // 3) 장소라면 explore 페이지 연결 (~/explore/locations/장소분류고유번호) openstreetmap 사용
     //    (괄호안의 숫자는 위치 DB의 ID로 추정, 일반적인 게시물의 의미를 생각하였을 때)
 
+        private final SearchMemberMapRepository searchMemberMapRepository;
+    private final SearchLocationMapRepository searchLocationMapRepository;
+    private final SearchHashTagMapRepository searchHashTagMapRepository;
+
     private final MemberRepository memberRepository;
     private final LocationRepository locationRepository;
     private final HashTagRepository hashTagRepository;
     private final Board_HashTag_MapRepository boardHashTagMapRepository;
+
+
+    public void createSearchFavoriteMember(Member requestMember, Member member) {
+
+        SearchMemberMap searchMemberMap = new SearchMemberMap();
+        searchMemberMap.setRequestMember(requestMember);
+        searchMemberMap.setMember(member);
+        this.searchMemberMapRepository.save(searchMemberMap);
+
+    }
+
+    public void createSearchFavoriteLocation(Member requestMember, Location location) {
+
+        SearchLocationMap searchLocationMap = new SearchLocationMap();
+        searchLocationMap.setRequestMember(requestMember);
+        searchLocationMap.setLocation(location);
+        this.searchLocationMapRepository.save(searchLocationMap);
+
+    }
+
+    public void createSearchFavoriteHashTag(Member requestMember, HashTag hashTag) {
+
+        SearchHashTagMap searchHashTagMap = new SearchHashTagMap();
+        searchHashTagMap.setRequestMember(requestMember);
+        searchHashTagMap.setHashTag(hashTag);
+        this.searchHashTagMapRepository.save(searchHashTagMap);
+
+    }
+
+    public List<SearchDTO> createSearchFavoriteList(Member loginMember) {
+
+        List<SearchDTO> searches = new ArrayList<>();
+
+        List<SearchDTO> searchesByMember = getSearchDTOsByMember(loginMember);
+        List<SearchDTO> searchesByLocation = getSearchDTOsByLocation(loginMember);
+        List<SearchDTO> searchesByHashTag = getSearchDTOsByHashTag(loginMember);
+
+        searches.addAll(searchesByMember);
+        searches.addAll(searchesByLocation);
+        searches.addAll(searchesByHashTag);
+
+        return searches;
+    }
+
+
+    // 지난 검색 결과를 보여주기 위한 DTO
+
+    private List<SearchDTO> getSearchDTOsByMember(Member requestMember) {
+
+        List<SearchMemberMap> searchMemberMapList = this.searchMemberMapRepository.findByRequestMember(requestMember);
+        List<SearchDTO> searchDTOList = new ArrayList<>();
+
+        for (SearchMemberMap searchMemberMap : searchMemberMapList) {
+            Member member = searchMemberMap.getMember();
+            SearchDTO sd = new SearchDTO();
+            sd.setListName(member.getUsername());
+            sd.setSearchType(SearchType.USER.getNumber());
+            sd.setListName(member.getUsername());
+            sd.setListImage(member.getImage() != null ? member.getImage().getName() : "");
+            sd.setListIntroduction(member.getIntroduction());
+            searchDTOList.add(sd);
+        }
+        return searchDTOList;
+    }
+
+    private List<SearchDTO> getSearchDTOsByLocation(Member requestMember) {
+
+        List<SearchLocationMap> searchLocationMapList = this.searchLocationMapRepository.findByRequestMember(requestMember);
+        List<SearchDTO> searchDTOList = new ArrayList<>();
+
+        for (SearchLocationMap searchLocationMap : searchLocationMapList) {
+            Location location = searchLocationMap.getLocation();
+            SearchDTO sd = new SearchDTO();
+            sd.setSearchType(SearchType.LOCATION.getNumber());
+            sd.setListLocationId(location.getLocationId());
+            sd.setListName(location.getPlaceName());
+            sd.setListImage("");
+            sd.setListIntroduction(location.getAddress());
+            searchDTOList.add(sd);
+        }
+        return searchDTOList;
+    }
+
+    private List<SearchDTO> getSearchDTOsByHashTag(Member requestMember) {
+
+        List<SearchHashTagMap> searchHashTagMapList = this.searchHashTagMapRepository.findByRequestMember(requestMember);
+        List<SearchDTO> searchDTOList = new ArrayList<>();
+
+        for (SearchHashTagMap searchHashTagMap : searchHashTagMapList) {
+            HashTag hashTag = searchHashTagMap.getHashTag();
+            SearchDTO sd = new SearchDTO();
+            sd.setSearchType(SearchType.HASHTAG.getNumber());
+            sd.setListHashTagId(String.valueOf(hashTag.getId()));
+            sd.setListName(hashTag.getName());
+            sd.setListImage("");
+            searchDTOList.add(sd);
+        }
+        return searchDTOList;
+    }
+
+    // ajax 기반 실시간 검색결과 출력을 위한 DTO
 
     public List<SearchDTO> searchByMember(String keyword) {
 

@@ -20,7 +20,6 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 
 // 게시글 속 댓글
 public class Comment {

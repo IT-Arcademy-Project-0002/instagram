@@ -96,23 +96,19 @@ public class NoticeService {
             noticeWeekDTO.setFollower(followMapService.isFollower(loginUser, notice.getRequestMember()));
             noticeWeekDTO.setFollow(followMapService.isFollow(loginUser, notice.getRequestMember()));
 
-            // 보드 내용 : 보드내용에는 언급된 회원의 정보가 포함되도록 getBoardContent 내부에 로직을 작성하였음 (게시물 멤버태그(9))
+            // 보드 내용 : 보드내용에는 언급된 회원의 정보가 포함되도록 getBoardContent 내부에 로직을 작성하였음 (게시물 멤버태그(6))
             noticeWeekDTO.processContent(noticeBoardMapService.getBoardContent(notice.getId(), notice.getType()));
 
-            // 보드 이미지 : 게시글 좋아요(1), 게시글 댓글(2), 댓글 좋아요(3), 댓글 대댓글(4), 게시글 멤버태그(9), 댓글 대댓글 좋아요(10)
+            // 보드 이미지 : 게시글 좋아요(1), 게시글 댓글(2), 댓글 좋아요(3), 댓글 대댓글(4), 댓글 대댓글 좋아요(5), 게시글 멤버태그(6)
             noticeWeekDTO.setBoardMainImage(noticeBoardMapService.getNoticeBoardImage(notice.getId(), notice.getType()));
 
             // 댓글 내용 : 게시글 댓글(2), 댓글 좋아요(3)
             noticeWeekDTO.setCommentContent(noticeCommentMapService.getNoticeComment(notice.getId(), notice.getType()).getContent());
 
-            // 대댓글 내용 : 댓글 대댓글(4), 댓글 대댓글 좋아요(10)
+            // 대댓글 내용 : 댓글 대댓글(4), 댓글 대댓글 좋아요(5)
             noticeWeekDTO.processRecommentContent(noticeCommentMapService.getNoticeRecomment(notice.getId(), notice.getType()).getContent());
 
-            // 디엠 왔을 때 : 5
-
-            // 디엠 좋아요 : 6
-
-            // 스토리 좋아요 : 7
+            // 미사용중 = 스토리 좋아요 (7), 디엠 왔을 때(9), 디엠 좋아요(10)
 
             noticeWeekDTOS.add(noticeWeekDTO);
         }
@@ -143,23 +139,19 @@ public class NoticeService {
             noticeMonthDTO.setFollower(followMapService.isFollower(loginUser, notice.getRequestMember()));
             noticeMonthDTO.setFollow(followMapService.isFollow(loginUser, notice.getRequestMember()));
 
-            // 보드 내용 : 보드내용에는 언급된 회원의 정보가 포함되도록 getBoardContent 내부에 로직을 작성하였음 (게시물 멤버태그(9))
+            // 보드 내용 : 보드내용에는 언급된 회원의 정보가 포함되도록 getBoardContent 내부에 로직을 작성하였음 (게시물 멤버태그(6))
             noticeMonthDTO.processContent(noticeBoardMapService.getBoardContent(notice.getId(), notice.getType()));
 
-            // 보드 이미지 : 게시글 좋아요(1), 게시글 댓글(2), 댓글 좋아요(3), 댓글 대댓글(4), 게시글 멤버태그(9), 댓글 대댓글 좋아요(10)
+            // 보드 이미지 : 게시글 좋아요(1), 게시글 댓글(2), 댓글 좋아요(3), 댓글 대댓글(4), 댓글 대댓글 좋아요(5), 게시글 멤버태그(6)
             noticeMonthDTO.setBoardMainImage(noticeBoardMapService.getNoticeBoardImage(notice.getId(), notice.getType()));
 
             // 댓글 내용 : 게시글 댓글(2), 댓글 좋아요(3)
             noticeMonthDTO.setCommentContent(noticeCommentMapService.getNoticeComment(notice.getId(), notice.getType()).getContent());
 
-            // 대댓글 내용 : 댓글 대댓글(4), 댓글 대댓글 좋아요(10)
+            // 대댓글 내용 : 댓글 대댓글(4), 댓글 대댓글 좋아요(5)
             noticeMonthDTO.processRecommentContent(noticeCommentMapService.getNoticeRecomment(notice.getId(), notice.getType()).getContent());
 
-            // 디엠 왔을 때 : 5
-
-            // 디엠 좋아요 : 6
-
-            // 스토리 좋아요 : 7
+            // 미사용중 = 스토리 좋아요 (7), 디엠 왔을 때(9), 디엠 좋아요(10)
 
             noticeMonthDTOS.add(noticeMonthDTO);
         }
@@ -190,23 +182,19 @@ public class NoticeService {
             noticeMonthDTO.setFollower(followMapService.isFollower(loginUser, notice.getRequestMember()));
             noticeMonthDTO.setFollow(followMapService.isFollow(loginUser, notice.getRequestMember()));
 
-            // 보드 내용 : 보드내용에는 언급된 회원의 정보가 포함되도록 getBoardContent 내부에 로직을 작성하였음 (게시물 멤버태그(9))
+            // 보드 내용 : 보드내용에는 언급된 회원의 정보가 포함되도록 getBoardContent 내부에 로직을 작성하였음 (게시물 멤버태그(6))
             noticeMonthDTO.processContent(noticeBoardMapService.getBoardContent(notice.getId(), notice.getType()));
 
-            // 보드 이미지 : 게시글 좋아요(1), 게시글 댓글(2), 댓글 좋아요(3), 댓글 대댓글(4), 게시글 멤버태그(9), 댓글 대댓글 좋아요(10)
+            // 보드 이미지 : 게시글 좋아요(1), 게시글 댓글(2), 댓글 좋아요(3), 댓글 대댓글(4), 댓글 대댓글 좋아요(5), 게시글 멤버태그(6)
             noticeMonthDTO.setBoardMainImage(noticeBoardMapService.getNoticeBoardImage(notice.getId(), notice.getType()));
 
             // 댓글 내용 : 게시글 댓글(2), 댓글 좋아요(3)
             noticeMonthDTO.setCommentContent(noticeCommentMapService.getNoticeComment(notice.getId(), notice.getType()).getContent());
 
-            // 대댓글 내용 : 댓글 대댓글(4), 댓글 대댓글 좋아요(10)
+            // 대댓글 내용 : 댓글 대댓글(4), 댓글 대댓글 좋아요(5)
             noticeMonthDTO.processRecommentContent(noticeCommentMapService.getNoticeRecomment(notice.getId(), notice.getType()).getContent());
 
-            // 디엠 왔을 때 : 5
-
-            // 디엠 좋아요 : 6
-
-            // 스토리 좋아요 : 7
+            // 미사용중 = 스토리 좋아요 (7), 디엠 왔을 때(9), 디엠 좋아요(10)
 
             noticeDueDateDTOS.add(noticeMonthDTO);
         }

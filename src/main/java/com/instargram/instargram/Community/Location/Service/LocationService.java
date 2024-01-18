@@ -44,9 +44,15 @@ public class LocationService {
     private final BoardRepository boardRepository;
     private final Board_HashTag_MapRepository boardHashTagMapRepository;
 
-    public List<Location> getLocationFindById(String id) {
+
+    public Location getLocationByLocationId(String id) {
 
         return this.locationRepository.findByLocationId(id);
+    }
+
+    public List<Location> getLocationListFindById(String id) {
+
+        return this.locationRepository.findLocationListByLocationId(id);
     }
 
     public List<Board> getBoardFindByLocation(List<Location> location) {

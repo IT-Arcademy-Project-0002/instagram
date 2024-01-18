@@ -79,12 +79,15 @@ public class RecommentController {
 
         if (member != null && comment != null) {
             Recomment recomment = recommentService.create(member, comment, recommentCreateForm.getContent());
-            Notice notice = noticeService.createNotice(Enum_Data.COMMENT_RECOMMENT.getNumber(), member, comment.getMember());
-            noticeCommentMapService.createNoticeRecomment(recomment, notice);
-            Member tagMember = noticeCommentMapService.createTagMember(recommentCreateForm.getContent());
-            if (tagMember != null) {
-                Notice noticeForTagMember = noticeService.createRecommentTagMemberNotice(Enum_Data.COMMENT_RECOMMENT.getNumber(), member, tagMember);
-                noticeCommentMapService.createNoticeRecomment(recomment, noticeForTagMember);
+            if (member != comment.getMember() || member != recomment.getMember()) {
+                Notice notice = this.noticeService.createNotice(Enum_Data.COMMENT_RECOMMENT.getNumber(), member, comment.getMember());
+                noticeCommentMapService.createNoticeRecomment(recomment, notice);
+                // 댓글, 대댓글 회원이 아닌 다른 TagMember를 언급할때 실제 회원이 존재한다면(tagMember != null) 알림을 보내는 비즈니스 로직
+                Member tagMember = noticeCommentMapService.createTagMember(recommentCreateForm.getContent());
+                if (member != comment.getMember() && member != recomment.getMember() && tagMember != null) {
+                    Notice noticeForTabMember = this.noticeService.createRecommentTagMemberNotice(Enum_Data.COMMENT_RECOMMENT.getNumber(), member, tagMember);
+                    noticeCommentMapService.createNoticeRecomment(recomment, noticeForTabMember);
+                }
             }
 
             // 서버에서 날짜를 원하는 형식으로 포맷

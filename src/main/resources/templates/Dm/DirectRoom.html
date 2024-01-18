@@ -66,15 +66,9 @@
                                                     </div>
                                                 </div>
                                                 <div th:unless="${msg.comment.messageMap.member.username == loginMember.username}">
-                                                    <div th:if="${msg.comment.messageMap.member.nickname == null}"
-                                                         class="text-end mb-2"
+                                                    <div class="text-end mb-2"
                                                          style="font-size: 12px; color: #797979; padding: 10px 8px 0 0"
-                                                         th:text="@{|회원님이 ${msg.comment.messageMap.member.username}님에게 보낸 답장|}">
-                                                    </div>
-                                                    <div th:unless="${msg.comment.messageMap.member.nickname == null}"
-                                                         class="text-end mb-2"
-                                                         style="font-size: 12px; color: #797979; padding: 10px 8px 0 0"
-                                                         th:text="@{|회원님이 ${msg.comment.messageMap.member.nickname}님에게 보낸 답장|}">
+                                                         th:text="@{|회원님이 ${msg.comment.messageMap.member.nickname == ''?msg.comment.messageMap.member.username:msg.comment.messageMap.member.nickname}님에게 보낸 답장|}">
                                                     </div>
                                                 </div>
                                                 <div>
@@ -136,7 +130,7 @@
                                                     <div style="margin: 8px; color: #9f9f9f">
                                                         <button th:id="${msg.id}" data-user="true"
                                                                 th:data-user-name="${msg.member.username}"
-                                                                th:data-msg-content="${msg.dataType == 1}?${msg.message.content}:''"
+                                                                th:data-msg-content="${msg.dataType == 1 && msg.commented}?${msg.comment.message.content}:(${msg.dataType == 1 && !msg.commented}? ${msg.message.content} : '')"
                                                                 th:data-type="${msg.dataType}"
                                                                 class="border-0" onclick="clickComment(this)"
                                                                 style="background: none; color: #9f9f9f"
@@ -175,7 +169,7 @@
                                                          style="width: 15rem; height: auto; border-radius: 22px 4px 22px 22px">
                                                 </div>
                                                 <div th:if="${msg.dataType == 3}"
-                                                     th:id="${msg.video.name}"
+                                                     th:data-id="${msg.video.name}"
                                                      onclick="clickShowVideo(this)"
                                                      type="button"
                                                      data-bs-toggle="modal" data-bs-target="#showDataModal"
@@ -202,30 +196,33 @@
                                      th:id="'msg'+${msg.id}">
                                     <div th:if="${!msg.commented}"
                                          style="margin-left: 44px; margin-top:10px; padding: 0 0 6px 12px; font-size: 12px; color: #737373"
-                                         th:text="${msg.member.nickname==null}?${msg.member.username}:${msg.member.nickname}"></div>
+                                         th:text="${msg.member.nickname==''}?${msg.member.username}:${msg.member.nickname}"></div>
 
                                     <div th:if="${msg.dataType == 1 && msg.commented}"
                                          style="margin-right: 6px; margin-left: 44px; margin-bottom: 6px;">
                                         <div th:if="${msg.comment.messageMap.member.username == msg.member.username}"
                                              style="padding: 10px 0 0 8px;">
-                                            <div th:if="${msg.member.nickname == null}"
+                                            <div th:if="${msg.member.nickname == ''}"
                                                  class="mb-2" style="font-size: 12px; color: #797979"
                                                  th:text="@{|${msg.member.username}님이 자신에게 보낸 답장|}">
                                             </div>
-                                            <div th:unless="${msg.member.nickname == null}"
+                                            <div th:unless="${msg.member.nickname == ''}"
                                                  class="mb-2" style="font-size: 12px; color: #797979"
                                                  th:text="@{|${msg.member.nickname}님이 자신에게 보낸 답장|}">
                                             </div>
                                         </div>
                                         <div th:unless="${msg.comment.messageMap.member.username == msg.member.username}"
                                              style="padding: 10px 0 0 8px;">
-                                            <div th:if="${msg.comment.messageMap.member.nickname == null}"
-                                                 class="mb-2" style="font-size: 12px; color: #797979"
-                                                 th:text="@{|${msg.member.nickname==null?msg.member.username:msg.member.nickname}님이 ${msg.comment.messageMap.member.username}님에게 보낸 답장|}">
+                                            <div th:if="${msg.comment.messageMap.member.username == loginMember.username}">
+                                                <div class="mb-2" style="font-size: 12px; color: #797979"
+                                                     th:text="@{|${msg.member.nickname==''?msg.member.username:msg.member.nickname}님이 회원님에게 보낸 답장|}">
+                                                </div>
                                             </div>
-                                            <div th:unless="${msg.comment.messageMap.member.nickname == null}"
-                                                 class="mb-2" style="font-size: 12px; color: #797979"
-                                                 th:text="@{|${msg.member.nickname==null?msg.member.username:msg.member.nickname}님이 ${msg.comment.messageMap.member.nickname}님에게 보낸 답장|}">
+                                            <div th:unless="${msg.comment.messageMap.member.username == loginMember.username}">
+                                                <div class="mb-2" style="font-size: 12px; color: #797979"
+                                                     th:text="@{|${msg.member.nickname==''?msg.member.username:msg.member.nickname}님이
+                                                     ${msg.comment.messageMap.member.nickname==''?msg.comment.messageMap.member.username:msg.comment.messageMap.member.nickname}님에게 보낸 답장|}">
+                                                </div>
                                             </div>
                                         </div>
                                         <div>
@@ -289,7 +286,7 @@
                                              th:text="${msg.comment.message.content}">
                                         </div>
                                         <div th:if="${msg.dataType == 2}"
-                                             th:id="${msg.image.name}"
+                                             th:data-id="${msg.image.name}"
                                              onclick="clickShowImage(this)"
                                              type="button"
                                              data-bs-toggle="modal" data-bs-target="#showDataModal">
@@ -297,7 +294,7 @@
                                                  style="width: 15rem; height: auto; border-radius: 4px 22px 22px 22px">
                                         </div>
                                         <div th:if="${msg.dataType == 3}" type="button"
-                                             th:id="${msg.video.name}"
+                                             th:data-id="${msg.video.name}"
                                              onclick="clickShowVideo(this)"
                                              data-bs-toggle="modal" data-bs-target="#showDataModal"
                                              class="d-flex justify-content-end position-relative">
@@ -319,7 +316,7 @@
                                             <div style="margin: 8px; color: #9f9f9f">
                                                 <button th:id="${msg.id}" data-user="false"
                                                         th:data-user-name="${msg.member.username}"
-                                                        th:data-msg-content="${msg.dataType == 1}?${msg.message.content}:''"
+                                                        th:data-msg-content="${msg.dataType == 1 && msg.commented}?${msg.comment.message.content}:(${msg.dataType == 1 && !msg.commented}? ${msg.message.content} : '')"
                                                         th:data-type="${msg.dataType}"
                                                         onclick="clickComment(this)" class="border-0"
                                                         style="background: none; color: #9f9f9f"
@@ -423,7 +420,7 @@
     <script th:inline="javascript">
 
 
-        debugger;
+        
         let popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]');
         let popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl));
 
@@ -500,7 +497,7 @@
                 area.classList.remove("hidden");
 
                 var msgArea = document.getElementById('msg-area-container');
-                msgArea.style.height = 'calc(100vh - 75px - 116px)';
+                msgArea.style.height = 'calc(100vh - 75px - 135.5px)';
             }
 
             document.getElementById('file-send-btn').disabled = true;
@@ -533,7 +530,7 @@
 
             var name = document.getElementById('comment-msg-name');
 
-            debugger;
+            
             if (data.dataset.user === 'true') {
                 name.textContent = '';
                 document.getElementById('comment-user').textContent = "나에게 답장 보내는 중";
@@ -641,6 +638,7 @@
             const csrfToken = document.querySelector('input[name="_csrf"]').value;
 
             console.log(e.data);
+            debugger;
 
 
             var data = JSON.parse(e.data);
@@ -664,11 +662,17 @@
             } else if (data.type === 'ENTER' && data.sender !== username) {
                 sendConnectState(socket);
 
-                connectMember.push(data.sender);
+                if(!connectMember.includes(data.sender))
+                {
+                    connectMember.push(data.sender);
+                }
 
                 readMessage(data);
             } else if (data.type === 'CONNECT' && data.sender !== username) {
-                connectMember.push(data.sender);
+                if(!connectMember.includes(data.sender))
+                {
+                    connectMember.push(data.sender);
+                }
             } else if (data.type === 'DISCONNECT' && data.sender !== username) {
                 let index = connectMember.indexOf(data.sender);
                 if (index !== -1) {
@@ -718,7 +722,19 @@
             var readCheck = document.getElementsByClassName('read-check');
 
             for (var i = 0; i < readCheck.length; i++) {
-                readCheck.item(i).textContent = data.sender + '님이 확인함';
+                var userNames = '';
+
+                for(var j = 0; j < connectMember.length; j++)
+                {
+                    debugger;
+                    userNames += connectMember[j];
+                    if(j !== connectMember.length-1)
+                    {
+                        userNames += '님이, ';
+                    }
+                }
+
+                readCheck.item(i).textContent = userNames + '님이 확인함';
             }
             scrollEnd();
         }
@@ -906,7 +922,7 @@
                 imgSrc = 'src="/resources/' + img.name + '"\n';
             }
 
-            debugger;
+            
             var userText =
                 '                                <div style="margin-left: 44px; margin-top:10px; padding: 0 0 6px 12px; font-size: 12px; color: #797979">\n' +
                 data.userText +
@@ -932,13 +948,22 @@
                             '                ' + data.commentUserText + '님이 자신에게 보낸 답장\n' +
                             '            </div>\n';
                     } else {
+                        var receive = '';
+                        if(data.commentUsername === username)
+                        {
+                            receive = '회원';
+                        }
+                        else
+                        {
+                            receive = data.commentUserText;
+                        }
                         userText =
                             '            <div class="mb-2" style="font-size: 12px; color: #797979; padding: 10px 0 0 8px">'
-                            + data.userText + '님이 ' + data.commentUserText + '님에게 보낸 답장' +
+                            + data.userText + '님이 ' + receive +'님에게 보낸 답장' +
                             '            </div>\n';
                     }
 
-                    debugger;
+                    
                     var commentContent = '';
 
                     if (data.commentDataType === 1) {
@@ -1096,7 +1121,7 @@
                     });
             } else if (input.dataset.type === 'comment') {
 
-                debugger;
+                
                 talkMsg.mapId = area.dataset.id;
                 fetch('/direct/comment/create',
                     {

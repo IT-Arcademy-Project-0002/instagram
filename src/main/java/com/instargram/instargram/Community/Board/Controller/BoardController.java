@@ -91,7 +91,15 @@ public class BoardController {
         }
         Member member = this.memberService.getMember(principal.getName());
 
-        Location location = this.locationService.create(locationDTO);
+
+        // Location
+        Location islocation = this.locationService.exists(locationDTO.getLocationId());
+        Location location;
+        if (islocation == null) {
+            location = this.locationService.create(locationDTO);
+        } else {
+            location = this.locationService.getLocationByLocationId(locationDTO.getLocationId());
+        }
 
         Board board = this.boardService.create(member, boardCreateForm.getContent(), location, boardCreateForm.isLikeHide(), boardCreateForm.isCommentDisable());
 
@@ -212,6 +220,8 @@ public class BoardController {
     public String boardDelete(@PathVariable("id") Long id) {
         Board board = this.boardService.getBoardById(id);
         boardService.delete(board);
+        Location location = board.getLocation();
+        this.locationService.uselessLocationDelete(location);
         return "redirect:/main";
     }
 
@@ -233,11 +243,18 @@ public class BoardController {
             return "redirect:/main";
         }
 
-        Board board = this.boardService.getBoardById(id);
-        Location tagetLocation = (board.getLocation() != null) ? board.getLocation() : new Location();
 
-        Location location = this.locationService.modify(tagetLocation, locationForm, locationForm.getModifyLocationId(), locationForm.getModifyPlaceName(), locationForm.getModifyAddressName(),
-                locationForm.getModifyRoadAddressName(), locationForm.getModify_x(), locationForm.getModify_y());
+        // targetLocation이 내가 사용했던 장소임. locationForm이 내가 이번에 입력한 것.
+        Board board = this.boardService.getBoardById(id);
+        Location targetLocation = board.getLocation();
+
+        Location islocation = this.locationService.exists(locationForm.getModifyLocationId());
+        Location location;
+        if (islocation == null) {
+            location = this.locationService.createNewLocation(locationForm);
+        } else {
+            location = this.locationService.getLocationByLocationId(locationForm.getModifyLocationId());
+        }
 
         // Location이 필요한 경우 명시적으로 저장 또는 병합
         if (location.getId() == null) {
@@ -245,7 +262,6 @@ public class BoardController {
         } else {
             this.boardService.modify(board, location, boardUpdateForm.getModifyContent(), boardUpdateForm.isModifyLikeHide(), boardUpdateForm.isModifyCommentDisable());
         }
-
 
         // # HashTag
         List<String> hashTagsList = Collections.emptyList();  // 기본적으로 빈 리스트로 초기화
@@ -277,6 +293,12 @@ public class BoardController {
             Member tagMember = this.memberService.getMember(memberMap);
             this.boardTagMemberMapService.create(board, tagMember);
         }
+
+        // 등록했던 장소가 존재하며(null이 아니며) 수정 후의 장소를 어떤 보드에서도 참조하지 않을 때 삭제
+        if (targetLocation != null) {
+            this.locationService.uselessLocationDelete(targetLocation);
+        }
+
         return "redirect:/main";
     }
 

@@ -1,3 +1,7 @@
+.modal{
+    overflow: hidden;
+}
+
 .noneBtn{
     text-decoration:none;
     color:inherit;
@@ -38,9 +42,4 @@
 
 .recomment-container:hover .recommentBtn {
     visibility: visible;
-}
-
-.stop-scroll{
-    height: 100%;
-    overflow: hidden;
 }

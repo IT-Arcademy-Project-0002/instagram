@@ -1,3 +1,39 @@
+function setCommentOptionTarget(clickedElement) {
+    console.log('클릭된 요소:', clickedElement);
+
+    var id = clickedElement.getAttribute('data-id');
+    console.log('클릭된 요소의 data-id 속성 값:', id);
+
+    var CommentOptionTargetId = document.getElementById("CommentOptionTargetId");
+    console.log(CommentOptionTargetId);
+
+    if (CommentOptionTargetId && CommentOptionTargetId.tagName.toLowerCase() === 'input') {
+        CommentOptionTargetId.value = id;
+    }
+}
+
+function setRecommentOptionTarget(clickedElement) {
+    console.log('클릭된 요소:', clickedElement);
+    var commentId = clickedElement.getAttribute('comment-id');
+    console.log('클릭된 요소의 data-id 속성 값:', commentId);
+    var recommentId = clickedElement.getAttribute('recomment-id');
+    console.log('클릭된 요소의 data-id 속성 값:', recommentId);
+
+    var RecommentByCommentOptionTargetId = document.getElementById("RecommentByCommentOptionTargetId");
+    console.log(RecommentByCommentOptionTargetId);
+
+    var RecommentOptionTargetId = document.getElementById("RecommentOptionTargetId");
+    console.log(RecommentOptionTargetId);
+
+    if (RecommentByCommentOptionTargetId && RecommentByCommentOptionTargetId.tagName.toLowerCase() === 'input') {
+        RecommentByCommentOptionTargetId.value = commentId;
+    }
+
+    if (RecommentOptionTargetId && RecommentOptionTargetId.tagName.toLowerCase() === 'input') {
+        RecommentOptionTargetId.value = recommentId;
+    }
+}
+
 // 댓글 상단고정
 function commentPin() {
     var comment = document.querySelector("#BoardUserCommentModal");
@@ -15,33 +51,95 @@ function commentPin() {
 
 //댓글 삭제
 function commentDelete() {
-    var commentDelete = document.querySelector("#BoardUserCommentModal");
-    console.log(commentDelete);
-    var commentDeleteButton = document.querySelector(".btn[data-bs-target='#BoardUserCommentModal']");
-    console.log(commentDeleteButton);
-
-    var id = commentDeleteButton.getAttribute('data-id');
+    debugger;
+    const id = document.getElementById("CommentOptionTargetId").value;
     console.log(id);
-    const commentDeleteLink = commentDelete.querySelector('.comment-delete');
-    console.log(commentDeleteLink)
+    var commentArea = document.getElementById('comment-' + id);
+    console.log(commentArea);
 
-    commentDeleteLink.setAttribute('href', '/comment/delete/' + id);
+    fetch("/comment/delete/" + id)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('데이터를 받지 못했습니다.');
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.result){
+                commentArea.remove();
+            }else{
+                alert("해당 댓글을 찾을 수 없습니다.");
+            }
+        })
+        .then(() => {
+            $('#BoardUserCommentModal').modal('hide')
+        })
+        .catch(error => console.error(error));
 }
 
 // 대댓글 삭제
 function recommentDelete() {
     debugger;
-    var recommentDelete = document.querySelector("#ReCommentCreateUserModal");
-    console.log(recommentDelete);
-    var recommentDeleteButton = document.querySelector(".btn[data-bs-target='#ReCommentCreateUserModal']");
-    console.log(recommentDeleteButton);
+    const commetId = document.getElementById("RecommentByCommentOptionTargetId").value;
+    console.log(commetId);
+    const recommetId = document.getElementById("RecommentOptionTargetId").value;
+    console.log(recommetId);
+    var recommentArea = document.getElementById('recomment-' + recommetId);
+    console.log(recommentArea);
 
-    var id = recommentDeleteButton.getAttribute('data-id');
-    console.log(id);
-    const recommentDeleteLink = recommentDelete.querySelector('.recomment-delete');
-    console.log(recommentDeleteLink)
+    fetch(`/recomment/delete/${recommetId}?commentId=${commetId}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('데이터를 받지 못했습니다.');
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.result){
+                recommentArea.remove();
+                var recommentChickBtn = document.getElementById(`recommentChickBtn-${data.comment.id}`)
+                console.log(recommentChickBtn);
 
-    recommentDeleteLink.setAttribute('href', '/recomment/delete/' + id);
+                var newRecommentBtnDiv = document.createElement('div'); // 변수 초기화
+                newRecommentBtnDiv.id = `recommentChickBtn-${data.comment.id}`;
+
+                if (data.recommentSize > 0) {
+                    newRecommentBtnDiv.innerHTML = `
+                        <div class="d-flex justify-content-center align-items-center" onclick="ReCommentContainerToggleReplies(${data.comment.id})">
+                            <button class="btn noneBtn btn-sm btn-link"
+                                    id="recommentContainer-${data.comment.id}">
+                                답글 숨기기
+                            </button>
+                            <button class="btn noneBtn btn-sm btn-link"
+                                    style="display: none;"
+                                    id="recommentCount-${data.comment.id}">
+                                -----  답글 보기(${data.recommentSize})
+                            </button>
+                        </div>
+                    `;
+                } else {
+                    newRecommentBtnDiv.innerHTML = `
+                        <button class="btn noneBtn btn-sm btn-link"
+                                style="display: none;"
+                                id="recommentContainer-${data.comment.id}">
+                            답글 숨기기
+                        </button>
+                        <button class="btn noneBtn btn-sm btn-link"
+                                id="recommentCount-${data.comment.id}"
+                                style="display: none;">
+                            -----  답글 보기(${data.recommentSize})
+                        </button>
+                    `;
+                }
+                recommentChickBtn.replaceWith(newRecommentBtnDiv);
+            }else{
+                alert("해당 댓글을 찾을 수 없습니다.");
+            }
+        })
+        .then(() => {
+            $('#ReCommentCreateUserModal').modal('hide')
+        })
+        .catch(error => console.error(error));
 }
 
 // 댓글 사용자 언급 처리 기능
@@ -119,6 +217,14 @@ function clickCommentBtn() {
                 return response.json();
             })
             .then(data => {
+                var commentId = document.getElementById(`comment-${data.comment.id}`)
+                var recommentChickBtn = document.getElementById(`recommentChickBtn-${data.comment.id}`)
+                var repliesContainer = document.getElementById(`repliesContainer-${data.comment.id}`)
+
+                console.log(commentId);
+                console.log(recommentChickBtn);
+                console.log(repliesContainer);
+
                 console.log(data.comment);
                 console.log(data.comment.recommentDTOS);
 
@@ -139,9 +245,9 @@ function clickCommentBtn() {
                         console.log(imgName);
                     }
                 }
-                var repliesContainerHTML = data.comment.recommentDTOS.map(function (recomment) {
+                var repliesContainerHTML = data.comment.recommentDTOS.reverse().map(function (recomment) {
                     return `
-                        <div>
+                        <div id="recomment-${recomment.id}">
                             <ul class="recomment-container" style="margin:0">
                                 <li class="d-flex" style="padding:10px 16px 0 10px;">
                                     <div class="me-3" style="position: relative; width: 2rem; height: 2rem;">
@@ -157,7 +263,7 @@ function clickCommentBtn() {
                                              <div class="d-flex w-80">
                                                  <div class="pe-2 text-dark small"
                                                     style="width: 30%; font-size: 12px;">` + data.formattedDate + `</div>
-                                                 <div class="pe-2 text-dark small" id="modalRecommentLikeCount${data.comment.id}"
+                                                 <div class="pe-2 text-dark small" id="modalRecommentLikeCount${recomment.id}"
                                                     style="width: 20%; font-size: 12px;"> ` + '좋아요 0개' + `</div>
                                                     
                                                  <!--대댓글 달기-->
@@ -170,7 +276,9 @@ function clickCommentBtn() {
                                                         style="font-size: 12px; width: 10%;"
                                                         class="btn noneBtn btn-sm btn-link p-0 recommentBtn"
                                                         data-bs-toggle="modal"
-                                                        data-id="${recomment.id}"
+                                                        comment-id="${data.comment.id}"
+                                                        recomment-id="${recomment.id}"
+                                                        onclick="setRecommentOptionTarget(this)"
                                                         data-bs-target=#ReCommentCreateUserModal>
                                                  <svg aria-label="옵션 더 보기" 
                                                     fill="currentColor" height="24" role="img" viewBox="0 0 24 24"
@@ -211,8 +319,9 @@ function clickCommentBtn() {
                     `;
                 }).join('');
 
-                var newRecommentBtnDiv = document.createElement('div');
-                newRecommentBtnDiv.id = 'existingRecommentBtnDiv';
+                var newRecommentBtnDiv = document.createElement('div'); // 변수 초기화
+                newRecommentBtnDiv.id = `recommentChickBtn-${data.comment.id}`;
+
                 if (data.recommentSize > 0) {
                     newRecommentBtnDiv.innerHTML = `
                         <div class="d-flex justify-content-center align-items-center" onclick="ReCommentContainerToggleReplies(${data.comment.id})">
@@ -225,7 +334,7 @@ function clickCommentBtn() {
                                     id="recommentCount-${data.comment.id}">
                                 -----  답글 보기(${data.recommentSize})
                             </button>
-                        </div>  
+                        </div>
                     `;
                 } else {
                     newRecommentBtnDiv.innerHTML = `
@@ -241,37 +350,26 @@ function clickCommentBtn() {
                         </button>
                     `;
                 }
+                var repliesContainerId = document.createElement('div');
+                repliesContainerId.id = `repliesContainer-${data.comment.id}`;
+                repliesContainerId.style.display = 'block';
+                repliesContainerId.innerHTML = repliesContainerHTML;
+                console.log(repliesContainerId);
 
-                var aa = document.createElement('div');
-                aa.id = `repliesContainer-${data.comment.id}`;
-                aa.style.display = 'block';
-
-                newRecommentBtnDiv.appendChild(aa);
+                console.log("===========================>");
                 console.log(newRecommentBtnDiv);
 
-                debugger;
-                var parentOfRepliesContainer = newRecommentBtnDiv.querySelector(`#repliesContainer-${data.comment.id}`);
-                console.log(parentOfRepliesContainer);
-                console.log(repliesContainerHTML);
-
-                // 아래 부분을 수정
-                var aaElements = document.getElementsByClassName("aa");
-                // aaElements.innerHTML = repliesContainerHTML;
-
-                // 클래스 이름이 "aa"인 요소들에 repliesContainerHTML을 설정
-                for (var i = 0; i < aaElements.length; i++) {
-                    aaElements[i].innerHTML = repliesContainerHTML;
-                }
-
-                // parentOfRepliesContainer.innerHTML = repliesContainerHTML;
-                // console.log(parentOfRepliesContainer.innerHTML);
-                // var qwe = document.getElementsByClassName("aa")
+                recommentChickBtn.replaceWith(newRecommentBtnDiv);
+                repliesContainer.replaceWith(repliesContainerId);
 
                 document.getElementById("modal-content").value = '';
+                document.getElementById("commentID").value = '';
+                document.getElementById("recommentID").value = '';
+                document.getElementById("isRecomment").value = '';
+
             })
             .catch(error => console.error(error));
     } else {
-        // form = document.getElementById('comment-form')
         fetch("/comment/modalCreate/" + boardID, {
             method: 'POST',
             headers: {
@@ -295,6 +393,9 @@ function clickCommentBtn() {
                 if (imgDto != null) {
                     imgName = '/resources/' + imgDto.name;
                 }
+                var newCommentAreaDiv = document.createElement('div');
+                newCommentAreaDiv.id = `comment-${data.comment.id}`
+
                 // Creating a new comment div
                 var newCommentDiv = document.createElement('div');
                 newCommentDiv.classList.add('d-flex', 'comment-container');
@@ -314,7 +415,7 @@ function clickCommentBtn() {
                             <div class="d-flex mb-2">
                                 <div class="pe-2"
                                      id="comment-username${data.comment.id}">` + data.comment.memberDTO.username + `</div>
-                                <div> ` + data.comment.content + `</div>
+                                <div class="pe-2"> ` + data.comment.content + `</div>
                             </div>
                             <div class="d-flex w-80">
                                 <div class="pe-2 text-dark small"
@@ -333,6 +434,7 @@ function clickCommentBtn() {
                                         class="btn noneBtn btn-sm btn-link p-0 commentBtn"
                                         data-bs-toggle="modal"
                                         data-id="${data.comment.id}"
+                                        onclick="setCommentOptionTarget(this)"
                                         data-bs-target=#BoardUserCommentModal>
                                     <svg aria-label="옵션 더 보기"
                                          fill="currentColor" height="24" role="img" viewBox="0 0 24 24"
@@ -344,33 +446,43 @@ function clickCommentBtn() {
                                 </button>
                             </div>
                         </div>
-                        <div>
-                            <a onclick="ModalCommentClickLike(${data.comment.id})">
-                                <svg id="modal-comment-liked-svg${data.comment.id}"
-                                     class=""
-                                     aria-label="좋아요"
-                                     fill="currentColor"
-                                     height="18" width="18" role="img"
-                                     viewBox="0 0 24 24"
-                                     style="color: black;">
-                                    <path d="M16.792 3.904A4.989 4.989 0 0 1 21.5 9.122c0 3.072-2.652 4.959-5.197 7.222-2.512 2.243-3.865 3.469-4.303 3.752-.477-.309-2.143-1.823-4.303-3.752C5.141 14.072 2.5 12.167 2.5 9.122a4.989 4.989 0 0 1 4.708-5.218 4.21 4.21 0 0 1 3.675 1.941c.84 1.175.98 1.763 1.12 1.763s.278-.588 1.11-1.766a4.17 4.17 0 0 1 3.679-1.938m0-2a6.04 6.04 0 0 0-4.797 2.127 6.052 6.052 0 0 0-4.787-2.127A6.985 6.985 0 0 0 .5 9.122c0 3.61 2.55 5.827 5.015 7.97.283.246.569.494.853.747l1.027.918a44.998 44.998 0 0 0 3.518 3.018 2 2 0 0 0 2.174 0 45.263 45.263 0 0 0 3.626-3.115l.922-.824c.293-.26.59-.519.885-.774 2.334-2.025 4.98-4.32 4.98-7.94a6.985 6.985 0 0 0-6.708-7.218Z"></path>
-                                </svg>
-                                <svg id="modal-comment-not-like-svg${data.comment.id}"
-                                     class="visually-hidden"
-                                     aria-label="좋아요 취소"
-                                     fill="currentColor"
-                                     height="18" width="18" role="img"
-                                     viewBox="0 0 48 48"
-                                     style="color:red;">
-                                    <path d="M34.6 3.1c-4.5 0-7.9 1.8-10.6 5.6-2.7-3.7-6.1-5.5-10.6-5.5C6 3.1 0 9.6 0 17.6c0 7.3 5.4 12 10.6 16.5.6.5 1.3 1.1 1.9 1.7l2.3 2c4.4 3.9 6.6 5.9 7.6 6.5.5.3 1.1.5 1.6.5s1.1-.2 1.6-.5c1-.6 2.8-2.2 7.8-6.8l2-1.8c.7-.6 1.3-1.2 2-1.7C42.7 29.6 48 25 48 17.6c0-8-6-14.5-13.4-14.5z"></path>
-                                </svg>
-                            </a>
-                        </div>
+                    </div>
+                    <div>
+                        <a onclick="ModalCommentClickLike(${data.comment.id})">
+                            <svg id="modal-comment-liked-svg${data.comment.id}"
+                                 class=""
+                                 aria-label="좋아요"
+                                 fill="currentColor"
+                                 height="18" width="18" role="img"
+                                 viewBox="0 0 24 24"
+                                 style="color: black;">
+                                <path d="M16.792 3.904A4.989 4.989 0 0 1 21.5 9.122c0 3.072-2.652 4.959-5.197 7.222-2.512 2.243-3.865 3.469-4.303 3.752-.477-.309-2.143-1.823-4.303-3.752C5.141 14.072 2.5 12.167 2.5 9.122a4.989 4.989 0 0 1 4.708-5.218 4.21 4.21 0 0 1 3.675 1.941c.84 1.175.98 1.763 1.12 1.763s.278-.588 1.11-1.766a4.17 4.17 0 0 1 3.679-1.938m0-2a6.04 6.04 0 0 0-4.797 2.127 6.052 6.052 0 0 0-4.787-2.127A6.985 6.985 0 0 0 .5 9.122c0 3.61 2.55 5.827 5.015 7.97.283.246.569.494.853.747l1.027.918a44.998 44.998 0 0 0 3.518 3.018 2 2 0 0 0 2.174 0 45.263 45.263 0 0 0 3.626-3.115l.922-.824c.293-.26.59-.519.885-.774 2.334-2.025 4.98-4.32 4.98-7.94a6.985 6.985 0 0 0-6.708-7.218Z"></path>
+                            </svg>
+                            <svg id="modal-comment-not-like-svg${data.comment.id}"
+                                 class="visually-hidden"
+                                 aria-label="좋아요 취소"
+                                 fill="currentColor"
+                                 height="18" width="18" role="img"
+                                 viewBox="0 0 48 48"
+                                 style="color:red;">
+                                <path d="M34.6 3.1c-4.5 0-7.9 1.8-10.6 5.6-2.7-3.7-6.1-5.5-10.6-5.5C6 3.1 0 9.6 0 17.6c0 7.3 5.4 12 10.6 16.5.6.5 1.3 1.1 1.9 1.7l2.3 2c4.4 3.9 6.6 5.9 7.6 6.5.5.3 1.1.5 1.6.5s1.1-.2 1.6-.5c1-.6 2.8-2.2 7.8-6.8l2-1.8c.7-.6 1.3-1.2 2-1.7C42.7 29.6 48 25 48 17.6c0-8-6-14.5-13.4-14.5z"></path>
+                            </svg>
+                        </a>
                     </div>
                 `;
+                var newRecommentBtnDiv = document.createElement('div'); // 변수 초기화
+                newRecommentBtnDiv.id = `recommentChickBtn-${data.comment.id}`;
 
-                var commentContainer = document.getElementById('commentList');
-                commentContainer.appendChild(newCommentDiv);
+                var repliesContainerId = document.createElement('div');
+                repliesContainerId.id = `repliesContainer-${data.comment.id}`;
+                repliesContainerId.style.display = 'block';
+
+                newCommentAreaDiv.appendChild(newCommentDiv);
+                newCommentAreaDiv.appendChild(newRecommentBtnDiv);
+                newCommentAreaDiv.appendChild(repliesContainerId);
+
+                var commentContainer = document.getElementById('comment');
+                commentContainer.insertBefore(newCommentAreaDiv, commentContainer.firstChild);
 
 
                 // 비동기 처리를 고려하여 textarea의 내용을 비워줍니다.
@@ -492,7 +604,6 @@ function ModalCommentClickLike(id) {
 
 // 모달에서 대댓글 좋아요
 function ModalRecommentClickLike(id) {
-    debugger;
     fetch("/recomment/like/" + id)
         .then(response => {
             return response.json()
@@ -505,6 +616,7 @@ function ModalRecommentClickLike(id) {
             var modal_recomment_NotLike = modal_recomment.querySelector('#modal-recomment-not-like-svg' + id);
             console.log(modal_recomment_NotLike);
 
+            debugger;
             if (data.result) {
                 modal_recomment_Liked.classList.add('visually-hidden');
                 modal_recomment_NotLike.classList.remove('visually-hidden');

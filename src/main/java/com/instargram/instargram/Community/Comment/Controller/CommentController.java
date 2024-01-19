@@ -125,10 +125,17 @@ public class CommentController {
     }
 
     @GetMapping("/delete/{id}")
-    public String delete(@PathVariable("id") Long id) {
+    public ResponseEntity<Map<String, Object>>  delete(@PathVariable("id") Long id) {
+        Map<String, Object> result = new HashMap<>();
+
         Comment comment = this.commentService.getCommentById(id);
-        commentService.delete(comment);
-        return "redirect:/main";
+        if(comment != null){
+            commentService.delete(comment);
+            result.put("result", true);
+        }else{
+            result.put("result", false);
+        }
+        return ResponseEntity.ok().body(result);
     }
 
     @GetMapping("/pin/{id}")

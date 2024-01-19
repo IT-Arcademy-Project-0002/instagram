@@ -68,6 +68,30 @@ public class MemberService {
 
             memberRepository.save(member);
         }
+
+
+
+        if (memberRepository.findByUsername("1111") == null) {
+            Member member = new Member();
+            member.setUsername("1111");
+            member.setPassword(passwordEncoder.encode("1111"));
+            member.setEmail("1111@gmail.com");
+            member.setNickname("장원영");
+            member.setScope(true);
+
+            memberRepository.save(member);
+        }
+
+        if (memberRepository.findByUsername("2222") == null) {
+            Member member = new Member();
+            member.setUsername("2222");
+            member.setPassword(passwordEncoder.encode("2222"));
+            member.setEmail("2222@gmail.com");
+            member.setNickname("한소희");
+            member.setScope(true);
+
+            memberRepository.save(member);
+        }
     }
 
 

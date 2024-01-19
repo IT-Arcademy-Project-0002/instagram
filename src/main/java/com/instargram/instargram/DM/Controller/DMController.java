@@ -202,10 +202,10 @@ public class DMController {
     }
 
     @GetMapping("/delete/{id}")
-    public ResponseEntity<String> deleteMap(@PathVariable("id")Long id)
+    public ResponseEntity<Map<String, Object>> deleteMap(@PathVariable("id")Long id)
     {
-        messageMemberMapService.delete(id);
+        Map<String, Object> result = messageMemberMapService.delete(id);
 
-        return ResponseEntity.ok("delete ok");
+        return ResponseEntity.ok(result);
     }
 }

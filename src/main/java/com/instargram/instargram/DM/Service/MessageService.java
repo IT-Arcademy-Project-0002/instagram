@@ -12,6 +12,7 @@ import lombok.Builder;
 import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -39,10 +40,26 @@ public class MessageService {
         return commentMessageRepository.findByMessage(getMessage(id));
     }
 
+    public List<CommentMessage> getCommentList(Message_Member_Map map)
+    {
+        return commentMessageRepository.findByMessageMap(map);
+    }
+
     public void delete(Long id)
     {
         messageRepository.deleteById(id);
     }
+
+    public void deleteComment(CommentMessage commentMessage)
+    {
+        commentMessageRepository.delete(commentMessage);
+    }
+
+    public void deleteComment(Long id)
+    {
+        commentMessageRepository.deleteById(id);
+    }
+
 
     public CommentMessage createComment(Map<String, Object> msg, Message_Member_Map map)
     {

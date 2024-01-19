@@ -11,4 +11,6 @@ public interface MessageMemberMapRepository extends JpaRepository<Message_Member
     List<Message_Member_Map> findAllByRoomOrderByCreateDateAsc(Room room);
 
     List<Message_Member_Map> findByRoomAndMember_UsernameNotAndSeeMemberNotContainingOrderByCreateDateAsc(Room room, String username, String name);
+
+    Message_Member_Map findByDataTypeAndDataId(Integer type, Long id);
 }

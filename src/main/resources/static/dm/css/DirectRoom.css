@@ -1,0 +1,20 @@
+.dm-supply-menu
+{
+    visibility: hidden;
+}
+
+.dm-area:hover .dm-supply-menu
+{
+    visibility: visible;
+}
+
+.dm-supply-menu:has(.popover-btn.show)
+{
+    visibility: visible;
+}
+
+.dm-members:hover
+{
+    color: black;
+    background: rgba(239,239,239,0.5);
+}

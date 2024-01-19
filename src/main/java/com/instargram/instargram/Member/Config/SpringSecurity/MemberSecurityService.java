@@ -39,7 +39,12 @@ public class MemberSecurityService implements UserDetailsService {
 
         if(member == null)
         {
-            throw new UsernameNotFoundException("입력한 정보의 유저가 없습니다.");
+            member = this.memberService.getMemberByUsername(username);
+
+            if(member == null)
+            {
+                throw new UsernameNotFoundException(" 유저가 없습니다.");
+            }
         }
 
         return new PrincipalDetails(member);

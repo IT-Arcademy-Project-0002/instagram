@@ -69,6 +69,7 @@ public class SearchController {
                 this.searchService.createSearchFavoriteMember(requestMember, member);
             } else if (searchType == 2) {
                 Location location = this.locationService.getLocationByLocationId(specificName);
+                System.out.println("콘트롤러 식별번호 2일때 장소의 이름 : " + location.getPlaceName());
                 this.searchService.createSearchFavoriteLocation(requestMember, location);
             } else if (searchType == 3) {
                 HashTag hashTag = this.hashTagService.gethashTag(specificName);

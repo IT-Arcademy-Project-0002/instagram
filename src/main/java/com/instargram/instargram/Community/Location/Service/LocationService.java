@@ -9,7 +9,7 @@ import com.instargram.instargram.Community.Location.Model.DTO.LocationDTO;
 import com.instargram.instargram.Community.Location.Model.Entity.Location;
 import com.instargram.instargram.Community.Location.Model.Form.LocationForm;
 import com.instargram.instargram.Community.Location.Model.Repository.LocationRepository;
-import com.instargram.instargram.DataNotFoundException;
+
 import io.micrometer.common.util.StringUtils;
 import lombok.RequiredArgsConstructor;
 import org.json.JSONArray;
@@ -22,6 +22,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -42,7 +43,6 @@ public class LocationService {
 
     private final LocationRepository locationRepository;
     private final BoardRepository boardRepository;
-    private final Board_HashTag_MapRepository boardHashTagMapRepository;
 
 
     public Location getLocationByLocationId(String id) {
@@ -60,9 +60,8 @@ public class LocationService {
         return this.boardRepository.findByLocationIn(location);
     }
 
-    public List<Board_HashTag_Map> getBoardFindByHashTag(HashTag hashtag) {
-
-        return this.boardHashTagMapRepository.findByTag(hashtag);
+    public Location exists(String locationId) {
+        return this.locationRepository.findByLocationId(locationId);
     }
 
     public Location create(LocationDTO locationDTO) {
@@ -181,19 +180,35 @@ public class LocationService {
         return new LocationDTO(id, placeName, addressName, roadAddressName, x, y);
     }
 
-    public Location modify(Location location, LocationForm locationForm, String locationId, String placeName, String addressName, String roadAddressName, String x, String y) {
+    @Transactional
+    public Location createNewLocation(LocationForm locationForm) {
+
+        Location location = new Location();
+
         if (isValidLocationForm(locationForm)) {
-            location.setLocationId(locationId);
-            location.setPlaceName(placeName);
-            if (roadAddressName != null) {
-                location.setAddress(roadAddressName);
+            location.setLocationId(locationForm.getModifyLocationId());
+            location.setPlaceName(locationForm.getModifyPlaceName());
+            if (locationForm.getModifyRoadAddressName() != null) {
+                location.setAddress(locationForm.getModifyRoadAddressName());
             } else {
-                location.setAddress(addressName);
+                location.setAddress(locationForm.getModifyAddressName());
             }
-            location.setX(x);
-            location.setY(y);
+            location.setX(locationForm.getModify_x());
+            location.setY(locationForm.getModify_y());
             return this.locationRepository.save(location);
         }
         return locationForm.toLocation();
+    }
+
+    @Transactional
+    public void uselessLocationDelete(Location targetLocation) {
+
+        // 해당 Location을 참조하는 Board가 있는지 확인
+        List<Board> referringBoards = this.boardRepository.findByLocation(targetLocation);
+
+        // 참조하는 Board가 없다면 삭제 진행
+        if (referringBoards.isEmpty()) {
+            this.locationRepository.delete(targetLocation);
+        }
     }
 }

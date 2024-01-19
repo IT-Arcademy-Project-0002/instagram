@@ -24,5 +24,7 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
 
     List<Board> findByLocationIn(List<Location> locations);
 
+    List<Board> findByLocation(Location location);
+
     List<Board> findByBoardHashTagMapsIn(List<Board_HashTag_Map> boardHashTagMap);
 }

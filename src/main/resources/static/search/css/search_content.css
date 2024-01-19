@@ -44,9 +44,31 @@ a {
     width: 100%;
 }
 
+.search-list-box:hover .delete-button,
+.search-list-box:hover .delete-button:after { /*지난 검색 기록 버튼 */
+    background-color: #F0F0F0;
+    color: #000;
+}
+
 .search-list-box { /*검색 항목*/
     display: flex;
     padding: 8px 24px 8px 24px;
+    align-items: center;
+}
+
+.delete-button {
+    margin-left: auto;
+    display: inline-block;
+    *display: inline;
+    background-color: white; /* 배경 색상을 하얀색으로 지정 */
+    border: none;
+}
+
+.delete-button:after {
+    display: inline-block;
+    content: "\00d7";
+    font-size: 20pt;
+    background-color: white; /* 배경 색상을 하얀색으로 지정 */
 }
 
 .search-content {
@@ -103,11 +125,10 @@ a {
 #searchListInit {
     display: flex;
     flex-direction: column;
-    margin: 6px 24px 6px 24px;
-    padding: 4px;
 }
 
 .searchListInitHeader {
+    padding: 6px 24px 6px 24px;
     margin-bottom: 10px;
     display: flex;
     justify-content: space-between;

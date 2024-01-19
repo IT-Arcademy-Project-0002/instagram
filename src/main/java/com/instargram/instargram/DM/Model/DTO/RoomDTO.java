@@ -18,6 +18,8 @@ public class RoomDTO {
 
     private Map<String, Member> members;
 
+    private boolean group = false;
+
     public RoomDTO(Member loginUser, Room room, Map<String, Member> members)
     {
         this.room = room;
@@ -30,6 +32,11 @@ public class RoomDTO {
                 this.name += member.getValue().getNickname().isEmpty() ? member.getValue().getUsername() : member.getValue().getNickname();
                 this.name += " ";
             }
+        }
+
+        if(members.size() > 2)
+        {
+            group = true;
         }
     }
 }

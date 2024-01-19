@@ -18,10 +18,7 @@ import lombok.Builder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 @Service
 @Builder
@@ -194,15 +191,21 @@ public class MessageMemberMapService {
         return messageDTOS;
     }
 
-    public void delete(Long id)
+    public Map<String, Object> delete(Long id)
     {
+        Map<String, Object> result = new HashMap<>();
+
         Message_Member_Map map = getMap(id);
 
         if(map != null)
         {
-            if(Objects.equals(map.getDataType(), Enum_Data.MESSAGE.getNumber()))
+            if(Objects.equals(map.getDataType(), Enum_Data.MESSAGE.getNumber()) && !map.isComment())
             {
                 messageService.delete(map.getDataId());
+            }
+            if(Objects.equals(map.getDataType(), Enum_Data.MESSAGE.getNumber()) && map.isComment())
+            {
+                messageService.deleteComment(map.getDataId());
             }
             else if(Objects.equals(map.getDataType(), Enum_Data.IMAGE.getNumber()))
             {
@@ -214,6 +217,23 @@ public class MessageMemberMapService {
             }
         }
 
+        List<CommentMessage> commentList = messageService.getCommentList(map);
+
+        List<Long> commentMapIdList = new ArrayList<>();
+        for(CommentMessage comment : commentList)
+        {
+            Message_Member_Map commentMap = messageMemberMapRepository.findByDataTypeAndDataId(Enum_Data.MESSAGE.getNumber(), comment.getMessage().getId());
+            commentMap.setComment(false);
+
+            messageMemberMapRepository.save(commentMap);
+
+            commentMapIdList.add(commentMap.getId());
+            messageService.deleteComment(comment);
+        }
+
         messageMemberMapRepository.deleteById(id);
+
+        result.put("commentIds", commentMapIdList);
+        return result;
     }
 }

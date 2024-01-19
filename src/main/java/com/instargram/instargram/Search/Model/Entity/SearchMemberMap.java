@@ -7,6 +7,8 @@ import lombok.Setter;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @Entity
@@ -15,6 +17,8 @@ public class SearchMemberMap {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    private LocalDateTime createDate;
 
     @ManyToOne
     @JoinColumn(name = "requestMember_id")

@@ -79,7 +79,7 @@ public class Board {
     @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private List<Board_TagMember_Map> boardTagMemberMaps;
 
-    @OneToOne(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name="location_id")
     private Location location;
 }

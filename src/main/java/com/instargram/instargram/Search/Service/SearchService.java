@@ -22,6 +22,7 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 @RequiredArgsConstructor
@@ -39,7 +40,7 @@ public class SearchService {
     // 3) 장소라면 explore 페이지 연결 (~/explore/locations/장소분류고유번호) openstreetmap 사용
     //    (괄호안의 숫자는 위치 DB의 ID로 추정, 일반적인 게시물의 의미를 생각하였을 때)
 
-        private final SearchMemberMapRepository searchMemberMapRepository;
+    private final SearchMemberMapRepository searchMemberMapRepository;
     private final SearchLocationMapRepository searchLocationMapRepository;
     private final SearchHashTagMapRepository searchHashTagMapRepository;
 
@@ -52,6 +53,7 @@ public class SearchService {
     public void createSearchFavoriteMember(Member requestMember, Member member) {
 
         SearchMemberMap searchMemberMap = new SearchMemberMap();
+        searchMemberMap.setCreateDate(LocalDateTime.now());
         searchMemberMap.setRequestMember(requestMember);
         searchMemberMap.setMember(member);
         this.searchMemberMapRepository.save(searchMemberMap);
@@ -61,6 +63,7 @@ public class SearchService {
     public void createSearchFavoriteLocation(Member requestMember, Location location) {
 
         SearchLocationMap searchLocationMap = new SearchLocationMap();
+        searchLocationMap.setCreateDate(LocalDateTime.now());
         searchLocationMap.setRequestMember(requestMember);
         searchLocationMap.setLocation(location);
         this.searchLocationMapRepository.save(searchLocationMap);
@@ -70,6 +73,7 @@ public class SearchService {
     public void createSearchFavoriteHashTag(Member requestMember, HashTag hashTag) {
 
         SearchHashTagMap searchHashTagMap = new SearchHashTagMap();
+        searchHashTagMap.setCreateDate(LocalDateTime.now());
         searchHashTagMap.setRequestMember(requestMember);
         searchHashTagMap.setHashTag(hashTag);
         this.searchHashTagMapRepository.save(searchHashTagMap);

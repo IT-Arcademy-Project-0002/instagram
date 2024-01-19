@@ -3,6 +3,7 @@ package com.instargram.instargram.Community.Board.Service;
 import com.instargram.instargram.Community.Board.Model.Entity.Board;
 import com.instargram.instargram.Community.Board.Model.Entity.Board_HashTag_Map;
 import com.instargram.instargram.Community.Board.Model.Repository.BoardRepository;
+import com.instargram.instargram.Community.Comment.Model.Entity.Comment;
 import com.instargram.instargram.Community.Location.Model.Entity.Location;
 import com.instargram.instargram.DataNotFoundException;
 import com.instargram.instargram.Member.Model.Entity.Member;
@@ -11,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 

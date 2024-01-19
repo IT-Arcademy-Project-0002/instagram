@@ -6,6 +6,7 @@ import com.instargram.instargram.Community.Board.Model.Entity.*;
 import com.instargram.instargram.Community.Board.Model.Form.BoardCreateForm;
 import com.instargram.instargram.Community.Board.Model.Form.BoardUpdateForm;
 import com.instargram.instargram.Community.Board.Service.*;
+import com.instargram.instargram.Community.Comment.Model.Entity.Comment;
 import com.instargram.instargram.Community.HashTag.Model.Entity.HashTag;
 import com.instargram.instargram.Community.HashTag.Service.HashTagService;
 import com.instargram.instargram.Community.Location.Model.DTO.LocationDTO;
@@ -24,6 +25,7 @@ import com.instargram.instargram.Member.Service.MemberService;
 import com.instargram.instargram.Notice.Model.Entity.Notice;
 import com.instargram.instargram.Notice.Service.NoticeBoardMapService;
 import com.instargram.instargram.Notice.Service.NoticeService;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -74,8 +76,6 @@ public class BoardController {
             model.addAttribute("selectFeed", selectFeed);
             httpSession.removeAttribute("selectFeed");
         }
-
-        System.out.println("===========================>" + selectFeed);
         model.addAttribute("feedList", feedList);
         return "Board/board_main";
     }

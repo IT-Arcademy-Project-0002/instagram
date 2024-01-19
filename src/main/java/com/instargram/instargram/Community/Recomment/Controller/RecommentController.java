@@ -138,11 +138,25 @@ public class RecommentController {
         return ResponseEntity.ok().body(result);
     }
 
-    @GetMapping("/delete/{id}")
-    public String delete(@PathVariable("id") Long id) {
-        Recomment recomment = this.recommentService.getRecommentById(id);
-        recommentService.delete(recomment);
-        System.out.println("gggggggggggggggggggggggggggggggg");
-        return "redirect:/main";
+    @GetMapping("/delete/{recommentId}")
+    public ResponseEntity<Map<String, Object>> delete(
+            @PathVariable("recommentId") Long recommentId,
+            @RequestParam("commentId") Long commentId) {
+
+        Map<String, Object> result = new HashMap<>();
+        Comment comment = commentService.getCommentById(commentId);
+        Recomment recomment = this.recommentService.getRecommentById(recommentId);
+
+        if (recomment != null) {
+            recommentService.delete(recomment);
+            result.put("result", true);
+            result.put("comment", new CommentDTO(comment));
+            result.put("recommentSize", comment.getRecommentList().size());
+        } else {
+            result.put("result", false);
+        }
+
+        return ResponseEntity.ok().body(result);
     }
+
 }

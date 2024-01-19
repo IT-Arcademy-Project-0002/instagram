@@ -50,34 +50,15 @@ public class SearchService {
     private final Board_HashTag_MapRepository boardHashTagMapRepository;
 
 
-    public void createSearchFavoriteMember(Member requestMember, Member member) {
 
-        SearchMemberMap searchMemberMap = new SearchMemberMap();
-        searchMemberMap.setCreateDate(LocalDateTime.now());
-        searchMemberMap.setRequestMember(requestMember);
-        searchMemberMap.setMember(member);
-        this.searchMemberMapRepository.save(searchMemberMap);
-
-    }
-
-    public void createSearchFavoriteLocation(Member requestMember, Location location) {
-
-        SearchLocationMap searchLocationMap = new SearchLocationMap();
-        searchLocationMap.setCreateDate(LocalDateTime.now());
-        searchLocationMap.setRequestMember(requestMember);
-        searchLocationMap.setLocation(location);
-        this.searchLocationMapRepository.save(searchLocationMap);
-
-    }
-
-    public void createSearchFavoriteHashTag(Member requestMember, HashTag hashTag) {
-
-        SearchHashTagMap searchHashTagMap = new SearchHashTagMap();
-        searchHashTagMap.setCreateDate(LocalDateTime.now());
-        searchHashTagMap.setRequestMember(requestMember);
-        searchHashTagMap.setHashTag(hashTag);
-        this.searchHashTagMapRepository.save(searchHashTagMap);
-
+    public void deleteSearchFavoriteList(String type, Long id) {
+        if (type.equals("searchmember")) {
+            this.searchMemberMapRepository.deleteById(id);
+        } else if (type.equals("searchlocation")) {
+            this.searchLocationMapRepository.deleteById(id);
+        } else if (type.equals("searchhashtag")) {
+            this.searchHashTagMapRepository.deleteById(id);
+        }
     }
 
     public List<SearchDTO> createSearchFavoriteList(Member loginMember) {
@@ -91,6 +72,7 @@ public class SearchService {
         searches.addAll(searchesByMember);
         searches.addAll(searchesByLocation);
         searches.addAll(searchesByHashTag);
+        searches.sort(Comparator.comparing(SearchDTO::getCreateDate).reversed());
 
         return searches;
     }
@@ -106,11 +88,13 @@ public class SearchService {
         for (SearchMemberMap searchMemberMap : searchMemberMapList) {
             Member member = searchMemberMap.getMember();
             SearchDTO sd = new SearchDTO();
+            sd.setSearchDataIndex(String.valueOf(searchMemberMap.getId()));
             sd.setListName(member.getUsername());
             sd.setSearchType(SearchType.USER.getNumber());
             sd.setListName(member.getUsername());
             sd.setListImage(member.getImage() != null ? member.getImage().getName() : "");
-            sd.setListIntroduction(member.getIntroduction());
+            sd.setListIntroduction(member.getNickname());
+            sd.setCreateDate(searchMemberMap.getCreateDate());
             searchDTOList.add(sd);
         }
         return searchDTOList;
@@ -124,11 +108,13 @@ public class SearchService {
         for (SearchLocationMap searchLocationMap : searchLocationMapList) {
             Location location = searchLocationMap.getLocation();
             SearchDTO sd = new SearchDTO();
+            sd.setSearchDataIndex(String.valueOf(searchLocationMap.getId()));
             sd.setSearchType(SearchType.LOCATION.getNumber());
             sd.setListLocationId(location.getLocationId());
             sd.setListName(location.getPlaceName());
             sd.setListImage("");
             sd.setListIntroduction(location.getAddress());
+            sd.setCreateDate(searchLocationMap.getCreateDate());
             searchDTOList.add(sd);
         }
         return searchDTOList;
@@ -142,10 +128,12 @@ public class SearchService {
         for (SearchHashTagMap searchHashTagMap : searchHashTagMapList) {
             HashTag hashTag = searchHashTagMap.getHashTag();
             SearchDTO sd = new SearchDTO();
+            sd.setSearchDataIndex(String.valueOf(searchHashTagMap.getId()));
             sd.setSearchType(SearchType.HASHTAG.getNumber());
             sd.setListHashTagId(String.valueOf(hashTag.getId()));
             sd.setListName(hashTag.getName());
             sd.setListImage("");
+            sd.setCreateDate(searchHashTagMap.getCreateDate());
             searchDTOList.add(sd);
         }
         return searchDTOList;

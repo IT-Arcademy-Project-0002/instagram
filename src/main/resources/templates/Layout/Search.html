@@ -22,13 +22,13 @@
                     <div id="searchListInit">
                         <div class="searchListInitHeader">
                             <span class="search_category_text">최근 검색 항목</span>
-                            <button class="btn_search">모두 지우기</button>
+                            <button class="btn_search" onclick="allDeleteButtonClicked()">모두 지우기</button>
                         </div>
                         <div class="searchListInitBody">
                             <div th:each="searchResult : ${searches}">
                                 <div th:if="${searchResult.searchType == 1}">
                                     <a th:href="'/member/page/' + ${searchResult.listName}" target="_blank" class="link">
-                                        <div class="search-list-box">
+                                        <div id="M1" class="search-list-box" th:id="@{|searchmember-${searchResult.SearchDataIndex}|}">
                                             <div class="search-profile">
                                                 <img th:if="${searchResult.listImage != null and searchResult.listImage != ''}" th:src="@{'/resources/' + ${searchResult.listImage}}" class="search-profile-image rounded-circle text-center" />
                                                 <img th:unless="${searchResult.listImage != null and searchResult.listImage != ''}" src="/files/designImg/noneuser.png" class="search-profile-image rounded-circle text-center" />
@@ -37,12 +37,13 @@
                                                 <div class="search-username" th:text="${searchResult.listName}"></div>
                                                 <div class="search-userintroduction" th:text="${searchResult.listIntroduction}"></div>
                                             </div>
+                                            <button type="button" class="delete-button" onclick="deleteButtonClicked(1, event)"></button>
                                         </div>
                                     </a>
                                 </div>
                                 <div th:if="${searchResult.searchType == 2}">
                                     <a th:href="@{'/explore/locations/' + ${searchResult.listLocationId}}" target="_blank" class="link">
-                                        <div class="search-list-box">
+                                        <div class="search-list-box" th:id="@{|searchlocation-${searchResult.SearchDataIndex}|}">
                                             <div class="search-profile">
                                                 <img src="/files/designImg/locationBase.png" class="search-profile-image rounded-circle text-center" />
                                             </div>
@@ -50,19 +51,20 @@
                                                 <div class="search-username" th:text="${searchResult.listName}"></div>
                                                 <div class="search-userintroduction" th:text="${searchResult.listIntroduction}"></div>
                                             </div>
+                                            <button type="button" class="delete-button" onclick="deleteButtonClicked(2, event)"></button>
                                         </div>
                                     </a>
                                 </div>
                                 <div th:if="${searchResult.searchType == 3}">
                                     <a th:href="@{'/explore/tags/' + ${searchResult.listHashTagId}}" target="_blank" class="link">
-                                        <div class="search-list-box">
+                                        <div class="search-list-box" th:id="@{|searchhashtag-${searchResult.SearchDataIndex}|}">
                                             <div class="search-profile">
                                                 <img src="/files/designImg/hashTag.jpg" class="search-profile-image rounded-circle text-center" />
                                             </div>
                                             <div class="search-userinfo">
                                                 <div class="search-username" th:text="${searchResult.listName}"></div>
-                                                <div class="search-userintroduction" th:text="${searchResult.listIntroduction}"></div>
                                             </div>
+                                            <button type="button" class="delete-button" onclick="deleteButtonClicked(3, event)"></button>
                                         </div>
                                     </a>
                                 </div>
@@ -76,6 +78,67 @@
             </div>
             <div id="noResult"></div>
         </div>
+        <script>
+
+            function allDeleteButtonClicked() {
+
+                var token = $("input[name='_csrf']").attr("value");
+                var header = $("input[name='_csrf_header']").attr("value");
+
+                var isConfirmedAll = confirm("모든 검색기록을 삭제하시겠습니까?");
+
+                if (isConfirmedAll) {
+
+                    var searchListBoxes = document.querySelectorAll('.search-list-box');
+
+                    searchListBoxes.forEach(searchListBox => {
+
+                        fetch("/search/favorite/deleteAll", {
+                            method: "POST",
+                            headers: {
+                                [header]: token
+                            }
+                        })
+                            .then(response => {
+
+                                searchListBox.remove();
+                            })
+                            .catch(error => {
+                                // 에러 처리
+                                alert(error.message);
+                            });
+                    });
+                }
+            }
+
+            function deleteButtonClicked(searchType, event) {
+
+                // 링크클릭 이벤트의 기본 동작 막기
+                event.preventDefault();
+
+                var token = $("input[name='_csrf']").attr("value");
+                var header = $("input[name='_csrf_header']").attr("value");
+
+                // 검색 결과 요소를 찾기
+                var searchListBox = event.target.closest('.search-list-box');
+                var searchResultId = searchListBox.id;
+
+                fetch("/search/favorite/delete/" + searchResultId, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        [header]: token
+                    }
+                })
+                    .then(response => {
+                        searchListBox.remove();
+                    })
+                    .catch(error => {
+                        alert(error.message);
+                    });
+
+            }
+        </script>
         <script src="/search/js/search.js"></script>
     </div>
 </div>

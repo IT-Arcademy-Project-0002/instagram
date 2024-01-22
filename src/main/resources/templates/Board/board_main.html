@@ -6,8 +6,8 @@
     <link rel="stylesheet" type="text/css" th:href="@{/board/css/modify_location.css}">
 </head>
 <div layout:fragment="content">
-    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-    <input type="hidden" th:name="_csrf_header" th:value="${_csrf.headerName}" />
+    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+    <input type="hidden" th:name="_csrf_header" th:value="${_csrf.headerName}"/>
 
     <!-- Feed list -->
     <div class="d-flex">
@@ -206,51 +206,31 @@
                                                 <path d="M20 22a.999.999 0 0 1-.687-.273L12 14.815l-7.313 6.912A1 1 0 0 1 3 21V3a1 1 0 0 1 1-1h16a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1Z"></path>
                                             </svg>
                                         </div>
+                                        <input th:data-id="${feed.board.id}" type="hidden" th:value="${feed.board.id}">
                                     </a>
-
-                                    <div class="popover" style="width: 300px; height: 200px; display: none;">
-                                        <div class="d-flex flex-column">
-                                            <div class="d-flex justify-content-between align-items-center mx-3 my-2 p-0">
-                                                <div class="Collection"
-                                                     style="font-weight: bold; font-size: 1rem;">
-                                                    컬렉션
-                                                </div>
-                                                <div class="btn noneBtn btn-link"
-                                                     style="font-weight: bold; font-size: 1rem;">+
-                                                </div>
+                                </div>
+                                <!-- Modal -->
+                                <div class="modal fade" id="collectionModal" tabindex="-1" aria-labelledby="collectionModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered modal-sm">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h1 class="modal-title fs-5" id="collectionModalLabel">새 컬렉션</h1>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="reloadPage()" aria-label="Close"></button>
                                             </div>
-                                            <div class="border-bottom"></div>
-                                            <div>
-                                                Your popover content here...
+                                            <div class="modal-body d-flex flex-column justify-content-center align-items-center" style="width: 100%; height: 100%;">
+                                                <div class="file-container">
+                                                </div>
+                                                <div class="input-group" style="width: 100%; margin-top: 20px;">
+                                                    <input type="text" class="form-control" id="GroupName" name="GroupName">
+                                                </div>
+                                                <input id="fileId" type="hidden">
+                                            </div>
+                                            <div class="modal-footer d-flex justify-content-center p-0" style="width: 100%;">
+                                                <button type="button" class="btn noneBtn btn-link" onclick="boardSaveGroup()">저장</button>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <script>
-                                    $(document).ready(function () {
-                                        $('.popoverLink').popover({
-                                            content: function () {
-                                                return $(this).siblings('.popover').html();
-                                            },
-                                            html: true,
-                                            placement: 'top',
-                                            trigger: 'manual',
-                                        }).on('mouseenter', function () {
-                                            var _this = this;
-                                            $(this).popover('show');
-                                            $('.popover').on('mouseleave', function () {
-                                                $(_this).popover('hide');
-                                            });
-                                        }).on('mouseleave', function () {
-                                            var _this = this;
-                                            setTimeout(function () {
-                                                if (!$('.popover:hover').length) {
-                                                    $(_this).popover('hide');
-                                                }
-                                            }, 200);
-                                        });
-                                    });
-                                </script>
                             </div>
                             <!-- 좋아요 갯수 -->
                             <div class="px-2" id="likeCount"
@@ -341,7 +321,8 @@
         <div class="modal-dialog modal-dialog-centered modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="reloadPage()"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                            onclick="reloadPage()"></button>
                 </div>
                 <div class="modal-body p-0">
                     <div th:if="${selectFeed}">
@@ -524,12 +505,14 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div id="ModalCommentDisable" th:classappend="${selectFeed.board.getCommentDisable() == true} ? 'visually-hidden'">
+                                    <div id="ModalCommentDisable"
+                                         th:classappend="${selectFeed.board.getCommentDisable() == true} ? 'visually-hidden'">
                                         <div id="comment"></div>
 
                                         <!-- Comment List -->
-                                        <div th:each="comment, loop : ${selectFeed.commentDTOS}" th:id="${'comment-' + comment.id}">
-                                            <div class="d-flex comment-container"  style="padding: 5px 16px 5px 16px;">
+                                        <div th:each="comment, loop : ${selectFeed.commentDTOS}"
+                                             th:id="${'comment-' + comment.id}">
+                                            <div class="d-flex comment-container" style="padding: 5px 16px 5px 16px;">
                                                 <div class="d-flex justify-content-center">
                                                     <div class="me-3"
                                                          style="position: relative; width: 2rem; height: 2rem;">
@@ -556,7 +539,8 @@
                                                             <div class="pe-2 text-dark small"
                                                                  style="width: 30%; font-size: 12px;"
                                                                  th:text="${#temporals.format(comment.createDate, 'MM월dd일 HH:mm')}"></div>
-                                                            <div class="pe-2 text-dark small" th:id="@{|modalCommentLikeCount${comment.id}|}"
+                                                            <div class="pe-2 text-dark small"
+                                                                 th:id="@{|modalCommentLikeCount${comment.id}|}"
                                                                  style="width: 20%; font-size: 12px;"
                                                                  th:text="'좋아요 ' + ${#lists.size(comment.getCommentLikeMemberIds())} + '개'"></div>
 
@@ -575,7 +559,8 @@
                                                                     onclick="setCommentOptionTarget(this)"
                                                                     th:attr="data-bs-target=(${comment.memberDTO.username} == ${loginMember.username}) ? '#BoardUserCommentModal' : '#UserCommentModal'">
                                                                 <svg aria-label="옵션 더 보기"
-                                                                     fill="currentColor" height="24" role="img" viewBox="0 0 24 24"
+                                                                     fill="currentColor" height="24" role="img"
+                                                                     viewBox="0 0 24 24"
                                                                      width="24"><title>옵션 더 보기</title>
                                                                     <circle cx="12" cy="12" r="1.5"></circle>
                                                                     <circle cx="6" cy="12" r="1.5"></circle>
@@ -628,7 +613,8 @@
 
                                             <div th:id="'repliesContainer-' + ${comment.id}" style="display: none;">
                                                 <!-- Comment => Recomment List -->
-                                                <div th:each="recomment : ${comment.recommentDTOS}" th:id="${'recomment-' + recomment.id}">
+                                                <div th:each="recomment : ${comment.recommentDTOS}"
+                                                     th:id="${'recomment-' + recomment.id}">
                                                     <ul class="recomment-container" style="margin:0">
                                                         <li class="d-flex" style="padding:10px 16px 0 10px;">
                                                             <div class="me-3"
@@ -655,7 +641,8 @@
                                                                         <div class="pe-2 text-dark small"
                                                                              style="width: 30%; font-size: 12px;"
                                                                              th:text="${#temporals.format(recomment.createDate, 'MM월dd일 HH:mm')}"></div>
-                                                                        <div class="pe-2 text-dark small" th:id="@{|modalRecommentLikeCount${recomment.id}|}"
+                                                                        <div class="pe-2 text-dark small"
+                                                                             th:id="@{|modalRecommentLikeCount${recomment.id}|}"
                                                                              style="width: 20%; font-size: 12px;"
                                                                              th:text="'좋아요 ' + ${#lists.size(recomment.getRecommentLikeMemberIds())} + '개'"></div>
 
@@ -676,11 +663,14 @@
                                                                                 onclick="setRecommentOptionTarget(this)"
                                                                                 th:attr="data-bs-target=(${recomment.memberDTO.username} == ${loginMember.username}) ? '#ReCommentCreateUserModal' : '#ReCommentUserModal'">
                                                                             <svg aria-label="옵션 더 보기"
-                                                                                 fill="currentColor" height="24" role="img" viewBox="0 0 24 24"
+                                                                                 fill="currentColor" height="24"
+                                                                                 role="img" viewBox="0 0 24 24"
                                                                                  width="24"><title>옵션 더 보기</title>
-                                                                                <circle cx="12" cy="12" r="1.5"></circle>
+                                                                                <circle cx="12" cy="12"
+                                                                                        r="1.5"></circle>
                                                                                 <circle cx="6" cy="12" r="1.5"></circle>
-                                                                                <circle cx="18" cy="12" r="1.5"></circle>
+                                                                                <circle cx="18" cy="12"
+                                                                                        r="1.5"></circle>
                                                                             </svg>
                                                                         </button>
                                                                     </div>
@@ -815,11 +805,16 @@
                                                     <div class="d-flex flex-column">
                                                         <div class="d-flex justify-content-between align-items-center mx-3 my-2 p-0">
                                                             <div class="Collection"
-                                                                 style="font-weight: bold; font-size: 1rem;">
-                                                                컬렉션
-                                                            </div>
+                                                                 style="font-weight: bold; font-size: 1rem;"
+                                                                 text="컬렉션"></div>
                                                             <div class="btn noneBtn btn-link"
-                                                                 style="font-weight: bold; font-size: 1rem;">+
+                                                                 style="font-weight: bold; font-size: 1rem;">
+                                                                <svg aria-label="+ 아이콘" class="highlight_icon"
+                                                                     fill="currentColor" height="24" role="img"
+                                                                     viewBox="0 0 24 24" width="24"><title>+
+                                                                    아이콘</title>
+                                                                    <path d="M21 11.3h-8.2V3c0-.4-.3-.8-.8-.8s-.8.4-.8.8v8.2H3c-.4 0-.8.3-.8.8s.3.8.8.8h8.2V21c0 .4.3.8.8.8s.8-.3.8-.8v-8.2H21c.4 0 .8-.3.8-.8s-.4-.7-.8-.7z"></path>
+                                                                </svg>
                                                             </div>
                                                         </div>
                                                         <div class="border-bottom"></div>
@@ -829,31 +824,6 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <script>
-                                                $(document).ready(function () {
-                                                    $('.popoverLink').popover({
-                                                        content: function () {
-                                                            return $(this).siblings('.popover').html();
-                                                        },
-                                                        html: true,
-                                                        placement: 'top',
-                                                        trigger: 'manual',
-                                                    }).on('mouseenter', function () {
-                                                        var _this = this;
-                                                        $(this).popover('show');
-                                                        $('.popover').on('mouseleave', function () {
-                                                            $(_this).popover('hide');
-                                                        });
-                                                    }).on('mouseleave', function () {
-                                                        var _this = this;
-                                                        setTimeout(function () {
-                                                            if (!$('.popover:hover').length) {
-                                                                $(_this).popover('hide');
-                                                            }
-                                                        }, 200);
-                                                    });
-                                                });
-                                            </script>
                                         </div>
                                         <!-- 좋아요 갯수 -->
                                         <div class="px-2" id="modalLikeCount"
@@ -863,7 +833,8 @@
                                     </div>
                                 </div>
                                 <div style="height: 10%">
-                                    <div id="ModalCommentTextAreaDisable" th:classappend="${selectFeed.board.getCommentDisable() == true}?'visually-hidden'">
+                                    <div id="ModalCommentTextAreaDisable"
+                                         th:classappend="${selectFeed.board.getCommentDisable() == true}?'visually-hidden'">
                                         <div id="boardID" th:text="${selectFeed.board.id}" style="display: none;"></div>
 
                                         <input type="hidden" id="commentID" name="commentID"></input>
@@ -1140,17 +1111,20 @@
                                 <button id="likehideBtn" type="button" th:if="${selectFeed.board.getLikeHide() == true}"
                                         class="btn noneBtn btn-link text-dark">좋아요 수 숨기기 취소
                                 </button>
-                                <button id="likehideBtn" type="button" th:if="${selectFeed.board.getLikeHide() == false}"
+                                <button id="likehideBtn" type="button"
+                                        th:if="${selectFeed.board.getLikeHide() == false}"
                                         class="btn noneBtn btn-link text-dark">좋아요 수 숨기기
                                 </button>
                             </a>
                         </div>
                         <div class="border-bottom text-center p-2">
                             <a th:onclick="@{|comment_disable(${selectFeed.board.id})|}">
-                                <button id="commentDisableBtn" type="button" th:if="${selectFeed.board.getCommentDisable() == false}"
+                                <button id="commentDisableBtn" type="button"
+                                        th:if="${selectFeed.board.getCommentDisable() == false}"
                                         class="btn noneBtn btn-link text-dark">댓글 비활성화
                                 </button>
-                                <button id="commentDisableBtn" type="button" th:if="${selectFeed.board.getCommentDisable() == true}"
+                                <button id="commentDisableBtn" type="button"
+                                        th:if="${selectFeed.board.getCommentDisable() == true}"
                                         class="btn noneBtn btn-link text-dark">댓글 활성화
                                 </button>
                             </a>
@@ -1311,6 +1285,7 @@
 
     <script th:inline="javascript">
         const selectFeed = /*[[${selectFeed}]]*/ null;
+        console.log(selectFeed);
         const myModal = new bootstrap.Modal('#BoardDetailModal', {
             keyboard: true
         })

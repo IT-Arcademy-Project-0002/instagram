@@ -11,7 +11,6 @@ import com.instargram.instargram.Community.Comment.Model.Entity.Comment;
 import com.instargram.instargram.Community.Comment.Model.Repository.CommentRepository;
 import com.instargram.instargram.Data.FileDTO;
 import com.instargram.instargram.Data.Image.Image;
-import com.instargram.instargram.Data.Image.ImageDTO;
 import com.instargram.instargram.Data.Image.ImageService;
 import com.instargram.instargram.Data.Video.Video;
 import com.instargram.instargram.Data.Video.VideoService;
@@ -101,5 +100,9 @@ public class Board_Data_MapService {
             commentDTOS.add(commentDTO);
         }
         return commentDTOS;
+    }
+
+    public List<Board_Data_Map> getImage(Board board) {
+        return boardDataMapRepository.findByBoard(board);
     }
 }

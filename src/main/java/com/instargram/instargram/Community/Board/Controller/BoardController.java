@@ -70,6 +70,9 @@ public class BoardController {
         allBoards.addAll(memberBoards);
         allBoards.addAll(followerBoards);
 
+        List<Board_Save_Map> boardSaveMaps = this.boardSaveMapService.getSaveGroup(member);
+        model.addAttribute("FeedGroupName" , boardSaveMaps);
+
         List<FeedListDTO> feedList = this.boardDataMapService.getFeed(allBoards);
         FeedDTO selectFeed = (FeedDTO) httpSession.getAttribute("selectFeed");
         if (selectFeed != null) {
@@ -370,7 +373,7 @@ public class BoardController {
                 this.boardSaveMapService.create(board, member, saveGroup);
                 result.put("result", true);
             } else {
-                this.boardSaveMapService.delete(isBoardSave);
+                this.boardSaveMapService.delete(board);
                 result.put("result", false);
             }
         }
@@ -394,4 +397,43 @@ public class BoardController {
 
         return ResponseEntity.ok().body(result);
     }
+
+    @GetMapping("/board/getImage/{id}")
+    public ResponseEntity<Map<String, Object>> getImage(@PathVariable("id") Long id) {
+        Map<String, Object> result = new HashMap<>();
+
+        Board board = this.boardService.getBoardById(id);
+        //이미지 : 2
+        //영상 : 3
+        if (board != null) {
+            List<Board_Data_Map> boardDataMapList = this.boardDataMapService.getMapByBoard(board);
+            if (!boardDataMapList.isEmpty()) {
+                if(boardDataMapList.get(0).getDataType() == 2){
+                    Image image = this.imageService.getImageByID(boardDataMapList.get(0).getDataId());
+                    String imageName = imageService.getImageByID(image.getId()).getName();
+                    result.put("imageName", imageName);
+                }else if(boardDataMapList.get(0).getDataType() == 3){
+                    Video video = this.videoService.getVideoByID(boardDataMapList.get(0).getDataId());
+                    String videoName = imageService.getImageByID(video.getId()).getName();
+                    result.put("videoName", videoName);
+                }
+            }
+        }
+        return ResponseEntity.ok().body(result);
+    }
+
+    @PostMapping("/board/saveFeed/{id}")
+    public ResponseEntity<Map<String, Object>> saveFeed(@PathVariable("id") Long id, @RequestParam(value = "GroupName") String groupName, Principal principal){
+        Map<String, Object> result = new HashMap<>();
+
+        SaveGroup saveGroup = this.saveGroupService.create(groupName);
+
+        Board board = boardService.getBoardById(id);
+        Member member = memberService.getMember(principal.getName());
+        this.boardSaveMapService.create(board, member, saveGroup);
+        result.put("result", true);
+
+        return ResponseEntity.ok().body(result);
+    }
+
 }

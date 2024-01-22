@@ -4,21 +4,36 @@ import com.instargram.instargram.Member.Model.Entity.Member;
 import com.instargram.instargram.Member.Service.MemberService;
 import com.instargram.instargram.Notice.Service.NoticeSSEService;
 
+import com.instargram.instargram.Notice.Service.NoticeService;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
+
+import java.security.Principal;
 
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/notice")
-public class NoticeSSEController {
+public class NoticeController {
 
+    private final NoticeService noticeService;
     private final NoticeSSEService noticeSSEService;
     private final MemberService memberService;
+
+    @PostMapping("/checking")
+    @ResponseBody
+    public void noticeChecking(Principal principal) {
+
+        Member member = this.memberService.getMemberByUsername(principal.getName());
+        this.noticeService.noticeChecking(member);
+
+    }
 
     @GetMapping("/alert")
     public SseEmitter initSSE(Authentication authentication) {

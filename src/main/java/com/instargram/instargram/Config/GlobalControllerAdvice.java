@@ -35,7 +35,9 @@ public class GlobalControllerAdvice {
 
             Member member = this.memberService.getMember(principal.getName());
             model.addAttribute("notices", this.noticeService.createNoticeList(member));
+            model.addAttribute("noticesChecked", this.noticeService.checkNoticeList(member));
             model.addAttribute("searches", this.searchService.createSearchFavoriteList(member));
+
 
             if(member != null)
             {

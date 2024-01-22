@@ -11,6 +11,7 @@ import com.instargram.instargram.Notice.Model.Repository.NoticeRepository;
 import com.instargram.instargram.Notice.Model.Repository.Notice_Comment_MapRepository;
 import lombok.Builder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -220,14 +221,30 @@ public class NoticeService {
         }
     }
 
+
+    public long checkNoticeList(Member member) {
+        List<Notice> uncheckedNotices = this.noticeRepository.findByMemberAndChecked(member, false);
+        return uncheckedNotices.size();
+    }
+
+    @Transactional
+    public void noticeChecking(Member member) {
+        List<Notice> uncheckedNotices = this.noticeRepository.findByMemberAndChecked(member, false);
+
+        for (Notice notice : uncheckedNotices) {
+            notice.setChecked(true);
+        }
+        noticeRepository.saveAll(uncheckedNotices);
+    }
+
     public void deleteById(Long id)
     {
-        noticeRepository.deleteById(id);
+        this.noticeRepository.deleteById(id);
     }
 
     public Notice getNotice(Long id)
     {
-        return noticeRepository.findById(id).orElse(null);
+        return this.noticeRepository.findById(id).orElse(null);
     }
 
 }

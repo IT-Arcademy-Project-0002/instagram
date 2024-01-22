@@ -12,6 +12,7 @@ $(document).ready(function () {
                     </div>
                     <div class="border-bottom"></div>
                     <div class="d-flex flex-column justify-content-between align-items-center p-3">
+                        <div th:if="${FeedGroupName}"></div>
                     </div>
                 </div>`;
 

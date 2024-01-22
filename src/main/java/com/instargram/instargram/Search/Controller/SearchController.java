@@ -64,8 +64,7 @@ public class SearchController {
 
     @PostMapping("/favorite/create")
     @ResponseBody
-    public void searchFavoriteCreate(Principal principal,
-                               @RequestBody Map<String, Object> data) {
+    public void searchFavoriteCreate(Principal principal, @RequestBody Map<String, Object> data) {
 
         Member requestMember = this.memberService.getMemberByUsername(principal.getName());
 

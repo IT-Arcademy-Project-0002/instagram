@@ -1,6 +1,7 @@
 <div th:fragment="sidebarFragment" class="side_menu d-flex" id="side_menu"
      xmlns="http://www.w3.org/1999/html">
 
+
     <!-- notify canvas-->
     <div class="offcanvas offcanvas-start"
          data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1" id="offcanvasNotify">
@@ -120,6 +121,9 @@
                                                  stroke="currentColor" stroke-linejoin="round"
                                                  stroke-width="2"></polygon>
                                     </svg>
+                                    <span class="bg-danger rounded-circle" style="width: 15px; height: 15px; margin-left: -10px; margin-top: -6px; color: white; font-size: 8px;">
+                                        <span th:text="@{|12|}" style="margin-top:1px; margin-left: -48px; font-size: 8px;"></span>
+                                    </span>
                                     <span class="menu_list_text menu_text"> 메시지 </span>
                                 </div>
                                 <label>
@@ -137,7 +141,9 @@
                                          viewBox="0 0 24 24" width="24">
                                         <path d="M16.792 3.904A4.989 4.989 0 0 1 21.5 9.122c0 3.072-2.652 4.959-5.197 7.222-2.512 2.243-3.865 3.469-4.303 3.752-.477-.309-2.143-1.823-4.303-3.752C5.141 14.072 2.5 12.167 2.5 9.122a4.989 4.989 0 0 1 4.708-5.218 4.21 4.21 0 0 1 3.675 1.941c.84 1.175.98 1.763 1.12 1.763s.278-.588 1.11-1.766a4.17 4.17 0 0 1 3.679-1.938m0-2a6.04 6.04 0 0 0-4.797 2.127 6.052 6.052 0 0 0-4.787-2.127A6.985 6.985 0 0 0 .5 9.122c0 3.61 2.55 5.827 5.015 7.97.283.246.569.494.853.747l1.027.918a44.998 44.998 0 0 0 3.518 3.018 2 2 0 0 0 2.174 0 45.263 45.263 0 0 0 3.626-3.115l.922-.824c.293-.26.59-.519.885-.774 2.334-2.025 4.98-4.32 4.98-7.94a6.985 6.985 0 0 0-6.708-7.218Z"></path>
                                     </svg>
+                                    <span th:if = "${noticesChecked > 0}" class="bg-danger rounded-circle" style="width: 8px; height: 8px; margin-left:-10px;"></span>
                                     <span class="menu_list_text menu_text"> 알림 </span>
+                                    <span id="noticePopoverSpan"></span>
                                 </label>
                             </div>
                             <input class="expand-menu" type="checkbox" id="expand-notify-menu" name="expand-menu"
@@ -308,8 +314,65 @@
     </div>
     
     <script>
+
+        <!-- 알림 팝오버 (부트스트랩 + JQuery) -->
+
+        var popoverInstance;
+
+        document.addEventListener('DOMContentLoaded', function () {
+            var popoverElement = document.getElementById('noticePopoverSpan');
+
+            popoverElement.style.marginLeft = '-85px';
+            popoverElement.style.marginTop = '12px';
+
+            var dataContent ='<div style="color: #FFFFFF;">'
+                + '<svg aria-label="하트" fill="#FFFFFF" height="20" role="img" viewBox="0 0 24 24" width="20">'
+                + '<path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C15.09 3.81 16.76 3 18.5 3 21.58 3 24 5.42 24 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"></path></svg>'
+                + ' 99+';
+
+
+            popoverInstance = new bootstrap.Popover(popoverElement, {
+                placement: 'right',
+                trigger: 'hover',
+                html: true,
+                content: function () {
+                    var div = document.createElement('div');
+                    div.innerHTML = dataContent;
+                    div.style.marginTop = '-10px';
+                    div.style.marginLeft = '-8px';
+                    return div;
+                }
+            });
+
+            popoverInstance.show();
+
+            // 팝오버의 DOM 요소에 직접 스타일 적용 (.tip을 사용하면 팝오버의 실제 DOM 요소에 직접 접근 가능)
+            var popoverTip = popoverInstance.tip;
+            popoverTip.style.backgroundColor = '#FF0000'; // 팝오버 배경 색상을 변경
+            popoverTip.style.height = '40px'; // 팝오버 높이를 변경
+            popoverTip.style.width = '80px'; // 팝오버 넓이를 변경
+
+            // 내부 화살표에 대한 스타일 변경
+            var arrowInner = popoverTip.querySelector('.popover-arrow');
+
+            // 가상 요소의 스타일을 직접 변경 (CSS를 사용하지 않고 JS 내에서 해결)
+            var styleTag = document.createElement('style');
+            styleTag.innerHTML = '::after { border-right-color: #FF0000 !important; }';
+            arrowInner.appendChild(styleTag);
+
+            setTimeout(function () {
+                popoverInstance.hide();  // 2000ms(2초) 뒤에 팝오버를 숨김
+            }, 2000);
+        });
+
+        function clickDM(dm) {
+            popoverInstance.hide();
+        }
+
         function clickSearch(search) {
-            debugger;
+
+            popoverInstance.hide();
+
             var input = document.getElementById('expand-notify-menu');
 
             if (input.checked) {
@@ -318,7 +381,11 @@
         }
 
         function clickNotify(notify) {
-            debugger;
+
+            popoverInstance.hide();
+
+            // noticeChecking();
+
             var input = document.getElementById('expand-search-menu');
 
             if (input.checked) {
@@ -329,6 +396,33 @@
         function offCanvas_img() {
             document.getElementById('logoImage').classList.add('offCanvas_img');
         }
+
+        <!-- 알림 읽음처리 JS (비동기 fetch) -->
+        function noticeChecking() {
+
+            var token = $("input[name='_csrf']").attr("value");
+            var header = $("input[name='_csrf_header']").attr("value");
+
+            fetch('/notice/checking', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json; charset=utf-8',
+                    [header]: token
+                }
+            })
+                .then(response => {
+                    // 응답 처리 (예: 성공 시 콘솔에 로그 출력)
+                    console.log('POST 요청 성공:', response);
+                })
+                .catch(error => {
+                    // 오류 처리
+                    console.error('POST 요청 실패:', error);
+                });
+        }
+
+
+
+
     </script>
 </div>
 

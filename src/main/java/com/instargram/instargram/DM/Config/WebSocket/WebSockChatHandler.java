@@ -46,7 +46,6 @@ public class WebSockChatHandler extends TextWebSocketHandler {
         String payload = message.getPayload();
 
         DMDTO chatMessage = objectMapper.readValue(payload, DMDTO.class);
-        Room room = roomService.getRoom(chatMessage.getRoomId());
 
         Long chatRoomId = chatMessage.getRoomId();
         if(!chatRoomSessionMap.containsKey(chatRoomId)){

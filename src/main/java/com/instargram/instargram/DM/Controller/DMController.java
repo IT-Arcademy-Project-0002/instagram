@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.instargram.instargram.DM.Model.DTO.ChattingMemberDTO;
 import com.instargram.instargram.DM.Model.DTO.MessageDTO;
 import com.instargram.instargram.DM.Model.DTO.RoomDTO;
+import com.instargram.instargram.DM.Model.Entity.Message.Emoji;
 import com.instargram.instargram.DM.Model.Entity.Message.Message_Member_Map;
 import com.instargram.instargram.DM.Model.Entity.Room.Room;
 import com.instargram.instargram.DM.Service.MessageMemberMapService;
@@ -207,5 +208,14 @@ public class DMController {
         Map<String, Object> result = messageMemberMapService.delete(id);
 
         return ResponseEntity.ok(result);
+    }
+
+    @PostMapping("/emoji/create")
+    public ResponseEntity<Map<String, Object>> emojiMessage(@RequestBody Map<String, Object> directMsg, Principal principal)
+    {
+        Emoji emoji = messageMemberMapService.createEmoji(directMsg, principal.getName());
+
+        directMsg.put("emojiId", emoji.getId());
+        return ResponseEntity.ok(directMsg);
     }
 }

@@ -2,12 +2,15 @@ package com.instargram.instargram.DM.Service;
 
 import com.instargram.instargram.Community.Comment.Model.Entity.Comment;
 import com.instargram.instargram.DM.Model.Entity.Message.CommentMessage;
+import com.instargram.instargram.DM.Model.Entity.Message.Emoji;
 import com.instargram.instargram.DM.Model.Entity.Message.Message;
 import com.instargram.instargram.DM.Model.Entity.Message.Message_Member_Map;
 import com.instargram.instargram.DM.Model.Entity.Room.Room;
 import com.instargram.instargram.DM.Model.Repository.CommentMessageRepository;
+import com.instargram.instargram.DM.Model.Repository.EmojiRepository;
 import com.instargram.instargram.DM.Model.Repository.MessageRepository;
 import com.instargram.instargram.Member.Model.Entity.Member;
+import jakarta.transaction.Transactional;
 import lombok.Builder;
 import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
@@ -55,9 +58,12 @@ public class MessageService {
         commentMessageRepository.delete(commentMessage);
     }
 
+    @Transactional
     public void deleteComment(Long id)
     {
-        commentMessageRepository.deleteById(id);
+        Message message = getMessage(id);
+        commentMessageRepository.deleteByMessage(message);
+        messageRepository.delete(message);
     }
 
 
@@ -74,4 +80,5 @@ public class MessageService {
 
         return commentMessageRepository.save(commentMessage);
     }
+
 }

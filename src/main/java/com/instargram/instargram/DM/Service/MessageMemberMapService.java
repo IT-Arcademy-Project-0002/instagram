@@ -3,9 +3,11 @@ package com.instargram.instargram.DM.Service;
 import com.instargram.instargram.Community.Comment.Model.Entity.Comment;
 import com.instargram.instargram.DM.Model.DTO.MessageDTO;
 import com.instargram.instargram.DM.Model.Entity.Message.CommentMessage;
+import com.instargram.instargram.DM.Model.Entity.Message.Emoji;
 import com.instargram.instargram.DM.Model.Entity.Message.Message;
 import com.instargram.instargram.DM.Model.Entity.Message.Message_Member_Map;
 import com.instargram.instargram.DM.Model.Entity.Room.Room;
+import com.instargram.instargram.DM.Model.Repository.EmojiRepository;
 import com.instargram.instargram.DM.Model.Repository.MessageMemberMapRepository;
 import com.instargram.instargram.Data.Image.Image;
 import com.instargram.instargram.Data.Image.ImageService;
@@ -17,6 +19,7 @@ import com.instargram.instargram.Member.Service.MemberService;
 import lombok.Builder;
 import org.springframework.stereotype.Service;
 
+import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -29,6 +32,7 @@ public class MessageMemberMapService {
     private final MessageService messageService;
     private final ImageService imageService;
     private final VideoService videoService;
+    private final EmojiRepository emojiRepository;
 
     public List<Message_Member_Map> getList(Room room)
     {
@@ -62,7 +66,6 @@ public class MessageMemberMapService {
         messageMemberMap.setMember(sender);
         messageMemberMap.setCreateDate(LocalDateTime.now());
         messageMemberMap.setRoom(room);
-        messageMemberMap.setEmpathy("");
         messageMemberMap.setSeeMember("");
 
         return messageMemberMapRepository.save(messageMemberMap);
@@ -235,5 +238,29 @@ public class MessageMemberMapService {
 
         result.put("commentIds", commentMapIdList);
         return result;
+    }
+
+
+    public Emoji createEmoji(Map<String, Object> msg, String username)
+    {
+        Member member = memberService.getMember(username);
+        Message_Member_Map map = getMap(Long.valueOf(msg.get("msgId").toString()));
+
+        Emoji emoji = emojiRepository.findByMemberAndMap(member, map);
+
+        if(emoji == null)
+        {
+            emoji = new Emoji();
+            emoji.setMember(member);
+            emoji.setMap(map);
+            msg.put("isNewEmoji", true);
+        }
+        else{
+            msg.put("isNewEmoji", false);
+        }
+
+        emoji.setContent(msg.get("emoji").toString());
+
+        return emojiRepository.save(emoji);
     }
 }

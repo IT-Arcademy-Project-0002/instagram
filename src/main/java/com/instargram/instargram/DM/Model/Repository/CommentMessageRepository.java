@@ -12,4 +12,6 @@ public interface CommentMessageRepository extends JpaRepository<CommentMessage, 
     CommentMessage findByMessage(Message message);
 
     List<CommentMessage> findByMessageMap(Message_Member_Map map);
+
+    void deleteByMessage(Message message);
 }

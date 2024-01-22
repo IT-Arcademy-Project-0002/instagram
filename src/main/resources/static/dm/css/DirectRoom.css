@@ -13,6 +13,11 @@
     visibility: visible;
 }
 
+.dm-supply-menu:has(.emoji-btn.show)
+{
+    visibility: visible;
+}
+
 .dm-members:hover
 {
     color: black;

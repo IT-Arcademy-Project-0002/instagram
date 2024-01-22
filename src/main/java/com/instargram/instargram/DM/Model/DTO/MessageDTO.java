@@ -1,6 +1,7 @@
 package com.instargram.instargram.DM.Model.DTO;
 
 import com.instargram.instargram.DM.Model.Entity.Message.CommentMessage;
+import com.instargram.instargram.DM.Model.Entity.Message.Emoji;
 import com.instargram.instargram.DM.Model.Entity.Message.Message;
 import com.instargram.instargram.DM.Model.Entity.Message.Message_Member_Map;
 import com.instargram.instargram.DM.Model.Entity.Room.Room;
@@ -14,10 +15,7 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 @Getter
 @Setter
@@ -30,7 +28,7 @@ public class MessageDTO {
 
     private Long dataId;
 
-    private String Empathy;
+    private List<Emoji> emojis = new ArrayList<>();
 
     private Room room;
 
@@ -51,7 +49,7 @@ public class MessageDTO {
     {
         this.id = map.getId();
         this.createDate = map.getCreateDate();
-        this.Empathy = map.getEmpathy();
+        this.emojis = map.getEmojiList();
         this.room = map.getRoom();
         this.member = map.getMember();
         this.dataType = map.getDataType();

@@ -9,6 +9,7 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -28,7 +29,8 @@ public class Message_Member_Map {
     private Long dataId;
 
     // 감정 (null 일 수 있음)
-    private String Empathy;
+    @OneToMany(mappedBy = "map")
+    private List<Emoji> emojiList;
 
     // 댓글 여부 (데이터 타입이 1이면서 댓글 여부가 참일 때 코멘트)
     private boolean comment;

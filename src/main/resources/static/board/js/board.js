@@ -1,3 +1,83 @@
+$(document).ready(function () {
+    $('.popoverLink').popover({
+        content: function () {
+            var aa = `<div class="d-flex flex-column" style="padding:0; margin: 0; width: 500px; height: 200px; ">
+                    <div class="d-flex justify-content-between align-items-center p-2">
+                        <div class="Collection" style="font-weight: bold; font-size: 1rem;">
+                            컬렉션
+                        </div>
+                        <div type="button" id="collection" data-bs-toggle="modal" data-bs-target="#collectionModal">
+                            +
+                        </div>
+                    </div>
+                    <div class="border-bottom"></div>
+                    <div class="d-flex flex-column justify-content-between align-items-center p-3">
+                    </div>
+                </div>`;
+
+            aa += `<script th:inline="javascript">
+                const FeedGroupName = /*[[${FeedGroupName}]]*/ [];
+
+                FeedGroupName.forEach(function(item) {
+                    console.log(item);
+                });
+            </script>`;
+
+            return aa;
+        },
+        html: true,
+        placement: 'top',
+        trigger: 'manual',
+    }).on('mouseenter', function () {
+        var _this = this;
+        $(this).popover('show');
+
+        var boardId = $(this).find('input').data('id');
+
+        $('.popover').on('mouseleave', function () {
+            $(_this).popover('hide');
+        });
+
+        $('#collection').on('click', function () {
+            fetch(`/board/getImage/` + boardId)
+                .then(response => {
+                    return response.json();
+                })
+                .then(data => {
+                    var fileId = document.getElementById("fileId");
+                    if (data.videoName) {
+                        $('#collectionModal .file-container').html(`<video controls 
+                        src="/resources/${data.videoName}" 
+                        class="shadow text-center rounded"
+                        style="width: 100px; height: 100px; object-fit: cover;"></video>`);
+                        fileId.value = boardId;
+                    } else if (data.imageName) {
+                        $('#collectionModal .file-container').html(`<img src="/resources/${data.imageName}" 
+                        alt="..." class="shadow text-center rounded"
+                        style="width: 100px; height: 100px; object-fit: cover;">`);
+                        fileId.value = boardId;
+                    }
+
+                    const myModal = new bootstrap.Modal('#collectionModal', {
+                        keyboard: true
+                    });
+                    myModal.show();
+                })
+                .catch(error => {
+                    console.error('Error fetching file:', error);
+                });
+
+        });
+    }).on('mouseleave', function () {
+        var _this = this;
+        setTimeout(function () {
+            if (!$('.popover:hover').length) {
+                $(_this).popover('hide');
+            }
+        }, 100);
+    });
+});
+
 function setCommentOptionTarget(clickedElement) {
     console.log('클릭된 요소:', clickedElement);
 
@@ -65,9 +145,9 @@ function commentDelete() {
             return response.json();
         })
         .then(data => {
-            if (data.result){
+            if (data.result) {
                 commentArea.remove();
-            }else{
+            } else {
                 alert("해당 댓글을 찾을 수 없습니다.");
             }
         })
@@ -95,7 +175,7 @@ function recommentDelete() {
             return response.json();
         })
         .then(data => {
-            if (data.result){
+            if (data.result) {
                 recommentArea.remove();
                 var recommentChickBtn = document.getElementById(`recommentChickBtn-${data.comment.id}`)
                 console.log(recommentChickBtn);
@@ -132,7 +212,7 @@ function recommentDelete() {
                     `;
                 }
                 recommentChickBtn.replaceWith(newRecommentBtnDiv);
-            }else{
+            } else {
                 alert("해당 댓글을 찾을 수 없습니다.");
             }
         })
@@ -653,6 +733,45 @@ function clickSaveGroup(id) {
         })
         .catch(error => console.error('데이터를 받지 못했습니다.', error));
 }
+
+function boardSaveGroup() {
+    var id = document.getElementById("fileId").value;
+    var token = $("input[name='_csrf']").attr("value");
+    var header = $("input[name='_csrf_header']").attr("value");
+    var saveGroupName = document.getElementById("GroupName").value;
+    console.log(saveGroupName);
+
+    var saveGroupNameData = {
+        name: saveGroupName
+    };
+    console.log(saveGroupNameData);
+
+    fetch(`/board/saveFeed/${id}?GroupName=${encodeURIComponent(saveGroupName)}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json; charset=utf-8',
+            [header]: token
+        },
+        body: JSON.stringify(saveGroupNameData)
+    })
+        .then(response => {
+            return response.json();
+        })
+        .then(data => {
+            if (data.result) {
+                alert("게시글 저장");
+            }
+            document.getElementById("GroupName").value = '';
+        })
+        .then(() => {
+            $('#collectionModal').modal('hide');
+        })
+        .catch(error => {
+            console.error('Error saving feed:', error);
+        });
+}
+
+
 
 // 모달에서 게시글 저장
 function ModalclickSaveGroup(id) {

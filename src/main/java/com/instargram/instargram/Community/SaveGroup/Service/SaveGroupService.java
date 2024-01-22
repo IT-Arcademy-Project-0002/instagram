@@ -22,4 +22,10 @@ public class SaveGroupService {
             throw new DataNotFoundException("saveGroup not found");
         }
     }
+
+    public SaveGroup create(String groupName) {
+        SaveGroup saveGroup = new SaveGroup();
+        saveGroup.setName(groupName);
+        return this.saveGroupRepository.save(saveGroup);
+    }
 }

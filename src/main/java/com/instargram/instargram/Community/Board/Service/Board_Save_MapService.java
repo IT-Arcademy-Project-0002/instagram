@@ -8,6 +8,8 @@ import com.instargram.instargram.Member.Model.Entity.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class Board_Save_MapService {
@@ -24,7 +26,14 @@ public class Board_Save_MapService {
         return this.boardSaveMapRepository.findByBoardAndMemberAndSaveGroup(board, member, saveGroup);
     }
 
-    public void delete(Board_Save_Map map) {
-        this.boardSaveMapRepository.delete(map);
+
+    public void delete(Board board) {
+        List<Board_Save_Map> boardSaveMaps = boardSaveMapRepository.findByBoard(board);
+        boardSaveMapRepository.deleteAll(boardSaveMaps);
+    }
+
+    public List<Board_Save_Map> getSaveGroup(Member member) {
+        List<Board_Save_Map> boardSaveMaps = this.boardSaveMapRepository.findByMember(member);
+        return boardSaveMaps;
     }
 }

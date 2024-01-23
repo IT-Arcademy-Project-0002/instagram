@@ -2,11 +2,16 @@ package com.instargram.instargram.Notice.Controller;
 
 import com.instargram.instargram.Member.Model.Entity.Member;
 import com.instargram.instargram.Member.Service.MemberService;
+import com.instargram.instargram.Notice.Model.DTO.NoticeAlertDTO;
+import com.instargram.instargram.Notice.Model.Entity.Notice;
 import com.instargram.instargram.Notice.Service.NoticeSSEService;
 
 import com.instargram.instargram.Notice.Service.NoticeService;
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,6 +21,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.security.Principal;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
@@ -36,6 +45,27 @@ public class NoticeController {
     }
 
     @GetMapping("/alert")
+    public ResponseEntity<List<NoticeAlertDTO>> noticeAlert(Principal principal) {
+
+        List<NoticeAlertDTO> noticeAlertDTOList = new ArrayList<>();
+
+        Member member = this.memberService.getMemberByUsername(principal.getName());
+        List<Notice> noticeList =  this.noticeService.checkNoticeList(member);
+
+        for (Notice notice : noticeList) {
+            NoticeAlertDTO noticeAlertDTO = new NoticeAlertDTO();
+
+            noticeAlertDTO.setId(notice.getId());
+            noticeAlertDTO.setCreateDate(notice.getCreateDate());
+            noticeAlertDTO.setType(notice.getType());
+
+            noticeAlertDTOList.add(noticeAlertDTO);
+        }
+
+        return ResponseEntity.ok().body(noticeAlertDTOList);
+    }
+
+    @GetMapping("/alertSSE")
     public SseEmitter initSSE(Authentication authentication) {
 
         // principal이 null이 아니고, MemberService에서 사용자 정보를 가져올 수 있는 경우에만 처리합니다.

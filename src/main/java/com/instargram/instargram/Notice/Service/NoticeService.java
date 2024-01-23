@@ -222,9 +222,8 @@ public class NoticeService {
     }
 
 
-    public long checkNoticeList(Member member) {
-        List<Notice> uncheckedNotices = this.noticeRepository.findByMemberAndChecked(member, false);
-        return uncheckedNotices.size();
+    public List<Notice> checkNoticeList(Member member) {
+        return this.noticeRepository.findByMemberAndChecked(member, false);
     }
 
     @Transactional

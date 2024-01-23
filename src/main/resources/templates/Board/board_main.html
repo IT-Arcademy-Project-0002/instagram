@@ -15,19 +15,44 @@
             <div class="frag-main d-flex h-100">
                 <div class="content-background">
                     <div class="frag-story mt-3">
-                        <div class="d-flex flex-column">
-                            <div style="position: relative; width: 3rem; height: 3rem;">
-                                <img th:if="${loginMember.Image == null}"
-                                     src="/files/designImg/noneuser.png"
-                                     class="rounded-circle text-center"
-                                     style="position: absolute; top: 0; left: 0; transform: translate(50,50); width: 100%; height: 100%; object-fit: cover; margin: auto">
-                                <img th:unless="${loginMember.Image == null}"
-                                     th:src="@{|/resources/${loginMember.Image.name}|}"
-                                     class="rounded-circle text-center"
-                                     style="position: absolute; top: 0; left: 0; transform: translate(50,50); width: 100%; height: 100%; object-fit: cover; margin: auto">
+                        <div class="d-flex">
+                            <div class="d-flex flex-column">
+                                <div style="position: relative; width: 3.5rem; height: 3.5rem;">
+                                    <img th:if="${loginMember.Image == null}"
+                                         src="/files/designImg/noneuser.png"
+                                         class="rounded-circle text-center"
+                                         style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; margin: auto">
+
+                                    <img th:unless="${loginMember.Image == null}"
+                                         th:src="@{|/resources/${loginMember.Image.name}|}"
+                                         class="rounded-circle text-center"
+                                         style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; margin: auto">
+
+                                    <button data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                        <span class="position-absolute bottom-0 end-0 p-0 bg-primary border border-light rounded-circle d-flex justify-content-center align-items-center text-white" style="width: 1.5rem; height: 1.5rem; border-width: 5px;">+</span>
+                                    </button>
+                                </div>
+                                <div class="text-center" style="font-weight: bold; font-size: smaller"
+                                     th:text="${loginMember.username}"></div>
                             </div>
-                            <div style="font-weight: bold; font-size: smaller"
-                                 th:text="${loginMember.username}"></div>
+                        </div>
+                        <!-- Modal -->
+                        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        ...
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                        <button type="button" class="btn btn-primary">Save changes</button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="frag-board mt-4 p-0">
@@ -224,23 +249,30 @@
                                 </div>
 
                                 <!-- collectionModal -->
-                                <div class="modal fade" id="collectionModal" tabindex="-1" aria-labelledby="collectionModalLabel" aria-hidden="true">
+                                <div class="modal fade" id="collectionModal" tabindex="-1"
+                                     aria-labelledby="collectionModalLabel" aria-hidden="true">
                                     <div class="modal-dialog modal-dialog-centered modal-sm">
                                         <div class="modal-content">
                                             <div class="modal-header">
                                                 <h1 class="modal-title fs-5" id="collectionModalLabel">새 컬렉션</h1>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="reloadPage()" aria-label="Close"></button>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                        onclick="reloadPage()" aria-label="Close"></button>
                                             </div>
-                                            <div class="modal-body d-flex flex-column justify-content-center align-items-center" style="width: 100%; height: 100%;">
+                                            <div class="modal-body d-flex flex-column justify-content-center align-items-center"
+                                                 style="width: 100%; height: 100%;">
                                                 <div class="file-container">
                                                 </div>
                                                 <div class="input-group" style="width: 100%; margin-top: 20px;">
-                                                    <input type="text" class="form-control" id="GroupName" name="GroupName">
+                                                    <input type="text" class="form-control" id="GroupName"
+                                                           name="GroupName">
                                                 </div>
                                                 <input id="fileId" type="hidden">
                                             </div>
-                                            <div class="modal-footer d-flex justify-content-center p-0" style="width: 100%;">
-                                                <button type="button" class="btn noneBtn btn-link" onclick="boardSaveGroup()">저장</button>
+                                            <div class="modal-footer d-flex justify-content-center p-0"
+                                                 style="width: 100%;">
+                                                <button type="button" class="btn noneBtn btn-link"
+                                                        onclick="boardSaveGroup()">저장
+                                                </button>
                                             </div>
                                         </div>
                                     </div>

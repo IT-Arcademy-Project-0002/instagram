@@ -122,7 +122,7 @@
                                                  stroke-width="2"></polygon>
                                     </svg>
                                     <span class="bg-danger rounded-circle" style="width: 15px; height: 15px; margin-left: -10px; margin-top: -6px; color: white; font-size: 8px;">
-                                        <span th:text="@{|12|}" style="margin-top:1px; margin-left: -48px; font-size: 8px;"></span>
+                                        <span th:if="${#lists.size(noticesChecked) > 0}" th:text="@{|12|}" style="margin-top:1px; margin-left: -48px; font-size: 8px;"></span>
                                     </span>
                                     <span class="menu_list_text menu_text"> 메시지 </span>
                                 </div>
@@ -141,9 +141,9 @@
                                          viewBox="0 0 24 24" width="24">
                                         <path d="M16.792 3.904A4.989 4.989 0 0 1 21.5 9.122c0 3.072-2.652 4.959-5.197 7.222-2.512 2.243-3.865 3.469-4.303 3.752-.477-.309-2.143-1.823-4.303-3.752C5.141 14.072 2.5 12.167 2.5 9.122a4.989 4.989 0 0 1 4.708-5.218 4.21 4.21 0 0 1 3.675 1.941c.84 1.175.98 1.763 1.12 1.763s.278-.588 1.11-1.766a4.17 4.17 0 0 1 3.679-1.938m0-2a6.04 6.04 0 0 0-4.797 2.127 6.052 6.052 0 0 0-4.787-2.127A6.985 6.985 0 0 0 .5 9.122c0 3.61 2.55 5.827 5.015 7.97.283.246.569.494.853.747l1.027.918a44.998 44.998 0 0 0 3.518 3.018 2 2 0 0 0 2.174 0 45.263 45.263 0 0 0 3.626-3.115l.922-.824c.293-.26.59-.519.885-.774 2.334-2.025 4.98-4.32 4.98-7.94a6.985 6.985 0 0 0-6.708-7.218Z"></path>
                                     </svg>
-                                    <span th:if = "${noticesChecked > 0}" class="bg-danger rounded-circle" style="width: 8px; height: 8px; margin-left:-10px;"></span>
+                                    <span th:if="${#lists.size(noticesChecked) > 0}" class="bg-danger rounded-circle" style="width: 8px; height: 8px; margin-left:-10px;"></span>
                                     <span class="menu_list_text menu_text"> 알림 </span>
-<!--                                    <span id="noticePopoverSpan"></span>-->
+                                    <span id="noticePopoverSpan"></span>
                                 </label>
                             </div>
                             <input class="expand-menu" type="checkbox" id="expand-notify-menu" name="expand-menu"
@@ -320,54 +320,120 @@
         var popoverInstance;
 
         document.addEventListener('DOMContentLoaded', function () {
-            var popoverElement = document.getElementById('noticePopoverSpan');
 
-            popoverElement.style.marginLeft = '-85px';
-            popoverElement.style.marginTop = '12px';
+            // 알람의 종류 및 개수를 판별하기 위한 fetch 비동기 통신
+            // notice 엔티티의 알림타입 (enum 기반)
+            var countNoticeLikeSeries = 0; // 좋아요 계열 : 1, 3, 5, 7
+            var countNoticeFollowSeries = 0; // 팔로우 계열 : 8, 9
+            var countNoticeTextSeries = 0; // 텍스트 계열 : 2, 4, 6
+            var countNoticeDMSeries = 0; // 디엠계열 : 10, 11
 
-            var dataContent ='<div style="color: #FFFFFF;">'
-                + '<svg aria-label="하트" fill="#FFFFFF" height="20" role="img" viewBox="0 0 24 24" width="20">'
-                + '<path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C15.09 3.81 16.76 3 18.5 3 21.58 3 24 5.42 24 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"></path></svg>'
-                + ' 99+';
+            fetch("/notice/alert")
+                .then(response => response.json())
+                .then(data => {
+                    data.forEach(notice => {
+                        switch (notice.type) {
+                            case 1:
+                            case 3:
+                            case 5:
+                            case 7:
+                                countNoticeLikeSeries++;
+                                break;
+                            case 8:
+                            case 9:
+                                countNoticeFollowSeries++;
+                                break;
+                            case 2:
+                            case 4:
+                            case 6:
+                                countNoticeTextSeries++;
+                                break;
+                            case 10:
+                            case 11:
+                                countNoticeDMSeries++;
+                                break;
+                        }
+                    });
+
+                    var popoverElement = document.getElementById('noticePopoverSpan');
+
+                    popoverElement.style.marginLeft = '-85px';
+                    popoverElement.style.marginTop = '12px';
+
+                    <!-- 팝오버 알림 내용 생성 시작 -->
+
+                    var dataContent = ''; // 팝오버 내용 초기화
+
+                    // 좋아요 계열
+                    if (countNoticeLikeSeries > 0) {
+                        dataContent += '<div class="d-flex align-items-center">' +
+                            '<svg aria-label="좋아요알림" fill="#FFFFFF" height="20" role="img" viewBox="0 0 24 24" width="20">' +
+                            '<path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C15.09 3.81 16.76 3 18.5 3 21.58 3 24 5.42 24 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"></path></svg>' +
+                            '</div>' +
+                            '&nbsp;' + countNoticeLikeSeries + '&nbsp;';
+                    }
+
+                    // 팔로우 계열
+                    if (countNoticeFollowSeries > 0) {
+                        dataContent += '<div class="d-flex align-items-center">' +
+                            '<svg aria-label="팔로우알림" fill="#FFFFFF" height="16" role="img" viewBox="11.8362 6.5645 1.934 2.162" width="16">' +
+                            '<path d="M13.343 7.105 c 0 0.2985 -0.242 0.5405 -0.5405 0.5405 c -0.2985 0 -0.5405 -0.242 -0.5405 -0.5405 c 0 -0.2985 0.242 -0.5405 0.5405 -0.5405 C 13.101 6.565 13.343 6.8065 13.343 7.105 z M 13.548 8.7265 c 0.1575 0 0.2675 -0.1625 0.203 -0.306 c -0.163 -0.363 -0.5245 -0.616 -0.948 -0.616 c -0.424 0 -0.7855 0.253 -0.948 0.616 c -0.0645 0.144 0.0455 0.306 0.203 0.306 H 13.548 z"</path></svg>' +
+                            '</div>' +
+                            '&nbsp;' + countNoticeFollowSeries + '&nbsp;';
+                    }
+
+                    // 텍스트 계열
+                    if (countNoticeTextSeries > 0) {
+                        dataContent += '<div class="d-flex align-items-center">' +
+                            '<svg aria-label="텍스트알림" fill="#FFFFFF" height="18" role="img" viewBox="11.1701 3.92919 1.297 1.297" width="18">' +
+                            '<path d="M12.3525 4.9443 c 0.0855 -0.1239 0.1293 -0.2787 0.1098 -0.4446 c -0.036 -0.3066 -0.2922 -0.549 -0.6003 -0.5691 c -0.3921 -0.0255 -0.7155 0.2976 -0.6906 0.6894 c 0.0186 0.2913 0.2853 0.5709 0.5754 0.6021 c 0.1455 0.0156 0.2826 -0.0171 0.3975 -0.084 c 0.0198 -0.0114 0.0528 -0.0111 0.0729 -0.0003 c 0.0408 0.0216 0.1056 0.0558 0.1533 0.081 c 0.0216 0.0114 0.0456 -0.0099 0.0372 -0.0327 c -0.0201 -0.0531 -0.048 -0.1266 -0.0648 -0.1704 C 12.3336 4.9914 12.3381 4.9653 12.3525 4.9443 z"></path></svg>' +
+                            '</div>' +
+                            '&nbsp;' + countNoticeTextSeries;
+                    }
+
+                    // dataContent가 비어있지 않은 경우에만 전체 팝오버 표시
+                    if (dataContent !== '') {
+                        dataContent = '<div class="dataContent d-flex" style="color: #FFFFFF;">' + dataContent + '</div>';
+
+                        popoverInstance = new bootstrap.Popover(popoverElement, {
+                            placement: 'right',
+                            html: true,
+                            content: function () {
+                                var div = document.createElement('div');
+                                div.innerHTML = dataContent;
+                                return div;
+                            }
+                        });
+
+                        popoverInstance.show();
+
+                        // 팝오버의 DOM 요소에 직접 스타일 적용 (.tip을 사용하면 팝오버의 실제 DOM 요소에 직접 접근 가능)
+                        var popoverTip = popoverInstance.tip;
+                        popoverTip.style.backgroundColor = '#FF0000'; // 팝오버 배경 색상을 변경
+                        popoverTip.style.height = 'auto';
+                        popoverTip.style.width = 'auto';
+
+                        // 내부 화살표에 대한 스타일 변경 (CSS를 사용하지 않고 appendChild를 이용하여 가상 요소의 스타일을 직접 변경)
+                        var arrowInner = popoverTip.querySelector('.popover-arrow');
+                        var styleTag = document.createElement('style');
+                        styleTag.innerHTML = '::after { border-right-color: #FF0000 !important; }';
+                        arrowInner.appendChild(styleTag);
+
+                        setTimeout(function () {
+                            popoverInstance.hide();  // 5000ms(5초) 뒤에 팝오버를 숨김
+                        }, 5000);
+
+                    }
+                    <!-- 팝오버 알림 내용 생성 종료 -->
 
 
-            popoverInstance = new bootstrap.Popover(popoverElement, {
-                placement: 'right',
-                trigger: 'hover',
-                html: true,
-                content: function () {
-                    var div = document.createElement('div');
-                    div.innerHTML = dataContent;
-                    div.style.marginTop = '-10px';
-                    div.style.marginLeft = '-8px';
-                    return div;
-                }
-            });
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
 
-            popoverInstance.show();
 
-            // 팝오버의 DOM 요소에 직접 스타일 적용 (.tip을 사용하면 팝오버의 실제 DOM 요소에 직접 접근 가능)
-            var popoverTip = popoverInstance.tip;
-            popoverTip.style.backgroundColor = '#FF0000'; // 팝오버 배경 색상을 변경
-            popoverTip.style.height = '40px'; // 팝오버 높이를 변경
-            popoverTip.style.width = '80px'; // 팝오버 넓이를 변경
-
-            // 내부 화살표에 대한 스타일 변경
-            var arrowInner = popoverTip.querySelector('.popover-arrow');
-
-            // 가상 요소의 스타일을 직접 변경 (CSS를 사용하지 않고 JS 내에서 해결)
-            var styleTag = document.createElement('style');
-            styleTag.innerHTML = '::after { border-right-color: #FF0000 !important; }';
-            arrowInner.appendChild(styleTag);
-
-            setTimeout(function () {
-                popoverInstance.hide();  // 2000ms(2초) 뒤에 팝오버를 숨김
-            }, 2000);
         });
-
-        function clickDM(dm) {
-            popoverInstance.hide();
-        }
 
         function clickSearch(search) {
 
@@ -384,7 +450,7 @@
 
             popoverInstance.hide();
 
-            // noticeChecking();
+            noticeChecking(); // 알림메뉴 클릭시 알림체크여부를 false에서 true로 변경하는 함수
 
             var input = document.getElementById('expand-search-menu');
 
@@ -411,8 +477,7 @@
                 }
             })
                 .then(response => {
-                    // 응답 처리 (예: 성공 시 콘솔에 로그 출력)
-                    console.log('POST 요청 성공:', response);
+
                 })
                 .catch(error => {
                     // 오류 처리

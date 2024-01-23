@@ -4,6 +4,7 @@ import com.instargram.instargram.Community.Board.Model.Entity.Board;
 import com.instargram.instargram.Community.SaveGroup.Model.Entity.SaveGroup;
 import com.instargram.instargram.Community.SaveGroup.Model.Repository.SaveGroupRepository;
 import com.instargram.instargram.DataNotFoundException;
+import com.instargram.instargram.Member.Model.Entity.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -23,9 +24,14 @@ public class SaveGroupService {
         }
     }
 
-    public SaveGroup create(String groupName) {
+    public SaveGroup create(String groupName, Member member) {
         SaveGroup saveGroup = new SaveGroup();
         saveGroup.setName(groupName);
+        saveGroup.setMember(member);
         return this.saveGroupRepository.save(saveGroup);
+    }
+
+    public SaveGroup findByName(String name) {
+        return saveGroupRepository.findByName(name);
     }
 }

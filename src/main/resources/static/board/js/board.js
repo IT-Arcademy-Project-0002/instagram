@@ -12,18 +12,9 @@ $(document).ready(function () {
                     </div>
                     <div class="border-bottom"></div>
                     <div class="d-flex flex-column justify-content-between align-items-center p-3">
-                        <div th:if="${FeedGroupName}"></div>
+                        <div>${bb}</div>   
                     </div>
                 </div>`;
-
-            aa += `<script th:inline="javascript">
-                const FeedGroupName = /*[[${FeedGroupName}]]*/ [];
-
-                FeedGroupName.forEach(function(item) {
-                    console.log(item);
-                });
-            </script>`;
-
             return aa;
         },
         html: true,
@@ -755,12 +746,14 @@ function boardSaveGroup() {
         },
         body: JSON.stringify(saveGroupNameData)
     })
-        .then(response => {
-            return response.json();
-        })
+        .then(response => response.json())
         .then(data => {
+            var saved = document.getElementById('saved-svg' + id);
+            var notSave = document.getElementById('not-save-svg' + id);
             if (data.result) {
-                alert("게시글 저장");
+                saved.classList.add('visually-hidden');
+                notSave.classList.remove('visually-hidden');
+                alert(`${saveGroupName}에 저장`);
             }
             document.getElementById("GroupName").value = '';
         })

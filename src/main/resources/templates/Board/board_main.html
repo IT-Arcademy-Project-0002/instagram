@@ -15,7 +15,16 @@
             <div class="frag-main d-flex h-100">
                 <div class="content-background">
                     <div class="frag-story mt-3">
-                        스토리
+                        <div style="position: relative; width: 2.5rem; height: 2.5rem;">
+                            <img th:if="${feed.board.memberDTO.imageDTO == null}"
+                                 src="/files/designImg/noneuser.png"
+                                 class="shadow rounded-circle text-center"
+                                 style="width: 100%; height: 100%; object-fit: cover;">
+                            <img th:unless="${feed.board.memberDTO.imageDTO == null}"
+                                 th:src="@{|/resources/${feed.board.memberDTO.imageDTO.name}|}"
+                                 class="shadow rounded-circle text-center"
+                                 style="width: 100%; height: 100%; object-fit: cover;">
+                        </div>
                     </div>
                     <div class="frag-board mt-4">
                         <div th:each="feed, idx : ${feedList}" class="feedList p-3 border-bottom">
@@ -209,7 +218,8 @@
                                         <input th:data-id="${feed.board.id}" type="hidden" th:value="${feed.board.id}">
                                     </a>
                                 </div>
-                                <!-- Modal -->
+
+                                <!-- collectionModal -->
                                 <div class="modal fade" id="collectionModal" tabindex="-1" aria-labelledby="collectionModalLabel" aria-hidden="true">
                                     <div class="modal-dialog modal-dialog-centered modal-sm">
                                         <div class="modal-content">
@@ -231,6 +241,8 @@
                                         </div>
                                     </div>
                                 </div>
+                                <!-- collectionModal End -->
+
                             </div>
                             <!-- 좋아요 갯수 -->
                             <div class="px-2" id="likeCount"
@@ -1281,10 +1293,9 @@
     <!-- javascript -->
     <script th:src="@{/board/js/update_board.js}"></script>
 
-    <script th:src="@{/board/js/board.js}"></script>
-
     <script th:inline="javascript">
         const selectFeed = /*[[${selectFeed}]]*/ null;
+        const bb = "123"
         console.log(selectFeed);
         const myModal = new bootstrap.Modal('#BoardDetailModal', {
             keyboard: true
@@ -1293,6 +1304,7 @@
             myModal.show();
         }
     </script>
+    <script th:src="@{/board/js/board.js}"></script>
     <!-- javascript End-->
 </div>
 </html>

@@ -22,7 +22,7 @@ public class ImageService {
         return this.imageRepository.save(image);
     }
 
-    public Image saveImage(MultipartFile multipartFile, String nameWithoutExtension, String fileExtension) throws IOException, IOException {
+    public Image saveImage(MultipartFile multipartFile, String nameWithoutExtension, String fileExtension) throws IOException {
         UUID uuid = UUID.randomUUID();
         String name = uuid + "_" + nameWithoutExtension + "." + fileExtension;
 

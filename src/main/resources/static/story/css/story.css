@@ -1,0 +1,56 @@
+.myStory {
+    border: 3px solid transparent;
+    border-radius: 50%;
+    background-image: linear-gradient(#fff, #fff),
+    linear-gradient(to right, red 0%,  orange 100%);
+    background-origin: border-box;
+    background-clip: content-box, border-box;
+}
+
+.myStoryNull {
+    border: 3px solid #ccc; /* 변경된 부분: 회색 50%의 빈 테두리 추가 */
+    border-radius: 50%;
+    background-origin: border-box;
+    background-clip: content-box, border-box;
+}
+
+.showBtn{
+    display: block;
+}
+
+.hiddenBtn{
+    display: none;
+}
+
+
+.progress-container {
+    display: flex;
+    flex-direction: row; /* Horizontal layout */
+}
+
+.progress {
+    flex: 1; /* Equal width for each progress bar */
+    margin-right: 5px; /* Adjust spacing between progress bars */
+    position: relative;
+}
+
+.progress-bar {
+    transition: width 1s ease;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+}
+
+.countdown {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+}
+
+.image-container {
+    width: 100%; /* Make image containers take full width */
+    margin-top: 10px; /* Adjust spacing between image containers */
+}

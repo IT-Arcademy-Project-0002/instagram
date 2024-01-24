@@ -6,7 +6,6 @@ import com.instargram.instargram.Community.Board.Model.Entity.*;
 import com.instargram.instargram.Community.Board.Model.Form.BoardCreateForm;
 import com.instargram.instargram.Community.Board.Model.Form.BoardUpdateForm;
 import com.instargram.instargram.Community.Board.Service.*;
-import com.instargram.instargram.Community.Comment.Model.Entity.Comment;
 import com.instargram.instargram.Community.HashTag.Model.Entity.HashTag;
 import com.instargram.instargram.Community.HashTag.Service.HashTagService;
 import com.instargram.instargram.Community.Location.Model.DTO.LocationDTO;
@@ -25,7 +24,8 @@ import com.instargram.instargram.Member.Service.MemberService;
 import com.instargram.instargram.Notice.Model.Entity.Notice;
 import com.instargram.instargram.Notice.Service.NoticeBoardMapService;
 import com.instargram.instargram.Notice.Service.NoticeService;
-import jakarta.persistence.criteria.CriteriaBuilder;
+import com.instargram.instargram.Story.Model.Entity.Story_Data_Map;
+import com.instargram.instargram.Story.Service.StoryDataMapService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -56,6 +56,7 @@ public class BoardController {
     private final NoticeBoardMapService noticeBoardMapService;
     private final HashTagService hashTagService;
     private final BoardHashTagMapService boardHashTagMapService;
+    private final StoryDataMapService storyDataMapService;
 
     // main
     @GetMapping("/main")
@@ -69,9 +70,31 @@ public class BoardController {
         List<Board> allBoards = new ArrayList<>();
         allBoards.addAll(memberBoards);
         allBoards.addAll(followerBoards);
+    
+        // 컬렉션 
+        // 현재 유저의 컬렉션이 존재하는지 판단하는 코드 개발해야함
 
-        List<Board_Save_Map> FeedGroupName = this.boardSaveMapService.getSaveGroup(member);
-        model.addAttribute("FeedGroupName" , FeedGroupName);
+        Story_Data_Map storyDataMap = this.storyDataMapService.hasStory(member);
+        List<Story_Data_Map> storyList = this.storyDataMapService.getStoryList(member);
+        List<Image> imageList = new ArrayList<>();
+        if(storyDataMap == null){
+            model.addAttribute("isMyStory", false);
+            model.addAttribute("storyList", imageList);
+        }else{
+            model.addAttribute("isMyStory", true);
+            for (Story_Data_Map story : storyList) {
+                if (story.getDataType() == 2) {
+                    Long imageId = story.getDataId();
+                    Image image = this.imageService.getImageByID(imageId);
+                    if (image != null) {
+                        imageList.add(image);
+                    }
+                }
+            }
+            model.addAttribute("storyList", imageList);
+        }
+
+        // 팔로우 되어 있는 사용자가 스토리를 올리면 받아서 템플릿에 전송
 
         List<FeedListDTO> feedList = this.boardDataMapService.getFeed(allBoards);
         FeedDTO selectFeed = (FeedDTO) httpSession.getAttribute("selectFeed");
@@ -93,7 +116,6 @@ public class BoardController {
             return "redirect:/main";
         }
         Member member = this.memberService.getMember(principal.getName());
-
 
         // Location
         Location islocation = this.locationService.exists(locationDTO.getLocationId());

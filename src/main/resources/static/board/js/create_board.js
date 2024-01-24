@@ -163,6 +163,8 @@ hashTagInputElement.addEventListener('input', function () {
 
 function clickFileUpload() {
     var upload = document.getElementById("file-upload");
+    console.log(upload);
+
     upload.click();
 
     upload.addEventListener('change', function () {
@@ -170,6 +172,7 @@ function clickFileUpload() {
         $(firstModal).modal('hide'); // 첫 번째 모달 닫기
 
         var selectedFiles = event.target.files;
+        console.log(selectedFiles);
         let filesArray = [];
         // 선택된 각 파일을 배열에 추가하기
         for (let i = 0; i < selectedFiles.length; i++) {

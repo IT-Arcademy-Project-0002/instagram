@@ -3,6 +3,7 @@
 <head>
     <link rel="stylesheet" type="text/css" th:href="@{/board/css/board_content.css}">
     <link rel="stylesheet" type="text/css" th:href="@{/board/css/modal.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/story/css/story.css}">
     <link rel="stylesheet" type="text/css" th:href="@{/board/css/modify_location.css}">
 </head>
 <div layout:fragment="content">
@@ -17,103 +18,318 @@
                     <div class="frag-story mt-3">
                         <div class="d-flex">
                             <div class="d-flex flex-column">
-                                <div style="position: relative; width: 3.5rem; height: 3.5rem;">
-                                    <img th:if="${loginMember.Image == null}"
-                                         src="/files/designImg/noneuser.png"
-                                         class="rounded-circle text-center"
-                                         style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; margin: auto">
+                                <div th:classappend="${isMyStory} ? 'myStory' : ''"
+                                     style="position: relative; width: 4rem; height: 4rem;">
+                                    <div id="openStoryListModal">
+                                        <img th:if="${loginMember.Image == null}"
+                                             src="/files/designImg/noneuser.png"
+                                             class="rounded-circle text-center"
+                                             style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; margin: auto">
 
-                                    <img th:unless="${loginMember.Image == null}"
-                                         th:src="@{|/resources/${loginMember.Image.name}|}"
-                                         class="rounded-circle text-center"
-                                         style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; margin: auto">
-
-                                    <button data-bs-toggle="modal" data-bs-target="#exampleModal">
-                                        <span class="position-absolute bottom-0 end-0 p-0 bg-primary border border-light rounded-circle d-flex justify-content-center align-items-center text-white" style="width: 1.5rem; height: 1.5rem; border-width: 5px;">+</span>
-                                    </button>
+                                        <img th:unless="${loginMember.Image == null}"
+                                             th:src="@{|/resources/${loginMember.Image.name}|}"
+                                             class="rounded-circle text-center"
+                                             style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; margin: auto">
+                                    </div>
+                                    <span data-bs-toggle="modal" data-bs-target="#StoryUploadModal"
+                                          class="position-absolute bottom-0 end-0 p-0 bg-primary border border-light rounded-circle d-flex justify-content-center align-items-center text-white"
+                                          style="width: 1.2rem; height: 1.2rem; border-width: 5px;">+</span>
                                 </div>
                                 <div class="text-center" style="font-weight: bold; font-size: smaller"
                                      th:text="${loginMember.username}"></div>
                             </div>
                         </div>
-                        <!-- Modal -->
-                        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+
+                        <!-- StoryListModal -->
+                        <div class="modal fade" id="StoryListModal" tabindex="-1" aria-labelledby="StoryListModalLabel"
+                             data-bs-backdrop="static" data-bs-keyboard="false" aria-hidden="true">
                             <div class="modal-dialog modal-dialog-centered">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        <h1 class="modal-title fs-5" id="StoryListModalLabel">스토리</h1>
+                                        <button type="button" class="btn-close" id="storyListModalClose" data-bs-dismiss="modal" aria-label="Close" onclick="reloadPage()"></button>
                                     </div>
                                     <div class="modal-body">
-                                        ...
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                        <button type="button" class="btn btn-primary">Save changes</button>
+                                        <div class="progress-container">
+                                            <div th:each="img, iterStat : ${storyList}" class="progress" role="progressbar"
+                                                 aria-label="Basic example" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+                                                <div class="progress-bar bg-dark" th:id="'progressBar' + ${iterStat.index}"
+                                                     style="width: 0%"></div>
+                                                <div class="countdown" th:id="'countdown' + ${iterStat.index}"></div>
+                                            </div>
+                                        </div>
+                                        <div id="carouselExample" class="carousel slide mt-1" data-bs-touch="false"
+                                             data-interval="false">
+                                            <div class="carousel-inner">
+                                                <div th:each="file, iterStat: ${storyList}">
+                                                    <div class="carousel-item"
+                                                         th:classappend="${iterStat.index == 0} ? 'active' : ''">
+                                                        <!-- Image -->
+                                                        <img th:if="${#strings.endsWith(file.name, '.jpg') or #strings.endsWith(file.name, '.jpeg') or #strings.endsWith(file.name, '.png')}"
+                                                             th:id="${file.getId()}"
+                                                             th:src="@{|/resources/${file.name}|}" alt="..."
+                                                             class="shadow text-center rounded"
+                                                             style="width: 100%; height: 100%;">
+                                                    </div>
+                                                </div>
+                                                <button class="carousel-control-prev" type="button"
+                                                        th:classappend="${#lists.size(storyList) == 1 } ? 'visually-hidden'"
+                                                        data-bs-target="#carouselExample"
+                                                        data-bs-slide="prev">
+                                                    <span class="carousel-control-prev-icon"
+                                                          aria-hidden="true"></span>
+                                                    <span class="visually-hidden">Previous</span>
+                                                </button>
+                                                <button class="carousel-control-next" type="button"
+                                                        th:classappend="${#lists.size(storyList) == 1 } ? 'visually-hidden'"
+                                                        data-bs-target="#carouselExample"
+                                                        data-bs-slide="next"
+                                                        data-test-id="imgChangeBtn">
+                                                    <span class="carousel-control-next-icon"
+                                                          aria-hidden="true"></span>
+                                                    <span class="visually-hidden">Next</span>
+                                                </button>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                        <script th:inline="javascript">
+                            document.getElementById('openStoryListModal').addEventListener('click', function() {
+                                if (typeof /*[[${storyList}]]*/ !== 'undefined' && /*[[${storyList}]]*/ !== null) {
+                                    var myModal = new bootstrap.Modal(document.getElementById('StoryListModal'));
+                                    myModal.show();
+                                } else {
+                                    console.log('storyList is null or undefined. Modal not shown.');
+                                }
+                            });
+
+                            document.addEventListener('DOMContentLoaded', function () {
+                                var imageCount = /*[[${#lists.size(storyList)}]]*/ 0;
+                                console.log(imageCount);
+                                var duration = 3;
+
+                                function updateProgressBar(index, percentage) {
+                                    var progressBarId = 'progressBar' + index;
+                                    var progressBar = document.getElementById(progressBarId);
+                                    if (progressBar) {
+                                        progressBar.style.width = percentage + '%';
+                                    }
+                                }
+
+                                function updateCountdown(index, seconds) {
+                                    var countdownId = 'countdown' + index;
+                                    document.getElementById(countdownId);
+                                }
+
+                                function startCountdown(index, callback) {
+                                    var seconds = duration;
+                                    var interval = setInterval(function () {
+                                        updateCountdown(index, seconds);
+                                        updateProgressBar(index, (duration - seconds) / duration * 100);
+
+                                        if (seconds <= 0) {
+                                            clearInterval(interval);
+                                            if (callback) {
+                                                callback();
+                                            }
+                                        }
+                                        seconds--;
+                                    }, 1000);
+                                }
+
+                                function startCountdownForImages(index) {
+                                    console.log(index);
+                                    // 이미지의 개수가 0보다 큰 경우에만 카운트다운 시작
+                                    if (index < imageCount && imageCount > 0) {
+                                        startCountdown(index, function () {
+                                            // 현재 이미지의 카운트다운이 끝나면 다음 이미지에 대한 카운트다운 시작
+                                            startCountdownForImages(index + 1);
+                                            if (index + 1) {
+                                                setTimeout(function () {
+                                                    var nextButton = document.querySelector('[data-test-id="imgChangeBtn"]');
+                                                    if (nextButton) {
+                                                        nextButton.click();
+                                                    }
+                                                }, 1000);
+                                            }
+                                        });
+                                    } else {
+                                        // 이미지의 개수가 0보다 크지 않거나 index가 이미지 개수와 같다면 btn을 클릭
+                                        var btn = document.getElementById('storyListModalClose');
+                                        if (btn) {
+                                            setTimeout(function () {
+                                                btn.click();
+                                            }, 1000);
+                                        }
+                                    }
+                                }
+                                // 이미지의 개수가 0보다 큰 경우에만 첫 번째 이미지에 대한 카운트다운 시작
+                                if (imageCount > 0) {
+                                    startCountdownForImages(0);
+                                }
+                            });
+                        </script>
+                        <!-- StoryListModal End -->
+
+
+                        <!-- StoryUploadModal -->
+                        <div class="modal fade" id="StoryUploadModal" tabindex="-1" data-bs-backdrop="static"
+                             data-bs-keyboard="false" aria-labelledby="StoryUploadModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <form th:action="@{/story/create}" method="post" enctype="multipart/form-data">
+                                        <div class="modal-header p-2 d-flex justify-content-between align-items-center">
+                                            <button type="button" class="btn-close m-0" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                            <h1 class="modal-title fs-5" style="font-weight: bold;">스토리</h1>
+                                            <button type="submit" class="btn noneBtn btn-link">
+                                                <svg width="15" height="15" viewBox="0 0 1248.000000 1280.000000"
+                                                     preserveAspectRatio="xMidYMid meet">
+                                                    <g transform="translate(0.000000,1280.000000) scale(0.100000,-0.100000)"
+                                                       fill="#000000" stroke="none">
+                                                        <path d="M10990 12794 c-148 -18 -348 -78 -471 -139 -171 -87 -363 -246 -469 -390 -25 -33 -1255 -1609 -2733 -3503 -1740 -2227 -2693 -3440 -2700 -3435 -55 33 -2153 1554 -2234 1620 -244 198 -479 321 -738 389 -135 35 -374 45 -519 20 -558 -95 -991 -521 -1103 -1084 -12 -61 -17 -136 -17 -252 -1 -179 18 -297 71 -444 36 -101 125 -270 181 -346 27 -36 462 -535 967 -1110 1869 -2125 2583 -2940 3089 -3522 l519 -597 27 37 c153 212 7390 10657 7431 10725 317 525 223 1224 -222 1653 -251 241 -556 370 -899 378 -80 3 -161 2 -180 0z"/>
+                                                    </g>
+                                                </svg>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body p-0 d-flex flex-column justify-content-center align-items-center">
+                                            <div id="storyFile-container">
+                                            </div>
+                                            <div id="btnGroup">
+                                                <button type="button" class="btn btn-primary my-3 text-white"
+                                                        onclick="clickStoryFileUpload()">
+                                                    컴퓨터에서 선택
+                                                </button>
+                                            </div>
+                                            <div class="visually-hidden">
+                                                <input type="file" name="story" id="story">
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- StoryUploadModal End -->
                     </div>
-                    <div class="frag-board mt-4 p-0">
+                    <div class="frag-board p-0">
                         <div th:each="feed, idx : ${feedList}" class="feedList p-3 border-bottom">
                             <!--location null-->
                             <div th:if="${feed.board.locationDTO == null}">
-                                <div class="d-flex" style="padding: 0 0 12px 4px;">
-                                    <div style="position: relative; width: 2.5rem; height: 2.5rem;">
-                                        <img th:if="${feed.board.memberDTO.imageDTO == null}"
-                                             src="/files/designImg/noneuser.png"
-                                             class="shadow rounded-circle text-center"
-                                             style="width: 100%; height: 100%; object-fit: cover;">
-                                        <img th:unless="${feed.board.memberDTO.imageDTO == null}"
-                                             th:src="@{|/resources/${feed.board.memberDTO.imageDTO.name}|}"
-                                             class="shadow rounded-circle text-center"
-                                             style="width: 100%; height: 100%; object-fit: cover;">
-                                    </div>
-                                    <div class="d-flex mx-2">
-                                        <div class="d-flex justify-content-center align-items-center text-center">
-                                            <div class="d-flex">
-                                                <div style="font-weight: bold; font-size: medium"
-                                                     th:text="${feed.board.memberDTO.username}"></div>
-                                            </div>
-                                            <div class="d-flex" style="font-size: smaller;">
-                                                <span class="mx-2" dir="auto"
-                                                      style="line-height: var(--base-line-clamp-line-height); --base-line-clamp-line-height: 18px;">•</span>
-                                                <div th:text="${#temporals.format(feed.board.createDate, 'yyyy-MM-dd HH:mm:ss')}"></div>
+                                <div class="d-flex justify-content-between" style="padding: 0 0 12px 4px;">
+                                    <div class="d-flex">
+                                        <div style="position: relative; width: 2.5rem; height: 2.5rem;">
+                                            <img th:if="${feed.board.memberDTO.imageDTO == null}"
+                                                 src="/files/designImg/noneuser.png"
+                                                 class="shadow rounded-circle text-center"
+                                                 style="width: 100%; height: 100%; object-fit: cover;">
+                                            <img th:unless="${feed.board.memberDTO.imageDTO == null}"
+                                                 th:src="@{|/resources/${feed.board.memberDTO.imageDTO.name}|}"
+                                                 class="shadow rounded-circle text-center"
+                                                 style="width: 100%; height: 100%; object-fit: cover;">
+                                        </div>
+                                        <div class="d-flex mx-2">
+                                            <div class="d-flex justify-content-center align-items-center text-center">
+                                                <div class="d-flex">
+                                                    <div style="font-weight: bold; font-size: medium"
+                                                         th:text="${feed.board.memberDTO.username}"></div>
+                                                </div>
+                                                <div class="d-flex" style="font-size: smaller;">
+                                                    <span class="mx-2" dir="auto"
+                                                          style="line-height: var(--base-line-clamp-line-height); --base-line-clamp-line-height: 18px;">•</span>
+                                                    <div th:text="${#temporals.format(feed.board.createDate, 'yyyy-MM-dd HH:mm:ss')}"></div>
+                                                </div>
                                             </div>
                                         </div>
+                                    </div>
+                                    <div class="d-flex justify-content-center align-items-center">
+                                        <button type="button" class="btn noneBtn btn-link"
+                                                th:if="${feed.board.memberDTO.username} == ${loginMember.username}"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#CreateUserBoardSettingModal">
+                                            <svg aria-label="옵션 더 보기"
+                                                 fill="currentColor" height="24" role="img" viewBox="0 0 24 24"
+                                                 width="24"><title>옵션 더 보기</title>
+                                                <circle cx="12" cy="12" r="1.5"></circle>
+                                                <circle cx="6" cy="12" r="1.5"></circle>
+                                                <circle cx="18" cy="12" r="1.5"></circle>
+                                            </svg>
+                                        </button>
+                                        <!-- 다른 경우 UserBoardSettingModal 버튼을 보여줍니다. -->
+                                        <button type="button" class="btn noneBtn btn-link"
+                                                th:if="${feed.board.memberDTO.username} != ${loginMember.username}"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#UserBoardSettingModal">
+                                            <svg aria-label="옵션 더 보기"
+                                                 fill="currentColor" height="24" role="img" viewBox="0 0 24 24"
+                                                 width="24"><title>옵션 더 보기</title>
+                                                <circle cx="12" cy="12" r="1.5"></circle>
+                                                <circle cx="6" cy="12" r="1.5"></circle>
+                                                <circle cx="18" cy="12" r="1.5"></circle>
+                                            </svg>
+                                        </button>
                                     </div>
                                 </div>
                             </div>
 
                             <!--location not null-->
                             <div th:if="${feed.board.locationDTO != null}">
-                                <div class="d-flex" style="padding: 0 0 12px 4px;">
-                                    <div style="position: relative; width: 2.5rem; height: 2.5rem;">
-                                        <img th:if="${feed.board.memberDTO.imageDTO == null}"
-                                             src="/files/designImg/noneuser.png"
-                                             class="shadow rounded-circle text-center"
-                                             style="width: 100%; height: 100%; object-fit: cover;">
-                                        <img th:unless="${feed.board.memberDTO.imageDTO == null}"
-                                             th:src="@{|/resources/${feed.board.memberDTO.imageDTO.name}|}"
-                                             class="shadow rounded-circle text-center"
-                                             style="width: 100%; height: 100%; object-fit: cover;">
+                                <div class="d-flex justify-content-between" style="padding: 0 0 12px 4px;">
+                                    <div class="d-flex">
+                                        <div style="position: relative; width: 2.5rem; height: 2.5rem;">
+                                            <img th:if="${feed.board.memberDTO.imageDTO == null}"
+                                                 src="/files/designImg/noneuser.png"
+                                                 class="shadow rounded-circle text-center"
+                                                 style="width: 100%; height: 100%; object-fit: cover;">
+                                            <img th:unless="${feed.board.memberDTO.imageDTO == null}"
+                                                 th:src="@{|/resources/${feed.board.memberDTO.imageDTO.name}|}"
+                                                 class="shadow rounded-circle text-center"
+                                                 style="width: 100%; height: 100%; object-fit: cover;">
+                                        </div>
+                                        <div class="d-flex flex-column mx-2">
+                                            <div class="d-flex justify-content-center align-items-center text-center">
+                                                <div class="d-flex">
+                                                    <div style="font-weight: bold; font-size: medium"
+                                                         th:text="${feed.board.memberDTO.username}"></div>
+                                                </div>
+                                                <div class="d-flex" style="font-size: smaller;">
+                                                        <span class="mx-2" dir="auto"
+                                                              style="line-height: var(--base-line-clamp-line-height); --base-line-clamp-line-height: 18px;">•</span>
+                                                    <div th:text="${#temporals.format(feed.board.createDate, 'yyyy-MM-dd HH:mm:ss')}"></div>
+                                                </div>
+                                            </div>
+                                            <div class="d-flex" style="font-size: 0.8rem;">
+                                                <div th:text="${feed.board.locationDTO.placeName}"></div>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="d-flex flex-column mx-2">
-                                        <div class="d-flex justify-content-center align-items-center text-center">
-                                            <div class="d-flex">
-                                                <div style="font-weight: bold; font-size: medium"
-                                                     th:text="${feed.board.memberDTO.username}"></div>
-                                            </div>
-                                            <div class="d-flex" style="font-size: smaller;">
-                                                    <span class="mx-2" dir="auto"
-                                                          style="line-height: var(--base-line-clamp-line-height); --base-line-clamp-line-height: 18px;">•</span>
-                                                <div th:text="${#temporals.format(feed.board.createDate, 'yyyy-MM-dd HH:mm:ss')}"></div>
-                                            </div>
-                                        </div>
-                                        <div class="d-flex" style="font-size: 0.8rem;">
-                                            <div th:text="${feed.board.locationDTO.placeName}"></div>
-                                        </div>
+                                    <div class="d-flex justify-content-center align-items-center">
+                                        <button type="button" class="btn noneBtn btn-link"
+                                                th:if="${feed.board.memberDTO.username} == ${loginMember.username}"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#CreateUserBoardSettingModal">
+                                            <svg aria-label="옵션 더 보기"
+                                                 fill="currentColor" height="24" role="img" viewBox="0 0 24 24"
+                                                 width="24"><title>옵션 더 보기</title>
+                                                <circle cx="12" cy="12" r="1.5"></circle>
+                                                <circle cx="6" cy="12" r="1.5"></circle>
+                                                <circle cx="18" cy="12" r="1.5"></circle>
+                                            </svg>
+                                        </button>
+                                        <!-- 다른 경우 UserBoardSettingModal 버튼을 보여줍니다. -->
+                                        <button type="button" class="btn noneBtn btn-link"
+                                                th:if="${feed.board.memberDTO.username} != ${loginMember.username}"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#UserBoardSettingModal">
+                                            <svg aria-label="옵션 더 보기"
+                                                 fill="currentColor" height="24" role="img" viewBox="0 0 24 24"
+                                                 width="24"><title>옵션 더 보기</title>
+                                                <circle cx="12" cy="12" r="1.5"></circle>
+                                                <circle cx="6" cy="12" r="1.5"></circle>
+                                                <circle cx="18" cy="12" r="1.5"></circle>
+                                            </svg>
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -192,7 +408,6 @@
                                             </svg>
                                         </a>
                                     </div>
-
                                     <!-- Comment -->
                                     <a th:href="@{|/board/detail/${feed.board.id}|}">
                                         <div class="p-2" type="button" tabindex="0" data-bs-toggle="modal"
@@ -324,7 +539,7 @@
                                         <textarea class="form-control border-0 me-2" style="resize: none;"
                                                   name="content"
                                                   id="content" placeholder="댓글 달기..."></textarea>
-                                        <button type="submit" style="width: 10%;" class="btn noneBtn btn-link">
+                                        <button type="submit" style="width: 15%;" class="btn noneBtn btn-link">
                                             게시
                                         </button>
                                     </div>
@@ -487,7 +702,7 @@
                                                 th:if="${selectFeed.board.memberDTO.username} == ${loginMember.username}"
                                                 data-bs-toggle="modal"
                                                 data-bs-target="#CreateUserBoardSettingModal">
-                                            <svg aria-label="옵션 더 보기" class="x1lliihq x1n2onr6 x5n08af"
+                                            <svg aria-label="옵션 더 보기"
                                                  fill="currentColor" height="24" role="img" viewBox="0 0 24 24"
                                                  width="24"><title>옵션 더 보기</title>
                                                 <circle cx="12" cy="12" r="1.5"></circle>
@@ -500,7 +715,7 @@
                                                 th:if="${selectFeed.board.memberDTO.username} != ${loginMember.username}"
                                                 data-bs-toggle="modal"
                                                 data-bs-target="#UserBoardSettingModal">
-                                            <svg aria-label="옵션 더 보기" class="x1lliihq x1n2onr6 x5n08af"
+                                            <svg aria-label="옵션 더 보기"
                                                  fill="currentColor" height="24" role="img" viewBox="0 0 24 24"
                                                  width="24"><title>옵션 더 보기</title>
                                                 <circle cx="12" cy="12" r="1.5"></circle>
@@ -1327,6 +1542,8 @@
     <!-- 사용자 Recomment Modal End -->
 
     <!-- javascript -->
+    <script th:src="@{/story/js/create_story.js}"></script>
+    <script th:src="@{/story/js/story.js}"></script>
     <script th:src="@{/board/js/update_board.js}"></script>
 
     <script th:inline="javascript">

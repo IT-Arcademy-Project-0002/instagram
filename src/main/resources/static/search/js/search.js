@@ -191,7 +191,7 @@ $(document).ready(function () {
             specificName: specificName
         });
 
-        fetch('/search/favorite/create', {
+        fetch('/search/favorite/createSearch', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json; charset=utf-8',

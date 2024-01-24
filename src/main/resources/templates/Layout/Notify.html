@@ -1,8 +1,8 @@
 <div th:fragment="notifyFragment">
+
     <div class="mb-4">
         <h4><b>알림</b></h4>
     </div>
-
 
     <div th:each="notice, status : ${notices}">
         <!-- period가 1일 때 "이번 주"를 표시 -->
@@ -117,13 +117,16 @@
                 </div>
             </div>
             <div th:if="${notice.type == 8}">
-                <a th:href="@{'/member/page/' + ${notice.requestMember.username}}">
+
                     <div class="d-flex">
+                        <a th:href="@{'/member/page/' + ${notice.requestMember.username}}">
                         <div class="ms-2" style="width: 200px">
                             <input type="hidden" th:value="${notice.requestMember.username}" id="username">
-                            <span th:text="@{|${notice.requestMember.username}님이 팔로우를 요청했습니다.|}"></span>
+                            <span th:if="${not notice.follow and notice.follower or notice.follow}" th:text="@{|${notice.requestMember.username}님이 회원님을 팔로우하기 시작했습니다|}"></span>
+                            <span th:unless="${not notice.follow and notice.follower or notice.follow}" th:text="@{|${notice.requestMember.username}님이 팔로우를 요청했습니다.|}"></span>
                             <span th:text="@{|${notice.elapsedTime}|}" style="color: grey;"></span>
                         </div>
+                        </a>
                         <div style="width: 140px" th:id="${notice.id}">
                             <div id="apply-container" th:if="${not notice.follower}" class="d-flex align-items-center">
                                 <button id="apply-btn" class="ms-2 btn btn-primary text-light"
@@ -153,7 +156,6 @@
                             </div>
                         </div>
                     </div>
-                </a>
             </div>
         </div>
     </div>

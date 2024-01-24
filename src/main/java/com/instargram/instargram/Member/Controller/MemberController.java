@@ -201,7 +201,7 @@ public class MemberController {
     public ResponseEntity<Map<String, Object>> requestFollowDelete(@PathVariable("id")Long id, Principal principal)
     {
         Map<String, Object> result = new HashMap<>();
-        memberService.RequestFollowDelete(id);
+        memberService. RequestFollowDelete(id);
 
         return ResponseEntity.ok().body(result);
     }

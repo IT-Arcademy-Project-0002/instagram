@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -49,20 +50,12 @@ public class NoticeService {
     {
         Notice notice = new Notice();
 
-        notice.setType(type);
-        notice.setRequestMember(loginMember);
-        notice.setMember(member);
-        notice.setChecked(false);
-        notice.setCreateDate(LocalDateTime.now());
-
-        noticeRepository.save(notice);
-
-        return notice;
-    }
-
-    public Notice createRecommentTagMemberNotice(Integer type, Member loginMember, Member member)
-    {
-        Notice notice = new Notice();
+        if (type == 8) {
+            Notice existingNotice = this.noticeRepository.findByTypeAndRequestMemberAndMember(type, loginMember, member);
+            if (existingNotice != null) {
+                return existingNotice;
+            }
+        }
 
         notice.setType(type);
         notice.setRequestMember(loginMember);
@@ -70,7 +63,7 @@ public class NoticeService {
         notice.setChecked(false);
         notice.setCreateDate(LocalDateTime.now());
 
-        noticeRepository.save(notice);
+        this.noticeRepository.save(notice);
 
         return notice;
     }
@@ -221,14 +214,28 @@ public class NoticeService {
         }
     }
 
+    public List<Notice> checkDMList(Member member) {
+        return this.noticeRepository.findByMemberAndCheckedAndTypeIn(member, false, Arrays.asList(10, 11));
+    }
 
     public List<Notice> checkNoticeList(Member member) {
-        return this.noticeRepository.findByMemberAndChecked(member, false);
+        return this.noticeRepository.findByMemberAndCheckedAndTypeNotIn(member, false, Arrays.asList(10, 11));
     }
 
     @Transactional
-    public void noticeChecking(Member member) {
-        List<Notice> uncheckedNotices = this.noticeRepository.findByMemberAndChecked(member, false);
+    public void noticeChecking(Member member, List<Integer> types) {
+        List<Notice> uncheckedNotices = this.noticeRepository.findByMemberAndCheckedAndTypeNotIn(member, false, types);
+
+        for (Notice notice : uncheckedNotices) {
+            notice.setChecked(true);
+        }
+
+        noticeRepository.saveAll(uncheckedNotices);
+    }
+
+    @Transactional
+    public void noticeDMChecking(Member member, List<Integer> types) {
+        List<Notice> uncheckedNotices = this.noticeRepository.findByMemberAndCheckedAndTypeIn(member, false, types);
 
         for (Notice notice : uncheckedNotices) {
             notice.setChecked(true);

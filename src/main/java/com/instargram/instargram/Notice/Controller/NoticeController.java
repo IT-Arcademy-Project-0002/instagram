@@ -21,10 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.security.Principal;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Controller
 @RequiredArgsConstructor
@@ -40,7 +37,16 @@ public class NoticeController {
     public void noticeChecking(Principal principal) {
 
         Member member = this.memberService.getMemberByUsername(principal.getName());
-        this.noticeService.noticeChecking(member);
+        this.noticeService.noticeChecking(member, Arrays.asList(10, 11));
+
+    }
+
+    @PostMapping("/checkingDM")
+    @ResponseBody
+    public void noticeDMChecking(Principal principal) {
+
+        Member member = this.memberService.getMemberByUsername(principal.getName());
+        this.noticeService.noticeDMChecking(member, Arrays.asList(10, 11));
 
     }
 

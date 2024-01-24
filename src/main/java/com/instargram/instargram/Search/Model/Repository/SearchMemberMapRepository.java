@@ -3,6 +3,7 @@ package com.instargram.instargram.Search.Model.Repository;
 
 import com.instargram.instargram.Member.Model.Entity.Member;
 import com.instargram.instargram.Search.Model.Entity.SearchMemberMap;
+import org.springframework.core.annotation.MergedAnnotations;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
@@ -11,4 +12,5 @@ public interface SearchMemberMapRepository extends JpaRepository<SearchMemberMap
 
     List<SearchMemberMap> findByRequestMember(Member requestMember);
 
+    SearchMemberMap findByRequestMemberAndMember(Member requestMember, Member member);
 }

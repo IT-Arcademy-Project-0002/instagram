@@ -1,5 +1,6 @@
 package com.instargram.instargram.Search.Model.Repository;
 
+import com.instargram.instargram.Community.HashTag.Model.Entity.HashTag;
 import com.instargram.instargram.Member.Model.Entity.Member;
 import com.instargram.instargram.Search.Model.Entity.SearchHashTagMap;
 import com.instargram.instargram.Search.Model.Entity.SearchLocationMap;
@@ -11,4 +12,5 @@ public interface SearchHashTagMapRepository extends JpaRepository<SearchHashTagM
 
     List<SearchHashTagMap> findByRequestMember(Member requestMember);
 
+    SearchHashTagMap findByRequestMemberAndHashTag(Member requestMember, HashTag hashTag);
 }

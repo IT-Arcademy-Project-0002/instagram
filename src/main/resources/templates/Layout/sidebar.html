@@ -121,8 +121,8 @@
                                                  stroke="currentColor" stroke-linejoin="round"
                                                  stroke-width="2"></polygon>
                                     </svg>
-                                    <span class="bg-danger rounded-circle" style="width: 15px; height: 15px; margin-left: -10px; margin-top: -6px; color: white; font-size: 8px;">
-                                        <span th:if="${#lists.size(noticesChecked) > 0}" th:text="@{|12|}" style="margin-top:1px; margin-left: -48px; font-size: 8px;"></span>
+                                    <span th:if="${#lists.size(noticesDMChecked) > 0}" class="bg-danger rounded-circle" style="width: 15px; height: 15px; margin-left: -10px; margin-top: -6px; color: white; font-size: 8px;">
+                                        <span th:text="${#lists.size(noticesDMChecked)}" style="margin-top:1px; margin-left: -45px; font-size: 8px;"></span>
                                     </span>
                                     <span class="menu_list_text menu_text"> 메시지 </span>
                                 </div>
@@ -326,7 +326,6 @@
             var countNoticeLikeSeries = 0; // 좋아요 계열 : 1, 3, 5, 7
             var countNoticeFollowSeries = 0; // 팔로우 계열 : 8, 9
             var countNoticeTextSeries = 0; // 텍스트 계열 : 2, 4, 6
-            var countNoticeDMSeries = 0; // 디엠계열 : 10, 11
 
             fetch("/notice/alert")
                 .then(response => response.json())
@@ -347,10 +346,6 @@
                             case 4:
                             case 6:
                                 countNoticeTextSeries++;
-                                break;
-                            case 10:
-                            case 11:
-                                countNoticeDMSeries++;
                                 break;
                         }
                     });
@@ -437,7 +432,9 @@
 
         function clickSearch(search) {
 
-            popoverInstance.hide();
+            if (popoverInstance) {
+                popoverInstance.hide();
+            }
 
             var input = document.getElementById('expand-notify-menu');
 
@@ -448,7 +445,9 @@
 
         function clickNotify(notify) {
 
-            popoverInstance.hide();
+            if (popoverInstance) {
+                popoverInstance.hide();
+            }
 
             noticeChecking(); // 알림메뉴 클릭시 알림체크여부를 false에서 true로 변경하는 함수
 

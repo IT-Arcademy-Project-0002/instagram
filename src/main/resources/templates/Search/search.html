@@ -4,6 +4,8 @@
     <link rel="stylesheet" type="text/css" th:href="@{/search/css/search_content.css}">
 </head>
 <div layout:fragment="content">
+    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+    <input type="hidden" th:name="_csrf_header" th:value="${_csrf.headerName}"/>
     <div class = "search-content">
         <div class = "search-container border mb-3">
             <div class="input-group mb-2">

@@ -29,6 +29,8 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static java.lang.Integer.parseInt;
+
 @Controller
 @Builder
 @RequestMapping("/search")
@@ -62,7 +64,7 @@ public class SearchController {
         return searchResult;
     }
 
-    @PostMapping("/favorite/create")
+    @PostMapping("/favorite/createSearch")
     @ResponseBody
     public void searchFavoriteCreate(Principal principal, @RequestBody Map<String, Object> data) {
 
@@ -71,11 +73,12 @@ public class SearchController {
         Integer searchType = (Integer) data.get("favoriteType");
         String specificName = (String) data.get("specificName");
 
-
         if (searchType != null) {
             if (searchType == 1) {
                 Member member = this.memberService.getMemberByUsername(specificName);
-                this.searchMemberMapService.createSearchFavoriteMember(requestMember, member);
+                if (requestMember != member) {
+                    this.searchMemberMapService.createSearchFavoriteMember(requestMember, member);
+                }
             } else if (searchType == 2) {
                 Location location = this.locationService.getLocationByLocationId(specificName);
                 this.searchLocationMapService.createSearchFavoriteLocation(requestMember, location);
@@ -84,6 +87,31 @@ public class SearchController {
                 this.searchHashTagMapService.createSearchFavoriteHashTag(requestMember, hashTag);
             }
         }
+    }
+
+    @PostMapping("/favorite/createRecentFavoriteSearch")
+    @ResponseBody
+    public void searchFavoriteCreate2(Principal principal, @RequestBody Map<String, Object> data) {
+
+        Member requestMember = this.memberService.getMemberByUsername(principal.getName());
+
+        Integer searchType = parseInt(data.get("favoriteType").toString());
+        String specificName = data.get("specificName").toString();
+
+        if (searchType == 1) {
+            Member member = this.memberService.getMemberByUsername(specificName);
+            if (requestMember != member) {
+                this.searchMemberMapService.createSearchFavoriteMember(requestMember, member);
+            }
+        } else if (searchType == 2) {
+            Location location = this.locationService.getLocationByLocationId(specificName);
+            System.out.println("장소 이름 확인" + location.getPlaceName());
+            this.searchLocationMapService.createSearchFavoriteLocation(requestMember, location);
+        } else if (searchType == 3) {
+            HashTag hashTag = this.hashTagService.gethashTag(specificName);
+            this.searchHashTagMapService.createSearchFavoriteHashTag(requestMember, hashTag);
+        }
+
     }
 
     @PostMapping("/favorite/deleteAll")

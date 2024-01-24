@@ -21,8 +21,11 @@ public interface NoticeRepository extends JpaRepository<Notice, Long> {
     @Query("SELECT n FROM Notice n WHERE n.member = :member AND n.createDate <= :oneMonthAgo AND n.createDate >= :dueDate ORDER BY n.createDate DESC")
     List<Notice> findNoticesInPast(@Param("member") Member member, @Param("oneMonthAgo") LocalDateTime oneMonthAgo, @Param("dueDate") LocalDateTime dueDate);
 
-    List<Notice> findByMemberAndChecked(Member member, boolean checked);
+    Notice findByTypeAndRequestMemberAndMember(Integer type, Member requestmember, Member member);
 
-    // 12주를 넘어가는 알림을 자동삭제 하기 위한 함수
-    List<Notice> findByCreateDateBefore(LocalDateTime dueDate);
+    List<Notice> findByMemberAndCheckedAndTypeNotIn(Member member, boolean checked, List<Integer> types); // 미열람 알림 중 타입이 아닌 것을 찾기 (DM외, NotIn)
+
+    List<Notice> findByMemberAndCheckedAndTypeIn(Member member, boolean checked,  List<Integer> types); // 미열람 알림 중 타입에 해당하는 것을 찾기 (DM만, In)
+
+    List<Notice> findByCreateDateBefore(LocalDateTime dueDate); // 12주를 넘어가는 알림을 자동삭제 하기 위한 함수
 }

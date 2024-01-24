@@ -19,11 +19,19 @@ public class SearchLocationMapService {
     private final SearchLocationMapRepository searchLocationMapRepository;
 
     public void createSearchFavoriteLocation(Member requestMember, Location location) {
-        SearchLocationMap searchLocationMap = new SearchLocationMap();
-        searchLocationMap.setCreateDate(LocalDateTime.now());
-        searchLocationMap.setRequestMember(requestMember);
-        searchLocationMap.setLocation(location);
-        this.searchLocationMapRepository.save(searchLocationMap);
+
+        SearchLocationMap existingMap = searchLocationMapRepository.findByRequestMemberAndLocation(requestMember, location);
+
+        if (existingMap != null) {
+            existingMap.setCreateDate(LocalDateTime.now());
+            searchLocationMapRepository.save(existingMap);
+        } else {
+            SearchLocationMap searchLocationMap = new SearchLocationMap();
+            searchLocationMap.setCreateDate(LocalDateTime.now());
+            searchLocationMap.setRequestMember(requestMember);
+            searchLocationMap.setLocation(location);
+            this.searchLocationMapRepository.save(searchLocationMap);
+        }
 
     }
 

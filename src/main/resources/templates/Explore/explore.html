@@ -4,6 +4,8 @@
     <link rel="stylesheet" type="text/css" th:href="@{/Explore/css/explore_content.css}">
 </head>
 <div class="explore-container" layout:fragment="content">
+    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+    <input type="hidden" th:name="_csrf_header" th:value="${_csrf.headerName}"/>
     <div class="explore-content text-center w-75 mx-auto">
         <div class="row row-cols-3">
             <div th:each="exploreList : ${ExploreList}"  class="col-4 p-1">

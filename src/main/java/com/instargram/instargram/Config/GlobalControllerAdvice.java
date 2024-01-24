@@ -34,9 +34,10 @@ public class GlobalControllerAdvice {
         {
 
             Member member = this.memberService.getMember(principal.getName());
-            model.addAttribute("notices", this.noticeService.createNoticeList(member));
-            model.addAttribute("noticesChecked", this.noticeService.checkNoticeList(member));
-            model.addAttribute("searches", this.searchService.createSearchFavoriteList(member));
+            model.addAttribute("notices", this.noticeService.createNoticeList(member)); // 알림 리스트
+            model.addAttribute("noticesChecked", this.noticeService.checkNoticeList(member)); // DM 제외 미확인 알림
+            model.addAttribute("noticesDMChecked", this.noticeService.checkDMList(member)); // DM 미확인 알림
+            model.addAttribute("searches", this.searchService.createSearchFavoriteList(member)); // 지난검색기록 리스트
 
 
             if(member != null)

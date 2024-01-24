@@ -85,7 +85,7 @@ public class RecommentController {
                 // 댓글, 대댓글 회원이 아닌 다른 TagMember를 언급할때 실제 회원이 존재한다면(tagMember != null) 알림을 보내는 비즈니스 로직
                 Member tagMember = noticeCommentMapService.createTagMember(recommentCreateForm.getContent());
                 if (member != comment.getMember() && member != recomment.getMember() && tagMember != null) {
-                    Notice noticeForTabMember = this.noticeService.createRecommentTagMemberNotice(Enum_Data.COMMENT_RECOMMENT.getNumber(), member, tagMember);
+                    Notice noticeForTabMember = this.noticeService.createNotice(Enum_Data.COMMENT_RECOMMENT.getNumber(), member, tagMember);
                     noticeCommentMapService.createNoticeRecomment(recomment, noticeForTabMember);
                 }
             }

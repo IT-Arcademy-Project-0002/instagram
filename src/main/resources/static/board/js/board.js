@@ -765,8 +765,6 @@ function boardSaveGroup() {
         });
 }
 
-
-
 // 모달에서 게시글 저장
 function ModalclickSaveGroup(id) {
     fetch("/board/saveGroup/" + id)

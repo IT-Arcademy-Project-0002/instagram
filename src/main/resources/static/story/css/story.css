@@ -29,8 +29,9 @@
 }
 
 .progress {
-    flex: 1; /* Equal width for each progress bar */
-    margin-right: 5px; /* Adjust spacing between progress bars */
+    flex: 1;
+    margin-right: 5px;
+    height: 5px;
     position: relative;
 }
 
@@ -50,7 +51,7 @@
     color: white;
 }
 
-.image-container {
-    width: 100%; /* Make image containers take full width */
-    margin-top: 10px; /* Adjust spacing between image containers */
+.storyFile-container {
+    width: 100%;
+    margin-top: 10px;
 }

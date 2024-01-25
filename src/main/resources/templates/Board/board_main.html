@@ -17,10 +17,10 @@
                 <div class="content-background">
                     <div class="frag-story mt-3">
                         <div class="d-flex">
-                            <div class="d-flex flex-column">
+                            <div class="d-flex flex-column me-2">
                                 <div th:classappend="${isMyStory} ? 'myStory' : ''"
                                      style="position: relative; width: 4rem; height: 4rem;">
-                                    <div id="openStoryListModal" onclick="openStoryListModal()">
+                                    <div onclick="openStoryListModal()">
                                         <img th:if="${loginMember.Image == null}"
                                              src="/files/designImg/noneuser.png"
                                              class="rounded-circle text-center"
@@ -36,7 +36,90 @@
                                           style="width: 1.2rem; height: 1.2rem; border-width: 5px;">+</span>
                                 </div>
                                 <div class="text-center" style="font-weight: bold; font-size: smaller"
-                                     th:text="${loginMember.username}"></div>
+                                     th:text="${loginMember.username}">
+                                </div>
+                            </div>
+                            <div th:each="follower, iterStat : ${followerStory}" class="mx-2" th:if="${follower.isFollowMemberStory()}">
+                                <div class="d-flex flex-column">
+                                    <div th:classappend="${follower.isFollowMemberStory()} ? 'myStory' : ''"
+                                         style="position: relative; width: 4rem; height: 4rem;">
+                                        <input type="hidden" th:id="'followStory' + ${iterStat.index}" th:value="${#lists.size(follower.images)}" />
+                                        <div th:onclick="@{|openFollowStoryListModal(${iterStat.index})|}">
+                                            <img th:if="${follower.imageDTO == null}"
+                                                 src="/files/designImg/noneuser.png"
+                                                 class="rounded-circle text-center"
+                                                 style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; margin: auto">
+
+                                            <img th:unless="${follower.imageDTO == null}"
+                                                 th:src="@{|/resources/${follower.imageDTO.name}|}"
+                                                 class="rounded-circle text-center"
+                                                 style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; margin: auto">
+                                        </div>
+                                    </div>
+                                    <div class="text-center" style="font-weight: bold; font-size: smaller"
+                                         th:text="${follower.username}"></div>
+                                </div>
+
+                                <!-- StoryListModal -->
+                                <div class="modal fade" th:id="'followerStoryListModal' + ${iterStat.index}" tabindex="-1" th:aria-labelledby="'followerStoryListModalLabel' + ${iterStat.index}"
+                                     data-bs-backdrop="static" data-bs-keyboard="false" aria-hidden="true">
+                                    <div class="modal-dialog modal-lg">
+                                        <div class="modal-content" style="height: 880px;">
+                                            <div class="modal-header p-2">
+                                                <h1 class="modal-title fs-5" th:id="'followerStoryListModalLabel' + ${iterStat.index}" style="font-weight: bold;">스토리</h1>
+                                                <button type="button" class="btn-close" th:id="'followerStoryListModalClose' + ${iterStat.index}"
+                                                        data-bs-dismiss="modal" aria-label="Close" onclick="reloadPage()"></button>
+                                            </div>
+                                            <div class="modal-body p-0">
+                                                <div th:id="'carouselFollowerStory' + ${iterStat.index}" class="carousel slide" data-bs-touch="false"
+                                                     data-interval="false" style="position: relative;">
+                                                    <div class="progress-container"
+                                                         style="position: absolute; top: 8px; left: 5px; right: 5px; z-index: 1;">
+                                                        <div th:each="img, imgIndex : ${follower.images}" class="progress" role="progressbar"
+                                                             aria-label="Basic example" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+                                                            <div class="progress-bar bg-dark" th:id="'progressBar' + ${iterStat.index + '_' + imgIndex.index}"
+                                                                 style="width: 0%;"></div>
+                                                            <div class="countdown" th:id="'countdown' + ${iterStat.index + '_' + imgIndex.index}"></div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="carousel-inner">
+                                                        <!-- Image Carousel -->
+                                                        <div th:each="file, imgIndex: ${follower.images}">
+                                                            <div class="carousel-item"
+                                                                 th:classappend="${imgIndex.index == 0} ? 'active' : ''">
+                                                                <!-- Image -->
+                                                                <div class="img-Color"
+                                                                     style="width: 100%; height: 831px; display: flex; justify-content: center; align-items: center;">
+                                                                    <img th:if="${#strings.endsWith(file.name, '.jpg') or #strings.endsWith(file.name, '.jpeg') or #strings.endsWith(file.name, '.png')}"
+                                                                         th:src="@{|/resources/${file.name}|}" alt="..."
+                                                                         class="shadow"
+                                                                         style="width: 100%; height: auto; margin: auto;">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <!-- Navigation Buttons -->
+                                                        <button class="carousel-control-prev" type="button"
+                                                                th:classappend="${#lists.size(follower.images) == 1 ? 'visually-hidden' : ''}"
+                                                                th:data-bs-target="'#carouselFollowerStory' + ${iterStat.index}"
+                                                                data-bs-slide="prev">
+                                                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                                            <span class="visually-hidden">Previous</span>
+                                                        </button>
+
+                                                        <button class="carousel-control-next" type="button"
+                                                                th:classappend="${#lists.size(follower.images) == 1 ? 'visually-hidden' : ''}"
+                                                                th:data-bs-target="'#carouselFollowerStory' + ${iterStat.index}"
+                                                                data-bs-slide="next"
+                                                                th:data-test-id="imgChangeBtn + ${iterStat.index}">
+                                                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                                            <span class="visually-hidden">Next</span>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
@@ -1044,7 +1127,7 @@
                                                    th:id="${#lists.contains(selectFeed.board.boardSaveIds, selectFeed.board.id)}">
                                                     <div class="p-2" role="button" tabindex="0">
                                                         <svg th:id="@{|modal-saved-svg${selectFeed.board.id}|}"
-                                                             aria-label="저장"
+                                         `                    aria-label="저장"
                                                              th:classappend="${#lists.contains(selectFeed.board.boardSaveIds, selectFeed.board.id)} ? 'visually-hidden' : '' "
                                                              fill="currentColor" height="24" role="img"
                                                              viewBox="0 0 24 24"

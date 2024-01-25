@@ -15,15 +15,18 @@ import com.instargram.instargram.Community.Location.Service.LocationService;
 import com.instargram.instargram.Community.SaveGroup.Model.Entity.SaveGroup;
 import com.instargram.instargram.Community.SaveGroup.Service.SaveGroupService;
 import com.instargram.instargram.Data.Image.Image;
+import com.instargram.instargram.Data.Image.ImageDTO;
 import com.instargram.instargram.Data.Image.ImageService;
 import com.instargram.instargram.Data.Video.Video;
 import com.instargram.instargram.Data.Video.VideoService;
 import com.instargram.instargram.Enum_Data;
+import com.instargram.instargram.Member.Model.DTO.MemberDTO;
 import com.instargram.instargram.Member.Model.Entity.Member;
 import com.instargram.instargram.Member.Service.MemberService;
 import com.instargram.instargram.Notice.Model.Entity.Notice;
 import com.instargram.instargram.Notice.Service.NoticeBoardMapService;
 import com.instargram.instargram.Notice.Service.NoticeService;
+import com.instargram.instargram.Story.Model.DTO.StoryDTO;
 import com.instargram.instargram.Story.Model.Entity.Story_Data_Map;
 import com.instargram.instargram.Story.Service.StoryDataMapService;
 import jakarta.servlet.http.HttpSession;
@@ -65,7 +68,20 @@ public class BoardController {
 
         List<Board> memberBoards = this.boardService.getBoardsByMember(member);
         List<Long> followerIdList = this.memberService.getFollowing(member);
-        List<Board> followerBoards = this.boardService.getBoardsByFollowerIds(followerIdList);
+
+        List<Member> followerList = new ArrayList<>();
+        for (Long followerId : followerIdList) {
+            Member follower = this.memberService.getMemberById(followerId);
+            if (follower != null) {
+                followerList.add(follower);
+            }
+        }
+
+        List<Board> followerBoards = new ArrayList<>();
+        for (Member follower : followerList) {
+            List<Board> boards = this.boardService.getBoardsByMember(follower);
+            followerBoards.addAll(boards);
+        }
 
         List<Board> allBoards = new ArrayList<>();
         allBoards.addAll(memberBoards);
@@ -94,7 +110,35 @@ public class BoardController {
             model.addAttribute("storyList", imageList);
         }
 
-        // 팔로우 되어 있는 사용자가 스토리를 올리면 받아서 템플릿에 전송
+        if (!followerList.isEmpty()) {
+            List<MemberDTO> followerDTOList = new ArrayList<>();
+
+            for (Member follower : followerList) {
+                MemberDTO followerDTO = new MemberDTO(follower);
+                List<Story_Data_Map> followerStoryDataList = this.storyDataMapService.getStoryList(follower);
+
+                List<Image> followerImageDTO = new ArrayList<>();
+
+                for (Story_Data_Map story : followerStoryDataList) {
+                    if (story != null && story.getDataType() == 2) {
+                        Long imageId = story.getDataId();
+                        Image image = this.imageService.getImageByID(imageId);
+
+                        if (image != null) {
+                            followerImageDTO.add(image);
+                        }
+                    }
+                }
+                if(followerImageDTO.isEmpty()){
+                    followerDTO.setFollowMemberStory(false);
+                }else{
+                    followerDTO.setImages(followerImageDTO);
+                    followerDTO.setFollowMemberStory(true);
+                }
+                followerDTOList.add(followerDTO);
+            }
+            model.addAttribute("followerStory", followerDTOList);
+        }
 
         List<FeedListDTO> feedList = this.boardDataMapService.getFeed(allBoards);
         FeedDTO selectFeed = (FeedDTO) httpSession.getAttribute("selectFeed");

@@ -36,32 +36,70 @@ $(document).ready(function () {
     }
 });
 
+function openFollowStoryListModal(id) {
+    var modalId = 'followerStoryListModal' + id;
+    var myModal = new bootstrap.Modal(document.getElementById(modalId), { backdrop: 'static', keyboard: false });
+    myModal.show();
+    var aa = 'followStory' + id;
+    var bb = document.getElementById(aa);
+    var imageCount = bb.value;
+    console.log(imageCount);
+    var imageDuration = 5;
 
-// function handleImageLoad(img) {
-//     var colorThief = new ColorThief();
-//
-//     // 배열을 사용하여 이미지의 배경 색상 저장
-//     var imageColors = [];
-//
-//     // ColorThief를 사용하여 이미지의 주요 색상 추출
-//     var dominantColor = colorThief.getColor(img);
-//     console.log(dominantColor);
-//     // 추출된 색상을 CSS rgb 형식으로 변환
-//     var bgColor = 'rgb(' + dominantColor[0] + ',' + dominantColor[1] + ',' + dominantColor[2] + ')';
-//
-//     // 배열에 배경 색상 추가
-//     imageColors.push(bgColor);
-//
-//     // 각 이미지의 부모 요소에 배경 색상 설정
-//     $(img).parent('.carousel-item').css('background', bgColor);
-//
-//     // 모든 이미지의 배경 색상을 결합하여 최종 배경 색상 설정
-//     var combinedColor = combineColors(imageColors);
-//     $('.carousel-inner').css('background', combinedColor);
-// }
-//
-// function combineColors(colors) {
-//     // 여러 색상의 평균을 계산하여 반환 또는 여러 색상을 특정 방식으로 결합할 수 있음
-//     // 이 예제에서는 간단히 배열의 마지막 색상을 반환합니다.
-//     return colors[colors.length - 1];
-// }
+    function updateProgressBar(index, percentage) {
+        var progressBarId = 'progressBar' + id + '_'+  index;
+        var progressBar = document.getElementById(progressBarId);
+        if (progressBar) {
+            progressBar.style.width = percentage + '%';
+        }
+    }
+
+    function updateCountdown(index, seconds) {
+        var countdownId = 'countdown' + id + '_'+  index;
+        document.getElementById(countdownId);
+    }
+
+    function startCountdown(index, callback) {
+        var seconds = imageDuration;
+        var interval = setInterval(function () {
+            updateCountdown(index, seconds);
+            updateProgressBar(index, (imageDuration - seconds) / imageDuration * 100);
+
+            if (seconds <= 0) {
+                clearInterval(interval);
+                if (callback) {
+                    callback();
+                }
+            }
+            seconds--;
+        }, 1000);
+    }
+
+    function startCountdownForImages(index) {
+        console.log(index);
+        if (index < imageCount && imageCount > 0) {
+            startCountdown(index, function () {
+                startCountdownForImages(index + 1);
+                if (index + 1) {
+                    setTimeout(function () {
+                        var nextButton = document.querySelector('[data-test-id="imgChangeBtn' + id + '"]');
+                        if (nextButton) {
+                            nextButton.click();
+                        }
+                    }, 1000);
+                }
+            });
+        } else {
+            var btn = document.getElementById('followerStoryListModalClose' + id);
+            if (btn) {
+                setTimeout(function () {
+                    btn.click();
+                }, 1000);
+            }
+        }
+    }
+
+    if (imageCount > 0) {
+        startCountdownForImages(0);
+    }
+}

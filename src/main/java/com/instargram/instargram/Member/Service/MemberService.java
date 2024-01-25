@@ -1,6 +1,8 @@
 package com.instargram.instargram.Member.Service;
 
+import com.instargram.instargram.Community.Board.Model.Entity.Board;
 import com.instargram.instargram.Data.Image.Image;
+import com.instargram.instargram.DataNotFoundException;
 import com.instargram.instargram.Member.Model.Entity.Follow_Map;
 import com.instargram.instargram.Member.Model.Entity.Member;
 import com.instargram.instargram.Member.Model.Form.MemberCreateForm;
@@ -257,5 +259,14 @@ public class MemberService {
             followingIdList.add(map.getFollowingMember().getId());
         }
         return followingIdList;
+    }
+
+    public Member getMemberById(Long followerId) {
+        Optional<Member> member = this.memberRepository.findById(followerId);
+        if (member.isPresent()) {
+            return member.get();
+        } else {
+            throw new DataNotFoundException("board not found");
+        }
     }
 }

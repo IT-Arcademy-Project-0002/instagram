@@ -91,7 +91,7 @@ public class SearchController {
 
     @PostMapping("/favorite/createRecentFavoriteSearch")
     @ResponseBody
-    public void searchFavoriteCreate2(Principal principal, @RequestBody Map<String, Object> data) {
+    public void searchRecentFavoriteCreate(Principal principal, @RequestBody Map<String, Object> data) {
 
         Member requestMember = this.memberService.getMemberByUsername(principal.getName());
 
@@ -105,7 +105,6 @@ public class SearchController {
             }
         } else if (searchType == 2) {
             Location location = this.locationService.getLocationByLocationId(specificName);
-            System.out.println("장소 이름 확인" + location.getPlaceName());
             this.searchLocationMapService.createSearchFavoriteLocation(requestMember, location);
         } else if (searchType == 3) {
             HashTag hashTag = this.hashTagService.gethashTag(specificName);

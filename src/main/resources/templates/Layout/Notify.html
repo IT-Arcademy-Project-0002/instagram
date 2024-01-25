@@ -122,8 +122,9 @@
                         <a th:href="@{'/member/page/' + ${notice.requestMember.username}}">
                         <div class="ms-2" style="width: 200px">
                             <input type="hidden" th:value="${notice.requestMember.username}" id="username">
-                            <span th:if="${not notice.follow and notice.follower or notice.follow}" th:text="@{|${notice.requestMember.username}님이 회원님을 팔로우하기 시작했습니다|}"></span>
-                            <span th:unless="${not notice.follow and notice.follower or notice.follow}" th:text="@{|${notice.requestMember.username}님이 팔로우를 요청했습니다.|}"></span>
+                            <span th:if="${notice.follower}" th:text="@{|${notice.requestMember.username}님이 회원님을 팔로우하기 시작했습니다|}"></span>
+<!--                        <span th:if="${not notice.follow and notice.follower or notice.follow}" th:text="@{|${notice.requestMember.username}님이 팔로우를 요청했습니다.|}"></span>-->
+                            <span th:if="${not notice.follower}" th:text="@{|${notice.requestMember.username}님이 팔로우를 요청했습니다.|}"></span>
                             <span th:text="@{|${notice.elapsedTime}|}" style="color: grey;"></span>
                         </div>
                         </a>
@@ -143,7 +144,7 @@
                                     삭제
                                 </button>
                             </div>
-                            <div id="follow-container" th:unless="${not notice.follower}" >
+                            <div id="follow-container" th:if="${notice.follower}" >
                                 <div th:if="${not notice.follow and notice.follower or notice.follow}">
                                     <button id="follow-btn" class="ms-2 btn w-75"
                                             th:classappend="${notice.follow}?'btn-outline-secondary':'btn-primary text-light'"
@@ -187,7 +188,7 @@
                 })
                 .catch(error => console.error('데이터를 받지 못했습니다.', error));
 
-            setTimeout(reloadDivArea, 100);
+            setTimeout(reloadDivArea, 300);
         }
 
         function clickFollowDelete(id) {

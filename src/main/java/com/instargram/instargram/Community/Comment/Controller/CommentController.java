@@ -75,9 +75,12 @@ public class CommentController {
         Board board = this.boardService.getBoardById(id);
 
         if (member != null && board != null) {
+
             Comment comment = commentService.create(member, board, commentCreateForm.getContent());
-            Notice notice = noticeService.createNotice(Enum_Data.BOARD_COMMENT.getNumber(), member, board.getMember());
-            noticeCommentMapService.createNoticeComment(comment, notice);
+            if (member != board.getMember()) {
+                Notice notice = noticeService.createNotice(Enum_Data.BOARD_COMMENT.getNumber(), member, board.getMember());
+                noticeCommentMapService.createNoticeComment(comment, notice);
+            }
 
             // 서버에서 날짜를 원하는 형식으로 포맷
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM월dd일 HH:mm");

@@ -1,4 +1,4 @@
-<div th:fragment="notifyFragment">
+<div id="notifyFragment" th:fragment="notifyFragment">
 
     <div class="mb-4">
         <h4><b>알림</b></h4>
@@ -143,11 +143,11 @@
                                     삭제
                                 </button>
                             </div>
-                            <div id="follow-container" th:unless="${not notice.follower}">
+                            <div id="follow-container" th:unless="${not notice.follower}" >
                                 <div th:if="${not notice.follow and notice.follower or notice.follow}">
                                     <button id="follow-btn" class="ms-2 btn w-75"
                                             th:classappend="${notice.follow}?'btn-outline-secondary':'btn-primary text-light'"
-                                            style="font-size: 10px; height: 32px" onclick="clickFollow()">
+                                            style="font-size: 10px; height: 32px" th:onclick="@{|clickFollowSwap(${notice.id})|}">
                                         <span id="follow-spin" class="visually-hidden spinner-border spinner-border-sm"
                                               aria-hidden="true"></span>
                                         <span id="follow-text" th:text="${notice.follow}?'팔로잉':'팔로우'"></span>
@@ -159,5 +159,91 @@
             </div>
         </div>
     </div>
+    <script>
+
+        // -------------------------- 8-1 : 팔로우 관련 스크립트 시작(이번주) ---------------------
+        function clickFollowApply() {
+            var username = document.getElementById('username').value;
+            var spin = document.getElementById('request-follow-spin');
+            var texts = document.getElementsByClassName('request-follow-text');
+
+            for (var i = 0; i < texts.length; i++) {
+                texts.item(i).textContent = '';
+            }
+            spin.classList.remove('visually-hidden');
+
+            fetch('/member/requestFollow/' + username)
+                .then(response => {
+                    return response.json()
+                })
+                .then(data => {
+                    spin.classList.add('visually-hidden');
+                    var apply = document.getElementById('apply-container');
+                    var follow = document.getElementById('follow-container');
+                    if (data.result) {
+                        apply.classList.add('visually-hidden');
+                        follow.classList.remove('visually-hidden');
+                    }
+                })
+                .catch(error => console.error('데이터를 받지 못했습니다.', error));
+
+            setTimeout(reloadDivArea, 100);
+        }
+
+        function clickFollowDelete(id) {
+            debugger;
+            fetch("/member/requestFollow/delete/" + id)
+                .then(response => {
+                    return response.json();
+                })
+                .then(data => {
+                    var container = document.getElementById('notice-' + id);
+
+                    container.classList.add('visually-hidden');
+                })
+                .catch(error => console.error('데이터를 받지 못했습니다.', error));
+        }
+
+        function clickFollowSwap(id) {
+            var username = document.getElementById('username').value;
+            var spin = document.getElementById('follow-spin');
+            var text = document.getElementById('follow-text');
+            var btn = document.getElementById('follow-btn');
+
+            text.textContent = '';
+
+            spin.classList.remove('visually-hidden');
+
+            fetch('/member/follow/' + username)
+                .then(response => {
+                    return response.json()
+                })
+                .then(data => {
+                    setTimeout(function () {
+                        spin.classList.add('visually-hidden');
+                        if (data.result) {
+                            text.textContent = '팔로잉';
+
+                            btn.classList = 'ms-2 btn btn-outline-secondary w-75';
+                        } else {
+                            text.textContent = '팔로우';
+
+                            btn.classList = 'ms-2 btn btn-primary text-light w-75';
+                        }
+                    }, 1500);
+                })
+                .catch(error => console.error('데이터를 받지 못했습니다.', error));
+
+
+        }
+
+        // 비공개 계정에 대한 팔로우 요청시 Notify 요소만 새로고침 하기 위한 함수
+        function reloadDivArea() {
+            $('#notifyFragment').load(location.href+' #notifyFragment');
+        }
+
+        // -------------------------- 8 : 팔로우 관련 스크립트 종료 --------------------------
+
+    </script>
     <script src="/notice/js/notice.js"> </script>
 </div>

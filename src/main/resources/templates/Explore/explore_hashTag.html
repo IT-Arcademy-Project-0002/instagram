@@ -2,13 +2,18 @@
 <html layout:decorate="~{Layout/layout_main}">
 <head>
     <link rel="stylesheet" type="text/css" th:href="@{/Explore/css/explore_hashtag.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/board/css/board_update.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/board/css/modify_location.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/board/css/modal.css}">
     <title> HashTag Page </title>
 </head>
 <div class="explore-container" layout:fragment="content">
+    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+    <input type="hidden" th:name="_csrf_header" th:value="${_csrf.headerName}"/>
     <div class="explore-content">
         <div class="explore-hashtag-container pt-4 mx-auto row">
             <div class="explore-hashtag-container-image col-3">
-                <img class="rounded-circle border border-secondary" th:src="@{|/resources/${exploreHashTagList.get(0).images().get(0).name}|}" style="width:150px; height:150px;"/>
+                <img class="rounded-circle border border-secondary" th:src="@{|/resources/${feedList.get(0).fileDTOS.get(0).getName()}|}" style="width:150px; height:150px;"/>
             </div>
             <div class="explore-hashtag-container-info col-9">
                 <span class="fs-2">#<span th:text="${hashTag.name}"></span></span>
@@ -19,16 +24,16 @@
         </div>
         <div class="explore-hashtag-gallery text-center mt-4 mx-auto">
             <div class="row row-cols-3">
-                <div th:each="exploreHashTagList : ${exploreHashTagList}"  class="col-4 p-1">
+                <div th:each="feedList : ${feedList}"  class="col-4 p-1">
                     <div class = "hovereffect">
-                        <img th:src="@{|/resources/${exploreHashTagList.images().get(0).name}|}" style="width:100%; height:100%;">
-                        <a href="http://www.naver.com" target="_blank">
+                        <img th:src="@{|/resources/${feedList.fileDTOS.get(0).getName()}|}" style="width:100%; height:100%;">
+                        <a th:href="@{|/explore/hashtag/detail/${feedList.board.id}?hid=${hashTag.id}|}">
                             <div class="overlay">
                                 <div class="overlay-content">
                                     <svg aria-label="좋아요" class="x1lliihq x1n2onr6 xxk16z8" fill="currentColor" height="24" role="img" viewBox="0 0 48 48" width="24"><path d="M34.6 3.1c-4.5 0-7.9 1.8-10.6 5.6-2.7-3.7-6.1-5.5-10.6-5.5C6 3.1 0 9.6 0 17.6c0 7.3 5.4 12 10.6 16.5.6.5 1.3 1.1 1.9 1.7l2.3 2c4.4 3.9 6.6 5.9 7.6 6.5.5.3 1.1.5 1.6.5s1.1-.2 1.6-.5c1-.6 2.8-2.2 7.8-6.8l2-1.8c.7-.6 1.3-1.2 2-1.7C42.7 29.6 48 25 48 17.6c0-8-6-14.5-13.4-14.5z"></path></svg>
-                                    <span th:text="${#lists.size(exploreHashTagList.board.boardLikeMemberMaps)}"></span>
+                                    <span th:text="${#lists.size(feedList.board.boardLikeMemberIds)}"></span>
                                     <svg aria-label="댓글" fill="currentColor" height="24" role="img" viewBox="0 0 24 24" width="24"><path d="M20.656 17.008a9.993 9.993 0 1 0-3.59 3.615L22 22Z" stroke="currentColor" stroke-linejoin="round" stroke-width="2"></path></svg>
-                                    <span th:text="${#lists.size(exploreHashTagList.board.commentList)}"></span>
+                                    <span th:text="${#lists.size(feedList.comments())}"></span>
                                 </div>
                             </div>
                         </a>
@@ -37,5 +42,24 @@
             </div>
         </div>
     </div>
+
+    <!-- 탐색전용 게시글 상세보기 -->
+    <div th:replace="~{Explore/explore_detail_board :: exploreDetailBoardFragment}"></div>
+
+    <!-- javascript -->
+    <script th:src="@{/explore/js/explore.js}"></script>
+    <script th:src="@{/explore/js/update_board_in_explore.js}"></script>
+    <script th:inline="javascript">
+        const selectFeed = /*[[${selectFeed}]]*/ null;
+        const bb = "123"
+        console.log(selectFeed);
+        const myModal = new bootstrap.Modal('#BoardDetailModal', {
+            keyboard: true
+        })
+        if (selectFeed != null) {
+            myModal.show();
+        }
+    </script>
+
 </div>
 </html>

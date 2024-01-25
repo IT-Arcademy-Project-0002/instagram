@@ -203,6 +203,10 @@ public class LocationService {
     @Transactional
     public void uselessLocationDelete(Location targetLocation) {
 
+        // Location이 null이면 아무 작업을 하지 않고 종료
+        if (targetLocation == null) {
+            return;
+        }
         // 해당 Location을 참조하는 Board가 있는지 확인
         List<Board> referringBoards = this.boardRepository.findByLocation(targetLocation);
 

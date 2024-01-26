@@ -323,8 +323,8 @@
 
             // 알람의 종류 및 개수를 판별하기 위한 fetch 비동기 통신
             // notice 엔티티의 알림타입 (enum 기반)
-            var countNoticeLikeSeries = 0; // 좋아요 계열 : 1, 3, 5, 7
-            var countNoticeFollowSeries = 0; // 팔로우 계열 : 8, 9
+            var countNoticeLikeSeries = 0; // 좋아요 계열 : 1, 3, 5, 11
+            var countNoticeFollowSeries = 0; // 팔로우 계열 : 7, 8
             var countNoticeTextSeries = 0; // 텍스트 계열 : 2, 4, 6
 
             fetch("/notice/alert")
@@ -335,11 +335,11 @@
                             case 1:
                             case 3:
                             case 5:
-                            case 7:
+                            case 11:
                                 countNoticeLikeSeries++;
                                 break;
+                            case 7:
                             case 8:
-                            case 9:
                                 countNoticeFollowSeries++;
                                 break;
                             case 2:

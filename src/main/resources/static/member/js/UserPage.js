@@ -55,29 +55,6 @@ function boardKeep(board)
     document.getElementById("board-keep-form").submit();
 }
 
-function clickFollow()
-{
-    var username = document.getElementById('username').value;
-    var spin = document.getElementById('follow-spin');
-    var texts = document.getElementsByClassName('follow-text');
-
-    for(var i = 0; i < texts.length; i++)
-    {
-        texts.item(i).textContent='';
-    }
-    spin.classList.remove('visually-hidden');
-
-    debugger;
-    fetch('/member/follow/'+username)
-        .then(response => {
-            return response.json()
-        })
-        .then(data => {
-            setTimeout(reload,200);
-        })
-        .catch(error => console.error('데이터를 받지 못했습니다.',error));
-}
-
 function reload()
 {
     window.location.reload();

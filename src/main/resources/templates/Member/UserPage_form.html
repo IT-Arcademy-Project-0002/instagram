@@ -139,8 +139,9 @@
                                         <!-- button -->
                                         <div class="d-flex mgL20">
                                             <a class="btn mw74 center"
-                                               th:classappend="${userPageDTO.isFollow() or userPageDTO.isRequestFollow()}?'btn_following bn' : 'btn_follow'"
-                                               onclick="clickFollow()">
+                                               th:classappend="${userPageDTO.isFollow() or userPageDTO.isRequestFollow()}?'btn_following' : 'btn_follow'"
+                                               th:attr="onclick=|clickFollowSwapInUserPage('${userPageDTO.isFollow() ? '/member/follow/delete' : '/member/follow'}')|">
+
                                                 <span id="follow-spin"
                                                       class="visually-hidden spinner-border spinner-border-sm"
                                                       aria-hidden="true"></span>
@@ -518,8 +519,56 @@
     <form id="board-keep-form" th:action="@{|/board/keep|}" method="post">
         <input type="hidden" id="keep" name="keep">
     </form>
-    <script th:src="@{/member/js/UserPage.js}"></script>
 
+    <script>
+
+    function clickFollowSwapInUserPage(fetchPath) {
+
+        var username = document.getElementById('username').value;
+        var spin = document.getElementById('follow-spin');
+        var texts = document.getElementsByClassName('follow-text');
+
+        for(var i = 0; i < texts.length; i++)
+        {
+            texts.item(i).textContent='';
+        }
+        spin.classList.remove('visually-hidden');
+
+        fetch(fetchPath + '/' + username)
+            .then(response => response.json())
+            .then(data => {
+                setTimeout(reload,200);
+            })
+            .catch(error => console.error('데이터를 받지 못했습니다.', error));
+    }
+
+    // member/js/UserPage.js에서 clickFollow() 가져와 주석처리하고 위의 clickFollowSwapInUserPage()로 교체하였음 (아래는 기존 주현 코드)
+    // function clickFollow()
+    // {
+    //     var username = document.getElementById('username').value;
+    //     var spin = document.getElementById('follow-spin');
+    //     var texts = document.getElementsByClassName('follow-text');
+    //
+    //     for(var i = 0; i < texts.length; i++)
+    //     {
+    //         texts.item(i).textContent='';
+    //     }
+    //     spin.classList.remove('visually-hidden');
+    //
+    //     debugger;
+    //     fetch('/member/follow/'+username)
+    //         .then(response => {
+    //             return response.json()
+    //         })
+    //         .then(data => {
+    //             setTimeout(reload,200);
+    //         })
+    //         .catch(error => console.error('데이터를 받지 못했습니다.',error));
+    // }
+
+    </script>
+
+    <script th:src="@{/member/js/UserPage.js}"></script>
 
 </div>
 </html>

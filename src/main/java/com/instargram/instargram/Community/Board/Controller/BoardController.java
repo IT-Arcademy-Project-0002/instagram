@@ -142,9 +142,12 @@ public class BoardController {
 
         List<FeedListDTO> feedList = this.boardDataMapService.getFeed(allBoards);
         FeedDTO selectFeed = (FeedDTO) httpSession.getAttribute("selectFeed");
+        String referer = (String)httpSession.getAttribute("referer");
         if (selectFeed != null) {
             model.addAttribute("selectFeed", selectFeed);
+            model.addAttribute("referer", referer);
             httpSession.removeAttribute("selectFeed");
+            httpSession.removeAttribute("referer");
         }
         model.addAttribute("feedList", feedList);
         return "Board/board_main";
@@ -234,7 +237,17 @@ public class BoardController {
 
         FeedDTO selectFeed = this.boardDataMapService.getFeedWithComments(board);
         httpSession.setAttribute("selectFeed", selectFeed);
+        httpSession.setAttribute("referer", "detail");
 
+        return "redirect:/main";
+    }
+    @GetMapping("/board/setting/{id}")
+    public String setting(@PathVariable("id") Long id, HttpSession httpSession) {
+        Board board = this.boardService.getBoardById(id);
+
+        FeedDTO selectFeed = this.boardDataMapService.getFeedWithComments(board);
+        httpSession.setAttribute("selectFeed", selectFeed);
+        httpSession.setAttribute("referer", "setting");
         return "redirect:/main";
     }
 

@@ -314,3 +314,7 @@ accessibilitySettingsToggle.addEventListener('click', function () {
         accessibilityexpandArrow.style.display = 'none';
     }
 });
+
+function reloadPage() {
+    setTimeout(() => window.location.reload(), 10);
+}

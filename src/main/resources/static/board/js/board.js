@@ -876,3 +876,13 @@ $(document).ready(function () {
     });
 });
 
+function saveScrollPosition() {
+    sessionStorage.setItem('scrollPosition', window.scrollY);
+    console.log(sessionStorage)
+}
+window.onload = function () {
+    var savedScrollPosition = sessionStorage.getItem('scrollPosition');
+    if (savedScrollPosition) {
+        window.scrollTo(0, savedScrollPosition);
+    }
+};

@@ -329,31 +329,33 @@
                                         </div>
                                     </div>
                                     <div class="d-flex justify-content-center align-items-center">
-                                        <button type="button" class="btn noneBtn btn-link"
-                                                th:if="${feed.board.memberDTO.username} == ${loginMember.username}"
-                                                data-bs-toggle="modal"
-                                                data-bs-target="#CreateUserBoardSettingModal">
-                                            <svg aria-label="옵션 더 보기"
-                                                 fill="currentColor" height="24" role="img" viewBox="0 0 24 24"
-                                                 width="24"><title>옵션 더 보기</title>
-                                                <circle cx="12" cy="12" r="1.5"></circle>
-                                                <circle cx="6" cy="12" r="1.5"></circle>
-                                                <circle cx="18" cy="12" r="1.5"></circle>
-                                            </svg>
-                                        </button>
-                                        <!-- 다른 경우 UserBoardSettingModal 버튼을 보여줍니다. -->
-                                        <button type="button" class="btn noneBtn btn-link"
-                                                th:if="${feed.board.memberDTO.username} != ${loginMember.username}"
-                                                data-bs-toggle="modal"
-                                                data-bs-target="#UserBoardSettingModal">
-                                            <svg aria-label="옵션 더 보기"
-                                                 fill="currentColor" height="24" role="img" viewBox="0 0 24 24"
-                                                 width="24"><title>옵션 더 보기</title>
-                                                <circle cx="12" cy="12" r="1.5"></circle>
-                                                <circle cx="6" cy="12" r="1.5"></circle>
-                                                <circle cx="18" cy="12" r="1.5"></circle>
-                                            </svg>
-                                        </button>
+                                        <a th:href="@{|/board/setting/${feed.board.id}|}" onclick="saveScrollPosition()">
+                                            <button type="button" class="btn noneBtn btn-link"
+                                                    th:if="${feed.board.memberDTO.username} == ${loginMember.username}"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#CreateUserBoardSettingModal">
+                                                <svg aria-label="옵션 더 보기"
+                                                     fill="currentColor" height="24" role="img" viewBox="0 0 24 24"
+                                                     width="24"><title>옵션 더 보기</title>
+                                                    <circle cx="12" cy="12" r="1.5"></circle>
+                                                    <circle cx="6" cy="12" r="1.5"></circle>
+                                                    <circle cx="18" cy="12" r="1.5"></circle>
+                                                </svg>
+                                            </button>
+                                            <!-- 다른 경우 UserBoardSettingModal 버튼을 보여줍니다. -->
+                                            <button type="button" class="btn noneBtn btn-link"
+                                                    th:if="${feed.board.memberDTO.username} != ${loginMember.username}"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#UserBoardSettingModal">
+                                                <svg aria-label="옵션 더 보기"
+                                                     fill="currentColor" height="24" role="img" viewBox="0 0 24 24"
+                                                     width="24"><title>옵션 더 보기</title>
+                                                    <circle cx="12" cy="12" r="1.5"></circle>
+                                                    <circle cx="6" cy="12" r="1.5"></circle>
+                                                    <circle cx="18" cy="12" r="1.5"></circle>
+                                                </svg>
+                                            </button>
+                                        </a>
                                     </div>
                                 </div>
                             </div>
@@ -390,31 +392,33 @@
                                         </div>
                                     </div>
                                     <div class="d-flex justify-content-center align-items-center">
-                                        <button type="button" class="btn noneBtn btn-link"
-                                                th:if="${feed.board.memberDTO.username} == ${loginMember.username}"
-                                                data-bs-toggle="modal"
-                                                data-bs-target="#CreateUserBoardSettingModal">
-                                            <svg aria-label="옵션 더 보기"
-                                                 fill="currentColor" height="24" role="img" viewBox="0 0 24 24"
-                                                 width="24"><title>옵션 더 보기</title>
-                                                <circle cx="12" cy="12" r="1.5"></circle>
-                                                <circle cx="6" cy="12" r="1.5"></circle>
-                                                <circle cx="18" cy="12" r="1.5"></circle>
-                                            </svg>
-                                        </button>
-                                        <!-- 다른 경우 UserBoardSettingModal 버튼을 보여줍니다. -->
-                                        <button type="button" class="btn noneBtn btn-link"
-                                                th:if="${feed.board.memberDTO.username} != ${loginMember.username}"
-                                                data-bs-toggle="modal"
-                                                data-bs-target="#UserBoardSettingModal">
-                                            <svg aria-label="옵션 더 보기"
-                                                 fill="currentColor" height="24" role="img" viewBox="0 0 24 24"
-                                                 width="24"><title>옵션 더 보기</title>
-                                                <circle cx="12" cy="12" r="1.5"></circle>
-                                                <circle cx="6" cy="12" r="1.5"></circle>
-                                                <circle cx="18" cy="12" r="1.5"></circle>
-                                            </svg>
-                                        </button>
+                                        <a th:href="@{|/board/setting/${feed.board.id}|}"  onclick="saveScrollPosition()">
+                                            <button type="button" class="btn noneBtn btn-link"
+                                                    th:if="${feed.board.memberDTO.username} == ${loginMember.username}"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#CreateUserBoardSettingModal">
+                                                <svg aria-label="옵션 더 보기"
+                                                     fill="currentColor" height="24" role="img" viewBox="0 0 24 24"
+                                                     width="24"><title>옵션 더 보기</title>
+                                                    <circle cx="12" cy="12" r="1.5"></circle>
+                                                    <circle cx="6" cy="12" r="1.5"></circle>
+                                                    <circle cx="18" cy="12" r="1.5"></circle>
+                                                </svg>
+                                            </button>
+                                            <!-- 다른 경우 UserBoardSettingModal 버튼을 보여줍니다. -->
+                                            <button type="button" class="btn noneBtn btn-link"
+                                                    th:if="${feed.board.memberDTO.username} != ${loginMember.username}"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#UserBoardSettingModal">
+                                                <svg aria-label="옵션 더 보기"
+                                                     fill="currentColor" height="24" role="img" viewBox="0 0 24 24"
+                                                     width="24"><title>옵션 더 보기</title>
+                                                    <circle cx="12" cy="12" r="1.5"></circle>
+                                                    <circle cx="6" cy="12" r="1.5"></circle>
+                                                    <circle cx="18" cy="12" r="1.5"></circle>
+                                                </svg>
+                                            </button>
+                                        </a>
                                     </div>
                                 </div>
                             </div>
@@ -1488,7 +1492,7 @@
                             </a>
                         </div>
                         <div class="text-center p-2">
-                            <button type="button" class="btn noneBtn btn-link text-dark" data-bs-dismiss="modal">취소
+                            <button type="button" class="btn noneBtn btn-link text-dark" data-bs-dismiss="modal" onclick="reloadPage()">취소
                             </button>
                         </div>
                     </div>
@@ -1517,7 +1521,7 @@
                             </a>
                         </div>
                         <div class="border-bottom text-center p-2">
-                            <button type="button" class="btn noneBtn btn-link text-dark" data-bs-dismiss="modal">취소
+                            <button type="button" class="btn noneBtn btn-link text-dark" data-bs-dismiss="modal" onclick="reloadPage()">취소
                             </button>
                         </div>
                     </div>
@@ -1636,7 +1640,7 @@
         </div>
     </div>
     <!-- 사용자 Recomment Modal End -->
-
+    <input type="hidden" id="loginMemberName" th:value="${loginMember.username}">
     <!-- javascript -->
     <script th:src="@{/story/js/create_story.js}"></script>
     <script th:src="@{/story/js/color-thief.min.js}"></script>
@@ -1645,13 +1649,30 @@
 
     <script th:inline="javascript">
         const selectFeed = /*[[${selectFeed}]]*/ null;
+        const referer = /*[[${referer}]]*/ null;
+        const username = document.getElementById("loginMemberName").value;
         const bb = "123"
-        console.log(selectFeed);
-        const myModal = new bootstrap.Modal('#BoardDetailModal', {
+        console.log('111111111111');
+        const a = new bootstrap.Modal('#BoardDetailModal', {
             keyboard: true
         })
-        if (selectFeed != null) {
-            myModal.show();
+        const b = new bootstrap.Modal('#CreateUserBoardSettingModal', {
+            keyboard: true
+        })
+        const c = new bootstrap.Modal('#UserBoardSettingModal', {
+            keyboard: true
+        })
+        console.log(referer);
+        console.log(selectFeed);
+        console.log(selectFeed.board.memberDTO.username == username);
+        if (referer === "detail") {
+            a.show();
+        }else{
+            if(selectFeed.board.memberDTO.username == username){
+                b.show();
+            }else{
+                c.show();
+            }
         }
     </script>
     <script th:src="@{/board/js/board.js}"></script>

@@ -183,6 +183,30 @@ public class MemberController {
         return ResponseEntity.ok().body(result);
     }
 
+    @GetMapping("/follow/deleteByNotice/{id}")
+    public ResponseEntity<Map<String, Object>> followDeleteByNotice(@PathVariable("id")Long id)
+    {
+        // 공개, 비공개에 상관없이 팔로잉 상태에서 버튼을 눌렀을때 무조건 팔로우를 취소하는 콘트롤러가 필요함 (알림창 기준, 알림 id를 이용)
+        Map<String, Object> result = new HashMap<>();
+        this.memberService.followDeleteByNotice(id);
+
+        return ResponseEntity.ok().body(result);
+    }
+
+    @GetMapping("/follow/delete/{username}")
+    public ResponseEntity<Map<String, Object>> followDelete(@PathVariable("username")String username, Principal principal)
+    {
+        // 공개, 비공개에 상관없이 팔로잉 상태에서 버튼을 눌렀을때 무조건 팔로우를 취소하는 콘트롤러가 필요함 (마이페이지 기준, username을 이용)
+        Map<String, Object> result = new HashMap<>();
+        Member loginMember = this.memberService.getMemberByUsername(principal.getName());
+        Member targetMember = this.memberService.getMemberByUsername(username);
+
+        this.memberService.followDelete(loginMember, targetMember);
+
+        return ResponseEntity.ok().body(result);
+    }
+
+
     @GetMapping("/requestFollow/{username}")
     public ResponseEntity<Map<String, Object>> requestFollow(@PathVariable("username")String username, Principal principal)
     {

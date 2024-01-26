@@ -3,6 +3,7 @@ package com.instargram.instargram.Member.Service;
 import com.instargram.instargram.Community.Board.Model.Entity.Board;
 import com.instargram.instargram.Data.Image.Image;
 import com.instargram.instargram.DataNotFoundException;
+import com.instargram.instargram.Enum_Data;
 import com.instargram.instargram.Member.Model.Entity.Follow_Map;
 import com.instargram.instargram.Member.Model.Entity.Member;
 import com.instargram.instargram.Member.Model.Form.MemberCreateForm;
@@ -155,25 +156,40 @@ public class MemberService {
 
     public boolean UserFollow(Member loginUser, Member targetUser)
     {
-        if(targetUser.isScope())
+        if(targetUser.isScope()) // 공개 (신청수락 불필요)
         {
-            return followMapService.UserFollow(loginUser, targetUser);
+            return followMapService.UserFollow(noticeService, loginUser, targetUser);
         }
-        else{
+        else{ // 비공개 (신청수락 필요)
             return followMapService.followRequest(noticeService, loginUser, targetUser);
         }
     }
 
+    public void followDelete(Member loginUser, Member targetUser)
+    {
+        Notice notice = noticeService.getNoticeByMemberAndTarget(Enum_Data.FOLLOW_STATE.getNumber(), loginUser, targetUser);
+        followMapService.deleteFollow(notice.getRequestMember(), notice.getMember());
+        noticeService.deleteNotice(notice);
+    }
+
+    public void followDeleteByNotice(Long id)
+    {
+        Notice notice = noticeService.getNotice(id);
+        followMapService.deleteFollow(notice.getRequestMember(), notice.getMember());
+        noticeService.deleteNoticeById(id);
+    }
+
+
     public boolean RequestFollowApply(Member loginUser, Member requestUser)
     {
-        return followMapService.RequestFollowApply(requestUser, loginUser);
+        return followMapService.RequestFollowApply(noticeService, requestUser, loginUser);
     }
 
     public void RequestFollowDelete(Long id)
     {
         Notice notice = noticeService.getNotice(id);
         followMapService.deleteRequestFollow(notice.getRequestMember(), notice.getMember());
-        noticeService.deleteById(id);
+        noticeService.deleteNoticeById(id);
     }
 
     public boolean isFollow(Member loginUser, Member targetUser)

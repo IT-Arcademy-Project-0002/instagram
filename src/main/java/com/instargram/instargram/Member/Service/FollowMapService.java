@@ -33,7 +33,7 @@ public class FollowMapService {
         return followMapRepository.findByFollowerMemberAndFollowingMember(member, target);
     }
 
-    public boolean UserFollow(Member member, Member target)
+    public boolean UserFollow(NoticeService noticeService, Member member, Member target)
     {
         if(!isFollow(member, target))
         {
@@ -41,22 +41,26 @@ public class FollowMapService {
             followMap.setFollowingMember(target);
             followMap.setFollowerMember(member);
             followMapRepository.save(followMap);
+            noticeService.createNotice(Enum_Data.FOLLOW_STATE.getNumber(), member, target);
             return true;
         }
         else{
             deleteFollow(member, target);
+            noticeService.deleteNoticeByMemberAndTarget(Enum_Data.FOLLOW_STATE.getNumber(), member, target);
             return false;
         }
     }
 
-    public boolean RequestFollowApply(Member requestUser, Member loginUser)
+    public boolean RequestFollowApply(NoticeService noticeService, Member requestUser, Member loginUser)
     {
         Follow_Map followMap = new Follow_Map();
         followMap.setFollowingMember(loginUser);
         followMap.setFollowerMember(requestUser);
         followMapRepository.save(followMap);
-        
+        noticeService.createNotice(Enum_Data.FOLLOW_STATE.getNumber(), requestUser, loginUser);
+
         deleteRequestFollow(requestUser, loginUser);
+        noticeService.deleteNoticeByMemberAndTarget(Enum_Data.FOLLOW_REQUEST.getNumber(), requestUser, loginUser);
         return true;
     }
 
@@ -91,6 +95,7 @@ public class FollowMapService {
         }
         else {
             deleteRequestFollow(member, target);
+            noticeService.deleteNoticeByMemberAndTarget(Enum_Data.FOLLOW_REQUEST.getNumber(), member, target);
             return false;
         }
     }

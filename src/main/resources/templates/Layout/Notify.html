@@ -15,6 +15,7 @@
         <span class="d-flex mt-3 mb-3" th:if="${notice.period == 3 && notices[status.index - 1]?.period == 2}"><b>이전 활동</b></span>
 
         <div class="d-flex" th:id="@{|notice-${notice.id}|}">
+            <input type="hidden" th:value="${notice.requestMember.username}" id="username">
             <div>
                 <div style="position: relative; width: 44px; height: 44px;">
                     <img th:if="${notice.requestMember.Image == null}"
@@ -116,53 +117,59 @@
                     </div>
                 </div>
             </div>
-            <div th:if="${notice.type == 8}">
-
-                    <div class="d-flex">
-                        <a th:href="@{'/member/page/' + ${notice.requestMember.username}}">
-                        <div class="ms-2" style="width: 200px">
-                            <input type="hidden" th:value="${notice.requestMember.username}" id="username">
-                            <span th:if="${notice.follower}" th:text="@{|${notice.requestMember.username}님이 회원님을 팔로우하기 시작했습니다|}"></span>
-<!--                        <span th:if="${not notice.follow and notice.follower or notice.follow}" th:text="@{|${notice.requestMember.username}님이 팔로우를 요청했습니다.|}"></span>-->
-                            <span th:if="${not notice.follower}" th:text="@{|${notice.requestMember.username}님이 팔로우를 요청했습니다.|}"></span>
-                            <span th:text="@{|${notice.elapsedTime}|}" style="color: grey;"></span>
+            <div th:if="${notice.type == 7}">
+                <div class="d-flex">
+                    <a th:href="@{'/member/page/' + ${notice.requestMember.username}}">
+                    <div class="ms-2" style="width: 200px">
+                        <span th:if="${not notice.follower}" th:text="@{|${notice.requestMember.username}님이 팔로우를 요청했습니다.|}"></span>
+                        <span th:text="@{|${notice.elapsedTime}|}" style="color: grey;"></span>
+                    </div>
+                    </a>
+                    <div style="width: 140px" th:id="${notice.id}">
+                        <div id="apply-container" th:if="${not notice.follower}" class="d-flex align-items-center">
+                            <button id="apply-btn" class="ms-2 btn btn-primary text-light"
+                                    style="font-size: 10px; height: 32px" onclick="clickFollowApply()">
+                                <span id="request-follow-spin" class="visually-hidden spinner-border spinner-border-sm"
+                                      aria-hidden="true"></span>
+                                <span class="request-follow-text">
+                                확인
+                            </span>
+                            </button>
+                            <button id="no-btn" class="ms-2 btn btn-outline-secondary"
+                                    style="font-size: 10px; height: 32px"
+                                    th:onclick="@{|clickFollowDelete(${notice.id})|}">
+                                삭제
+                            </button>
                         </div>
-                        </a>
-                        <div style="width: 140px" th:id="${notice.id}">
-                            <div id="apply-container" th:if="${not notice.follower}" class="d-flex align-items-center">
-                                <button id="apply-btn" class="ms-2 btn btn-primary text-light"
-                                        style="font-size: 10px; height: 32px" onclick="clickFollowApply()">
-                                    <span id="request-follow-spin" class="visually-hidden spinner-border spinner-border-sm"
-                                          aria-hidden="true"></span>
-                                    <span class="request-follow-text">
-                                    확인
-                                </span>
-                                </button>
-                                <button id="no-btn" class="ms-2 btn btn-outline-secondary"
+                    </div>
+                </div>
+            </div>
+            <div th:if="${notice.type == 8}">
+                <div class="d-flex">
+                    <div class="ms-2" style="width: 200px">
+                        <span th:if="${notice.follower}" th:text="@{|${notice.requestMember.username}님이 회원님을 팔로우하기 시작했습니다|}"></span>
+                        <span th:text="@{|${notice.elapsedTime}|}" style="color: grey;"></span>
+                    </div>
+                    <div style="width: 140px" th:id="${notice.id}">
+
+                        <div id="follow-container" th:if="${notice.follower}" >
+                            <div th:if="${not notice.follow and notice.follower or notice.follow}">
+                                <button id="follow-btn" class="ms-2 btn w-75"
+                                        th:classappend="${notice.follow}?'btn-outline-secondary':'btn-primary text-light'"
                                         style="font-size: 10px; height: 32px"
-                                        th:onclick="@{|clickFollowDelete(${notice.id})|}">
-                                    삭제
+                                        th:attr="onclick=|clickFollowSwap('${notice.follow ? '/member/follow/deleteByNotice' : '/member/follow'}', '${notice.follow ? notice.id : ''}')|">
+                                    <span id="follow-spin" class="visually-hidden spinner-border spinner-border-sm" aria-hidden="true"></span>
+                                    <span id="follow-text" th:text="${notice.follow}?'팔로잉':'팔로우'"></span>
                                 </button>
-                            </div>
-                            <div id="follow-container" th:if="${notice.follower}" >
-                                <div th:if="${not notice.follow and notice.follower or notice.follow}">
-                                    <button id="follow-btn" class="ms-2 btn w-75"
-                                            th:classappend="${notice.follow}?'btn-outline-secondary':'btn-primary text-light'"
-                                            style="font-size: 10px; height: 32px" th:onclick="@{|clickFollowSwap(${notice.id})|}">
-                                        <span id="follow-spin" class="visually-hidden spinner-border spinner-border-sm"
-                                              aria-hidden="true"></span>
-                                        <span id="follow-text" th:text="${notice.follow}?'팔로잉':'팔로우'"></span>
-                                    </button>
-                                </div>
                             </div>
                         </div>
                     </div>
+                </div>
             </div>
         </div>
     </div>
     <script>
-
-        // -------------------------- 8-1 : 팔로우 관련 스크립트 시작(이번주) ---------------------
+        // -------------------------- 7 팔로우 신청 관련 스크립트 시작 ---------------------
         function clickFollowApply() {
             var username = document.getElementById('username').value;
             var spin = document.getElementById('request-follow-spin');
@@ -205,46 +212,39 @@
                 .catch(error => console.error('데이터를 받지 못했습니다.', error));
         }
 
-        function clickFollowSwap(id) {
-            var username = document.getElementById('username').value;
-            var spin = document.getElementById('follow-spin');
-            var text = document.getElementById('follow-text');
-            var btn = document.getElementById('follow-btn');
-
-            text.textContent = '';
-
-            spin.classList.remove('visually-hidden');
-
-            fetch('/member/follow/' + username)
-                .then(response => {
-                    return response.json()
-                })
-                .then(data => {
-                    setTimeout(function () {
-                        spin.classList.add('visually-hidden');
-                        if (data.result) {
-                            text.textContent = '팔로잉';
-
-                            btn.classList = 'ms-2 btn btn-outline-secondary w-75';
-                        } else {
-                            text.textContent = '팔로우';
-
-                            btn.classList = 'ms-2 btn btn-primary text-light w-75';
-                        }
-                    }, 1500);
-                })
-                .catch(error => console.error('데이터를 받지 못했습니다.', error));
-
-
-        }
-
         // 비공개 계정에 대한 팔로우 요청시 Notify 요소만 새로고침 하기 위한 함수
         function reloadDivArea() {
             $('#notifyFragment').load(location.href+' #notifyFragment');
         }
 
-        // -------------------------- 8 : 팔로우 관련 스크립트 종료 --------------------------
+        // -------------------------- 7 팔로우 신청 관련 스크립트 종료 ---------------------
 
+        // -------------------------- 8 팔로우 상태 관련 스크립트 시작 ---------------------
+        function clickFollowSwap(fetchPath, variable) {
+            var followBtn = document.getElementById('follow-btn');
+            var followText = document.getElementById('follow-text');
+            var spin = document.getElementById('follow-spin');
+
+            var username = document.getElementById('username').value;
+            spin.classList.remove('visually-hidden');
+            followText.textContent = '';
+
+            fetch(fetchPath + '/' + (variable ? variable : username))
+                .then(response => response.json())
+                .then(data => {
+                    setTimeout(function () {
+                        spin.classList.add('visually-hidden');
+                        if (data.result) {
+                            followText.textContent = '팔로잉';
+                            followBtn.classList = 'ms-2 btn btn-outline-secondary w-75';
+                        } else {
+                            followText.textContent = '팔로우';
+                            followBtn.classList = 'ms-2 btn btn-primary text-light w-75';
+                        }
+                    }, 1500);
+                })
+                .catch(error => console.error('데이터를 받지 못했습니다.', error));
+        }
+        // -------------------------- 8 팔로우 상태 관련 스크립트 종료 ---------------------
     </script>
-    <script src="/notice/js/notice.js"> </script>
 </div>

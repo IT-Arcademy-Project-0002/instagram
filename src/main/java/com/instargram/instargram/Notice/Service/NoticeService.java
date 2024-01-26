@@ -50,7 +50,7 @@ public class NoticeService {
     {
         Notice notice = new Notice();
 
-        if (type == 8) {
+        if (type == 7 || type == 8) {
             Notice existingNotice = this.noticeRepository.findByTypeAndRequestMemberAndMember(type, loginMember, member);
             if (existingNotice != null) {
                 return existingNotice;
@@ -80,7 +80,7 @@ public class NoticeService {
         {
             NoticeDTO noticeWeekDTO = new NoticeDTO();
 
-            // 공통 객체 : 모든 경우(ALL) + 팔로우 요청(8)
+            // 공통 객체 : 모든 경우(ALL) + 팔로우 요청(7) + 팔로우 상태 (8)
             noticeWeekDTO.setRequestMember(notice.getRequestMember());
             noticeWeekDTO.setType(notice.getType());
             noticeWeekDTO.setId(notice.getId());
@@ -102,7 +102,7 @@ public class NoticeService {
             // 대댓글 내용 : 댓글 대댓글(4), 댓글 대댓글 좋아요(5)
             noticeWeekDTO.processRecommentContent(noticeCommentMapService.getNoticeRecomment(notice.getId(), notice.getType()).getContent());
 
-            // 미사용중 = 스토리 좋아요 (7), 디엠 왔을 때(9), 디엠 좋아요(10)
+            // 미사용중 = 디엠 왔을 때(9), 디엠 좋아요(10), 스토리 좋아요 (11)
 
             noticeWeekDTOS.add(noticeWeekDTO);
         }
@@ -123,7 +123,7 @@ public class NoticeService {
         {
             NoticeDTO noticeMonthDTO = new NoticeDTO();
 
-            // 공통 객체 : 모든 경우(ALL) + 팔로우 요청(8)
+            // 공통 객체 : 모든 경우(ALL) + 팔로우 요청(7) + 팔로우 상태 (8)
             noticeMonthDTO.setRequestMember(notice.getRequestMember());
             noticeMonthDTO.setType(notice.getType());
             noticeMonthDTO.setId(notice.getId());
@@ -145,7 +145,7 @@ public class NoticeService {
             // 대댓글 내용 : 댓글 대댓글(4), 댓글 대댓글 좋아요(5)
             noticeMonthDTO.processRecommentContent(noticeCommentMapService.getNoticeRecomment(notice.getId(), notice.getType()).getContent());
 
-            // 미사용중 = 스토리 좋아요 (7), 디엠 왔을 때(9), 디엠 좋아요(10)
+            // 미사용중 = 디엠 왔을 때(9), 디엠 좋아요(10), 스토리 좋아요 (11)
 
             noticeMonthDTOS.add(noticeMonthDTO);
         }
@@ -166,7 +166,7 @@ public class NoticeService {
         {
             NoticeDTO noticeMonthDTO = new NoticeDTO();
 
-            // 공통 객체 : 모든 경우(ALL) + 팔로우 요청(8)
+            // 공통 객체 : 모든 경우(ALL) + 팔로우 요청(7) + 팔로우 상태 (8)
             noticeMonthDTO.setRequestMember(notice.getRequestMember());
             noticeMonthDTO.setType(notice.getType());
             noticeMonthDTO.setId(notice.getId());
@@ -188,7 +188,7 @@ public class NoticeService {
             // 대댓글 내용 : 댓글 대댓글(4), 댓글 대댓글 좋아요(5)
             noticeMonthDTO.processRecommentContent(noticeCommentMapService.getNoticeRecomment(notice.getId(), notice.getType()).getContent());
 
-            // 미사용중 = 스토리 좋아요 (7), 디엠 왔을 때(9), 디엠 좋아요(10)
+            // 미사용중 = 디엠 왔을 때(9), 디엠 좋아요(10), 스토리 좋아요 (11)
 
             noticeDueDateDTOS.add(noticeMonthDTO);
         }
@@ -243,9 +243,29 @@ public class NoticeService {
         noticeRepository.saveAll(uncheckedNotices);
     }
 
-    public void deleteById(Long id)
+    public void deleteNotice(Notice notice)
+    {
+        this.noticeRepository.delete(notice);
+    }
+
+    public void deleteNoticeById(Long id)
     {
         this.noticeRepository.deleteById(id);
+    }
+
+    public void deleteNoticeByMemberAndTarget(Integer type, Member loginMember, Member member) {
+
+        if (type == 7 || type == 8) {
+            Notice existingNotice = this.noticeRepository.findByTypeAndRequestMemberAndMember(type, loginMember, member);
+            if (existingNotice != null) {
+                this.noticeRepository.delete(existingNotice);
+            }
+        }
+
+    }
+
+    public Notice getNoticeByMemberAndTarget(Integer type, Member loginMember, Member member) {
+        return this.noticeRepository.findByTypeAndRequestMemberAndMember(type, loginMember, member);
     }
 
     public Notice getNotice(Long id)

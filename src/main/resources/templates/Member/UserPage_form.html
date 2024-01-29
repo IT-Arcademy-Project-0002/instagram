@@ -1,6 +1,7 @@
 <html layout:decorate="~{Layout/layout_main}">
 <head>
     <link rel="stylesheet" type="text/css" th:href="@{/member/css/UserPage.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/instagram.css}">
     <title>User Page</title>
 </head>
 <div layout:fragment="content">
@@ -146,36 +147,35 @@
                                     <!-- not mine page-->
                                     <div th:unless="${userPageDTO.isMine()}" class="d-flex align-items-center">
                                         <!-- button -->
-                                        <div class="d-flex mgL20">
-                                            <div th:if="${!blocking}">
-                                                <a class="btn mw74 center"
-                                                   th:classappend="${userPageDTO.isFollow() or userPageDTO.isRequestFollow()}?'btn_following' : 'btn_follow'"
-                                                   th:attr="onclick=|clickFollowSwapInUserPage('${userPageDTO.isFollow() ? '/member/follow/delete' : '/member/follow'}')|">
+                                        <div class="d-flex mgL20" th:if="${!blocking}">
+                                            <a class="btn mw74 center"
+                                               th:classappend="${userPageDTO.isFollow() or userPageDTO.isRequestFollow()}?'btn_following' : 'btn_follow'"
+                                               th:attr="onclick=|clickFollowSwapInUserPage('${userPageDTO.isFollow() ? '/member/follow/delete' : '/member/follow'}')|">
 
-                                                <span id="follow-spin"
-                                                      class="visually-hidden spinner-border spinner-border-sm"
-                                                      aria-hidden="true"></span>
-                                                    <span th:if="${userPageDTO.isFollow()}" class="follow-text bn">팔로잉</span>
-                                                    <span th:if="${not userPageDTO.isFollow() and userPageDTO.isFollower() and not userPageDTO.isRequestFollow()}"
-                                                          class="follow-text w140">맞팔로우 하기</span>
-                                                    <span th:if="${userPageDTO.isRequestFollow()}"
-                                                          class="follow-text">요청됨</span>
-                                                    <span th:if="${not userPageDTO.isRequestFollow() and not userPageDTO.isFollow() and not userPageDTO.isFollower()}"
-                                                          class="follow-text fs14 fwb bn">팔로우</span>
-                                                </a>
-                                                <a th:if="${not userPageDTO.isFollower() or userPageDTO.isFollow()}"
-                                                   class="btn btn_message mgL8 bn">메세지 보내기</a>
-                                            </div>
-                                            <div th:if="${blocking}">
-                                                <a class="btn mw74 center btn_follow"
-                                                   data-bs-target="#userBlockCancelModal" data-bs-toggle="modal">
+                                            <span id="follow-spin"
+                                                  class="visually-hidden spinner-border spinner-border-sm"
+                                                  aria-hidden="true"></span>
+                                                <span th:if="${userPageDTO.isFollow()}" class="follow-text fs14 fwb bn">팔로잉</span>
+                                                <span th:if="${not userPageDTO.isFollow() and userPageDTO.isFollower() and not userPageDTO.isRequestFollow()}"
+                                                      class="follow-text fs14 fwb bn">맞팔로우 하기</span>
+                                                <span th:if="${userPageDTO.isRequestFollow()}"
+                                                      class="follow-text fs14 fwb bn">요청됨</span>
+                                                <span th:if="${not userPageDTO.isRequestFollow() and not userPageDTO.isFollow() and not userPageDTO.isFollower()}"
+                                                      class="follow-text fs14 fwb bn">팔로우</span>
+                                            </a>
+                                            <a th:if="${not userPageDTO.isFollower() or userPageDTO.isFollow()}"
+                                               class="btn btn_message mgL8 bn">메세지 보내기</a>
+                                        </div>
+
+                                        <div class="d-flex mgL20" th:if="${blocking}">
+                                            <a class="btn mw74 center btn_follow"
+                                               data-bs-target="#userBlockCancelModal" data-bs-toggle="modal">
 
                                                 <span id="block-spin"
                                                       class="visually-hidden spinner-border spinner-border-sm"
                                                       aria-hidden="true"></span>
-                                                    <span class="follow-text fs14 fwb bn">차단 해제</span>
-                                                </a>
-                                            </div>
+                                                <span class="follow-text fs14 fwb bn">차단 해제</span>
+                                            </a>
                                         </div>
 
                                         <!-- user page setting -->
@@ -541,17 +541,11 @@
                                 </div>
                             </div>
                         </div>
-
-                        <div>
-                            <footer>
-                                작업 중
-                            </footer>
-                        </div>
                     </div>
 
                     <div th:unless="${member.scope or userPageDTO.isMine()}">
-                        <div class="border border-1 rounded-3 p-5 my-4">
-                            <div class="text-center py-2">
+                        <div class="bdb border-1 pd40" style="border-top: none !important;">
+                            <div class="text-center fs14">
                                 비공개 계정입니다
                                 <br>
                                 <br>

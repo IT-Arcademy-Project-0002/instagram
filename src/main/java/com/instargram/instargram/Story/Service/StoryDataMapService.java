@@ -8,6 +8,7 @@ import com.instargram.instargram.Story.Model.Repository.StoryDataMapRepository;
 import lombok.Builder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +23,7 @@ public class StoryDataMapService {
         storyDataMap.setDataId(image.getId());
         storyDataMap.setDataType(data_type);
         storyDataMap.setOwner(member);
+        storyDataMap.setCreateDate(LocalDateTime.now());
 
         return this.storyDataMapRepository.save(storyDataMap);
     }

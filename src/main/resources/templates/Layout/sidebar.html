@@ -1,11 +1,16 @@
+<head>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/sidemenu.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/instagram.css}">
+</head>
+
 <div th:fragment="sidebarFragment" class="side_menu d-flex" id="side_menu"
      xmlns="http://www.w3.org/1999/html">
 
 
     <!-- notify canvas-->
-    <div class="offcanvas offcanvas-start"
+    <div class="offcanvas offcanvas-start pdT8 pdB8"
          data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1" id="offcanvasNotify">
-        <div class="offcanvas-body">
+        <div class="offcanvas-body pd0">
             <div>
                 <div th:replace="~{Layout/Notify::notifyFragment}"></div>
             </div>
@@ -483,10 +488,6 @@
                     console.error('POST 요청 실패:', error);
                 });
         }
-
-
-
-
     </script>
 </div>
 

@@ -1,20 +1,26 @@
+<head>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/instagram.css}">
+</head>
+
 <div id="notifyFragment" th:fragment="notifyFragment">
 
-    <div class="mb-4">
-        <h4><b>알림</b></h4>
+    <div class="pdT10 pdR24 pdB12 pdL24 d-flex">
+        <div>
+            <span class="fs24 fw700">알림</span>
+        </div>
     </div>
 
     <div th:each="notice, status : ${notices}">
         <!-- period가 1일 때 "이번 주"를 표시 -->
-        <span class="d-flex mb-3" th:if="${notice.period == 1 && status.first}"><b>이번 주</b></span>
+        <span class="d-flex mgB10 pdR24 pdL24 fs16" th:if="${notice.period == 1 && status.first}"><b>이번 주</b></span>
 
         <!-- period가 2일 때 "이번 달"을 표시 -->
-        <span class="d-flex mt-3 mb-3" th:if="${notice.period == 2 && notices[status.index - 1]?.period == 1}"><b>이번 달</b></span>
+        <span class="d-flex mgT22 mgB10 pdR24 pdL24 fs16" th:if="${notice.period == 2 && notices[status.index - 1]?.period == 1}"><b>이번 달</b></span>
 
         <!-- period가 3일 때 "이전 활동"을 표시 -->
-        <span class="d-flex mt-3 mb-3" th:if="${notice.period == 3 && notices[status.index - 1]?.period == 2}"><b>이전 활동</b></span>
+        <span class="d-flex mgT22 mgB10 pdR24 pdL24 fs16" th:if="${notice.period == 3 && notices[status.index - 1]?.period == 2}"><b>이전 활동</b></span>
 
-        <div class="d-flex" th:id="@{|notice-${notice.id}|}">
+        <div class="d-flex pdT8 pdR24 pdB8 pdL24 w-100" th:id="@{|notice-${notice.id}|}">
             <input type="hidden" th:value="${notice.requestMember.username}" id="username">
             <div>
                 <div style="position: relative; width: 44px; height: 44px;">
@@ -28,9 +34,10 @@
                          style="position: absolute; top: 0; left: 0; transform: translate(50,50); width: 100%; height: 100%; object-fit: cover; margin: auto">
                 </div>
             </div>
+
             <div th:if="${notice.type == 1}">
                 <div class="d-flex">
-                    <div class="ms-2" style="width: 244px">
+                    <div class="ms-2 w-100 fs14">
                         <input type="hidden" th:value="${notice.requestMember.username}">
                         <span th:text="@{|${notice.requestMember.username}님이 회원님의 사진을 좋아합니다.|}"></span>
                         <span th:text="@{|${notice.elapsedTime}|}" style="color: grey;"></span>
@@ -42,11 +49,12 @@
                     </div>
                 </div>
             </div>
+
             <div th:if="${notice.type == 2}">
                 <div class="d-flex">
-                    <div class="ms-2" style="width: 244px">
+                    <div class="ms-2 w-100 fs14">
                         <input type="hidden" th:value="${notice.requestMember.username}">
-                        <span th:text="@{|${notice.requestMember.username}님이 댓글을 남겼습니다.|}"></span>
+                        <span th:text="@{|${notice.requestMember.username}님이 댓글을 남겼습니다:|}"></span>
                         <span th:utext="${notice.commentContent}"></span>
                         <span th:text="@{|${notice.elapsedTime}|}" style="color: grey;"></span>
                     </div>
@@ -57,11 +65,12 @@
                     </div>
                 </div>
             </div>
+
             <div th:if="${notice.type == 3}">
                 <div class="d-flex">
-                    <div class="ms-2" style="width: 244px">
+                    <div class="ms-2 w-100 fs14">
                         <input type="hidden" th:value="${notice.requestMember.username}">
-                        <span th:text="@{|${notice.requestMember.username}님이 회원님의 댓글을 좋아합니다: |}"></span>
+                        <span th:text="@{|${notice.requestMember.username}님이 회원님의 댓글을 좋아합니다.|}"></span>
                         <span th:utext="@{|${notice.commentContent}|}"></span>
                         <span th:text="@{|${notice.elapsedTime}|}" style="color: grey;"></span>
                     </div>
@@ -72,11 +81,12 @@
                     </div>
                 </div>
             </div>
+
             <div th:if="${notice.type == 4}">
                 <div class="d-flex">
-                    <div class="ms-2" style="width: 244px">
+                    <div class="ms-2 w-100 fs14">
                         <input type="hidden" th:value="${notice.requestMember.username}">
-                        <span th:text="@{|${notice.requestMember.username}님이 댓글을 남겼습니다.|}"></span>
+                        <span th:text="@{|${notice.requestMember.username}님이 댓글을 남겼습니다:|}"></span>
                         <span th:utext="@{|${notice.recommentContent}|}"></span>
                         <span th:text="@{|${notice.elapsedTime}|}" style="color: grey;"></span>
                     </div>
@@ -87,11 +97,12 @@
                     </div>
                 </div>
             </div>
+
             <div th:if="${notice.type == 5}">
                 <div class="d-flex">
-                    <div class="ms-2" style="width: 244px">
+                    <div class="ms-2 w-100 fs14">
                         <input type="hidden" th:value="${notice.requestMember.username}">
-                        <span th:text="@{|${notice.requestMember.username}님이 회원님의 댓글을 좋아합니다: |}"></span>
+                        <span th:text="@{|${notice.requestMember.username}님이 회원님의 댓글을 좋아합니다.|}"></span>
                         <span th:utext="@{|${notice.recommentContent}|}"></span>
                         <span th:text="@{|${notice.elapsedTime}|}" style="color: grey;"></span>
                     </div>
@@ -102,11 +113,12 @@
                     </div>
                 </div>
             </div>
+
             <div th:if="${notice.type == 6}">
                 <div class="d-flex">
-                    <div class="ms-2" style="width: 244px">
+                    <div class="ms-2 w-100 fs14">
                         <input type="hidden" th:value="${notice.requestMember.username}">
-                        <span th:text="@{|${notice.requestMember.username}님이 게시글에서 회원님을 언급했습니다.|}"></span>
+                        <span th:text="@{|${notice.requestMember.username}님이 게시글에서 회원님을 언급했습니다:|}"></span>
                         <span th:utext="@{|${notice.boardContent}|}"></span>
                         <span th:text="@{|${notice.elapsedTime}|}" style="color: grey;"></span>
                     </div>
@@ -117,10 +129,11 @@
                     </div>
                 </div>
             </div>
+
             <div th:if="${notice.type == 7}">
                 <div class="d-flex">
                     <a th:href="@{'/member/page/' + ${notice.requestMember.username}}">
-                    <div class="ms-2" style="width: 200px">
+                    <div class="ms-2 w-100 fs14">
                         <span th:if="${not notice.follower}" th:text="@{|${notice.requestMember.username}님이 팔로우를 요청했습니다.|}"></span>
                         <span th:text="@{|${notice.elapsedTime}|}" style="color: grey;"></span>
                     </div>
@@ -144,10 +157,11 @@
                     </div>
                 </div>
             </div>
+
             <div th:if="${notice.type == 8}">
                 <div class="d-flex">
-                    <div class="ms-2" style="width: 200px">
-                        <span th:if="${notice.follower}" th:text="@{|${notice.requestMember.username}님이 회원님을 팔로우하기 시작했습니다|}"></span>
+                    <div class="ms-2 w-100 fs14">
+                        <span th:if="${notice.follower}" th:text="@{|${notice.requestMember.username}님이 회원님을 팔로우하기 시작했습니다.|}"></span>
                         <span th:text="@{|${notice.elapsedTime}|}" style="color: grey;"></span>
                     </div>
                     <div style="width: 140px" th:id="${notice.id}">

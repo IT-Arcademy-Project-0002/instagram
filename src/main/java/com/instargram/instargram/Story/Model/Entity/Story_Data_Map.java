@@ -7,6 +7,7 @@ import lombok.Setter;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -24,6 +25,8 @@ public class Story_Data_Map {
 
     // 데이터 아이디 : 데이터 타입에 따라 따로 처리 필요
     private Long dataId;
+
+    private LocalDateTime createDate;
 
     // 계정주
     @ManyToOne

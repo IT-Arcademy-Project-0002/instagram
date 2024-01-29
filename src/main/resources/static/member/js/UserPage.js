@@ -59,3 +59,8 @@ function reload()
 {
     window.location.reload();
 }
+
+function clickBlockCancel()
+{
+
+}

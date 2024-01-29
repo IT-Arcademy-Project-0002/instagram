@@ -5,9 +5,11 @@ import com.instargram.instargram.Data.Image.Image;
 import com.instargram.instargram.DataNotFoundException;
 import com.instargram.instargram.Enum_Data;
 import com.instargram.instargram.Member.Model.Entity.Follow_Map;
+import com.instargram.instargram.Member.Model.Entity.Hate_Member_Map;
 import com.instargram.instargram.Member.Model.Entity.Member;
 import com.instargram.instargram.Member.Model.Form.MemberCreateForm;
 import com.instargram.instargram.Member.Model.Repository.FollowMapRepository;
+import com.instargram.instargram.Member.Model.Repository.HateMemberMapRepository;
 import com.instargram.instargram.Member.Model.Repository.MemberRepository;
 import com.instargram.instargram.Notice.Model.Entity.Notice;
 import com.instargram.instargram.Notice.Service.NoticeService;
@@ -33,6 +35,7 @@ public class MemberService {
     private final FollowMapService followMapService;
     private final NoticeService noticeService;
     private final FollowMapRepository followMapRepository;
+    private final HateMemberMapRepository hateMemberMapRepository;
 
     public Member getMemberByUsername(String id)
     {
@@ -284,5 +287,52 @@ public class MemberService {
         } else {
             throw new DataNotFoundException("board not found");
         }
+    }
+
+    public Hate_Member_Map blockMember(String loginUser, String target)
+    {
+        Hate_Member_Map hateMemberMap = new Hate_Member_Map();
+        Member owner = getMember(loginUser);
+        hateMemberMap.setOwner(owner);
+
+        Member hateMember = getMember(target);
+        hateMemberMap.setHateMember(hateMember);
+
+        boolean follow = followMapService.isFollow(owner, hateMember);
+
+        if(follow)
+        {
+            followMapService.deleteFollow(owner, hateMember);
+        }
+
+        follow = followMapService.isFollower(owner, hateMember);
+
+        if(follow)
+        {
+            followMapService.deleteFollow(hateMember, owner);
+        }
+
+        return hateMemberMapRepository.save(hateMemberMap);
+    }
+
+    public void blockCancelMember(String loginUser, String target)
+    {
+        Hate_Member_Map hateMemberMap = getBlockMemberMap(loginUser, target);
+
+        hateMemberMapRepository.delete(hateMemberMap);
+    }
+
+    public Hate_Member_Map getBlockMemberMap(String loginUser, String target)
+    {
+        return hateMemberMapRepository.findByOwnerUsernameAndHateMemberUsername(loginUser, target);
+    }
+    public List<Member> getBlockMembers(String loginUser)
+    {
+        return hateMemberMapRepository.findByOwnerUsername(loginUser).stream().map(Hate_Member_Map::getHateMember).toList();
+    }
+
+    public boolean isBlock(String owner, String target)
+    {
+        return hateMemberMapRepository.existsByOwnerUsernameAndHateMemberUsername(owner, target);
     }
 }

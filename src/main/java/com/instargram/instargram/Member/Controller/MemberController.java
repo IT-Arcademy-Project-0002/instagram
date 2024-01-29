@@ -9,6 +9,7 @@ import com.instargram.instargram.Member.Config.OAuth2.Model.OAuth2UserInfo;
 import com.instargram.instargram.Member.Config.SpringSecurity.MemberSecurityService;
 import com.instargram.instargram.Member.Config.SpringSecurity.PrincipalDetails;
 import com.instargram.instargram.Member.Model.DTO.UserPageDTO;
+import com.instargram.instargram.Member.Model.Entity.Hate_Member_Map;
 import com.instargram.instargram.Member.Model.Entity.Member;
 import com.instargram.instargram.Member.Model.Form.MemberCreateForm;
 import com.instargram.instargram.Member.Service.FollowMapService;
@@ -146,8 +147,16 @@ public class MemberController {
 
         model.addAttribute("member", member);
 
-        UserPageDTO userPageDTO = new UserPageDTO(member, loginMember, boardService, followMapService, storyHighlightMapService, dataMapService);
-        model.addAttribute("userPageDTO", userPageDTO);
+        if(memberService.isBlock(username, principal.getName()))
+        {
+            model.addAttribute("blocked", true);
+        }
+        else{
+            model.addAttribute("blocked", false);
+            model.addAttribute("blocking", memberService.isBlock(principal.getName(), username));
+            UserPageDTO userPageDTO = new UserPageDTO(member, loginMember, boardService, followMapService, storyHighlightMapService, dataMapService);
+            model.addAttribute("userPageDTO", userPageDTO);
+        }
 
         return "Member/UserPage_form";
     }
@@ -297,4 +306,27 @@ public class MemberController {
 
         return ResponseEntity.ok().body(result);
     }
+
+    @GetMapping("/block/{target}")
+    public ResponseEntity<Map<String, Object>> blockMember(@PathVariable("target")String target, Principal principal)
+    {
+        Map<String, Object> result = new HashMap<>();
+
+        result.put("result", memberService.blockMember(principal.getName(), target));
+
+        return ResponseEntity.ok().body(result);
+    }
+
+    @GetMapping("/block/cancel/{target}")
+    public ResponseEntity<Map<String, Object>> blockCancelMember(@PathVariable("target")String target, Principal principal)
+    {
+        Map<String, Object> result = new HashMap<>();
+
+        memberService.blockCancelMember(principal.getName(), target);
+
+        result.put("result", "blockCancel");
+
+        return ResponseEntity.ok().body(result);
+    }
+
 }

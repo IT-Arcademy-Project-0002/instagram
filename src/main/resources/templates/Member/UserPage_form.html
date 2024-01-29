@@ -1,6 +1,7 @@
 <html layout:decorate="~{Layout/layout_main}">
 <head>
     <link rel="stylesheet" type="text/css" th:href="@{/member/css/UserPage.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/instagram.css}">
     <title>User Page</title>
 </head>
 <div layout:fragment="content">
@@ -145,11 +146,11 @@
                                                 <span id="follow-spin"
                                                       class="visually-hidden spinner-border spinner-border-sm"
                                                       aria-hidden="true"></span>
-                                                <span th:if="${userPageDTO.isFollow()}" class="follow-text bn">팔로잉</span>
+                                                <span th:if="${userPageDTO.isFollow()}" class="follow-text fs14 fwb bn">팔로잉</span>
                                                 <span th:if="${not userPageDTO.isFollow() and userPageDTO.isFollower() and not userPageDTO.isRequestFollow()}"
-                                                      class="follow-text w140">맞팔로우 하기</span>
+                                                      class="follow-text fs14 fwb bn">맞팔로우 하기</span>
                                                 <span th:if="${userPageDTO.isRequestFollow()}"
-                                                      class="follow-text">요청됨</span>
+                                                      class="follow-text fs14 fwb bn">요청됨</span>
                                                 <span th:if="${not userPageDTO.isRequestFollow() and not userPageDTO.isFollow() and not userPageDTO.isFollower()}"
                                                       class="follow-text fs14 fwb bn">팔로우</span>
                                             </a>
@@ -492,15 +493,10 @@
                         </div>
                     </div>
 
-                    <div>
-                        <footer>
-                            작업 중
-                        </footer>
-                    </div>
 
                     <div th:unless="${member.scope or userPageDTO.isMine()}">
-                        <div class="border border-1 rounded-3 p-5 my-4">
-                            <div class="text-center py-2">
+                        <div class="bdb border-1 pd40" style="border-top: none !important;">
+                            <div class="text-center fs14">
                                 비공개 계정입니다
                                 <br>
                                 <br>

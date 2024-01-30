@@ -327,7 +327,6 @@ public class BoardController {
             return "redirect:/main";
         }
 
-
         // targetLocation이 내가 사용했던 장소임. locationForm이 내가 이번에 입력한 것.
         Board board = this.boardService.getBoardById(id);
         Location targetLocation = board.getLocation();

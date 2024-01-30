@@ -22,11 +22,12 @@ public class Board_TagMember_MapService {
     public List<String> extractMentionedWords(String content) {
         List<String> mentionedWords = new ArrayList<>();
 
-        Pattern pattern = Pattern.compile("@(\\w+)");
-        Matcher matcher = pattern.matcher(content);
-
-        while (matcher.find()) {
-            mentionedWords.add(matcher.group(1));
+        for(String username : content.split("@"))
+        {
+            if(!username.isEmpty())
+            {
+                mentionedWords.add(username);
+            }
         }
 
         return mentionedWords;

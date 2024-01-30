@@ -1,7 +1,3 @@
-<head>
-    <link rel="stylesheet" type="text/css" th:href="@{/css/instagram.css}">
-</head>
-
 <div id="notifyFragment" th:fragment="notifyFragment">
 
     <div class="pdT10 pdR24 pdB12 pdL24 d-flex">
@@ -132,26 +128,28 @@
 
             <div th:if="${notice.type == 7}">
                 <div class="d-flex">
-                    <a th:href="@{'/member/page/' + ${notice.requestMember.username}}">
-                    <div class="ms-2 w-100 fs14">
-                        <span th:if="${not notice.follower}" th:text="@{|${notice.requestMember.username}님이 팔로우를 요청했습니다.|}"></span>
-                        <span th:text="@{|${notice.elapsedTime}|}" style="color: grey;"></span>
-                    </div>
+                    <a th:href="@{'/member/page/' + ${notice.requestMember.username}}" class="flex-fill">
+                        <div class="ms-2 fs14">
+                            <span th:if="${not notice.follower}"
+                                  th:text="@{|${notice.requestMember.username}님이 팔로우를 요청했습니다.|}"></span>
+                            <span th:text="@{|${notice.elapsedTime}|}" style="color: grey;"></span>
+                        </div>
                     </a>
-                    <div style="width: 140px" th:id="${notice.id}">
-                        <div id="apply-container" th:if="${not notice.follower}" class="d-flex align-items-center">
-                            <button id="apply-btn" class="ms-2 btn btn-primary text-light"
-                                    style="font-size: 10px; height: 32px" onclick="clickFollowApply()">
+
+                    <div class="d-flex align-items-center justify-content-center" th:id="${notice.id}">
+                        <div id="apply-container" th:if="${not notice.follower}" class="d-flex ms-2" style="text-align: right;">
+                            <button id="apply-btn" class="btn btn_follow wa fs14 pdL10 pdR10"
+                                    style="height: 32px" onclick="clickFollowApply()">
                                 <span id="request-follow-spin" class="visually-hidden spinner-border spinner-border-sm"
                                       aria-hidden="true"></span>
-                                <span class="request-follow-text">
-                                확인
-                            </span>
+                                <span class="request-follow-text align-items-center">
+                                    확인
+                                </span>
                             </button>
-                            <button id="no-btn" class="ms-2 btn btn-outline-secondary"
-                                    style="font-size: 10px; height: 32px"
-                                    th:onclick="@{|clickFollowDelete(${notice.id})|}">
-                                삭제
+
+                            <button id="no-btn" class=" ms-2 btn btn_following wa fs14 pdL10 pdR10"
+                                    style="height: 32px"
+                                    th:onclick="@{|clickFollowDelete(${notice.id})|}">삭제
                             </button>
                         </div>
                     </div>
@@ -164,16 +162,18 @@
                         <span th:if="${notice.follower}" th:text="@{|${notice.requestMember.username}님이 회원님을 팔로우하기 시작했습니다.|}"></span>
                         <span th:text="@{|${notice.elapsedTime}|}" style="color: grey;"></span>
                     </div>
-                    <div style="width: 140px" th:id="${notice.id}">
 
-                        <div id="follow-container" th:if="${notice.follower}" >
+                    <div class="d-flex align-items-center" style="width: 140px; justify-content: end " th:id="${notice.id}">
+                        <div id="follow-container" th:if="${notice.follower}">
                             <div th:if="${not notice.follow and notice.follower or notice.follow}">
-                                <button id="follow-btn" class="ms-2 btn w-75"
-                                        th:classappend="${notice.follow}?'btn-outline-secondary':'btn-primary text-light'"
-                                        style="font-size: 10px; height: 32px"
+                                <button id="follow-btn" class="ms-2 btn btn_follow wa fs14"
+                                        th:classappend="${notice.follow}?'ms-2 btn btn_following wa fs14':'ms-2 btn btn_follow wa fs14'"
+                                        style="height: 32px"
                                         th:attr="onclick=|clickFollowSwap('${notice.follow ? '/member/follow/deleteByNotice' : '/member/follow'}', '${notice.follow ? notice.id : ''}')|">
-                                    <span id="follow-spin" class="visually-hidden spinner-border spinner-border-sm" aria-hidden="true"></span>
-                                    <span id="follow-text" th:text="${notice.follow}?'팔로잉':'팔로우'"></span>
+                                    <span id="follow-spin"
+                                          class="visually-hidden spinner-border spinner-border-sm"
+                                          aria-hidden="true"></span>
+                                    <spanc class="w-100" id="follow-text" th:text="${notice.follow}?'팔로잉':'팔로우'"></spanc>
                                 </button>
                             </div>
                         </div>
@@ -250,10 +250,10 @@
                         spin.classList.add('visually-hidden');
                         if (data.result) {
                             followText.textContent = '팔로잉';
-                            followBtn.classList = 'ms-2 btn btn-outline-secondary w-75';
+                            followBtn.classList = 'ms-2 btn btn_following wa fs14';
                         } else {
                             followText.textContent = '팔로우';
-                            followBtn.classList = 'ms-2 btn btn-primary text-light w-75';
+                            followBtn.classList = 'ms-2 btn btn_follow wa fs14';
                         }
                     }, 1500);
                 })

@@ -1,5 +1,7 @@
 package com.instargram.instargram.Member.Controller;
 
+import com.instargram.instargram.Community.Board.Model.DTO.FeedDTO;
+import com.instargram.instargram.Community.Board.Model.Entity.Board;
 import com.instargram.instargram.Community.Board.Service.BoardService;
 import com.instargram.instargram.Community.Board.Service.Board_Data_MapService;
 import com.instargram.instargram.Data.Image.Image;
@@ -21,6 +23,7 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.websocket.server.PathParam;
 import lombok.Builder;
 
+import lombok.Getter;
 import org.hibernate.Hibernate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -51,7 +54,7 @@ public class MemberController {
     private final BoardService boardService;
     private final FollowMapService followMapService;
     private final StoryHighlightMapService storyHighlightMapService;
-    private final Board_Data_MapService dataMapService;
+    private final Board_Data_MapService boardDataMapService;
     private final ImageService imageService;
 
     private final AuthenticationManager authenticationManager;
@@ -140,8 +143,23 @@ public class MemberController {
     }
 
     @GetMapping("/page/{username}")
-    public String userPage(@PathVariable("username")String username, Model model, Principal principal)
+    public String userPage(@PathVariable("username")String username,
+                           @RequestParam(value = "id", defaultValue = "-1")Long id,
+                           @RequestParam(value = "page", defaultValue = "default")String referer,
+                           @RequestParam(value = "scroll", defaultValue = "0")double scroll,
+                           Model model, Principal principal)
     {
+        if(referer.equals("detail"))
+        {
+            Board board = this.boardService.getBoardById(id);
+
+            FeedDTO selectFeed = this.boardDataMapService.getFeedWithComments(board);
+            model.addAttribute("selectFeed", selectFeed);
+        }
+
+        model.addAttribute("referer", referer);
+        model.addAttribute("scroll", scroll);
+
         Member member = memberService.getMember(username);
         Member loginMember = memberService.getMember(principal.getName());
 
@@ -154,10 +172,9 @@ public class MemberController {
         else{
             model.addAttribute("blocked", false);
             model.addAttribute("blocking", memberService.isBlock(principal.getName(), username));
-            UserPageDTO userPageDTO = new UserPageDTO(member, loginMember, boardService, followMapService, storyHighlightMapService, dataMapService);
+            UserPageDTO userPageDTO = new UserPageDTO(member, loginMember, boardService, memberService.getFollowMapService(), memberService.getStoryHighlightMapService(), boardDataMapService);
             model.addAttribute("userPageDTO", userPageDTO);
         }
-
         return "Member/UserPage_form";
     }
 

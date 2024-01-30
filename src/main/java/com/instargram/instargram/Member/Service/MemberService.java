@@ -13,6 +13,7 @@ import com.instargram.instargram.Member.Model.Repository.HateMemberMapRepository
 import com.instargram.instargram.Member.Model.Repository.MemberRepository;
 import com.instargram.instargram.Notice.Model.Entity.Notice;
 import com.instargram.instargram.Notice.Service.NoticeService;
+import com.instargram.instargram.Story.Service.StoryHighlightMapService;
 import jakarta.annotation.PostConstruct;
 import jakarta.transaction.Transactional;
 import lombok.Builder;
@@ -36,6 +37,8 @@ public class MemberService {
     private final NoticeService noticeService;
     private final FollowMapRepository followMapRepository;
     private final HateMemberMapRepository hateMemberMapRepository;
+    @Getter
+    private final StoryHighlightMapService storyHighlightMapService;
 
     public Member getMemberByUsername(String id)
     {

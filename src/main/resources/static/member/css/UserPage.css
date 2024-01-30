@@ -113,7 +113,6 @@
     background-color: #efefef;
     padding: 6px 16px;
     height: 32px;
-    width: 100%;
     border-radius: 8px;
     font-size: 14px;
     font-weight: bold;
@@ -164,22 +163,23 @@
     align-items: center;
 }
 
-.btn_follow {
-    display: flex;
-    align-items: center;
+.btn_follow, .btn_photo_choice {
+    padding: 6px 16px;
     height: 32px;
+    font-size: 14px;
     color: #fff;
     background-color: #0095f6;
     border-color: #0095f6;
     border-radius: 8px;
-
+    font-weight: bold;
+    white-space: nowrap;
 }
-.btn_follow:hover {
+.btn_follow:hover, .btn_photo_choice:hover {
     color: #fff;
     background-color: #1877f2;
     border-color: #1877f2;
 }
-.btn_follow:active {
+.btn_follow:active, .btn_photo_choice:active {
     color: #fff !important;
     background-color: #1877f2 !important;
     border-color: #1877f2 !important;

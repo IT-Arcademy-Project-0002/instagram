@@ -9,10 +9,31 @@
     <div class="d-flex">
         <div class="main-content d-flex" style="margin-left: 4.5rem;">
             <div class="border-end" style="min-width: 398px; overflow-y: scroll">
-                <ul>
-                    <li th:each="dto:${roomList}">
-                        <a th:href="@{|/direct/t/${dto.room.id}|}"
-                           th:text="${dto.name}"></a>
+                <ul style=" list-style:none; padding-left:0;">
+                    <li class="room-list" th:each="dto:${roomList}" style="padding: 8px 24px">
+                        <a th:href="@{|/direct/t/${dto.room.id}|}">
+                            <div class="d-flex align-items-center">
+                                <div th:each="member : ${dto.members}">
+                                    <div th:if="${member.getKey() != loginMember.username}"
+                                         style="position: relative; width: 55px; height: 55px; margin-right: 12px">
+                                        <img th:if="${member.getValue().getMember().image == null}"
+                                             src="/files/designImg/noneuser.png"
+                                             class="shadow-sm rounded-circle text-center"
+                                             style="position: absolute; top: 0; left: 0; transform: translate(50,50); width: 100%; height: 100%; object-fit: cover; margin: auto">
+                                        <img th:unless="${member.getValue().getMember().image == null}"
+                                             th:src="@{|/resources/${member.getValue().getMember().image.name}|}"
+                                             class="shadow-sm rounded-circle text-center"
+                                             style="position: absolute; top: 0; left: 0; transform: translate(50,50); width: 100%; height: 100%; object-fit: cover; margin: auto">
+                                    </div>
+                                </div>
+                                <div>
+                                    <div th:text="${dto.name}"></div>
+                                    <div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
                     </li>
                 </ul>
             </div>
@@ -1305,10 +1326,11 @@
             var members = [[${nowRoomDTO.members}]];
             var imgSrc = '';
             var img = members[data.sender].image;
-            if (img === null) {
-                imgSrc = 'src="/files/designImg/noneuser.png"\n';
-            } else {
+            debugger;
+            if (img) {
                 imgSrc = 'src="/resources/' + img.name + '"\n';
+            } else {
+                imgSrc = 'src="/files/designImg/noneuser.png"\n';
             }
 
 

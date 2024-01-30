@@ -25,7 +25,8 @@
                         <!--user photo-->
                         <div class="user_photo">
                             <div class="d-flex h-100 justify-content-center align-items-center">
-                                <button class="btn btn-light rounded-circle userProfile_btn"
+                                <button th:if="${member.username == loginMember.username}"
+                                        class="btn btn-light rounded-circle userProfile_btn"
                                         data-bs-toggle="modal" data-bs-target="#ProfilePhotoModifyModal">
                                     <img th:if="${member.image == null}" id="none_user_img"
                                          src="/files/designImg/noneuser.png"
@@ -34,6 +35,16 @@
                                          th:src="@{|/resources/${member.image.name}|}"
                                          class="rounded-circle text-center smooth-update userProfile_img">
                                 </button>
+
+                                <div th:unless="${member.username == loginMember.username}"
+                                        class="btn-light rounded-circle userProfile_btn">
+                                    <img th:if="${member.image == null}"
+                                         src="/files/designImg/noneuser.png"
+                                         class="rounded-circle text-center smooth-update userProfile_img">
+                                    <img th:unless="${member.image == null}"
+                                         th:src="@{|/resources/${member.image.name}|}"
+                                         class="rounded-circle text-center smooth-update userProfile_img">
+                                </div>
 
                                 <!-- profile photo change modal -->
                                 <div class="modal fade" id="ProfilePhotoModifyModal" tabindex="-1"
@@ -199,9 +210,14 @@
                                             <div class="modal-dialog modal-dialog-centered center">
                                                 <div class="modal-content w400 bn">
 
-                                                    <button class="btn w-100 h50 center hfwb pdT4 pdB4 pdL8 pdR8 fs14 fcRed fcRed fwb bn"
+                                                    <button th:if="${!blocking}" class="btn w-100 h50 center hfwb pdT4 pdB4 pdL8 pdR8 fs14 fcRed fcRed fwb bn"
                                                             data-bs-target="#userBlockModal" data-bs-toggle="modal">
                                                         차단
+                                                    </button>
+
+                                                    <button th:if="${blocking}" class="btn w-100 h50 center hfwb pdT4 pdB4 pdL8 pdR8 fs14 fcRed fcRed fwb bn"
+                                                            data-bs-target="#userBlockCancelModal" data-bs-toggle="modal">
+                                                        차단 해제
                                                     </button>
 
                                                     <div class="btsS btw1 btcDB w400"></div>
@@ -231,7 +247,8 @@
                                                     </div>
 
                                                     <div class="btsS btw1 btcDB w400"></div>
-                                                    <button class="btn w-100 h50 center hfwb pdT4 pdB4 pdL8 pdR8 fs14 hfcRed fcRed fwb bn">
+                                                    <button onclick="clickBlock()"
+                                                            class="btn w-100 h50 center hfwb pdT4 pdB4 pdL8 pdR8 fs14 hfcRed fcRed fwb bn">
                                                         차단
                                                     </button>
 
@@ -259,7 +276,8 @@
                                                     </div>
 
                                                     <div class="btsS btw1 btcDB w400"></div>
-                                                    <button class="btn w-100 h50 center hfwb pdT4 pdB4 pdL8 pdR8 fs14 hfcRed fcRed fwb bn">
+                                                    <button onclick="clickBlockCancel()"
+                                                            class="btn w-100 h50 center hfwb pdT4 pdB4 pdL8 pdR8 fs14 hfcRed fcRed fwb bn">
                                                         차단 해제
                                                     </button>
 

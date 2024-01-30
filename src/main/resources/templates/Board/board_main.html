@@ -1131,7 +1131,7 @@
                                                    th:id="${#lists.contains(selectFeed.board.boardSaveIds, selectFeed.board.id)}">
                                                     <div class="p-2" role="button" tabindex="0">
                                                         <svg th:id="@{|modal-saved-svg${selectFeed.board.id}|}"
-                                         `                    aria-label="저장"
+                                                             aria-label="저장"
                                                              th:classappend="${#lists.contains(selectFeed.board.boardSaveIds, selectFeed.board.id)} ? 'visually-hidden' : '' "
                                                              fill="currentColor" height="24" role="img"
                                                              viewBox="0 0 24 24"
@@ -1226,7 +1226,7 @@
                 <div class="modal-content">
                     <form th:action="@{|/board/update/${selectFeed.board().id}|}" method="post">
                         <div class="modal-header d-flex justify-content-between">
-                            <button type="button" class="btn btn-link">
+                            <button type="button" class="btn btn-link" onclick="reloadPage()">
                                 <svg viewBox="0 0 24 24" fill="currentColor" width="1em"
                                      height="1em" aria-hidden="true">
                                     <path fill-rule="evenodd" clip-rule="evenodd"

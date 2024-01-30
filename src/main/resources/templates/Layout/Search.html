@@ -1,8 +1,4 @@
 <div th:fragment="searchFragment" class="search_layout">
-    <head>
-        <link rel="stylesheet" type="text/css" th:href="@{/search/css/search_content.css}">
-    </head>
-
     <div class="search-content">
         <div class="search_title">
             <div>
@@ -24,7 +20,7 @@
                             <span class="search_category_text">최근 검색 항목</span>
                             <button class="btn_search" th:attr="onclick=|allDeleteButtonClicked()|">모두 지우기</button>
                         </div>
-                        <div class="searchListInitBody">
+
                             <div th:each="searchResult : ${searches}">
                                 <div th:if="${searchResult.searchType == 1}">
                                     <a th:href="'/member/page/' + ${searchResult.listName}" target="_blank" class="link">
@@ -37,10 +33,11 @@
                                                 <div class="search-username" th:text="${searchResult.listName}"></div>
                                                 <div class="search-userintroduction" th:text="${searchResult.listIntroduction}"></div>
                                             </div>
-                                            <button type="button" class="delete-button" th:attr="onclick=|deleteButtonClicked(1, event)|"></button>
+                                                <button type="button" class="btn-close pd8 fwb bn fs12 " style="margin-left: auto;" th:attr="onclick=|deleteButtonClicked(1, event)|"></button>
                                         </div>
                                     </a>
                                 </div>
+
                                 <div th:if="${searchResult.searchType == 2}">
                                     <a th:href="@{'/explore/locations/' + ${searchResult.listLocationId}}" target="_blank" class="link">
                                         <div class="search-list-box" th:id="@{|searchlocation-${searchResult.SearchDataIndex}|}" th:attr="onclick=|recentSearchFavoriteUpdate('${searchResult.searchType}', '${searchResult.listLocationId}', event)|">
@@ -55,6 +52,7 @@
                                         </div>
                                     </a>
                                 </div>
+
                                 <div th:if="${searchResult.searchType == 3}">
                                     <a th:href="@{'/explore/tags/' + ${searchResult.listHashTagId}}" target="_blank" class="link">
                                         <div class="search-list-box" th:id="@{|searchhashtag-${searchResult.SearchDataIndex}|}" th:attr="onclick=|recentSearchFavoriteUpdate('${searchResult.searchType}', '${searchResult.listName}', event)|">
@@ -69,7 +67,6 @@
                                     </a>
                                 </div>
                             </div>
-                        </div>
                     </div>
                     <div id="searchListResult">
                         <div class="h-100" id="searchList"></div>

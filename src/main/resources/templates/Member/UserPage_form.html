@@ -1,7 +1,5 @@
 <html layout:decorate="~{Layout/layout_main}">
 <head>
-    <link rel="stylesheet" type="text/css" th:href="@{/member/css/UserPage.css}">
-    <link rel="stylesheet" type="text/css" th:href="@{/css/instagram.css}">
     <title>User Page</title>
 </head>
 <div layout:fragment="content">
@@ -152,14 +150,18 @@
                                                th:classappend="${userPageDTO.isFollow() or userPageDTO.isRequestFollow()}?'btn_following' : 'btn_follow'"
                                                th:attr="onclick=|clickFollowSwapInUserPage('${userPageDTO.isFollow() ? '/member/follow/delete' : '/member/follow'}')|">
 
-                                            <span id="follow-spin"
-                                                  class="visually-hidden spinner-border spinner-border-sm"
-                                                  aria-hidden="true"></span>
+                                                <span id="follow-spin"
+                                                      class="visually-hidden spinner-border spinner-border-sm"
+                                                      aria-hidden="true"></span>
+
                                                 <span th:if="${userPageDTO.isFollow()}" class="follow-text fs14 fwb bn">팔로잉</span>
+
                                                 <span th:if="${not userPageDTO.isFollow() and userPageDTO.isFollower() and not userPageDTO.isRequestFollow()}"
                                                       class="follow-text fs14 fwb bn">맞팔로우 하기</span>
+
                                                 <span th:if="${userPageDTO.isRequestFollow()}"
                                                       class="follow-text fs14 fwb bn">요청됨</span>
+
                                                 <span th:if="${not userPageDTO.isRequestFollow() and not userPageDTO.isFollow() and not userPageDTO.isFollower()}"
                                                       class="follow-text fs14 fwb bn">팔로우</span>
                                             </a>

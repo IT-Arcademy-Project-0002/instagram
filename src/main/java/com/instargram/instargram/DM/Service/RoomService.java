@@ -14,10 +14,7 @@ import lombok.Getter;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 @Builder
@@ -52,23 +49,22 @@ public class RoomService {
 
         for(Member mem : chatMembers)
         {
-            chattingMemberRooms.add(roomMemberMapService.findByMember(mem));
+            List<Room> memRoomList = roomMemberMapService.findByMember(mem);
+            if(!memRoomList.isEmpty())
+            {
+                chattingMemberRooms.add(memRoomList);
+            }
         }
 
         for(Room room : loginMemberRooms)
         {
-            for(List<Room> chatRooms : chattingMemberRooms)
+
+            List<Member> members = new ArrayList<>(roomMemberMapService.getMemberByRoom(room));
+            members.remove(loginMember);
+
+            if(new HashSet<>(chatMembers).containsAll(members) && new HashSet<>(members).containsAll(chatMembers))
             {
-                if(!chatRooms.contains(room))
-                {
-                    loginMemberRooms.remove(room);
-                }
-                else{
-                    if(loginMemberRooms.size() == 1)
-                    {
-                        return loginMemberRooms.get(0);
-                    }
-                }
+                return room;
             }
         }
         return null;

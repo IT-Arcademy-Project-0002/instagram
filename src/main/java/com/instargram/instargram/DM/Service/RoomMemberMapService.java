@@ -33,4 +33,9 @@ public class RoomMemberMapService {
     {
         return roomMemberMapRepository.findByRoom(room);
     }
+
+    public List<Member> getMemberByRoom(Room room)
+    {
+        return roomMemberMapRepository.findByRoom(room).stream().map(Room_Member_Map::getMember).toList();
+    }
 }

@@ -26,3 +26,8 @@
     background: rgba(152,152,152,0.2);
     padding: 8px 8px;
 }
+
+.room-list:hover
+{
+    background: #efefef;
+}

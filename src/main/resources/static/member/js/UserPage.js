@@ -5,7 +5,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const images = document.querySelectorAll('.smooth-update');
 
     images.forEach(function(img) {
-        debugger;
         setTimeout(showImg(img),50)
     });
 });
@@ -55,12 +54,38 @@ function boardKeep(board)
     document.getElementById("board-keep-form").submit();
 }
 
+function clickBlockCancel()
+{
+    var username = document.getElementById('username').value;
+
+    fetch('/member/block/cancel/' + username)
+        .then(response => response.json())
+        .then(data => {
+            reload();
+        })
+        .catch(error => {
+            // 에러 처리
+            console.error('Error:', error);
+        });
+}
+
+function clickBlock()
+{
+    var username = document.getElementById('username').value;
+
+    fetch('/member/block/' + username)
+        .then(response => response.json())
+        .then(data => {
+            reload();
+        })
+        .catch(error => {
+            // 에러 처리
+            console.error('Error:', error);
+        });
+}
+
+
 function reload()
 {
     window.location.reload();
-}
-
-function clickBlockCancel()
-{
-
 }

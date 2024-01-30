@@ -245,6 +245,7 @@ function Recomment(commentId, recommentId) {
 
 // main페이지 or 모달에서 댓글/대댓글 작성기능
 function clickCommentBtn() {
+    debugger;
     const boardID = document.getElementById('boardID').innerText;
     console.log(boardID);
     const commentID = document.getElementById('commentID').innerText;

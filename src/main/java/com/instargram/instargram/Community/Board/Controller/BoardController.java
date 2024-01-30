@@ -21,6 +21,7 @@ import com.instargram.instargram.Data.Video.Video;
 import com.instargram.instargram.Data.Video.VideoService;
 import com.instargram.instargram.Enum_Data;
 import com.instargram.instargram.Member.Model.DTO.MemberDTO;
+import com.instargram.instargram.Member.Model.DTO.UserPageDTO;
 import com.instargram.instargram.Member.Model.Entity.Member;
 import com.instargram.instargram.Member.Service.MemberService;
 import com.instargram.instargram.Notice.Model.Entity.Notice;
@@ -241,6 +242,7 @@ public class BoardController {
 
         return "redirect:/main";
     }
+
     @GetMapping("/board/setting/{id}")
     public String setting(@PathVariable("id") Long id, HttpSession httpSession) {
         Board board = this.boardService.getBoardById(id);

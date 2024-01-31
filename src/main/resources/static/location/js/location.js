@@ -88,7 +88,7 @@ $(document).ready(function () {
                 newList.append(listItem);
             });
         } else {
-            var listItem = $('<div></div>');
+            var listItem = $('<div class="center pd10"></div>');
             listItem.text('검색 결과가 없습니다.');
             newList.append(listItem);
         }

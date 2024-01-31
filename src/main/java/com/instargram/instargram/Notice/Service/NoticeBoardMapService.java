@@ -77,7 +77,7 @@ public class NoticeBoardMapService {
                 for (Board_Data_Map dataMap : dataMaps) {
                     if (dataMap.getDataType() != null && dataMap.getDataType() == 2) {
                         Long id = dataMap.getDataId();
-                        imagePath = "/files/img/" + imageService.getImageByID(id).getName();
+                        imagePath = "/resources/" + imageService.getImageByID(id).getName();
                         break; // 첫 번째 이미지만 필요하므로 루프 종료
                     }
                 }
@@ -96,7 +96,7 @@ public class NoticeBoardMapService {
                 for (Board_Data_Map dataMap : dataMapsForComment) {
                     if (dataMap.getDataType() != null && dataMap.getDataType() == 2) {
                         Long id = dataMap.getDataId();
-                        imagePath = "/files/img/" + imageService.getImageByID(id).getName();
+                        imagePath = "/resources/" + imageService.getImageByID(id).getName();
                         break; // 첫 번째 이미지만 필요하므로 루프 종료
                     }
                 }
@@ -118,7 +118,7 @@ public class NoticeBoardMapService {
                     for (Board_Data_Map dataMap : dataMapsForRecomment) {
                         if (dataMap.getDataType() != null && dataMap.getDataType() == 2) {
                             Long id = dataMap.getDataId();
-                            imagePath = "/files/img/" + imageService.getImageByID(id).getName();
+                            imagePath = "/resources/" + imageService.getImageByID(id).getName();
                             break; // 첫 번째 이미지만 필요하므로 루프 종료
                         }
                     }
@@ -138,7 +138,7 @@ public class NoticeBoardMapService {
                 for (Board_Data_Map dataMap : dataMaps) {
                     if (dataMap.getDataType() != null && dataMap.getDataType() == 2) {
                         Long id = dataMap.getDataId();
-                        imagePath = "/files/img/" + imageService.getImageByID(id).getName();
+                        imagePath = "/resources/" + imageService.getImageByID(id).getName();
                         break; // 첫 번째 이미지만 필요하므로 루프 종료
                     }
                 }

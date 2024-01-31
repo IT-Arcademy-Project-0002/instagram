@@ -12,6 +12,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 @Getter
 @Configuration
 public class AppConfig {
@@ -24,13 +27,13 @@ public class AppConfig {
     public static String getImageFileDirPath()
     {
         // 원하는 경로로 지정해주세요
-        return System.getProperty("user.dir") + "\\src\\main\\resources\\static\\files\\img\\";
+        return System.getProperty("user.dir") + "/storage/img/";
     }
 
     @Bean
     public static String getVideoFileDirPath()
     {
         // 원하는 경로로 지정해주세요
-        return System.getProperty("user.dir") + "\\src\\main\\resources\\static\\files\\video\\";
+        return System.getProperty("user.dir") + "/storage/video/";
     }
 }

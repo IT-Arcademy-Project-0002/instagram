@@ -187,7 +187,7 @@ function ModifyBoard(id) {
     let videoPreviewArray = [];
 
     console.log(id);
-    fetch("/explore/board/update/" + id)
+    fetch("/board/update/" + id)
         .then(response => {
             return response.json();
         })
@@ -239,9 +239,9 @@ function ModifyBoard(id) {
                 imagePreviewArray.push(decodeURIComponent(modifyImg.src));
                 videoPreviewArray.push(decodeURIComponent(modifyVideo.src))
                 // 이미지 또는 비디오를 캐러셀에 추가
-                if (filesArray[i].path.includes('\\img\\\\')) {
+                if (filesArray[i].path.includes('/img/')) {
                     fileContainer.appendChild(modifyImg);
-                } else if (filesArray[i].path.includes('\\video\\\\')) {
+                } else if (filesArray[i].path.includes('/video/')) {
                     fileContainer.appendChild(modifyVideo);
                 }
                 carouselItem.appendChild(fileContainer);

@@ -13,4 +13,8 @@ public interface Board_Save_MapRepository extends JpaRepository<Board_Save_Map, 
     List<Board_Save_Map> findByBoard(Board board);
 
     List<Board_Save_Map> findByMember(Member member);
+
+    List<Board_Save_Map> findTop1BySaveGroupOrderByIdDesc(SaveGroup saveGroup);
+
+    List<Board_Save_Map> findTop4ByMemberAndSaveGroupIsNullOrderByBoardCreateDateDesc(Member member);
 }

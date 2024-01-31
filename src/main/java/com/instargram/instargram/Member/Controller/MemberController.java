@@ -1,9 +1,13 @@
 package com.instargram.instargram.Member.Controller;
 
 import com.instargram.instargram.Community.Board.Model.DTO.FeedDTO;
+import com.instargram.instargram.Community.Board.Model.DTO.SavedBoardDTO;
 import com.instargram.instargram.Community.Board.Model.Entity.Board;
+import com.instargram.instargram.Community.Board.Model.Entity.Board_Save_Map;
 import com.instargram.instargram.Community.Board.Service.BoardService;
 import com.instargram.instargram.Community.Board.Service.Board_Data_MapService;
+import com.instargram.instargram.Community.Board.Service.Board_Save_MapService;
+import com.instargram.instargram.Community.SaveGroup.Service.SaveGroupService;
 import com.instargram.instargram.Data.Image.Image;
 import com.instargram.instargram.Data.Image.ImageService;
 import com.instargram.instargram.Enum_Data;
@@ -56,7 +60,8 @@ public class MemberController {
     private final StoryHighlightMapService storyHighlightMapService;
     private final Board_Data_MapService boardDataMapService;
     private final ImageService imageService;
-
+    private final Board_Save_MapService boardSaveMapService;
+    private final SaveGroupService saveGroupService;
     private final AuthenticationManager authenticationManager;
 
     @GetMapping("/login")
@@ -163,6 +168,7 @@ public class MemberController {
         Member member = memberService.getMember(username);
         Member loginMember = memberService.getMember(principal.getName());
 
+
         model.addAttribute("member", member);
 
         if(memberService.isBlock(username, principal.getName()))
@@ -178,6 +184,37 @@ public class MemberController {
         return "Member/UserPage_form";
     }
 
+
+    @GetMapping("/page/{username}/saved")
+            public String SavedPage(@PathVariable("username")String username, Principal principal, Model model)
+    {
+        Member member = memberService.getMember(username);
+        Member loginMember = memberService.getMember(principal.getName());
+
+
+        model.addAttribute("member", member);
+
+        if(memberService.isBlock(username, principal.getName()))
+        {
+            model.addAttribute("blocked", true);
+        }
+        else{
+            model.addAttribute("blocked", false);
+            model.addAttribute("blocking", memberService.isBlock(principal.getName(), username));
+            UserPageDTO userPageDTO = new UserPageDTO(member, loginMember, boardService, memberService.getFollowMapService(), memberService.getStoryHighlightMapService(), boardDataMapService);
+            model.addAttribute("userPageDTO", userPageDTO);
+        }
+
+        if(member.getUsername().equals(principal.getName()))
+        {
+            SavedBoardDTO savedBoardDTO = new SavedBoardDTO(member, loginMember,
+                    memberService.getFollowMapService(), memberService.getStoryHighlightMapService(),
+                    boardDataMapService, boardSaveMapService);
+            model.addAttribute("savedBoardDTO", savedBoardDTO);
+        }
+
+        return "Member/UserSaved_form";
+    }
 
     @PostMapping("/profile/delete")
     public String ProfileImageDelete(Principal principal, @RequestParam(value = "account", defaultValue = "false") boolean account)

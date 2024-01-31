@@ -5,10 +5,12 @@ import com.instargram.instargram.Community.Board.Model.DTO.FeedDTO;
 import com.instargram.instargram.Community.Board.Model.DTO.FeedListDTO;
 import com.instargram.instargram.Community.Board.Model.Entity.Board;
 import com.instargram.instargram.Community.Board.Model.Entity.Board_Data_Map;
+import com.instargram.instargram.Community.Board.Model.Entity.Board_Save_Map;
 import com.instargram.instargram.Community.Board.Model.Repository.Board_Data_MapRepository;
 import com.instargram.instargram.Community.Comment.Model.DTO.CommentDTO;
 import com.instargram.instargram.Community.Comment.Model.Entity.Comment;
 import com.instargram.instargram.Community.Comment.Model.Repository.CommentRepository;
+import com.instargram.instargram.Community.SaveGroup.Model.Entity.SaveGroup;
 import com.instargram.instargram.Data.FileDTO;
 import com.instargram.instargram.Data.Image.Image;
 import com.instargram.instargram.Data.Image.ImageService;
@@ -18,9 +20,7 @@ import com.instargram.instargram.Enum_Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -104,5 +104,30 @@ public class Board_Data_MapService {
 
     public List<Board_Data_Map> getImage(Board board) {
         return boardDataMapRepository.findByBoard(board);
+    }
+
+    public Map<SaveGroup, List<FileDTO>> getSavedGroupFileList(Map<SaveGroup, List<Board>> savedBoardMaps)
+    {
+        Map<SaveGroup, List<FileDTO>> savedBoardFileMaps = new HashMap<>();
+        for (Map.Entry<SaveGroup, List<Board>> saveMaps : savedBoardMaps.entrySet()) {
+            List<FileDTO> savedBoardFiles = new ArrayList<>();
+            for(Board board : saveMaps.getValue())
+            {
+                List<Board_Data_Map> maps = getMapByBoard(board);
+
+                for (Board_Data_Map map : maps) {
+                    if (Objects.equals(map.getDataType(), Enum_Data.IMAGE.getNumber())) {
+                        Image image = imageService.getImageByID(map.getDataId());
+                        savedBoardFiles.add(new FileDTO(image, null));
+                    } else if (Objects.equals(map.getDataType(), Enum_Data.VIDEO.getNumber())) {
+                        Video video = videoService.getVideoByID(map.getDataId());
+                        savedBoardFiles.add(new FileDTO(null, video));
+                    }
+                    break;
+                }
+            }
+            savedBoardFileMaps.put(saveMaps.getKey(), savedBoardFiles);
+        }
+        return savedBoardFileMaps;
     }
 }

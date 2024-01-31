@@ -151,6 +151,7 @@ public class BoardController {
             httpSession.removeAttribute("referer");
         }
         model.addAttribute("feedList", feedList);
+        model.addAttribute("saveGroups", saveGroupService.getSaveGroupByMember(member));
         return "Board/board_main";
     }
 
@@ -435,7 +436,8 @@ public class BoardController {
 
     // board SaveGroup
     @GetMapping("/board/saveGroup/{boardId}")
-    public ResponseEntity<Map<String, Object>> boardSave(@PathVariable("boardId") Long boardId, @RequestParam(value = "saveGroupId", required = false) Long saveGroupId, Principal principal) {
+    public ResponseEntity<Map<String, Object>> boardSave(@PathVariable("boardId") Long boardId,
+                                                         @RequestParam(value = "saveGroupId", required = false) Long saveGroupId, Principal principal) {
         Map<String, Object> result = new HashMap<>();
 
         SaveGroup saveGroup = null;
@@ -503,15 +505,27 @@ public class BoardController {
     }
 
     @PostMapping("/board/saveFeed/{id}")
-    public ResponseEntity<Map<String, Object>> saveFeed(@PathVariable("id") Long id, @RequestParam(value = "GroupName") String groupName, Principal principal) {
+    public ResponseEntity<Map<String, Object>> saveFeed(@PathVariable("id") Long id,
+                                                        @RequestParam(value = "GroupName", defaultValue = "") String groupName,
+                                                        @RequestParam(value = "GroupId", defaultValue = "-1") Long groupId,
+                                                        Principal principal) {
         Map<String, Object> result = new HashMap<>();
 
         Board board = boardService.getBoardById(id);
         Member member = memberService.getMember(principal.getName());
-        SaveGroup saveGroup = this.saveGroupService.create(groupName, member);
-        this.boardSaveMapService.create(board, member, saveGroup);
+        SaveGroup saveGroup;
+        if(groupName.isEmpty())
+        {
+            saveGroup = this.saveGroupService.getSaveGroupById(groupId);
 
+        }
+        else{
+            saveGroup = this.saveGroupService.create(groupName, member);
+
+        }
+        this.boardSaveMapService.create(board, member, saveGroup);
         result.put("result", true);
+
 
         return ResponseEntity.ok().body(result);
     }

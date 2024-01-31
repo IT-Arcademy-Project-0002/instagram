@@ -37,7 +37,7 @@
                                 </button>
 
                                 <div th:unless="${member.username == loginMember.username}"
-                                        class="btn-light rounded-circle userProfile_btn">
+                                     class="btn-light rounded-circle userProfile_btn">
                                     <img th:if="${member.image == null}"
                                          src="/files/designImg/noneuser.png"
                                          class="rounded-circle text-center smooth-update userProfile_img">
@@ -55,7 +55,7 @@
                                             <div class="center">
                                                 <div class="center"></div>
                                                 <div class="w-100 h50 center fs20 mg16 fwb">
-                                                        프로필 사진 변경
+                                                    프로필 사진 변경
                                                 </div>
                                             </div>
                                             <div class="bbsS bbw1 bbcDB w400"></div>
@@ -71,7 +71,8 @@
                                                     </form>
                                                     <form th:action="@{|/member/profile/delete|}" method="post"
                                                           id="img-delete-form"></form>
-                                                    <button type="button" class="btn w-100 h50 center hfwb afwb pdT4 pdB4 pdL8 pdR8 fs14 fcBlue hfcBlue bn"
+                                                    <button type="button"
+                                                            class="btn w-100 h50 center hfwb afwb pdT4 pdB4 pdL8 pdR8 fs14 fcBlue hfcBlue bn"
                                                             onclick="clickProfilePhotoChange()">사진 업로드
                                                     </button>
 
@@ -214,13 +215,16 @@
                                             <div class="modal-dialog modal-dialog-centered center">
                                                 <div class="modal-content w400 bn">
 
-                                                    <button th:if="${!blocking}" class="btn w-100 h50 center hfwb pdT4 pdB4 pdL8 pdR8 fs14 fcRed fcRed fwb bn"
+                                                    <button th:if="${!blocking}"
+                                                            class="btn w-100 h50 center hfwb pdT4 pdB4 pdL8 pdR8 fs14 fcRed fcRed fwb bn"
                                                             data-bs-target="#userBlockModal" data-bs-toggle="modal">
                                                         차단
                                                     </button>
 
-                                                    <button th:if="${blocking}" class="btn w-100 h50 center hfwb pdT4 pdB4 pdL8 pdR8 fs14 fcRed fcRed fwb bn"
-                                                            data-bs-target="#userBlockCancelModal" data-bs-toggle="modal">
+                                                    <button th:if="${blocking}"
+                                                            class="btn w-100 h50 center hfwb pdT4 pdB4 pdL8 pdR8 fs14 fcRed fcRed fwb bn"
+                                                            data-bs-target="#userBlockCancelModal"
+                                                            data-bs-toggle="modal">
                                                         차단 해제
                                                     </button>
 
@@ -242,7 +246,8 @@
                                                         <div class="w-100 h-100 center mg32 fs14 fcGray"
                                                              id="userBlockModalToggleLabel">
                                                             <div class="text-center">
-                                                                <span class="pdB16 fs20 fw600 fcBlack" th:text="@{|${member.username}님을 차단하시겠어요?|}"></span>
+                                                                <span class="pdB16 fs20 fw600 fcBlack"
+                                                                      th:text="@{|${member.username}님을 차단하시겠어요?|}"></span>
                                                                 <br>상대방은 Instagram에서 회원님의 프로필, 게시물 및 <br>
                                                                 스토리를 찾을 수 없게 됩니다. Instagram은 회원님이 <br>
                                                                 차단한 사실을 상대방에게 알리지 않습니다.
@@ -273,8 +278,10 @@
                                                         <div class="w-100 h-100 center mg32 fs14 fcGray"
                                                              id="userBlockCancelModalToggleLabel">
                                                             <div class="text-center">
-                                                                <span class="pdB16 fs20 fw600 fcBlack" th:text="@{|${member.username}님을 차단 해제하시겠어요?|}"></span>
-                                                                <br>이제 상대방은 Instagram에서 회원님의 게시물을 보고 회원님을 팔로우할 수 있습니다. Instagram은 회원님이 차단을 해제한 사실을 상대방에게 알리지 않습니다.
+                                                                <span class="pdB16 fs20 fw600 fcBlack"
+                                                                      th:text="@{|${member.username}님을 차단 해제하시겠어요?|}"></span>
+                                                                <br>이제 상대방은 Instagram에서 회원님의 게시물을 보고 회원님을 팔로우할 수 있습니다.
+                                                                Instagram은 회원님이 차단을 해제한 사실을 상대방에게 알리지 않습니다.
                                                             </div>
                                                         </div>
                                                     </div>
@@ -369,7 +376,8 @@
 
                                     <div class="center">
                                         <div class="center fb48"></div>
-                                        <div class="w-100 h50 center pdT4 pdB4 pdL8 pdR8 fs16 fwb" id="highlightModalLabel">
+                                        <div class="w-100 h50 center pdT4 pdB4 pdL8 pdR8 fs16 fwb"
+                                             id="highlightModalLabel">
                                             새로운 하이라이트
                                         </div>
                                         <div class="center fb48">
@@ -403,9 +411,11 @@
                                     <div class="center">
 
                                         <div class="center fb48">
-                                            <button type="button" class="btn_back pd8 fwb" data-bs-target="#highlightModal"
+                                            <button type="button" class="btn_back pd8 fwb"
+                                                    data-bs-target="#highlightModal"
                                                     data-bs-toggle="modal">
-                                                <svg aria-label="돌아가기" class="" fill="currentColor" height="21" role="img"
+                                                <svg aria-label="돌아가기" class="" fill="currentColor" height="21"
+                                                     role="img"
                                                      viewBox="0 0 24 24" width="21"><title>돌아가기</title>
                                                     <path d="M21 17.502a.997.997 0 0 1-.707-.293L12 8.913l-8.293 8.296a1 1 0 1 1-1.414-1.414l9-9.004a1.03 1.03 0 0 1 1.414 0l9 9.004A1 1 0 0 1 21 17.502Z"
                                                           transform="rotate(-90 12 12)"></path>
@@ -446,7 +456,8 @@
                                         <div class="center fb48">
                                             <button type="button" class="btn_back pd8 fwb"
                                                     data-bs-target="#highlightListModal" data-bs-toggle="modal">
-                                                <svg aria-label="돌아가기" class="" fill="currentColor" height="21" role="img"
+                                                <svg aria-label="돌아가기" class="" fill="currentColor" height="21"
+                                                     role="img"
                                                      viewBox="0 0 24 24" width="21"><title>돌아가기</title>
                                                     <path d="M21 17.502a.997.997 0 0 1-.707-.293L12 8.913l-8.293 8.296a1 1 0 1 1-1.414-1.414l9-9.004a1.03 1.03 0 0 1 1.414 0l9 9.004A1 1 0 0 1 21 17.502Z"
                                                           transform="rotate(-90 12 12)"></path>
@@ -483,15 +494,17 @@
                             <!--board list menu-->
                             <div class="d-flex justify-content-center align-items-center h53">
                                 <div class="d-flex">
-                                    <div class="center h52 mgR60 hfcBlack">
+                                    <div class="center h54 mgR60 hfcBlack border-top border-dark">
                                         <a class="center btn pd0 mgL6 fs12 fwb fcGray bn hfcBlack" href="">
                                             <svg aria-label="" fill="currentColor" height="12" role="img"
                                                  viewBox="0 0 24 24" width="12"><title></title>
-                                                <rect fill="none" height="18" stroke="currentColor" stroke-linecap="round"
+                                                <rect fill="none" height="18" stroke="currentColor"
+                                                      stroke-linecap="round"
                                                       stroke-linejoin="round" stroke-width="2" width="18" x="3"
                                                       y="3"></rect>
                                                 <line fill="none" stroke="currentColor" stroke-linecap="round"
-                                                      stroke-linejoin="round" stroke-width="2" x1="9.015" x2="9.015" y1="3"
+                                                      stroke-linejoin="round" stroke-width="2" x1="9.015" x2="9.015"
+                                                      y1="3"
                                                       y2="21"></line>
                                                 <line fill="none" stroke="currentColor" stroke-linecap="round"
                                                       stroke-linejoin="round" stroke-width="2" x1="14.985" x2="14.985"
@@ -500,7 +513,8 @@
                                                       stroke-linejoin="round" stroke-width="2" x1="21" x2="3" y1="9.015"
                                                       y2="9.015"></line>
                                                 <line fill="none" stroke="currentColor" stroke-linecap="round"
-                                                      stroke-linejoin="round" stroke-width="2" x1="21" x2="3" y1="14.985"
+                                                      stroke-linejoin="round" stroke-width="2" x1="21" x2="3"
+                                                      y1="14.985"
                                                       y2="14.985"></line>
                                             </svg>
                                             <div class="mgL6">게시물</div>
@@ -508,8 +522,9 @@
                                         </a>
                                     </div>
 
-                                    <div class="center h52 mgR60">
-                                        <a class="center btn pd0 mgL6 fs12 fwb fcGray bn hfcBlack" th:href="@{|/member/page/${member.username}/saved|}">
+                                    <div th:if="${member.username == loginMember.username}" class="center h54 mgR60">
+                                        <a class="center btn pd0 mgL6 fs12 fwb fcGray bn hfcBlack"
+                                           th:href="@{|/member/page/${member.username}/saved|}">
                                             <svg aria-label="" fill="currentColor" height="12" role="img"
                                                  viewBox="0 0 24 24" width="12"><title></title>
                                                 <polygon fill="none" points="20 21 12 13.44 4 21 4 3 20 3 20 21"
@@ -520,8 +535,9 @@
                                         </a>
                                     </div>
 
-                                    <div class="center h52">
-                                        <a class="center btn pd0 mgL6 fs12 fwb fcGray bn hfcBlack" th:href="@{|/member/page/${member.username}/tagged|}">
+                                    <div class="center h54">
+                                        <a class="center btn pd0 mgL6 fs12 fwb fcGray bn hfcBlack"
+                                           th:href="@{|/member/page/${member.username}/tagged|}">
                                             <svg aria-label="" fill="currentColor" height="12" role="img"
                                                  viewBox="0 0 24 24" width="12"><title></title>
                                                 <path d="M10.201 3.797 12 1.997l1.799 1.8a1.59 1.59 0 0 0 1.124.465h5.259A1.818 1.818 0 0 1 22 6.08v14.104a1.818 1.818 0 0 1-1.818 1.818H3.818A1.818 1.818 0 0 1 2 20.184V6.08a1.818 1.818 0 0 1 1.818-1.818h5.26a1.59 1.59 0 0 0 1.123-.465Z"
@@ -530,7 +546,8 @@
                                                 <path d="M18.598 22.002V21.4a3.949 3.949 0 0 0-3.948-3.949H9.495A3.949 3.949 0 0 0 5.546 21.4v.603"
                                                       fill="none" stroke="currentColor" stroke-linecap="round"
                                                       stroke-linejoin="round" stroke-width="2"></path>
-                                                <circle cx="12.072" cy="11.075" fill="none" r="3.556" stroke="currentColor"
+                                                <circle cx="12.072" cy="11.075" fill="none" r="3.556"
+                                                        stroke="currentColor"
                                                         stroke-linecap="round" stroke-linejoin="round"
                                                         stroke-width="2"></circle>
                                             </svg>
@@ -545,11 +562,41 @@
                                 <div class="row row-cols-3 mx-0 p-0">
                                     <div th:each="feed : ${userPageDTO.feeds}" class="col mb-1 p-0">
                                         <div class="d-flex justify-content-center">
-                                            <div class="pr w300 h300" type="button"
+                                            <div class="pr w300 h300 " type="button"
                                                  th:onclick="@{|clickShowDetailBoard(${feed.board().id})|}">
-                                                <img th:src="@{|/resources/${feed.fileDTOS().get(0).name}|}"
-                                                     class="shadow-sm text-center smooth-update userProfile_line pa top0 left0 w-100 h_100 mga ofc"
-                                                     style="transform: translate(50,50)">
+                                                <div class="hovereffect">
+                                                    <img th:src="@{|/resources/${feed.fileDTOS().get(0).name}|}"
+                                                         class="shadow-sm text-center smooth-update userProfile_line pa top0 left0 w-100 h_100 mga ofc"
+                                                         style="transform: translate(50,50)">
+                                                    <div th:if="${#lists.size(feed.fileDTOS()) > 1}" class="position-absolute w-100">
+                                                        <div class="d-flex justify-content-end">
+                                                            <svg aria-label="슬라이드" class="m-2"
+                                                                 style="color: #ffffff"
+                                                                 fill="currentColor" height="22" role="img"
+                                                                 viewBox="0 0 48 48" width="22"><title>슬라이드</title>
+                                                                <path d="M34.8 29.7V11c0-2.9-2.3-5.2-5.2-5.2H11c-2.9 0-5.2 2.3-5.2 5.2v18.7c0 2.9 2.3 5.2 5.2 5.2h18.7c2.8-.1 5.1-2.4 5.1-5.2zM39.2 15v16.1c0 4.5-3.7 8.2-8.2 8.2H14.9c-.6 0-.9.7-.5 1.1 1 1.1 2.4 1.8 4.1 1.8h13.4c5.7 0 10.3-4.6 10.3-10.3V18.5c0-1.6-.7-3.1-1.8-4.1-.5-.4-1.2 0-1.2.6z"></path>
+                                                            </svg>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="overlay">
+                                                        <div class="overlay-content">
+                                                            <svg aria-label="좋아요" class="x1lliihq x1n2onr6 xxk16z8"
+                                                                 fill="currentColor" height="24" role="img"
+                                                                 viewBox="0 0 48 48" width="24">
+                                                                <path d="M34.6 3.1c-4.5 0-7.9 1.8-10.6 5.6-2.7-3.7-6.1-5.5-10.6-5.5C6 3.1 0 9.6 0 17.6c0 7.3 5.4 12 10.6 16.5.6.5 1.3 1.1 1.9 1.7l2.3 2c4.4 3.9 6.6 5.9 7.6 6.5.5.3 1.1.5 1.6.5s1.1-.2 1.6-.5c1-.6 2.8-2.2 7.8-6.8l2-1.8c.7-.6 1.3-1.2 2-1.7C42.7 29.6 48 25 48 17.6c0-8-6-14.5-13.4-14.5z"></path>
+                                                            </svg>
+                                                            <span th:text="${#lists.size(feed.board().boardLikeMemberIds)}"></span>
+                                                            <svg aria-label="댓글" fill="currentColor" height="24"
+                                                                 role="img" viewBox="0 0 24 24" width="24">
+                                                                <path d="M20.656 17.008a9.993 9.993 0 1 0-3.59 3.615L22 22Z"
+                                                                      stroke="currentColor" stroke-linejoin="round"
+                                                                      stroke-width="2"></path>
+                                                            </svg>
+                                                            <span th:text="${#lists.size(feed.comments())}"></span>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -1035,7 +1082,7 @@
                                                    th:id="${#lists.contains(selectFeed.board.boardSaveIds, selectFeed.board.id)}">
                                                     <div class="p-2" role="button" tabindex="0">
                                                         <svg th:id="@{|modal-saved-svg${selectFeed.board.id}|}"
-                                                             `                    aria-label="저장"
+                                                             ` aria-label="저장"
                                                              th:classappend="${#lists.contains(selectFeed.board.boardSaveIds, selectFeed.board.id)} ? 'visually-hidden' : '' "
                                                              fill="currentColor" height="24" role="img"
                                                              viewBox="0 0 24 24"
@@ -1174,7 +1221,8 @@
                             </a>
                         </div>
                         <div class="text-center p-2">
-                            <button type="button" class="btn noneBtn btn-link text-dark" data-bs-dismiss="modal" onclick="reloadPage()">취소
+                            <button type="button" class="btn noneBtn btn-link text-dark" data-bs-dismiss="modal"
+                                    onclick="reloadPage()">취소
                             </button>
                         </div>
                     </div>
@@ -1202,7 +1250,8 @@
                             </a>
                         </div>
                         <div class="border-bottom text-center p-2">
-                            <button type="button" class="btn noneBtn btn-link text-dark" data-bs-dismiss="modal" onclick="reloadPage()">취소
+                            <button type="button" class="btn noneBtn btn-link text-dark" data-bs-dismiss="modal"
+                                    onclick="reloadPage()">취소
                             </button>
                         </div>
                     </div>
@@ -1226,49 +1275,48 @@
 
     <script>
 
-    function clickFollowSwapInUserPage(fetchPath) {
+        function clickFollowSwapInUserPage(fetchPath) {
 
-        var username = document.getElementById('username').value;
-        var spin = document.getElementById('follow-spin');
-        var texts = document.getElementsByClassName('follow-text');
+            var username = document.getElementById('username').value;
+            var spin = document.getElementById('follow-spin');
+            var texts = document.getElementsByClassName('follow-text');
 
-        for(var i = 0; i < texts.length; i++)
-        {
-            texts.item(i).textContent='';
+            for (var i = 0; i < texts.length; i++) {
+                texts.item(i).textContent = '';
+            }
+            spin.classList.remove('visually-hidden');
+
+            fetch(fetchPath + '/' + username)
+                .then(response => response.json())
+                .then(data => {
+                    setTimeout(reload, 200);
+                })
+                .catch(error => console.error('데이터를 받지 못했습니다.', error));
         }
-        spin.classList.remove('visually-hidden');
 
-        fetch(fetchPath + '/' + username)
-            .then(response => response.json())
-            .then(data => {
-                setTimeout(reload,200);
-            })
-            .catch(error => console.error('데이터를 받지 못했습니다.', error));
-    }
-
-    // member/js/UserPage.js에서 clickFollow() 가져와 주석처리하고 위의 clickFollowSwapInUserPage()로 교체하였음 (아래는 기존 주현 코드)
-    // function clickFollow()
-    // {
-    //     var username = document.getElementById('username').value;
-    //     var spin = document.getElementById('follow-spin');
-    //     var texts = document.getElementsByClassName('follow-text');
-    //
-    //     for(var i = 0; i < texts.length; i++)
-    //     {
-    //         texts.item(i).textContent='';
-    //     }
-    //     spin.classList.remove('visually-hidden');
-    //
-    //     debugger;
-    //     fetch('/member/follow/'+username)
-    //         .then(response => {
-    //             return response.json()
-    //         })
-    //         .then(data => {
-    //             setTimeout(reload,200);
-    //         })
-    //         .catch(error => console.error('데이터를 받지 못했습니다.',error));
-    // }
+        // member/js/UserPage.js에서 clickFollow() 가져와 주석처리하고 위의 clickFollowSwapInUserPage()로 교체하였음 (아래는 기존 주현 코드)
+        // function clickFollow()
+        // {
+        //     var username = document.getElementById('username').value;
+        //     var spin = document.getElementById('follow-spin');
+        //     var texts = document.getElementsByClassName('follow-text');
+        //
+        //     for(var i = 0; i < texts.length; i++)
+        //     {
+        //         texts.item(i).textContent='';
+        //     }
+        //     spin.classList.remove('visually-hidden');
+        //
+        //     debugger;
+        //     fetch('/member/follow/'+username)
+        //         .then(response => {
+        //             return response.json()
+        //         })
+        //         .then(data => {
+        //             setTimeout(reload,200);
+        //         })
+        //         .catch(error => console.error('데이터를 받지 못했습니다.',error));
+        // }
 
     </script>
 

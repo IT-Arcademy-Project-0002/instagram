@@ -248,11 +248,17 @@
 .h53 {
     height: 53px;
 }
+.h54 {
+    height: 54px;
+}
 .h55 {
     height: 55px;
 }
 .h60 {
     height: 60px;
+}
+.h64 {
+    height: 64px;
 }
 .h130 {
     height: 130px;
@@ -497,3 +503,13 @@
     flex-basis: 48px;
 }
 /* flex */
+
+.saved-group
+{
+    background-image: linear-gradient( to top, rgba(38, 38, 38, .6), rgba(255, 255, 255, 0) );
+}
+
+.saved-group:hover
+{
+    background-image: none;
+}

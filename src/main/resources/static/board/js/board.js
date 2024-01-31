@@ -1,7 +1,19 @@
 $(document).ready(function () {
     $('.popoverLink').popover({
         content: function () {
-            var aa = `<div class="d-flex flex-column" style="padding:0; margin: 0; width: 500px; height: 200px; ">
+            var saveGroups = document.getElementsByName('save-groups');
+
+
+            var groupStr = '';
+
+            for(var i = 0; i < saveGroups.length; i++)
+            {
+                groupStr += '<div>' +
+                    '<div onclick="clickSaveGroupList('+saveGroups[i].dataset.id+','+saveGroups[i].dataset.name+')">'+saveGroups[i].dataset.name+'</div>'+
+                    '</div>';
+            }
+
+            var popoverStr = `<div class="d-flex flex-column" style="padding:0; margin: 0; width: 500px; height: 200px; ">
                     <div class="d-flex justify-content-between align-items-center p-2">
                         <div class="Collection" style="font-weight: bold; font-size: 1rem;">
                             컬렉션
@@ -12,10 +24,10 @@ $(document).ready(function () {
                     </div>
                     <div class="border-bottom"></div>
                     <div class="d-flex flex-column justify-content-between align-items-center p-3">
-                        <div>${bb}</div>   
+                        <div>`+groupStr+`</div>   
                     </div>
                 </div>`;
-            return aa;
+            return popoverStr;
         },
         html: true,
         placement: 'top',
@@ -70,6 +82,28 @@ $(document).ready(function () {
     });
 });
 
+function clickSaveGroupList(groupId, groupName)
+{
+    debugger;
+    var id = document.getElementById("fileId").value;
+
+    fetch(`/board/saveFeed/${id}?GroupId=`+groupId)
+        .then(response => response.json())
+        .then(data => {
+            var saved = document.getElementById('saved-svg' + id);
+            var notSave = document.getElementById('not-save-svg' + id);
+            if (data.result) {
+                saved.classList.add('visually-hidden');
+                notSave.classList.remove('visually-hidden');
+                alert(groupName+`에 저장`);
+            }
+            document.getElementById("GroupName").value = '';
+        })
+        .catch(error => {
+            console.error('Error saving feed:', error);
+        });
+}
+
 function setCommentOptionTarget(clickedElement) {
     console.log('클릭된 요소:', clickedElement);
 
@@ -123,7 +157,7 @@ function commentPin() {
 
 //댓글 삭제
 function commentDelete() {
-    debugger;
+
     const id = document.getElementById("CommentOptionTargetId").value;
     console.log(id);
     var commentArea = document.getElementById('comment-' + id);
@@ -151,7 +185,7 @@ function commentDelete() {
 
 // 대댓글 삭제
 function recommentDelete() {
-    debugger;
+
     const commetId = document.getElementById("RecommentByCommentOptionTargetId").value;
     console.log(commetId);
     const recommetId = document.getElementById("RecommentOptionTargetId").value;
@@ -245,7 +279,7 @@ function Recomment(commentId, recommentId) {
 
 // main페이지 or 모달에서 댓글/대댓글 작성기능
 function clickCommentBtn() {
-    debugger;
+
     const boardID = document.getElementById('boardID').innerText;
     console.log(boardID);
     const commentID = document.getElementById('commentID').innerText;
@@ -689,7 +723,7 @@ function ModalRecommentClickLike(id) {
             var modal_recomment_NotLike = modal_recomment.querySelector('#modal-recomment-not-like-svg' + id);
             console.log(modal_recomment_NotLike);
 
-            debugger;
+        
             if (data.result) {
                 modal_recomment_Liked.classList.add('visually-hidden');
                 modal_recomment_NotLike.classList.remove('visually-hidden');

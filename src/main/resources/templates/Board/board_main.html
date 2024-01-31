@@ -1174,7 +1174,7 @@
                                                         </div>
                                                         <div class="border-bottom"></div>
                                                         <div>
-                                                            Your popover content here...
+
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1216,6 +1216,9 @@
         </div>
     </div>
     <!-- Board Detail Modal End -->
+
+
+    <input th:if="${#lists.size(saveGroups) > 0}" th:each="saveGroup : ${saveGroups}" type="hidden" name="save-groups" th:data-name="${saveGroup.name}" th:data-id="${saveGroup.id}">
 
 
     <!--Modify Board Modal -->

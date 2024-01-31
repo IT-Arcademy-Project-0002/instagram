@@ -1640,7 +1640,9 @@
         </div>
     </div>
     <!-- 사용자 Recomment Modal End -->
+
     <input type="hidden" id="loginMemberName" th:value="${loginMember.username}">
+    
     <!-- javascript -->
     <script th:src="@{/story/js/create_story.js}"></script>
     <script th:src="@{/story/js/color-thief.min.js}"></script>
@@ -1652,7 +1654,7 @@
         const referer = /*[[${referer}]]*/ null;
         const username = document.getElementById("loginMemberName").value;
         const bb = "123"
-        console.log('111111111111');
+
         const a = new bootstrap.Modal('#BoardDetailModal', {
             keyboard: true
         })
@@ -1662,9 +1664,6 @@
         const c = new bootstrap.Modal('#UserBoardSettingModal', {
             keyboard: true
         })
-        console.log(referer);
-        console.log(selectFeed);
-        console.log(selectFeed.board.memberDTO.username == username);
         if (referer === "detail") {
             a.show();
         }else{

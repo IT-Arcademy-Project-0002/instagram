@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html layout:decorate="~{Layout/layout_main}">
 <head>
-    <link rel="stylesheet" type="text/css" th:href="@{/Explore/css/explore_hashtag.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/explore/css/explore_hashtag.css}">
     <link rel="stylesheet" type="text/css" th:href="@{/board/css/board_update.css}">
     <link rel="stylesheet" type="text/css" th:href="@{/board/css/modify_location.css}">
     <link rel="stylesheet" type="text/css" th:href="@{/board/css/modal.css}">
@@ -19,7 +19,7 @@
                 <span class="fs-2">#<span th:text="${hashTag.name}"></span></span>
                 <span class="d-block" th:text="'게시물'"></span>
                 <span class="d-block fw-bold" th:text="${hashTagSize}"></span>
-                <button type="button" class="btn btn-primary btn-sm btn-block w-100 mt-3"> 팔로우(미작동) </button>
+                <button type="button" class="btn btn-primary btn-sm btn-block w-100 mt-3"> 팔로우 </button>
             </div>
         </div>
         <div class="explore-hashtag-gallery text-center mt-4 mx-auto">

@@ -35,7 +35,7 @@ public class VideoService {
             }
         }
 
-        String filePath = savePath + "\\" + name;
+        String filePath = savePath + name;
         File origFile = new File(filePath);
         multipartFile.transferTo(origFile);
 

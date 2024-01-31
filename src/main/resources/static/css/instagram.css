@@ -35,6 +35,9 @@
 .pdR8 {
     padding-right: 8px;
 }
+.pdR10 {
+    padding-right: 10px !important;
+}
 .pdR13 {
     padding-right: 13px;
 }
@@ -73,6 +76,9 @@
 .pdL8 {
     padding-left: 8px;
 }
+.pdL10 {
+    padding-left: 10px !important;
+}
 .pdL15 {
     padding-left: 15px;
 }
@@ -106,6 +112,9 @@
 
 .mgT8 {
     margin-top: 8px;
+}
+.mgT10 {
+    margin-top: 10px;
 }
 .mgT22 {
     margin-top: 22px;
@@ -260,6 +269,9 @@
 .h692 {
     height: 692px;
 }
+.h750 {
+    height: 750px;
+}
 
 .h10r {
     height: 10rem;
@@ -297,6 +309,9 @@
 
 
 /* font size */
+.fs0 {
+    font-size: 0;
+}
 .fs11 {
     font-size: 11px;
 }

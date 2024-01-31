@@ -4706,7 +4706,7 @@
 
         this._resetAdjustments();
 
-        //this._scrollBar.reset();
+        this._scrollBar.reset();
 
         EventHandler.trigger(this._element, EVENT_HIDDEN$3);
       });

@@ -245,6 +245,7 @@ function Recomment(commentId, recommentId) {
 
 // main페이지 or 모달에서 댓글/대댓글 작성기능
 function clickCommentBtn() {
+    debugger;
     const boardID = document.getElementById('boardID').innerText;
     console.log(boardID);
     const commentID = document.getElementById('commentID').innerText;
@@ -876,13 +877,16 @@ $(document).ready(function () {
     });
 });
 
-function saveScrollPosition() {
-    sessionStorage.setItem('scrollPosition', window.scrollY);
-    console.log(sessionStorage)
-}
-window.onload = function () {
-    var savedScrollPosition = sessionStorage.getItem('scrollPosition');
+document.addEventListener("DOMContentLoaded", function() {
+    // 페이지 로드 시 스크롤 위치 복원
+    var savedScrollPosition = sessionStorage.getItem("scrollPosition");
     if (savedScrollPosition) {
         window.scrollTo(0, savedScrollPosition);
+        sessionStorage.removeItem("scrollPosition");
     }
-};
+});
+
+function saveScrollPosition() {
+    // 스크롤 위치 저장
+    sessionStorage.setItem("scrollPosition", window.scrollY);
+}

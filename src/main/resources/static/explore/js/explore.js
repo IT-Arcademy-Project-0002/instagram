@@ -856,7 +856,7 @@ function reloadPage() {
 $(document).ready(function () {
     $(".show-more-btn").each(function () {
         var contentContainer = $(this).prev(".content-container");
-        var buttonText = contentContainer.css("max-height") === "45px" ? "... 더보기" : "접기";
+        var buttonText = contentContainer.css("max-height") === "45px" ? "... 더보기" : "간단히 보기";
 
         $(this).text(buttonText);
 

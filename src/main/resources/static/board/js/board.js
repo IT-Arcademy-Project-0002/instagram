@@ -889,7 +889,7 @@ function reloadPage() {
 $(document).ready(function () {
     $(".show-more-btn").each(function () {
         var contentContainer = $(this).prev(".content-container");
-        var buttonText = contentContainer.css("max-height") === "45px" ? "... 더보기" : "접기";
+        var buttonText = contentContainer.css("max-height") === "45px" ? "... 더보기" : "간단히 보기";
 
         $(this).text(buttonText);
 
@@ -903,7 +903,7 @@ $(document).ready(function () {
 
         if (contentContainer.css("max-height") === "45px") {
             contentContainer.css("max-height", "none");
-            $(this).text("접기");
+            $(this).text("간단히 보기");
         } else {
             contentContainer.css("max-height", "45px");
             $(this).text("... 더보기");

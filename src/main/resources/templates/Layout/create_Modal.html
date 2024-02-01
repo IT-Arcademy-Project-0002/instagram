@@ -55,7 +55,7 @@
                                 <div class="w734 h734">
                                     <div  id="carouselExampleControlsNoTouching" class="carousel slide h734"
                                          data-interval="false">
-                                        <div class="carousel-inner h734" style="border-bottom-left-radius: 12px;">
+                                        <div class="carousel-inner h734 bBLr12">
                                             <div id="img-container"></div>
                                         </div>
                                         <button class="carousel-control-prev" type="button"
@@ -75,23 +75,21 @@
                             </div>
 
                             <!-- 게시물 설정 -->
-                            <div class="d-flex flex-column w340 h734 bLdb bBRr20" style="overflow-y: auto">
+                            <div class="d-flex flex-column w340 h734 bLdb bBRr20 oya">
                                 <div class="mg16">
                                     <div class="d-flex">
-                                        <div class="w28 h28 bdd5" style="position: relative; border-radius: 50%">
+                                        <div class="w28 h28 bdd5 br50 pr">
                                             <img th:if="${loginMember.Image == null}"
                                                  src="/files/designImg/noneuser.png"
-                                                 class="rounded-circle text-center"
-                                                 style="position: absolute; top: 0; left: 0; transform: translate(50,50); width: 100%; height: 100%; object-fit: cover; margin: auto">
+                                                 class="rounded-circle text-center mga w-100 h_100 pta tt50 top0 left0 ofc">
                                             <img th:unless="${loginMember.Image == null}"
                                                  th:src="@{|/resources/${loginMember.Image.name}|}"
-                                                 class="rounded-circle text-center"
-                                                 style="position: absolute; top: 0; left: 0; transform: translate(50,50); width: 100%; height: 100%; object-fit: cover; margin: auto">
+                                                 class="rounded-circle text-center mga w-100 h_100 pta tt50 top0 left0 ofc">
                                         </div>
                                         <div class="center mx-2 fs14 fw600"
                                              th:text="${loginMember.username}"></div>
                                     </div>
-                                    <textarea class="form-control bn mt-3 p-0 h170" style="resize: none;" name="content"
+                                    <textarea class="form-control bn mt-3 p-0 h170 rn" name="content"
                                               id="content" placeholder="문구를 입력하세요..."></textarea>
                                     <div class="textLengthWrap d-flex justify-content-end">
                                         <p class="textCount p-0 m-0 fs12 fcGray">0</p>
@@ -116,30 +114,25 @@
 
                                 <div class="d-flex flex-column pd12 bBdb">
                                     <!--접근성-->
-                                    <div class="d-flex justify-content-between align-items-center"
+                                    <div class="d-flex justify-content-between align-items-center cp"
                                          id="accessibilitySettingsToggle">
-                                             <div style="font-weight: bold;" th:text="접근성"></div>
+                                             <div class="fw600" th:text="접근성"></div>
 
-                                             <span id="accessibilitycollapseArrow" style="display: inline-block; transform: rotate(0deg);">
-                                                <svg aria-label="위쪽 V자형 아이콘" class="cp"
-                                                     fill="currentColor" height="16" role="img" viewBox="0 0 24 24"
-                                                     width="16">
+                                             <span id="accessibilitycollapseArrow" class="dib tr0">
+                                                <svg aria-label="위쪽 V자형 아이콘" fill="currentColor" height="16" role="img" viewBox="0 0 24 24" width="16">
                                                     <title>아래쪽 V자형 아이콘</title>
                                                     <path d="M21 17.502a.997.997 0 0 1-.707-.293L12 8.913l-8.293 8.296a1 1 0 1 1-1.414-1.414l9-9.004a1.03 1.03 0 0 1 1.414 0l9 9.004A1 1 0 0 1 21 17.502Z"></path>
                                                 </svg>
                                             </span>
 
-                                        <span id="accessibilityexpandArrow"
-                                              style="display: none; transform: rotate(180deg);">
-                                                <svg aria-label="아래쪽 V자형 아이콘" class="cp"
-                                                     fill="currentColor" height="16" role="img" viewBox="0 0 24 24"
-                                                     width="16">
+                                        <span id="accessibilityexpandArrow" class="dn tr180">
+                                                <svg aria-label="아래쪽 V자형 아이콘" fill="currentColor" height="16" role="img" viewBox="0 0 24 24" width="16">
                                                     <title>위쪽 V자형 아이콘</title>
                                                     <path d="M21 17.502a.997.997 0 0 1-.707-.293L12 8.913l-8.293 8.296a1 1 0 1 1-1.414-1.414l9-9.004a1.03 1.03 0 0 1 1.414 0l9 9.004A1 1 0 0 1 21 17.502Z"></path>
                                                 <</svg>
                                             </span>
                                     </div>
-                                    <div id="accessibilitySettings" style="display: none;">
+                                    <div id="accessibilitySettings" class="dn">
                                         <div class="d-flex flex-column justify-content-between align-items-center w-100">
                                             <div class="d-flex flex-column justify-content-between my-2 w-100">
                                                 <div class="text small fs12 fcGray">
@@ -152,35 +145,29 @@
                                     </div>
                                     <!--접근성 End-->
                                 </div>
-                                <div class="d-flex flex-column pd12 bBdb cp">
+                                <div class="d-flex flex-column pd12 bBdb">
                                     <!-- 고급설정 -->
-                                    <div class="d-flex justify-content-between align-items-center"
+                                    <div class="d-flex justify-content-between align-items-center cp"
                                          id="advancedSettingsToggle">
-                                        <div style="font-weight: bold;" th:text="고급설정"></div>
-                                        <span id="advancedcollapseArrow"
-                                              style="display: inline-block; transform: rotate(0deg);">
-                                            <svg aria-label="위쪽 V자형 아이콘" class="cp"
-                                                 fill="currentColor" height="16" role="img" viewBox="0 0 24 24"
-                                                 width="16">
+                                        <div class="fw600" th:text="고급설정"></div>
+                                        <span id="advancedcollapseArrow" class="dib tr0">
+                                            <svg aria-label="위쪽 V자형 아이콘" fill="currentColor" height="16" role="img" viewBox="0 0 24 24" width="16">
                                                 <title>아래쪽 V자형 아이콘</title>
                                                 <path d="M21 17.502a.997.997 0 0 1-.707-.293L12 8.913l-8.293 8.296a1 1 0 1 1-1.414-1.414l9-9.004a1.03 1.03 0 0 1 1.414 0l9 9.004A1 1 0 0 1 21 17.502Z"></path>
                                             </svg>
                                         </span>
-                                        <span id="advancedexpandArrow"
-                                              style="display: none; transform: rotate(180deg);">
-                                            <svg aria-label="아래쪽 V자형 아이콘" class="cp"
-                                                 fill="currentColor" height="16" role="img" viewBox="0 0 24 24"
-                                                 width="16">
+                                        <span id="advancedexpandArrow" class="dn tr180">
+                                            <svg aria-label="아래쪽 V자형 아이콘" fill="currentColor" height="16" role="img" viewBox="0 0 24 24" width="16">
                                                 <title>위쪽 V자형 아이콘</title>
                                                 <path d="M21 17.502a.997.997 0 0 1-.707-.293L12 8.913l-8.293 8.296a1 1 0 1 1-1.414-1.414l9-9.004a1.03 1.03 0 0 1 1.414 0l9 9.004A1 1 0 0 1 21 17.502Z"></path>
                                             <</svg>
                                         </span>
                                     </div>
-                                    <div id="advancedSettings" style="display: none;">
+                                    <div id="advancedSettings" class="dn">
                                         <div class="d-flex flex-column justify-content-between align-items-center w-100">
                                             <div class="d-flex justify-content-between my-2 w-100">
                                                 <div>이 게시물의 좋아요 수 숨기기</div>
-                                                <div class="form-check form-switch p-0 m-0" style="margin-top: 2px">
+                                                <div class="form-check form-switch p-0 m-0 mgT2">
                                                     <label>
                                                         <input class="form-check-input cp" type="checkbox" role="switch"
                                                                id="likeHide" name="likeHide">
@@ -193,7 +180,7 @@
                                             </div>
                                             <div class="d-flex justify-content-between my-2 w-100">
                                                 <div>댓글 기능 해제</div>
-                                                <div class="form-check form-switch p-0 m-0" style="margin-top: 2px">
+                                                <div class="form-check form-switch p-0 m-0 mgT2">
                                                     <label>
                                                         <input class="form-check-input cp" type="checkbox" role="switch"
                                                                id="commentDisable" name="commentDisable">
@@ -211,7 +198,7 @@
                                     <input type="text" class="form-control pd0 bn" placeholder="위치 추가"
                                            aria-describedby="basic-addon2" id="boardkeyword" name="boardkeyword"
                                            size="15" autocomplete="off">
-                                    <div class="d-flex justify-content-center align-items-center" style="border-top-left-radius: 0; border-bottom-left-radius: 0; background: transparent; border-color: #CCC;">
+                                    <div class="center">
                                         <svg aria-label="위치 추가" fill="currentColor"
                                              height="16" role="img" viewBox="0 0 24 24" width="16"><title>위치 추가</title>
                                             <path d="M12.053 8.105a1.604 1.604 0 1 0 1.604 1.604 1.604 1.604 0 0 0-1.604-1.604Zm0-7.105a8.684 8.684 0 0 0-8.708 8.66c0 5.699 6.14 11.495 8.108 13.123a.939.939 0 0 0 1.2 0c1.969-1.628 8.109-7.424 8.109-13.123A8.684 8.684 0 0 0 12.053 1Zm0 19.662C9.29 18.198 5.345 13.645 5.345 9.66a6.709 6.709 0 0 1 13.417 0c0 3.985-3.944 8.538-6.709 11.002Z"></path>
@@ -220,7 +207,7 @@
                                 </div>
                                 <div class="location-list" id="locationList">
                                 </div>
-                                <div style="width: 184px">
+                                <div class="w184">
                                     <input type="hidden" id="locationId" name="locationId" value=" " readonly>
                                     <input type="hidden" id="placeName" name="placeName" value=" " readonly>
                                     <input type="hidden" id="addressName" name="addressName" value=" " readonly>
@@ -252,7 +239,7 @@
 
                         <!--모달 뒤로 돌려야함-->
                         <div class="border-bottom text-center p-2">
-                            <button type="button" class="btn btn-link text-danger" style="font-weight: bold;">삭제
+                            <button type="button" class="btn btn-link text-danger fw600">삭제
                             </button>
                         </div>
                         <div class="border-bottom text-center p-2">

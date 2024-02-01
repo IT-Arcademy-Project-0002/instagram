@@ -123,7 +123,7 @@ function commentPin() {
 
 //댓글 삭제
 function commentDelete() {
-    debugger;
+    
     const id = document.getElementById("CommentOptionTargetId").value;
     console.log(id);
     var commentArea = document.getElementById('comment-' + id);
@@ -151,7 +151,7 @@ function commentDelete() {
 
 // 대댓글 삭제
 function recommentDelete() {
-    debugger;
+    
     const commetId = document.getElementById("RecommentByCommentOptionTargetId").value;
     console.log(commetId);
     const recommetId = document.getElementById("RecommentOptionTargetId").value;
@@ -688,7 +688,7 @@ function ModalRecommentClickLike(id) {
             var modal_recomment_NotLike = modal_recomment.querySelector('#modal-recomment-not-like-svg' + id);
             console.log(modal_recomment_NotLike);
 
-            debugger;
+            
             if (data.result) {
                 modal_recomment_Liked.classList.add('visually-hidden');
                 modal_recomment_NotLike.classList.remove('visually-hidden');
@@ -854,13 +854,15 @@ function reloadPage() {
 
 // 게시글 내용 일정 길이 넘어가면 더보기.. 버튼 생성 (접기로 조절 가능)
 $(document).ready(function () {
+    
     $(".show-more-btn").each(function () {
+        
         var contentContainer = $(this).prev(".content-container");
-        var buttonText = contentContainer.css("max-height") === "45px" ? "... 더보기" : "간단히 보기";
+        var buttonText = contentContainer.hasClass('long-content')?"... 더보기" : "간단히 보기";
 
         $(this).text(buttonText);
 
-        if (contentContainer[0].scrollHeight <= 48) {
+        if (!contentContainer.hasClass('long-content')) {
             $(this).hide();
         }
     });
@@ -868,11 +870,11 @@ $(document).ready(function () {
     $(".show-more-btn").click(function () {
         var contentContainer = $(this).prev(".content-container");
 
-        if (contentContainer.css("max-height") === "45px") {
-            contentContainer.css("max-height", "none");
-            $(this).text("접기");
+        if (!contentContainer.hasClass('show')) {
+            contentContainer.addClass('show');
+            $(this).text("간단히 보기");
         } else {
-            contentContainer.css("max-height", "45px");
+            contentContainer.removeClass('show');
             $(this).text("... 더보기");
         }
     });

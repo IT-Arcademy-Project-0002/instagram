@@ -85,7 +85,7 @@ $(document).ready(function () {
 
 
 $(document).on('click', '.saved-group-menu', function () {
-    debugger;
+    
     // 삭제 동작 수행
     var id = $(this).attr('id');
     var name = $(this).text();
@@ -95,7 +95,7 @@ $(document).on('click', '.saved-group-menu', function () {
 
 function clickSaveGroupList(groupID, name)
 {
-    debugger;
+    
     var id = document.getElementById("fileId").value;
 
     fetch(`/board/saveFeed/${id}?GroupId=`+groupID)
@@ -899,24 +899,30 @@ function reloadPage() {
 // 게시글 내용 일정 길이 넘어가면 더보기.. 버튼 생성 (접기로 조절 가능)
 $(document).ready(function () {
     $(".show-more-btn").each(function () {
+        
         var contentContainer = $(this).prev(".content-container");
-        var buttonText = contentContainer.css("max-height") === "45px" ? "... 더보기" : "간단히 보기";
+        var buttonText = contentContainer.hasClass('long-content')?"... 더보기" : "간단히 보기";
 
         $(this).text(buttonText);
 
-        if (contentContainer[0].scrollHeight <= 48) {
+        if (!contentContainer.hasClass('long-content')) {
             $(this).hide();
         }
     });
 
     $(".show-more-btn").click(function () {
+        
         var contentContainer = $(this).prev(".content-container");
 
-        if (contentContainer.css("max-height") === "45px") {
-            contentContainer.css("max-height", "none");
-            $(this).text("간단히 보기");
+        if (!contentContainer.hasClass('show')) {
+            contentContainer.addClass('show');
+            contentContainer.text(contentContainer.data('content'));
+            $(this).addClass('visually-hidden');
         } else {
-            contentContainer.css("max-height", "45px");
+            contentContainer.removeClass('show');
+            var dataContent = contentContainer.data('content');
+            var first10Characters = dataContent.substring(0, 10);
+            contentContainer.text(first10Characters);
             $(this).text("... 더보기");
         }
     });

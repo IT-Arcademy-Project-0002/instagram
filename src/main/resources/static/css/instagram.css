@@ -119,6 +119,9 @@
 .mgT2 {
     margin-top: 2px;
 }
+.mgT3 {
+    margin-top: 3px;
+}
 .mgT8 {
     margin-top: 8px;
 }
@@ -161,6 +164,9 @@
     margin-bottom: 44px;
 }
 
+.mgL3 {
+    margin-left: 3px;
+}
 .mgL5 {
     margin-left: 5px;
 }
@@ -258,6 +264,9 @@
     height: 100vh;
 }
 
+.h21 {
+    height: 21px;
+}
 .h28 {
     height: 28px;
 }
@@ -438,6 +447,7 @@
 .bn:focus, .bn:active {
     border: none;
     box-shadow: none;
+    outline: none;
 }
 /* border none */
 

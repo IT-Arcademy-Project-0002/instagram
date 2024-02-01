@@ -504,7 +504,7 @@ public class BoardController {
         return ResponseEntity.ok().body(result);
     }
 
-    @PostMapping("/board/saveFeed/{id}")
+    @GetMapping("/board/saveFeed/{id}")
     public ResponseEntity<Map<String, Object>> saveFeed(@PathVariable("id") Long id,
                                                         @RequestParam(value = "GroupName", defaultValue = "") String groupName,
                                                         @RequestParam(value = "GroupId", defaultValue = "-1") Long groupId,

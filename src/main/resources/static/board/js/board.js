@@ -9,7 +9,7 @@ $(document).ready(function () {
             for(var i = 0; i < saveGroups.length; i++)
             {
                 groupStr += '<div>' +
-                    '<div onclick="clickSaveGroupList('+saveGroups[i].dataset.id+','+saveGroups[i].dataset.name+')">'+saveGroups[i].dataset.name+'</div>'+
+                    '<div class="saved-group-menu" id="'+saveGroups[i].dataset.id+'">'+saveGroups[i].dataset.name+'</div>'+
                     '</div>';
             }
 
@@ -37,6 +37,8 @@ $(document).ready(function () {
         $(this).popover('show');
 
         var boardId = $(this).find('input').data('id');
+        var fileId = document.getElementById("fileId");
+        fileId.value = boardId;
 
         $('.popover').on('mouseleave', function () {
             $(_this).popover('hide');
@@ -48,18 +50,17 @@ $(document).ready(function () {
                     return response.json();
                 })
                 .then(data => {
-                    var fileId = document.getElementById("fileId");
                     if (data.videoName) {
                         $('#collectionModal .file-container').html(`<video controls 
                         src="/resources/${data.videoName}" 
                         class="shadow text-center rounded"
                         style="width: 100px; height: 100px; object-fit: cover;"></video>`);
-                        fileId.value = boardId;
+
                     } else if (data.imageName) {
                         $('#collectionModal .file-container').html(`<img src="/resources/${data.imageName}" 
                         alt="..." class="shadow text-center rounded"
                         style="width: 100px; height: 100px; object-fit: cover;">`);
-                        fileId.value = boardId;
+
                     }
 
                     const myModal = new bootstrap.Modal('#collectionModal', {
@@ -82,12 +83,22 @@ $(document).ready(function () {
     });
 });
 
-function clickSaveGroupList(groupId, groupName)
+
+$(document).on('click', '.saved-group-menu', function () {
+    debugger;
+    // 삭제 동작 수행
+    var id = $(this).attr('id');
+    var name = $(this).text();
+    // Popover 닫기 (선택 사항)
+    clickSaveGroupList(id, name);
+});
+
+function clickSaveGroupList(groupID, name)
 {
     debugger;
     var id = document.getElementById("fileId").value;
 
-    fetch(`/board/saveFeed/${id}?GroupId=`+groupId)
+    fetch(`/board/saveFeed/${id}?GroupId=`+groupID)
         .then(response => response.json())
         .then(data => {
             var saved = document.getElementById('saved-svg' + id);
@@ -95,7 +106,7 @@ function clickSaveGroupList(groupId, groupName)
             if (data.result) {
                 saved.classList.add('visually-hidden');
                 notSave.classList.remove('visually-hidden');
-                alert(groupName+`에 저장`);
+                alert(name+`에 저장`);
             }
             document.getElementById("GroupName").value = '';
         })

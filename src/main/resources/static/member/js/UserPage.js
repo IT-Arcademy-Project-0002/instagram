@@ -25,6 +25,13 @@ function showImg(img)
     img.style.opacity = 1;
 }
 
+function SaveGroupCreate()
+{
+    var name = document.getElementById('GroupName').value;
+
+    window.location.href = '/saveGroup/create/' + name;
+}
+
 function clickProfilePhotoChange()
 {
     var fileInput = document.getElementById('profile-photo-input');

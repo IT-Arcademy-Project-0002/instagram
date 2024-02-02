@@ -11,8 +11,7 @@
     display: none;
 }
 
-.modal-body .modalInfo {
-    height: 800vh;
+.modal-body {
     overflow-y: auto; /* 세로 스크롤 적용 */
 }
 

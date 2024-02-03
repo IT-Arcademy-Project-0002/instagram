@@ -27,6 +27,22 @@ a {
     color: #939393;
 }
 
+.search-list-box { /*검색 항목*/
+    width: 395px;
+    display: flex;
+    padding: 8px 24px 8px 24px;
+    align-items: center;
+}
+.search-list-box:hover { /*검색 항목*/
+    background-color: #f2f2f2;
+    color: #000;
+    width: 395px;
+}
+.search-list-box:hover .delete-button,
+.search-list-box:hover .delete-button:after { /*지난 검색 기록 버튼 */
+    background-color: #f2f2f2;
+    color: #000;
+}
 .search-list-box:hover .search-profile img { /*검색 항목*/
     /* .search-box가 호버될 때 .search-profile 내부의 img에 영향을 주는 스타일 추가 */
     filter: brightness(95%); /* 예시로 이미지를 어둡게 만듦 */
@@ -38,29 +54,12 @@ a {
     overflow-x: hidden;
     /*overflow-y: scroll;*/
 }
-.search-list-box:hover { /*검색 항목*/
-    background-color: #F0F0F0;
-    color: #000;
-    width: 100%;
-}
-
-.search-list-box:hover .delete-button,
-.search-list-box:hover .delete-button:after { /*지난 검색 기록 버튼 */
-    background-color: #F0F0F0;
-    color: #000;
-}
-
-.search-list-box { /*검색 항목*/
-    display: flex;
-    padding: 8px 24px 8px 24px;
-    align-items: center;
-}
 
 .delete-button {
     margin-left: auto;
     display: inline-block;
     *display: inline;
-    background-color: white; /* 배경 색상을 하얀색으로 지정 */
+    background-color: white;
     border: none;
 }
 
@@ -68,7 +67,7 @@ a {
     display: inline-block;
     content: "\00d7";
     font-size: 20pt;
-    background-color: white; /* 배경 색상을 하얀색으로 지정 */
+    background-color: white;
 }
 
 .search-content {

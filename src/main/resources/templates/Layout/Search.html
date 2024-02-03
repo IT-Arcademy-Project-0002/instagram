@@ -1,8 +1,4 @@
 <div th:fragment="searchFragment" class="search_layout">
-    <head>
-        <link rel="stylesheet" type="text/css" th:href="@{/search/css/search_content.css}">
-    </head>
-
     <div class="search-content">
         <div class="search_title">
             <div>
@@ -22,13 +18,13 @@
                     <div id="searchListInit">
                         <div class="searchListInitHeader">
                             <span class="search_category_text">최근 검색 항목</span>
-                            <button class="btn_search" onclick="allDeleteButtonClicked()">모두 지우기</button>
+                            <button class="btn_search" th:attr="onclick=|allDeleteButtonClicked()|">모두 지우기</button>
                         </div>
-                        <div class="searchListInitBody">
+
                             <div th:each="searchResult : ${searches}">
                                 <div th:if="${searchResult.searchType == 1}">
                                     <a th:href="'/member/page/' + ${searchResult.listName}" target="_blank" class="link">
-                                        <div id="M1" class="search-list-box" th:id="@{|searchmember-${searchResult.SearchDataIndex}|}">
+                                        <div id="M1" class="search-list-box" th:id="@{|searchmember-${searchResult.SearchDataIndex}|}" th:attr="onclick=|recentSearchFavoriteUpdate('${searchResult.searchType}', '${searchResult.listName}', event)|">
                                             <div class="search-profile">
                                                 <img th:if="${searchResult.listImage != null and searchResult.listImage != ''}" th:src="@{'/resources/' + ${searchResult.listImage}}" class="search-profile-image rounded-circle text-center" />
                                                 <img th:unless="${searchResult.listImage != null and searchResult.listImage != ''}" src="/files/designImg/noneuser.png" class="search-profile-image rounded-circle text-center" />
@@ -37,13 +33,14 @@
                                                 <div class="search-username" th:text="${searchResult.listName}"></div>
                                                 <div class="search-userintroduction" th:text="${searchResult.listIntroduction}"></div>
                                             </div>
-                                            <button type="button" class="delete-button" onclick="deleteButtonClicked(1, event)"></button>
+                                                <button type="button" class="btn-close pd8 fwb bn fs12 " style="margin-left: auto;" th:attr="onclick=|deleteButtonClicked(1, event)|"></button>
                                         </div>
                                     </a>
                                 </div>
+
                                 <div th:if="${searchResult.searchType == 2}">
                                     <a th:href="@{'/explore/locations/' + ${searchResult.listLocationId}}" target="_blank" class="link">
-                                        <div class="search-list-box" th:id="@{|searchlocation-${searchResult.SearchDataIndex}|}">
+                                        <div class="search-list-box" th:id="@{|searchlocation-${searchResult.SearchDataIndex}|}" th:attr="onclick=|recentSearchFavoriteUpdate('${searchResult.searchType}', '${searchResult.listLocationId}', event)|">
                                             <div class="search-profile">
                                                 <img src="/files/designImg/locationBase.png" class="search-profile-image rounded-circle text-center" />
                                             </div>
@@ -51,25 +48,25 @@
                                                 <div class="search-username" th:text="${searchResult.listName}"></div>
                                                 <div class="search-userintroduction" th:text="${searchResult.listIntroduction}"></div>
                                             </div>
-                                            <button type="button" class="delete-button" onclick="deleteButtonClicked(2, event)"></button>
+                                            <button type="button" class="delete-button" th:attr="onclick=|deleteButtonClicked(2, event)|"></button>
                                         </div>
                                     </a>
                                 </div>
+
                                 <div th:if="${searchResult.searchType == 3}">
                                     <a th:href="@{'/explore/tags/' + ${searchResult.listHashTagId}}" target="_blank" class="link">
-                                        <div class="search-list-box" th:id="@{|searchhashtag-${searchResult.SearchDataIndex}|}">
+                                        <div class="search-list-box" th:id="@{|searchhashtag-${searchResult.SearchDataIndex}|}" th:attr="onclick=|recentSearchFavoriteUpdate('${searchResult.searchType}', '${searchResult.listName}', event)|">
                                             <div class="search-profile">
                                                 <img src="/files/designImg/hashTag.jpg" class="search-profile-image rounded-circle text-center" />
                                             </div>
                                             <div class="search-userinfo">
                                                 <div class="search-username" th:text="${searchResult.listName}"></div>
                                             </div>
-                                            <button type="button" class="delete-button" onclick="deleteButtonClicked(3, event)"></button>
+                                            <button type="button" class="delete-button" th:attr="onclick=|deleteButtonClicked(3, event)|"></button>
                                         </div>
                                     </a>
                                 </div>
                             </div>
-                        </div>
                     </div>
                     <div id="searchListResult">
                         <div class="h-100" id="searchList"></div>
@@ -111,10 +108,40 @@
                 }
             }
 
+            function recentSearchFavoriteUpdate(searchType, specificName, event) {
+
+                var token = $("input[name='_csrf']").attr("value");
+                var header = $("input[name='_csrf_header']").attr("value");
+
+                var body = JSON.stringify({
+                    favoriteType: searchType,
+                    specificName: specificName
+                });
+
+                fetch('/search/favorite/createRecentFavoriteSearch', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json; charset=utf-8',
+                        [header]: token
+                    },
+                    body: body
+                })
+                    .then(response => {
+                    })
+                    .catch(error => {
+                        // 오류 처리
+                        console.error('POST 요청 실패:', error);
+                    });
+
+            }
+
             function deleteButtonClicked(searchType, event) {
 
                 // 링크클릭 이벤트의 기본 동작 막기
                 event.preventDefault();
+
+                // 지난검색기록 생성 이벤트 동작 막기 (서로 상반되는 로직이므로 충돌방지 필요)
+                event.stopPropagation();
 
                 var token = $("input[name='_csrf']").attr("value");
                 var header = $("input[name='_csrf_header']").attr("value");

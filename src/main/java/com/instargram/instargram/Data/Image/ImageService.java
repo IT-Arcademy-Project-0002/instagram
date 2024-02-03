@@ -22,7 +22,7 @@ public class ImageService {
         return this.imageRepository.save(image);
     }
 
-    public Image saveImage(MultipartFile multipartFile, String nameWithoutExtension, String fileExtension) throws IOException, IOException {
+    public Image saveImage(MultipartFile multipartFile, String nameWithoutExtension, String fileExtension) throws IOException {
         UUID uuid = UUID.randomUUID();
         String name = uuid + "_" + nameWithoutExtension + "." + fileExtension;
 
@@ -35,7 +35,7 @@ public class ImageService {
                 e.printStackTrace();
             }
         }
-        String filePath = savePath + "\\" + name;
+        String filePath = savePath + name;
         File origFile = new File(filePath);
         multipartFile.transferTo(origFile);
 
@@ -66,7 +66,7 @@ public class ImageService {
                                    String nameWithoutExtension, String fileExtension) throws IOException {
         if(image != null)
         {
-            deleteImageFile(AppConfig.getImageFileDirPath()+"\\"+image.getName());
+            deleteImageFile(AppConfig.getImageFileDirPath()+image.getName());
         }
 
         return saveImage(multipartFile, nameWithoutExtension, fileExtension);

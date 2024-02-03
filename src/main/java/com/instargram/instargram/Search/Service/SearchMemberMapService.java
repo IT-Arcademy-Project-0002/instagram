@@ -17,12 +17,18 @@ public class SearchMemberMapService {
 
     public void createSearchFavoriteMember(Member requestMember, Member member) {
 
-        SearchMemberMap searchMemberMap = new SearchMemberMap();
-        searchMemberMap.setCreateDate(LocalDateTime.now());
-        searchMemberMap.setRequestMember(requestMember);
-        searchMemberMap.setMember(member);
-        this.searchMemberMapRepository.save(searchMemberMap);
+        SearchMemberMap existingMap = searchMemberMapRepository.findByRequestMemberAndMember(requestMember, member);
 
+        if (existingMap != null) {
+            existingMap.setCreateDate(LocalDateTime.now());
+            searchMemberMapRepository.save(existingMap);
+        } else {
+            SearchMemberMap newMap = new SearchMemberMap();
+            newMap.setCreateDate(LocalDateTime.now());
+            newMap.setRequestMember(requestMember);
+            newMap.setMember(member);
+            searchMemberMapRepository.save(newMap);
+        }
     }
 
     public List<SearchMemberMap> getSearchMemberMapsByMember(Member member) {

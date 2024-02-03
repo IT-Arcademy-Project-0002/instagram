@@ -3,6 +3,7 @@
 <head>
     <link rel="stylesheet" type="text/css" th:href="@{/board/css/board_content.css}">
     <link rel="stylesheet" type="text/css" th:href="@{/board/css/modal.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/story/css/story.css}">
     <link rel="stylesheet" type="text/css" th:href="@{/board/css/modify_location.css}">
 </head>
 <div layout:fragment="content">
@@ -15,67 +16,432 @@
             <div class="frag-main d-flex h-100">
                 <div class="content-background">
                     <div class="frag-story mt-3">
-                        스토리
-                    </div>
-                    <div class="frag-board mt-4">
-                        <div th:each="feed, idx : ${feedList}" class="feedList p-3 border-bottom">
-                            <!--location null-->
-                            <div th:if="${feed.board.locationDTO == null}">
-                                <div class="d-flex" style="padding: 0 0 12px 4px;">
-                                    <div style="position: relative; width: 2.5rem; height: 2.5rem;">
-                                        <img th:if="${feed.board.memberDTO.imageDTO == null}"
+                        <div class="d-flex">
+                            <div class="d-flex flex-column me-2">
+                                <div th:classappend="${isMyStory} ? 'myStory' : ''"
+                                     style="position: relative; width: 4rem; height: 4rem;">
+                                    <div onclick="openStoryListModal()">
+                                        <img th:if="${loginMember.Image == null}"
                                              src="/files/designImg/noneuser.png"
-                                             class="shadow rounded-circle text-center"
-                                             style="width: 100%; height: 100%; object-fit: cover;">
-                                        <img th:unless="${feed.board.memberDTO.imageDTO == null}"
-                                             th:src="@{|/resources/${feed.board.memberDTO.imageDTO.name}|}"
-                                             class="shadow rounded-circle text-center"
-                                             style="width: 100%; height: 100%; object-fit: cover;">
+                                             class="rounded-circle text-center"
+                                             style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; margin: auto">
+
+                                        <img th:unless="${loginMember.Image == null}"
+                                             th:src="@{|/resources/${loginMember.Image.name}|}"
+                                             class="rounded-circle text-center"
+                                             style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; margin: auto">
                                     </div>
-                                    <div class="d-flex mx-2">
-                                        <div class="d-flex justify-content-center align-items-center text-center">
-                                            <div class="d-flex">
-                                                <div style="font-weight: bold; font-size: medium"
-                                                     th:text="${feed.board.memberDTO.username}"></div>
+                                    <span data-bs-toggle="modal" data-bs-target="#StoryUploadModal"
+                                          class="position-absolute bottom-0 end-0 p-0 bg-primary border border-light rounded-circle d-flex justify-content-center align-items-center text-white"
+                                          style="width: 1.2rem; height: 1.2rem; border-width: 5px;">+</span>
+                                </div>
+                                <div class="text-center" style="font-weight: bold; font-size: smaller"
+                                     th:text="${loginMember.username}">
+                                </div>
+                            </div>
+                            <div th:each="follower, iterStat : ${followerStory}" class="mx-2"
+                                 th:if="${follower.isFollowMemberStory()}">
+                                <div class="d-flex flex-column">
+                                    <div th:classappend="${follower.isFollowMemberStory()} ? 'myStory' : ''"
+                                         style="position: relative; width: 4rem; height: 4rem;">
+                                        <input type="hidden" th:id="'followStory' + ${iterStat.index}"
+                                               th:value="${#lists.size(follower.images)}"/>
+                                        <div th:onclick="@{|openFollowStoryListModal(${iterStat.index})|}">
+                                            <img th:if="${follower.imageDTO == null}"
+                                                 src="/files/designImg/noneuser.png"
+                                                 class="rounded-circle text-center"
+                                                 style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; margin: auto">
+
+                                            <img th:unless="${follower.imageDTO == null}"
+                                                 th:src="@{|/resources/${follower.imageDTO.name}|}"
+                                                 class="rounded-circle text-center"
+                                                 style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; margin: auto">
+                                        </div>
+                                    </div>
+                                    <div class="text-center" style="font-weight: bold; font-size: smaller"
+                                         th:text="${follower.username}"></div>
+                                </div>
+
+                                <!-- StoryListModal -->
+                                <div class="modal fade" th:id="'followerStoryListModal' + ${iterStat.index}"
+                                     tabindex="-1"
+                                     th:aria-labelledby="'followerStoryListModalLabel' + ${iterStat.index}"
+                                     data-bs-backdrop="static" data-bs-keyboard="false" aria-hidden="true">
+                                    <div class="modal-dialog modal-lg">
+                                        <div class="modal-content" style="height: 880px;">
+                                            <div class="modal-header p-2">
+                                                <h1 class="modal-title fs-5"
+                                                    th:id="'followerStoryListModalLabel' + ${iterStat.index}"
+                                                    style="font-weight: bold;">스토리</h1>
+                                                <button type="button" class="btn-close"
+                                                        th:id="'followerStoryListModalClose' + ${iterStat.index}"
+                                                        data-bs-dismiss="modal" aria-label="Close"
+                                                        onclick="reloadPage()"></button>
                                             </div>
-                                            <div class="d-flex" style="font-size: smaller;">
-                                                <span class="mx-2" dir="auto"
-                                                      style="line-height: var(--base-line-clamp-line-height); --base-line-clamp-line-height: 18px;">•</span>
-                                                <div th:text="${#temporals.format(feed.board.createDate, 'yyyy-MM-dd HH:mm:ss')}"></div>
+                                            <div class="modal-body p-0">
+                                                <div th:id="'carouselFollowerStory' + ${iterStat.index}"
+                                                     class="carousel slide" data-bs-touch="false"
+                                                     data-interval="false" style="position: relative;">
+                                                    <div class="progress-container"
+                                                         style="position: absolute; top: 8px; left: 5px; right: 5px; z-index: 1;">
+                                                        <div th:each="img, imgIndex : ${follower.images}"
+                                                             class="progress" role="progressbar"
+                                                             aria-label="Basic example" aria-valuenow="0"
+                                                             aria-valuemin="0" aria-valuemax="100">
+                                                            <div class="progress-bar bg-dark"
+                                                                 th:id="'progressBar' + ${iterStat.index + '_' + imgIndex.index}"
+                                                                 style="width: 0%;"></div>
+                                                            <div class="countdown"
+                                                                 th:id="'countdown' + ${iterStat.index + '_' + imgIndex.index}"></div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="carousel-inner">
+                                                        <!-- Image Carousel -->
+                                                        <div th:each="file, imgIndex: ${follower.images}">
+                                                            <div class="carousel-item"
+                                                                 th:classappend="${imgIndex.index == 0} ? 'active' : ''">
+                                                                <!-- Image -->
+                                                                <div class="img-Color"
+                                                                     style="width: 100%; height: 831px; display: flex; justify-content: center; align-items: center;">
+                                                                    <img th:if="${#strings.endsWith(file.name, '.jpg') or #strings.endsWith(file.name, '.jpeg') or #strings.endsWith(file.name, '.png')}"
+                                                                         th:src="@{|/resources/${file.name}|}" alt="..."
+                                                                         class="shadow"
+                                                                         style="width: 100%; height: auto; margin: auto;">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <!-- Navigation Buttons -->
+                                                        <button class="carousel-control-prev" type="button"
+                                                                th:classappend="${#lists.size(follower.images) == 1 ? 'visually-hidden' : ''}"
+                                                                th:data-bs-target="'#carouselFollowerStory' + ${iterStat.index}"
+                                                                data-bs-slide="prev">
+                                                            <span class="carousel-control-prev-icon"
+                                                                  aria-hidden="true"></span>
+                                                            <span class="visually-hidden">Previous</span>
+                                                        </button>
+
+                                                        <button class="carousel-control-next" type="button"
+                                                                th:classappend="${#lists.size(follower.images) == 1 ? 'visually-hidden' : ''}"
+                                                                th:data-bs-target="'#carouselFollowerStory' + ${iterStat.index}"
+                                                                data-bs-slide="next"
+                                                                th:data-test-id="imgChangeBtn + ${iterStat.index}">
+                                                            <span class="carousel-control-next-icon"
+                                                                  aria-hidden="true"></span>
+                                                            <span class="visually-hidden">Next</span>
+                                                        </button>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- StoryListModal -->
+                        <div class="modal fade" id="StoryListModal" tabindex="-1" aria-labelledby="StoryListModalLabel"
+                             data-bs-backdrop="static" data-bs-keyboard="false" aria-hidden="true">
+                            <div class="modal-dialog modal-lg">
+                                <div class="modal-content" style="height: 880px;">
+                                    <div class="modal-header p-2">
+                                        <h1 class="modal-title fs-5" id="StoryListModalLabel"
+                                            style="font-weight: bold;">스토리</h1>
+                                        <button type="button" class="btn-close" id="storyListModalClose"
+                                                data-bs-dismiss="modal" aria-label="Close"
+                                                onclick="reloadPage()"></button>
+                                    </div>
+                                    <div class="modal-body p-0">
+                                        <div id="carouselExample" class="carousel slide" data-bs-touch="false"
+                                             data-interval="false" style="position: relative;">
+                                            <div class="progress-container"
+                                                 style="position: absolute; top: 8px; left: 5px; right: 5px; z-index: 1;">
+                                                <div th:each="img, iterStat : ${storyList}" class="progress"
+                                                     role="progressbar" aria-label="Basic example"
+                                                     aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+                                                    <div class="progress-bar bg-dark"
+                                                         th:id="'progressBar' + ${iterStat.index}"
+                                                         style="width: 0%;"></div>
+                                                    <div class="countdown"
+                                                         th:id="'countdown' + ${iterStat.index}"></div>
+                                                </div>
+                                            </div>
+
+                                            <div class="carousel-inner">
+                                                <!-- Image Carousel -->
+                                                <div th:each="file, iterStat: ${storyList}">
+                                                    <div class="carousel-item"
+                                                         th:classappend="${iterStat.index == 0} ? 'active' : ''">
+                                                        <!-- Image -->
+                                                        <div class="img-Color"
+                                                             style="width: 100%; height: 831px; display: flex; justify-content: center; align-items: center;">
+                                                            <img th:if="${#strings.endsWith(file.name, '.jpg') or #strings.endsWith(file.name, '.jpeg') or #strings.endsWith(file.name, '.png')}"
+                                                                 th:id="${file.getId()}"
+                                                                 th:src="@{|/resources/${file.name}|}" alt="..."
+                                                                 class="shadow"
+                                                                 style="width: 100%; height: auto; margin: auto;">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- Navigation Buttons -->
+                                                <button class="carousel-control-prev" type="button"
+                                                        th:classappend="${#lists.size(storyList) == 1 ? 'visually-hidden' : ''}"
+                                                        data-bs-target="#carouselExample"
+                                                        data-bs-slide="prev">
+                                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                                    <span class="visually-hidden">Previous</span>
+                                                </button>
+
+                                                <button class="carousel-control-next" type="button"
+                                                        th:classappend="${#lists.size(storyList) == 1 ? 'visually-hidden' : ''}"
+                                                        data-bs-target="#carouselExample"
+                                                        data-bs-slide="next"
+                                                        data-test-id="imgChangeBtn">
+                                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                                    <span class="visually-hidden">Next</span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <script th:inline="javascript">
+                            function openStoryListModal() {
+                                if (typeof /*[[${storyList}]]*/ !== 'undefined' && /*[[${storyList}]]*/ !== null) {
+                                    var myModal = new bootstrap.Modal(document.getElementById('StoryListModal'));
+                                    myModal.show();
+
+                                    var imageCount = /*[[${#lists.size(storyList)}]]*/ 0;
+                                    console.log(imageCount);
+                                    var imageDuration = 5;
+
+                                    function updateProgressBar(index, percentage) {
+                                        var progressBarId = 'progressBar' + index;
+                                        var progressBar = document.getElementById(progressBarId);
+                                        if (progressBar) {
+                                            progressBar.style.width = percentage + '%';
+                                        }
+                                    }
+
+                                    function updateCountdown(index, seconds) {
+                                        var countdownId = 'countdown' + index;
+                                        document.getElementById(countdownId);
+                                    }
+
+                                    function startCountdown(index, callback) {
+                                        var seconds = imageDuration;
+                                        var interval = setInterval(function () {
+                                            updateCountdown(index, seconds);
+                                            updateProgressBar(index, (imageDuration - seconds) / imageDuration * 100);
+
+                                            if (seconds <= 0) {
+                                                clearInterval(interval);
+                                                if (callback) {
+                                                    callback();
+                                                }
+                                            }
+                                            seconds--;
+                                        }, 1000);
+                                    }
+
+                                    function startCountdownForImages(index) {
+                                        console.log(index);
+                                        if (index < imageCount && imageCount > 0) {
+                                            startCountdown(index, function () {
+                                                startCountdownForImages(index + 1);
+                                                if (index + 1) {
+                                                    setTimeout(function () {
+                                                        var nextButton = document.querySelector('[data-test-id="imgChangeBtn"]');
+                                                        if (nextButton) {
+                                                            nextButton.click();
+                                                        }
+                                                    }, 1000);
+                                                }
+                                            });
+                                        } else {
+                                            var btn = document.getElementById('storyListModalClose');
+                                            if (btn) {
+                                                setTimeout(function () {
+                                                    btn.click();
+                                                }, 1000);
+                                            }
+                                        }
+                                    }
+
+                                    if (imageCount > 0) {
+                                        startCountdownForImages(0);
+                                    }
+                                } else {
+                                    console.log('storyList is null or undefined. Modal not shown.');
+                                }
+                            }
+                        </script>
+                        <!-- StoryListModal End -->
+
+
+                        <!-- StoryUploadModal -->
+                        <div class="modal fade" id="StoryUploadModal" tabindex="-1" data-bs-backdrop="static"
+                             data-bs-keyboard="false" aria-labelledby="StoryUploadModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <form th:action="@{/story/create}" method="post" enctype="multipart/form-data">
+                                        <div class="modal-header p-2 d-flex justify-content-between align-items-center">
+                                            <button type="button" class="btn-close m-0" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                            <h1 class="modal-title fs-5" style="font-weight: bold;">스토리</h1>
+                                            <button type="submit" class="btn noneBtn btn-link">
+                                                <svg width="15" height="15" viewBox="0 0 1248.000000 1280.000000"
+                                                     preserveAspectRatio="xMidYMid meet">
+                                                    <g transform="translate(0.000000,1280.000000) scale(0.100000,-0.100000)"
+                                                       fill="#000000" stroke="none">
+                                                        <path d="M10990 12794 c-148 -18 -348 -78 -471 -139 -171 -87 -363 -246 -469 -390 -25 -33 -1255 -1609 -2733 -3503 -1740 -2227 -2693 -3440 -2700 -3435 -55 33 -2153 1554 -2234 1620 -244 198 -479 321 -738 389 -135 35 -374 45 -519 20 -558 -95 -991 -521 -1103 -1084 -12 -61 -17 -136 -17 -252 -1 -179 18 -297 71 -444 36 -101 125 -270 181 -346 27 -36 462 -535 967 -1110 1869 -2125 2583 -2940 3089 -3522 l519 -597 27 37 c153 212 7390 10657 7431 10725 317 525 223 1224 -222 1653 -251 241 -556 370 -899 378 -80 3 -161 2 -180 0z"/>
+                                                    </g>
+                                                </svg>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body p-0 d-flex flex-column justify-content-center align-items-center">
+                                            <div id="storyFile-container">
+                                            </div>
+                                            <div id="btnGroup">
+                                                <button type="button" class="btn btn-primary my-3 text-white"
+                                                        onclick="clickStoryFileUpload()">
+                                                    컴퓨터에서 선택
+                                                </button>
+                                            </div>
+                                            <div class="visually-hidden">
+                                                <input type="file" name="story" id="story">
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- StoryUploadModal End -->
+                    </div>
+                    <div class="frag-board p-0">
+                        <div th:each="feed, idx : ${feedList}" class="feedList p-3">
+
+                            <!--location null-->
+                            <div th:if="${feed.board.locationDTO == null}">
+                                <div class="d-flex justify-content-between" style="padding: 0 0 12px 4px;">
+                                    <div class="center">
+                                        <div class="w32 h32 bdd5 br50" style="position: relative">
+                                            <img th:if="${feed.board.memberDTO.imageDTO == null}"
+                                                 src="/files/designImg/noneuser.png"
+                                                 class="rounded-circle text-center"
+                                                 style="width: 100%; height: 100%; object-fit: cover;">
+                                            <img th:unless="${feed.board.memberDTO.imageDTO == null}"
+                                                 th:src="@{|/resources/${feed.board.memberDTO.imageDTO.name}|}"
+                                                 class="rounded-circle text-center"
+                                                 style="width: 100%; height: 100%; object-fit: cover;">
+                                        </div>
+                                        <div class="d-flex mx-2">
+                                            <div class="d-flex justify-content-center align-items-center text-center">
+                                                <div class="d-flex">
+                                                    <div class="fs14 fw600"
+                                                         th:text="${feed.board.memberDTO.username}"></div>
+                                                </div>
+                                                <div class="d-flex fs14 fcGray">
+                                                    <span class="mx-2" dir="auto"
+                                                          style="line-height: var(--base-line-clamp-line-height); --base-line-clamp-line-height: 18px;">•</span>
+                                                    <div th:text="${#temporals.format(feed.board.createDate, 'yyyy-MM-dd HH:mm:ss')}"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex justify-content-center align-items-center">
+                                        <a th:href="@{|/board/setting/${feed.board.id}|}"
+                                           onclick="saveScrollPosition()">
+                                            <button type="button" class="btn noneBtn btn-link"
+                                                    th:if="${feed.board.memberDTO.username} == ${loginMember.username}"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#CreateUserBoardSettingModal">
+                                                <svg aria-label="옵션 더 보기"
+                                                     fill="currentColor" height="24" role="img" viewBox="0 0 24 24"
+                                                     width="24"><title>옵션 더 보기</title>
+                                                    <circle cx="12" cy="12" r="1.5"></circle>
+                                                    <circle cx="6" cy="12" r="1.5"></circle>
+                                                    <circle cx="18" cy="12" r="1.5"></circle>
+                                                </svg>
+                                            </button>
+                                            <!-- 다른 경우 UserBoardSettingModal 버튼을 보여줍니다. -->
+                                            <button type="button" class="btn noneBtn btn-link"
+                                                    th:if="${feed.board.memberDTO.username} != ${loginMember.username}"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#UserBoardSettingModal">
+                                                <svg aria-label="옵션 더 보기"
+                                                     fill="currentColor" height="24" role="img" viewBox="0 0 24 24"
+                                                     width="24"><title>옵션 더 보기</title>
+                                                    <circle cx="12" cy="12" r="1.5"></circle>
+                                                    <circle cx="6" cy="12" r="1.5"></circle>
+                                                    <circle cx="18" cy="12" r="1.5"></circle>
+                                                </svg>
+                                            </button>
+                                        </a>
                                     </div>
                                 </div>
                             </div>
 
                             <!--location not null-->
                             <div th:if="${feed.board.locationDTO != null}">
-                                <div class="d-flex" style="padding: 0 0 12px 4px;">
-                                    <div style="position: relative; width: 2.5rem; height: 2.5rem;">
-                                        <img th:if="${feed.board.memberDTO.imageDTO == null}"
-                                             src="/files/designImg/noneuser.png"
-                                             class="shadow rounded-circle text-center"
-                                             style="width: 100%; height: 100%; object-fit: cover;">
-                                        <img th:unless="${feed.board.memberDTO.imageDTO == null}"
-                                             th:src="@{|/resources/${feed.board.memberDTO.imageDTO.name}|}"
-                                             class="shadow rounded-circle text-center"
-                                             style="width: 100%; height: 100%; object-fit: cover;">
+                                <div class="d-flex justify-content-between" style="padding: 0 0 12px 4px;">
+                                    <div class="d-flex">
+                                        <div style="position: relative; width: 2.5rem; height: 2.5rem;">
+                                            <img th:if="${feed.board.memberDTO.imageDTO == null}"
+                                                 src="/files/designImg/noneuser.png"
+                                                 class="shadow rounded-circle text-center"
+                                                 style="width: 100%; height: 100%; object-fit: cover;">
+                                            <img th:unless="${feed.board.memberDTO.imageDTO == null}"
+                                                 th:src="@{|/resources/${feed.board.memberDTO.imageDTO.name}|}"
+                                                 class="shadow rounded-circle text-center"
+                                                 style="width: 100%; height: 100%; object-fit: cover;">
+                                        </div>
+                                        <div class="d-flex flex-column mx-2">
+                                            <div class="d-flex justify-content-center align-items-center text-center">
+                                                <div class="d-flex">
+                                                    <div style="font-weight: bold; font-size: medium"
+                                                         th:text="${feed.board.memberDTO.username}"></div>
+                                                </div>
+                                                <div class="d-flex" style="font-size: smaller;">
+                                                        <span class="mx-2" dir="auto"
+                                                              style="line-height: var(--base-line-clamp-line-height); --base-line-clamp-line-height: 18px;">•</span>
+                                                    <div th:text="${#temporals.format(feed.board.createDate, 'yyyy-MM-dd HH:mm:ss')}"></div>
+                                                </div>
+                                            </div>
+                                            <div class="d-flex" style="font-size: 0.8rem;">
+                                                <div th:text="${feed.board.locationDTO.placeName}"></div>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="d-flex flex-column mx-2">
-                                        <div class="d-flex justify-content-center align-items-center text-center">
-                                            <div class="d-flex">
-                                                <div style="font-weight: bold; font-size: medium"
-                                                     th:text="${feed.board.memberDTO.username}"></div>
-                                            </div>
-                                            <div class="d-flex" style="font-size: smaller;">
-                                                    <span class="mx-2" dir="auto"
-                                                          style="line-height: var(--base-line-clamp-line-height); --base-line-clamp-line-height: 18px;">•</span>
-                                                <div th:text="${#temporals.format(feed.board.createDate, 'yyyy-MM-dd HH:mm:ss')}"></div>
-                                            </div>
-                                        </div>
-                                        <div class="d-flex" style="font-size: 0.8rem;">
-                                            <div th:text="${feed.board.locationDTO.placeName}"></div>
-                                        </div>
+                                    <div class="d-flex justify-content-center align-items-center">
+                                        <a th:href="@{|/board/setting/${feed.board.id}|}"
+                                           onclick="saveScrollPosition()">
+                                            <button type="button" class="btn noneBtn btn-link"
+                                                    th:if="${feed.board.memberDTO.username} == ${loginMember.username}"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#CreateUserBoardSettingModal">
+                                                <svg aria-label="옵션 더 보기"
+                                                     fill="currentColor" height="24" role="img" viewBox="0 0 24 24"
+                                                     width="24"><title>옵션 더 보기</title>
+                                                    <circle cx="12" cy="12" r="1.5"></circle>
+                                                    <circle cx="6" cy="12" r="1.5"></circle>
+                                                    <circle cx="18" cy="12" r="1.5"></circle>
+                                                </svg>
+                                            </button>
+                                            <!-- 다른 경우 UserBoardSettingModal 버튼을 보여줍니다. -->
+                                            <button type="button" class="btn noneBtn btn-link"
+                                                    th:if="${feed.board.memberDTO.username} != ${loginMember.username}"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#UserBoardSettingModal">
+                                                <svg aria-label="옵션 더 보기"
+                                                     fill="currentColor" height="24" role="img" viewBox="0 0 24 24"
+                                                     width="24"><title>옵션 더 보기</title>
+                                                    <circle cx="12" cy="12" r="1.5"></circle>
+                                                    <circle cx="6" cy="12" r="1.5"></circle>
+                                                    <circle cx="18" cy="12" r="1.5"></circle>
+                                                </svg>
+                                            </button>
+                                        </a>
                                     </div>
                                 </div>
                             </div>
@@ -103,7 +469,7 @@
                                                  th:src="@{|/resources/${file.name}|}"
                                                  alt="..."
                                                  class="shadow text-center rounded"
-                                                 style="width: 654px; height: 592px; object-fit: cover;">
+                                                 style="width: 100%; height: 614px; object-fit: cover;">
 
                                             <!-- 비디오인 경우 -->
                                             <video th:if="${#strings.endsWith(file.name, '.mp4') or #strings.endsWith(file.name, '.webm') or #strings.endsWith(file.name, '.mov')}"
@@ -111,7 +477,7 @@
                                                    class="shadow text-center rounded"
                                                    th:src="@{|/resources/${file.name}|}"
                                                    controls autoplay muted
-                                                   style="width: 654px; height: 592px; object-fit: cover;">
+                                                   style="width: 100%; height: 614px; object-fit: cover;">
                                             </video>
                                         </div>
                                     </div>
@@ -131,157 +497,166 @@
                                     </button>
                                 </div>
                             </div>
-                            <div class="d-flex justify-content-between">
-                                <div class="d-flex">
-                                    <!-- Like -->
-                                    <div class="p-2" role="button" tabindex="0">
-                                        <a th:onclick="@{|clickLike(${feed.board.id})|}"
-                                           th:id="${#lists.contains(feed.board.boardLikeMemberIds, loginMember.id)}">
-                                            <svg th:id="@{|liked-svg${feed.board.id}|}"
-                                                 th:classappend="${#lists.contains(feed.board.boardLikeMemberIds, loginMember.id)}?'visually-hidden':''"
-                                                 aria-label="좋아요"
-                                                 fill="currentColor"
-                                                 height="24" width="24" role="img" viewBox="0 0 24 24"
-                                                 style="color: black;">
-                                                <path d="M16.792 3.904A4.989 4.989 0 0 1 21.5 9.122c0 3.072-2.652 4.959-5.197 7.222-2.512 2.243-3.865 3.469-4.303 3.752-.477-.309-2.143-1.823-4.303-3.752C5.141 14.072 2.5 12.167 2.5 9.122a4.989 4.989 0 0 1 4.708-5.218 4.21 4.21 0 0 1 3.675 1.941c.84 1.175.98 1.763 1.12 1.763s.278-.588 1.11-1.766a4.17 4.17 0 0 1 3.679-1.938m0-2a6.04 6.04 0 0 0-4.797 2.127 6.052 6.052 0 0 0-4.787-2.127A6.985 6.985 0 0 0 .5 9.122c0 3.61 2.55 5.827 5.015 7.97.283.246.569.494.853.747l1.027.918a44.998 44.998 0 0 0 3.518 3.018 2 2 0 0 0 2.174 0 45.263 45.263 0 0 0 3.626-3.115l.922-.824c.293-.26.59-.519.885-.774 2.334-2.025 4.98-4.32 4.98-7.94a6.985 6.985 0 0 0-6.708-7.218Z"></path>
+
+                            <div>
+                                <div class="d-flex justify-content-between">
+                                    <div class="d-flex">
+                                        <!-- Like -->
+                                        <div class="pdT8 pdR8 pdB8" style="padding-left: 0" role="button" tabindex="0">
+                                            <a th:onclick="@{|clickLike(${feed.board.id})|}"
+                                               th:id="${#lists.contains(feed.board.boardLikeMemberIds, loginMember.id)}">
+                                                <svg th:id="@{|liked-svg${feed.board.id}|}"
+                                                     th:classappend="${#lists.contains(feed.board.boardLikeMemberIds, loginMember.id)}?'visually-hidden':''"
+                                                     aria-label="좋아요"
+                                                     fill="currentColor"
+                                                     height="24" width="24" role="img" viewBox="0 0 24 24"
+                                                     style="color: black;">
+                                                    <path d="M16.792 3.904A4.989 4.989 0 0 1 21.5 9.122c0 3.072-2.652 4.959-5.197 7.222-2.512 2.243-3.865 3.469-4.303 3.752-.477-.309-2.143-1.823-4.303-3.752C5.141 14.072 2.5 12.167 2.5 9.122a4.989 4.989 0 0 1 4.708-5.218 4.21 4.21 0 0 1 3.675 1.941c.84 1.175.98 1.763 1.12 1.763s.278-.588 1.11-1.766a4.17 4.17 0 0 1 3.679-1.938m0-2a6.04 6.04 0 0 0-4.797 2.127 6.052 6.052 0 0 0-4.787-2.127A6.985 6.985 0 0 0 .5 9.122c0 3.61 2.55 5.827 5.015 7.97.283.246.569.494.853.747l1.027.918a44.998 44.998 0 0 0 3.518 3.018 2 2 0 0 0 2.174 0 45.263 45.263 0 0 0 3.626-3.115l.922-.824c.293-.26.59-.519.885-.774 2.334-2.025 4.98-4.32 4.98-7.94a6.985 6.985 0 0 0-6.708-7.218Z"></path>
+                                                </svg>
+                                                <svg th:id="@{|not-like-svg${feed.board.id}|}" aria-label="좋아요 취소"
+                                                     th:classappend="${#lists.contains(feed.board.boardLikeMemberIds, loginMember.id)}?'':'visually-hidden'"
+                                                     fill="currentColor"
+                                                     height="24" width="24" role="img" viewBox="0 0 48 48"
+                                                     style="color:red;">
+                                                    <path d="M34.6 3.1c-4.5 0-7.9 1.8-10.6 5.6-2.7-3.7-6.1-5.5-10.6-5.5C6 3.1 0 9.6 0 17.6c0 7.3 5.4 12 10.6 16.5.6.5 1.3 1.1 1.9 1.7l2.3 2c4.4 3.9 6.6 5.9 7.6 6.5.5.3 1.1.5 1.6.5s1.1-.2 1.6-.5c1-.6 2.8-2.2 7.8-6.8l2-1.8c.7-.6 1.3-1.2 2-1.7C42.7 29.6 48 25 48 17.6c0-8-6-14.5-13.4-14.5z"></path>
+                                                </svg>
+                                            </a>
+                                        </div>
+                                        <!-- Comment -->
+                                        <a th:href="@{|/board/detail/${feed.board.id}|}">
+                                            <div class="p-2" type="button" tabindex="0" data-bs-toggle="modal"
+                                                 data-bs-target="#selectFeedModal">
+                                                <svg aria-label="댓글 달기" fill="currentColor" height="24" width="24"
+                                                     role="img"
+                                                     viewBox="0 0 24 24" style="color: black;">
+                                                    <path d="M20.656 17.008a9.993 9.993 0 1 0-3.59 3.615L22 22Z"
+                                                          fill="none"
+                                                          stroke="currentColor" stroke-linejoin="round"
+                                                          stroke-width="2"></path>
+                                                </svg>
+                                            </div>
+                                        </a>
+                                        <!-- share -->
+                                        <div class="p-2" role="button" tabindex="0">
+                                            <svg aria-label="게시물 공유"
+                                                 fill="currentColor" height="24" role="img" viewBox="0 0 24 24"
+                                                 width="24"><title>게시물 공유</title>
+                                                <line fill="none" stroke="currentColor" stroke-linejoin="round"
+                                                      stroke-width="2" x1="22" x2="9.218" y1="3" y2="10.083"></line>
+                                                <polygon fill="none"
+                                                         points="11.698 20.334 22 3.001 2 3.001 9.218 10.084 11.698 20.334"
+                                                         stroke="currentColor" stroke-linejoin="round"
+                                                         stroke-width="2"></polygon>
                                             </svg>
-                                            <svg th:id="@{|not-like-svg${feed.board.id}|}" aria-label="좋아요 취소"
-                                                 th:classappend="${#lists.contains(feed.board.boardLikeMemberIds, loginMember.id)}?'':'visually-hidden'"
-                                                 fill="currentColor"
-                                                 height="24" width="24" role="img" viewBox="0 0 48 48"
-                                                 style="color:red;">
-                                                <path d="M34.6 3.1c-4.5 0-7.9 1.8-10.6 5.6-2.7-3.7-6.1-5.5-10.6-5.5C6 3.1 0 9.6 0 17.6c0 7.3 5.4 12 10.6 16.5.6.5 1.3 1.1 1.9 1.7l2.3 2c4.4 3.9 6.6 5.9 7.6 6.5.5.3 1.1.5 1.6.5s1.1-.2 1.6-.5c1-.6 2.8-2.2 7.8-6.8l2-1.8c.7-.6 1.3-1.2 2-1.7C42.7 29.6 48 25 48 17.6c0-8-6-14.5-13.4-14.5z"></path>
-                                            </svg>
+                                        </div>
+                                    </div>
+                                    <!-- save -->
+                                    <div class="d-flex">
+                                        <a class="popoverLink" th:onclick="@{|clickSaveGroup(${feed.board.id})|}"
+                                           th:id="${#lists.contains(feed.board.boardSaveIds, feed.board.id)}">
+                                            <div class="pdT8 pdB8 pdL8" role="button" tabindex="0">
+                                                <svg th:id="@{|saved-svg${feed.board.id}|}" aria-label="저장"
+                                                     th:classappend="${#lists.contains(feed.board.boardSaveIds, feed.board.id)} ? 'visually-hidden' : '' "
+                                                     fill="currentColor" height="24" role="img" viewBox="0 0 24 24"
+                                                     width="24">
+                                                    <title>저장</title>
+                                                    <polygon fill="none" points="20 21 12 13.44 4 21 4 3 20 3 20 21"
+                                                             stroke="currentColor"
+                                                             stroke-linecap="round" stroke-linejoin="round"
+                                                             stroke-width="2"></polygon>
+                                                </svg>
+                                                <svg th:id="@{|not-save-svg${feed.board.id}|}" aria-label="삭제"
+                                                     th:classappend="${#lists.contains(feed.board.boardSaveIds, feed.board.id)} ? '' : 'visually-hidden' "
+                                                     fill="currentColor" height="24" role="img" viewBox="0 0 24 24"
+                                                     width="24">
+                                                    <title>삭제</title>
+                                                    <path d="M20 22a.999.999 0 0 1-.687-.273L12 14.815l-7.313 6.912A1 1 0 0 1 3 21V3a1 1 0 0 1 1-1h16a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1Z"></path>
+                                                </svg>
+                                            </div>
+                                            <input th:data-id="${feed.board.id}" type="hidden"
+                                                   th:value="${feed.board.id}">
                                         </a>
                                     </div>
 
-                                    <!-- Comment -->
-                                    <a th:href="@{|/board/detail/${feed.board.id}|}">
-                                        <div class="p-2" type="button" tabindex="0" data-bs-toggle="modal"
-                                             data-bs-target="#selectFeedModal">
-                                            <svg aria-label="댓글 달기" fill="currentColor" height="24" width="24"
-                                                 role="img"
-                                                 viewBox="0 0 24 24" style="color: black;">
-                                                <path d="M20.656 17.008a9.993 9.993 0 1 0-3.59 3.615L22 22Z"
-                                                      fill="none"
-                                                      stroke="currentColor" stroke-linejoin="round"
-                                                      stroke-width="2"></path>
-                                            </svg>
-                                        </div>
-                                    </a>
-                                    <!-- share -->
-                                    <div class="p-2" role="button" tabindex="0">
-                                        <svg aria-label="게시물 공유"
-                                             fill="currentColor" height="24" role="img" viewBox="0 0 24 24"
-                                             width="24"><title>게시물 공유</title>
-                                            <line fill="none" stroke="currentColor" stroke-linejoin="round"
-                                                  stroke-width="2" x1="22" x2="9.218" y1="3" y2="10.083"></line>
-                                            <polygon fill="none"
-                                                     points="11.698 20.334 22 3.001 2 3.001 9.218 10.084 11.698 20.334"
-                                                     stroke="currentColor" stroke-linejoin="round"
-                                                     stroke-width="2"></polygon>
-                                        </svg>
-                                    </div>
-                                </div>
-                                <!-- save -->
-                                <div class="d-flex">
-                                    <a class="popoverLink" th:onclick="@{|clickSaveGroup(${feed.board.id})|}"
-                                       th:id="${#lists.contains(feed.board.boardSaveIds, feed.board.id)}">
-                                        <div class="p-2" role="button" tabindex="0">
-                                            <svg th:id="@{|saved-svg${feed.board.id}|}" aria-label="저장"
-                                                 th:classappend="${#lists.contains(feed.board.boardSaveIds, feed.board.id)} ? 'visually-hidden' : '' "
-                                                 fill="currentColor" height="24" role="img" viewBox="0 0 24 24"
-                                                 width="24">
-                                                <title>저장</title>
-                                                <polygon fill="none" points="20 21 12 13.44 4 21 4 3 20 3 20 21"
-                                                         stroke="currentColor"
-                                                         stroke-linecap="round" stroke-linejoin="round"
-                                                         stroke-width="2"></polygon>
-                                            </svg>
-                                            <svg th:id="@{|not-save-svg${feed.board.id}|}" aria-label="삭제"
-                                                 th:classappend="${#lists.contains(feed.board.boardSaveIds, feed.board.id)} ? '' : 'visually-hidden' "
-                                                 fill="currentColor" height="24" role="img" viewBox="0 0 24 24"
-                                                 width="24">
-                                                <title>삭제</title>
-                                                <path d="M20 22a.999.999 0 0 1-.687-.273L12 14.815l-7.313 6.912A1 1 0 0 1 3 21V3a1 1 0 0 1 1-1h16a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1Z"></path>
-                                            </svg>
-                                        </div>
-                                        <input th:data-id="${feed.board.id}" type="hidden" th:value="${feed.board.id}">
-                                    </a>
-                                </div>
-                                <!-- Modal -->
-                                <div class="modal fade" id="collectionModal" tabindex="-1" aria-labelledby="collectionModalLabel" aria-hidden="true">
-                                    <div class="modal-dialog modal-dialog-centered modal-sm">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h1 class="modal-title fs-5" id="collectionModalLabel">새 컬렉션</h1>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="reloadPage()" aria-label="Close"></button>
-                                            </div>
-                                            <div class="modal-body d-flex flex-column justify-content-center align-items-center" style="width: 100%; height: 100%;">
-                                                <div class="file-container">
+                                    <!-- collectionModal -->
+                                    <div class="modal fade" id="collectionModal" tabindex="-1"
+                                         aria-labelledby="collectionModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered modal-sm">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h1 class="modal-title fs-5" id="collectionModalLabel">새 컬렉션</h1>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                            onclick="reloadPage()" aria-label="Close"></button>
                                                 </div>
-                                                <div class="input-group" style="width: 100%; margin-top: 20px;">
-                                                    <input type="text" class="form-control" id="GroupName" name="GroupName">
+                                                <div class="modal-body d-flex flex-column justify-content-center align-items-center"
+                                                     style="width: 100%; height: 100%;">
+                                                    <div class="file-container">
+                                                    </div>
+                                                    <div class="input-group" style="width: 100%; margin-top: 20px;">
+                                                        <input type="text" class="form-control" id="GroupName"
+                                                               name="GroupName">
+                                                    </div>
+                                                    <input id="fileId" type="hidden">
                                                 </div>
-                                                <input id="fileId" type="hidden">
-                                            </div>
-                                            <div class="modal-footer d-flex justify-content-center p-0" style="width: 100%;">
-                                                <button type="button" class="btn noneBtn btn-link" onclick="boardSaveGroup()">저장</button>
+                                                <div class="modal-footer d-flex justify-content-center p-0"
+                                                     style="width: 100%;">
+                                                    <button type="button" class="btn noneBtn btn-link"
+                                                            onclick="boardSaveGroup()">저장
+                                                    </button>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
+                                    <!-- collectionModal End -->
                                 </div>
-                            </div>
-                            <!-- 좋아요 갯수 -->
-                            <div class="px-2" id="likeCount"
-                                 th:text="${feed.board.likeHide == false ? '좋아요 ' + #lists.size(feed.board.boardLikeMemberIds) + '개' : '좋아요 여러개 입니다.'}"></div>
-                            <div class="d-flex" style="width: 60%;">
-                                <div class="px-2" th:text="${feed.board.memberDTO.username}"></div>
-                                <div class="d-flex flex-column">
-                                    <div class="content-container" th:text="${feed.board.content}"></div>
-                                    <div class="btn noneBtn btn-link border-top p-0 show-more-btn">... 더보기</div>
+                                <!-- 좋아요 갯수 -->
+                                <div class="d-flex fs14 fw600" id="likeCount"
+                                     th:text="${feed.board.likeHide == false ? '좋아요 ' + #lists.size(feed.board.boardLikeMemberIds) + '개' : '좋아요 여러개 입니다.'}"></div>
+                                <!-- 게시물 내용 -->
+                                <div class="d-flex w-100 mgT3 h21">
+                                    <div class="pdR8 fs14 fw600" th:text="${feed.board.memberDTO.username}"></div>
+                                    <div class="d-flex fs14" style="flex-direction: row">
+                                        <div class="content-container bn" th:classappend ="${feed.board.content.length() > 10 } ? 'long-content'"
+                                             th:data-content="${feed.board.content}"
+                                             th:text="${feed.board.content.length() > 10 ? feed.board.content.substring(0, 10) : feed.board.content}"></div>
+                                        <div class="btn noneBtn btn-link p-0 show-more-btn fs14 fcGray mgL3">... 더보기</div>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="d-flex px-2" style="width: 100%;"
-                                 th:classappend="${feed.board.boardTagMembers == null} ? 'visually-hidden' : ''">
-                                <div th:each="tagMember : ${feed.board.boardTagMembers}">
-                                    <a th:href="@{|/member/page/${tagMember}|}">
-                                        <button class="btn btn-link noneBtn p-0 text-primary"
-                                                th:text="'@' + ${tagMember}"></button>
-                                    </a>
+                                <!-- 언급 -->
+                                <div class="d-flex w-100 mgT3"
+                                     th:classappend="${feed.board.boardTagMembers == null} ? 'visually-hidden' : ''">
+                                        <a class="btn btn-link noneBtn p-0 fs14 bn" style="color: #00376b" th:each="tagMember : ${feed.board.boardTagMembers}"
+                                           type="button" th:href="@{|/member/page/${tagMember}|}" th:text="'@' + ${tagMember}" ></a>
                                 </div>
-                            </div>
-
-                            <div class="d-flex flex-wrap px-2" style="width: 100%;">
-                                <div th:each="hashTag : ${feed.board.boardHashTags}">
-                                    <a href="#">
-                                        <button class="btn btn-link noneBtn p-0 text-primary"
-                                                th:text="'#' + ${hashTag}"></button>
-                                    </a>
+                                <!-- 태그 -->
+                                <div class="d-flex w-100 mgT3">
+                                        <a class="btn btn-link noneBtn p-0 fs14" href="#" style="color: #00376b"
+                                           th:each="hashTag : ${feed.board.boardHashTags}" th:text="'#' + ${hashTag}"></a>
                                 </div>
-                            </div>
 
-
-                            <!-- button show BoardDetailModal -->
-                            <a th:href="@{|/board/detail/${feed.board.id}|}">
-                                <button type="button" class="btn noneBtn btn-link px-2 py-0"
-                                        data-bs-toggle="modal"
-                                        data-bs-target="#BoardDetailModal"
-                                        th:text="${'댓글 ' + #lists.size(feed.comments())}+'개 보기'"></button>
-                            </a>
-
-                            <div th:classappend="${feed.board.commentDisable == true}?'visually-hidden'">
-                                <form th:action="@{|/comment/create/${feed.board.id}|}" method="post">
-                                    <div class="d-flex">
-                                        <textarea class="form-control border-0 me-2" style="resize: none;"
+                                <!-- button show BoardDetailModal -->
+                                <a class="d-flex mgT3" th:href="@{|/board/detail/${feed.board.id}|}">
+                                    <button type="button" class="btn noneBtn btn-link pd0 fs14 fcGray bn"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#BoardDetailModal"
+                                            th:text="${'댓글 ' + #lists.size(feed.comments())}+'개 보기'"></button>
+                                </a>
+                                <!-- 댓글 -->
+                                <div th:classappend="${feed.board.commentDisable == true}?'visually-hidden'">
+                                    <form th:action="@{|/comment/create/${feed.board.id}|}" method="post">
+                                        <div class="d-flex pdB10" style="margin-top: 3px">
+                                        <textarea class="bn fs14 fcGray w-100 h28 rn pd0"
                                                   name="content"
                                                   id="content" placeholder="댓글 달기..."></textarea>
-                                        <button type="submit" style="width: 10%;" class="btn noneBtn btn-link">
-                                            게시
-                                        </button>
-                                    </div>
-                                </form>
+                                            <button type="submit" style="width: 40px;" class="btn noneBtn btn-link fs14 pd0">
+                                                게시
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+
                             </div>
+                            <div class="bBdb"></div>
                         </div>
                     </div>
                 </div>
@@ -315,12 +690,14 @@
     <!-- Feed list End-->
 
 
+
+
     <!--Board Detail Modal -->
     <div class="modal fade" id="BoardDetailModal" data-bs-backdrop="static"
          data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-xl">
-            <div class="modal-content">
-                <div class="modal-header">
+            <div class="modal-content w1074 br12">
+                <div class="modal-header pd8">
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
                             onclick="reloadPage()"></button>
                 </div>
@@ -351,7 +728,7 @@
                                                      th:src="@{|/resources/${file.name}|}"
                                                      alt="..."
                                                      class="shadow text-center"
-                                                     style="width: 70%; height:100%; position: absolute; top: 0; left: 0; transform: translate(50,50); object-fit: cover; margin: auto">
+                                                     style="width: 80%; height:100%; position: absolute; top: 0; left: 0; transform: translate(50,50); object-fit: cover; margin: auto">
 
                                                 <!-- 비디오인 경우 -->
                                                 <video th:if="${#strings.endsWith(file.name, '.mp4') or #strings.endsWith(file.name, '.webm') or #strings.endsWith(file.name, '.mov')}"
@@ -439,7 +816,7 @@
                                                 th:if="${selectFeed.board.memberDTO.username} == ${loginMember.username}"
                                                 data-bs-toggle="modal"
                                                 data-bs-target="#CreateUserBoardSettingModal">
-                                            <svg aria-label="옵션 더 보기" class="x1lliihq x1n2onr6 x5n08af"
+                                            <svg aria-label="옵션 더 보기"
                                                  fill="currentColor" height="24" role="img" viewBox="0 0 24 24"
                                                  width="24"><title>옵션 더 보기</title>
                                                 <circle cx="12" cy="12" r="1.5"></circle>
@@ -452,7 +829,7 @@
                                                 th:if="${selectFeed.board.memberDTO.username} != ${loginMember.username}"
                                                 data-bs-toggle="modal"
                                                 data-bs-target="#UserBoardSettingModal">
-                                            <svg aria-label="옵션 더 보기" class="x1lliihq x1n2onr6 x5n08af"
+                                            <svg aria-label="옵션 더 보기"
                                                  fill="currentColor" height="24" role="img" viewBox="0 0 24 24"
                                                  width="24"><title>옵션 더 보기</title>
                                                 <circle cx="12" cy="12" r="1.5"></circle>
@@ -512,7 +889,8 @@
                                         <!-- Comment List -->
                                         <div th:each="comment, loop : ${selectFeed.commentDTOS}"
                                              th:id="${'comment-' + comment.id}">
-                                            <div class="d-flex comment-container" style="padding: 5px 16px 5px 16px;">
+                                            <div class="d-flex comment-container"
+                                                 style="padding: 5px 16px 5px 16px;">
                                                 <div class="d-flex justify-content-center">
                                                     <div class="me-3"
                                                          style="position: relative; width: 2rem; height: 2rem;">
@@ -668,7 +1046,8 @@
                                                                                  width="24"><title>옵션 더 보기</title>
                                                                                 <circle cx="12" cy="12"
                                                                                         r="1.5"></circle>
-                                                                                <circle cx="6" cy="12" r="1.5"></circle>
+                                                                                <circle cx="6" cy="12"
+                                                                                        r="1.5"></circle>
                                                                                 <circle cx="18" cy="12"
                                                                                         r="1.5"></circle>
                                                                             </svg>
@@ -799,30 +1178,6 @@
                                                         </svg>
                                                     </div>
                                                 </a>
-
-                                                <div class="popover"
-                                                     style="width: 300px; height: 200px; display: none;">
-                                                    <div class="d-flex flex-column">
-                                                        <div class="d-flex justify-content-between align-items-center mx-3 my-2 p-0">
-                                                            <div class="Collection"
-                                                                 style="font-weight: bold; font-size: 1rem;"
-                                                                 text="컬렉션"></div>
-                                                            <div class="btn noneBtn btn-link"
-                                                                 style="font-weight: bold; font-size: 1rem;">
-                                                                <svg aria-label="+ 아이콘" class="highlight_icon"
-                                                                     fill="currentColor" height="24" role="img"
-                                                                     viewBox="0 0 24 24" width="24"><title>+
-                                                                    아이콘</title>
-                                                                    <path d="M21 11.3h-8.2V3c0-.4-.3-.8-.8-.8s-.8.4-.8.8v8.2H3c-.4 0-.8.3-.8.8s.3.8.8.8h8.2V21c0 .4.3.8.8.8s.8-.3.8-.8v-8.2H21c.4 0 .8-.3.8-.8s-.4-.7-.8-.7z"></path>
-                                                                </svg>
-                                                            </div>
-                                                        </div>
-                                                        <div class="border-bottom"></div>
-                                                        <div>
-                                                            Your popover content here...
-                                                        </div>
-                                                    </div>
-                                                </div>
                                             </div>
                                         </div>
                                         <!-- 좋아요 갯수 -->
@@ -835,7 +1190,8 @@
                                 <div style="height: 10%">
                                     <div id="ModalCommentTextAreaDisable"
                                          th:classappend="${selectFeed.board.getCommentDisable() == true}?'visually-hidden'">
-                                        <div id="boardID" th:text="${selectFeed.board.id}" style="display: none;"></div>
+                                        <div id="boardID" th:text="${selectFeed.board.id}"
+                                             style="display: none;"></div>
 
                                         <input type="hidden" id="commentID" name="commentID"></input>
                                         <input type="hidden" id="recommentID" name="recommentID"></input>
@@ -862,6 +1218,13 @@
     <!-- Board Detail Modal End -->
 
 
+
+
+
+
+    <input th:if="${#lists.size(saveGroups) > 0}" th:each="saveGroup : ${saveGroups}" type="hidden" name="save-groups" th:data-name="${saveGroup.name}" th:data-id="${saveGroup.id}">
+
+
     <!--Modify Board Modal -->
     <div class="modal fade" id="ModifyBoardModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
          aria-labelledby="ModifyBoardModalLabel" aria-hidden="true">
@@ -870,7 +1233,7 @@
                 <div class="modal-content">
                     <form th:action="@{|/board/update/${selectFeed.board().id}|}" method="post">
                         <div class="modal-header d-flex justify-content-between">
-                            <button type="button" class="btn btn-link">
+                            <button type="button" class="btn btn-link" onclick="reloadPage()">
                                 <svg viewBox="0 0 24 24" fill="currentColor" width="1em"
                                      height="1em" aria-hidden="true">
                                     <path fill-rule="evenodd" clip-rule="evenodd"
@@ -941,7 +1304,8 @@
 
                                     <div class="input-group d-flex flex-column">
                                         <div class="d-flex align-items-center">
-                                            <input type="text" class="form-control my-2" size="14" name="ModifyHashTag"
+                                            <input type="text" class="form-control my-2" size="14"
+                                                   name="ModifyHashTag"
                                                    id="ModifyHashTag" placeholder="#해시태그를 입력하세요..."
                                                    style="border:none; resize: none;">
                                         </div>
@@ -974,7 +1338,8 @@
                                                readonly>
                                         <input type="hidden" id="ModifyRoadAddressName" name="ModifyRoadAddressName"
                                                value=" " readonly>
-                                        <input type="hidden" id="ModifyAddressName" name="ModifyAddressName" value=" "
+                                        <input type="hidden" id="ModifyAddressName" name="ModifyAddressName"
+                                               value=" "
                                                readonly>
                                         <input type="hidden" id="Modify_x" name="Modify_x" value=" " readonly>
                                         <input type="hidden" id="Modify_y" name="Modify_y" value=" " readonly>
@@ -1007,7 +1372,8 @@
                                             <div class="d-flex flex-column justify-content-between align-items-center w-100">
                                                 <div class="d-flex flex-column justify-content-between my-2 w-100">
                                                     <div class="text small" style="font-size: 0.8rem;">
-                                                        대체 텍스트는 시각적으로 사진을 보기 어려운 사람들에게 사진 내용을 설명하는 텍스트입니다. 대체 텍스트는 회원님의
+                                                        대체 텍스트는 시각적으로 사진을 보기 어려운 사람들에게 사진 내용을 설명하는 텍스트입니다. 대체 텍스트는
+                                                        회원님의
                                                         사진에
                                                         대해 자동으로 생성되며, 직접 입력할 수도 있습니다
                                                     </div>
@@ -1046,7 +1412,8 @@
                                             <div class="d-flex flex-column justify-content-between align-items-center w-100">
                                                 <div class="d-flex justify-content-between my-2 w-100">
                                                     <div>이 게시물의 좋아요 수 <br> 숨기기</div>
-                                                    <div class="form-check form-switch p-0 m-0" style="margin-top: 2px">
+                                                    <div class="form-check form-switch p-0 m-0"
+                                                         style="margin-top: 2px">
                                                         <label>
                                                             <input class="form-check-input" type="checkbox"
                                                                    role="switch"
@@ -1061,7 +1428,8 @@
                                                 </div>
                                                 <div class="d-flex justify-content-between my-2 w-100">
                                                     <div>댓글 기능 해제</div>
-                                                    <div class="form-check form-switch p-0 m-0" style="margin-top: 2px">
+                                                    <div class="form-check form-switch p-0 m-0"
+                                                         style="margin-top: 2px">
                                                         <label>
                                                             <input class="form-check-input" type="checkbox"
                                                                    role="switch"
@@ -1093,46 +1461,40 @@
          tabindex="-1" aria-labelledby="CreateUserBoardSettingModalLabel"
          aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
+            <div class="modal-content w400 bn">
                 <div th:if="${selectFeed}">
                     <div class="modal-body p-0">
-                        <div class="border-bottom text-center p-2">
-                            <a th:href="@{|/beard/delete/${selectFeed.board.id}|}">
-                                <button type="button" class="btn noneBtn btn-link text-danger">삭제</button>
-                            </a>
+                        <div class="border-bottom w-100 h50 center hfwb pdT4 pdB4 pdL8 pdR8">
+                            <a type="button" class="btn noneBtn btn-link text-danger fs14"
+                               th:href="@{|/beard/delete/${selectFeed.board.id}|}">삭제</a>
                         </div>
-                        <div class="border-bottom text-center p-2">
-                            <button type="button" class="btn noneBtn btn-link text-primary"
+
+                        <div class="border-bottom w-100 h50 center hfwb pdT4 pdB4 pdL8 pdR8">
+                            <button type="button" class="btn noneBtn btn-link text-primary fs14"
                                     th:onclick="@{|ModifyBoard(${selectFeed.board.id})|}">수정
                             </button>
                         </div>
-                        <div class="border-bottom text-center p-2">
-                            <a th:onclick="@{|likehide(${selectFeed.board.id})|}">
-                                <button id="likehideBtn" type="button" th:if="${selectFeed.board.getLikeHide() == true}"
-                                        class="btn noneBtn btn-link text-dark">좋아요 수 숨기기 취소
-                                </button>
-                                <button id="likehideBtn" type="button"
-                                        th:if="${selectFeed.board.getLikeHide() == false}"
-                                        class="btn noneBtn btn-link text-dark">좋아요 수 숨기기
-                                </button>
-                            </a>
+
+                        <div class="border-bottom w-100 h50 center hfwb pdT4 pdB4 pdL8 pdR8">
+                            <a id="likehideBtn" type="button" th:onclick="@{|likehide(${selectFeed.board.id})|}"
+                               th:if="${selectFeed.board.getLikeHide() == true}" class="btn noneBtn btn-link text-dark fs14">좋아요 수 숨기기 취소</a>
+                            <a id="likehideBtn" type="button" th:onclick="@{|likehide(${selectFeed.board.id})|}"
+                               th:if="${selectFeed.board.getLikeHide() == false}" class="btn noneBtn btn-link text-dark fs14">좋아요 수 숨기기 </a>
                         </div>
-                        <div class="border-bottom text-center p-2">
-                            <a th:onclick="@{|comment_disable(${selectFeed.board.id})|}">
-                                <button id="commentDisableBtn" type="button"
-                                        th:if="${selectFeed.board.getCommentDisable() == false}"
-                                        class="btn noneBtn btn-link text-dark">댓글 비활성화
-                                </button>
-                                <button id="commentDisableBtn" type="button"
-                                        th:if="${selectFeed.board.getCommentDisable() == true}"
-                                        class="btn noneBtn btn-link text-dark">댓글 활성화
-                                </button>
-                            </a>
+
+                        <div class="border-bottom w-100 h50 center hfwb pdT4 pdB4 pdL8 pdR8">
+                            <a id="commentDisableBtn" type="button" th:onclick="@{|comment_disable(${selectFeed.board.id})|}"
+                               th:if="${selectFeed.board.getCommentDisable() == false}" class="btn noneBtn btn-link text-dark fs14">댓글 비활성화</a>
+                            <a id="commentDisableBtn" type="button" th:onclick="@{|comment_disable(${selectFeed.board.id})|}"
+                               th:if="${selectFeed.board.getCommentDisable() == true}" class="btn noneBtn btn-link text-dark fs14">댓글 활성화</a>
                         </div>
-                        <div class="text-center p-2">
-                            <button type="button" class="btn noneBtn btn-link text-dark" data-bs-dismiss="modal">취소
+
+                        <div class="w-100 h50 center hfwb pdT4 pdB4 pdL8 pdR8">
+                            <button type="button" class="btn noneBtn btn-link text-dark fs14" data-bs-dismiss="modal"
+                                    onclick="reloadPage()">취소
                             </button>
                         </div>
+
                     </div>
                 </div>
             </div>
@@ -1147,19 +1509,19 @@
          aria-labelledby="UserBoardSettingModalLabel"
          aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
+            <div class="modal-content w400 bn">
                 <div th:if="${selectFeed}">
                     <div class="modal-body p-0">
-                        <div class="border-bottom text-center p-2">
-                            <button class="btn noneBtn btn-link text-dark">즐겨찾기 추가</button>
+                        <div class="border-bottom w-100 h50 center hfwb pdT4 pdB4 pdL8 pdR8">
+                            <button class="btn noneBtn btn-link text-dark fs14">즐겨찾기 추가</button>
+
                         </div>
-                        <div class="border-bottom text-center p-2">
-                            <a th:href="@{|/board/feedMemberInfo/${selectFeed.board.id}|}">
-                                <button class="btn noneBtn btn-link text-dark">이 계정 정보</button>
-                            </a>
+                        <div class="border-bottom w-100 h50 center hfwb pdT4 pdB4 pdL8 pdR8">
+                            <a class="btn noneBtn btn-link text-dark fs14" th:href="@{|/board/feedMemberInfo/${selectFeed.board.id}|}">이 계정 정보</a>
                         </div>
-                        <div class="border-bottom text-center p-2">
-                            <button type="button" class="btn noneBtn btn-link text-dark" data-bs-dismiss="modal">취소
+                        <div class="w-100 h50 center hfwb pdT4 pdB4 pdL8 pdR8">
+                            <button type="button" class="btn noneBtn btn-link text-dark fs14" data-bs-dismiss="modal"
+                                    onclick="reloadPage()">취소
                             </button>
                         </div>
                     </div>
@@ -1184,7 +1546,8 @@
                     </div>
                     <div class="border-bottom text-center p-2">
                         <a class="comment-pin">
-                            <button type="button" class="btn noneBtn btn-link text-primary" style="font-weight: bold;"
+                            <button type="button" class="btn noneBtn btn-link text-primary"
+                                    style="font-weight: bold;"
                                     onclick="commentPin()">댓글 고정
                             </button>
                         </a>
@@ -1277,22 +1640,42 @@
         </div>
     </div>
     <!-- 사용자 Recomment Modal End -->
-
+    <input type="hidden" id="loginMemberName" th:value="${loginMember.username}">
     <!-- javascript -->
+    <script th:src="@{/story/js/create_story.js}"></script>
+    <script th:src="@{/story/js/color-thief.min.js}"></script>
+    <script th:src="@{/story/js/story.js}"></script>
     <script th:src="@{/board/js/update_board.js}"></script>
-
-    <script th:src="@{/board/js/board.js}"></script>
 
     <script th:inline="javascript">
         const selectFeed = /*[[${selectFeed}]]*/ null;
-        console.log(selectFeed);
-        const myModal = new bootstrap.Modal('#BoardDetailModal', {
+        const referer = /*[[${referer}]]*/ null;
+        const username = document.getElementById("loginMemberName").value;
+        const bb = "123"
+        console.log('111111111111');
+        const a = new bootstrap.Modal('#BoardDetailModal', {
             keyboard: true
         })
-        if (selectFeed != null) {
-            myModal.show();
+        const b = new bootstrap.Modal('#CreateUserBoardSettingModal', {
+            keyboard: true
+        })
+        const c = new bootstrap.Modal('#UserBoardSettingModal', {
+            keyboard: true
+        })
+        console.log(referer);
+        console.log(selectFeed);
+        console.log(selectFeed.board.memberDTO.username == username);
+        if (referer === "detail") {
+            a.show();
+        } else {
+            if (selectFeed.board.memberDTO.username == username) {
+                b.show();
+            } else {
+                c.show();
+            }
         }
     </script>
+    <script th:src="@{/board/js/board.js}"></script>
     <!-- javascript End-->
 </div>
 </html>

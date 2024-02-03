@@ -93,7 +93,7 @@ public class DMController {
     public String room(@PathVariable("id")Long id, Model model, Principal principal)
     {
         Member loginUSer = memberService.getMember(principal.getName());
-        RoomDTO roomDTO = roomService.getRoomDTO(loginUSer, id);
+        RoomDTO roomDTO = roomService.getRoomDTO(loginUSer, id, memberService.getBlockMembers(principal.getName()));
         List<MessageDTO> messageList = roomService.getMessageDTOList(id);
 
         model.addAttribute("messageList", messageList);

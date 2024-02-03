@@ -7,16 +7,14 @@ import com.instargram.instargram.DM.Model.Entity.Room.Room;
 import com.instargram.instargram.DM.Model.Entity.Room.Room_Member_Map;
 import com.instargram.instargram.DM.Model.Repository.RoomMemberMapRepository;
 import com.instargram.instargram.DM.Model.Repository.RoomRepository;
+import com.instargram.instargram.Member.Model.DTO.DMMemberDTO;
 import com.instargram.instargram.Member.Model.Entity.Member;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 @Builder
@@ -51,23 +49,22 @@ public class RoomService {
 
         for(Member mem : chatMembers)
         {
-            chattingMemberRooms.add(roomMemberMapService.findByMember(mem));
+            List<Room> memRoomList = roomMemberMapService.findByMember(mem);
+            if(!memRoomList.isEmpty())
+            {
+                chattingMemberRooms.add(memRoomList);
+            }
         }
 
         for(Room room : loginMemberRooms)
         {
-            for(List<Room> chatRooms : chattingMemberRooms)
+
+            List<Member> members = new ArrayList<>(roomMemberMapService.getMemberByRoom(room));
+            members.remove(loginMember);
+
+            if(new HashSet<>(chatMembers).containsAll(members) && new HashSet<>(members).containsAll(chatMembers))
             {
-                if(!chatRooms.contains(room))
-                {
-                    loginMemberRooms.remove(room);
-                }
-                else{
-                    if(loginMemberRooms.size() == 1)
-                    {
-                        return loginMemberRooms.get(0);
-                    }
-                }
+                return room;
             }
         }
         return null;
@@ -77,10 +74,10 @@ public class RoomService {
         return roomRepository.findById(id).orElse(null);
     }
 
-    public RoomDTO getRoomDTO(Member loginUSer, Long id)
+    public RoomDTO getRoomDTO(Member loginUSer, Long id, List<Member> hateMembers)
     {
         Room room = getRoom(id);
-        return new RoomDTO(loginUSer, room, getMemberMapList(room));
+        return new RoomDTO(loginUSer, room, getMemberMapList(room, hateMembers));
     }
 
     public List<RoomDTO> getRoomDTOList(Member loginUSer)
@@ -96,12 +93,23 @@ public class RoomService {
         return roomDTOList;
     }
 
-    private Map<String, Member> getMemberMapList(Room room) {
-        Map<String, Member> memberMap = new HashMap<>();
+    private Map<String, DMMemberDTO> getMemberMapList(Room room, List<Member> hateMembers) {
+        Map<String, DMMemberDTO> memberMap = new HashMap<>();
 
         for (Room_Member_Map roomMemberMap : roomMemberMapService.getByRoom(room)) {
             Member member = roomMemberMap.getMember();
-            memberMap.put(member.getUsername(), member);
+            memberMap.put(member.getUsername(), new DMMemberDTO(member, hateMembers.contains(member)));
+        }
+
+        return memberMap;
+    }
+
+    private Map<String, DMMemberDTO> getMemberMapList(Room room) {
+        Map<String, DMMemberDTO> memberMap = new HashMap<>();
+
+        for (Room_Member_Map roomMemberMap : roomMemberMapService.getByRoom(room)) {
+            Member member = roomMemberMap.getMember();
+            memberMap.put(member.getUsername(), new DMMemberDTO(member, false));
         }
 
         return memberMap;

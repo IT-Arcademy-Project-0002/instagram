@@ -218,7 +218,7 @@ function ModifyBoard(id) {
                 modifyImg.style.height = "100%";
                 modifyImg.style.objectFit = "cover";
                 modifyImg.style.margin = "auto";
-                modifyImg.src = "/files/img/" + decodeURIComponent(filesArray[i].name);
+                modifyImg.src = "/resources/" + decodeURIComponent(filesArray[i].name);
 
                 var modifyVideo = document.createElement("video");
                 modifyVideo.id = "name" + i;
@@ -231,17 +231,18 @@ function ModifyBoard(id) {
                 modifyVideo.style.height = "100%";
                 modifyVideo.style.objectFit = "cover";
                 modifyVideo.style.margin = "auto";
-                modifyVideo.src = "/files/video/" + decodeURIComponent(filesArray[i].name);
+                modifyVideo.src = "/resources/" + decodeURIComponent(filesArray[i].name);
                 modifyVideo.controls = true; // 비디오 컨트롤
                 modifyVideo.autoplay = true; // 자동 재생
                 modifyVideo.muted = true; // 음소거
 
+                debugger;
                 imagePreviewArray.push(decodeURIComponent(modifyImg.src));
                 videoPreviewArray.push(decodeURIComponent(modifyVideo.src))
                 // 이미지 또는 비디오를 캐러셀에 추가
-                if (filesArray[i].path.includes('\\img\\\\')) {
+                if (filesArray[i].path.includes('\\img\\')) {
                     fileContainer.appendChild(modifyImg);
-                } else if (filesArray[i].path.includes('\\video\\\\')) {
+                } else if (filesArray[i].path.includes('\\video\\')) {
                     fileContainer.appendChild(modifyVideo);
                 }
                 carouselItem.appendChild(fileContainer);

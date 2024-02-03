@@ -18,25 +18,6 @@ import java.util.Objects;
 @Service
 public class ExploreService {
 
-    private final Board_Data_MapService boardDataMapService;
-    private final ImageService imageService;
-
-    public List<ExploreDTO> initExplore(List<Board> boardList) {
-        List<ExploreDTO> exploreDTOS = new ArrayList<>();
-        for (Board board : boardList) {
-            List<Board_Data_Map> maps = this.boardDataMapService.getMapByBoard(board);
-            List<Image> images = new ArrayList<>();
-            for(Board_Data_Map map : maps)
-            {
-                if (Objects.equals(map.getDataType(), Enum_Data.IMAGE.getNumber())) {
-                    Image image = this.imageService.getImageByID(map.getDataId());
-                    images.add(image);
-                }
-            }
-            exploreDTOS.add(new ExploreDTO(board, images));
-        }
-        return exploreDTOS;
-    }
     public String formatHashTagCount(long count) {
         if (count < 10000) {
             // 1만 미만은 그냥 숫자만 반환

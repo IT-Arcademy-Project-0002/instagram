@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -49,20 +50,12 @@ public class NoticeService {
     {
         Notice notice = new Notice();
 
-        notice.setType(type);
-        notice.setRequestMember(loginMember);
-        notice.setMember(member);
-        notice.setChecked(false);
-        notice.setCreateDate(LocalDateTime.now());
-
-        noticeRepository.save(notice);
-
-        return notice;
-    }
-
-    public Notice createRecommentTagMemberNotice(Integer type, Member loginMember, Member member)
-    {
-        Notice notice = new Notice();
+        if (type == 7 || type == 8) {
+            Notice existingNotice = this.noticeRepository.findByTypeAndRequestMemberAndMember(type, loginMember, member);
+            if (existingNotice != null) {
+                return existingNotice;
+            }
+        }
 
         notice.setType(type);
         notice.setRequestMember(loginMember);
@@ -70,7 +63,7 @@ public class NoticeService {
         notice.setChecked(false);
         notice.setCreateDate(LocalDateTime.now());
 
-        noticeRepository.save(notice);
+        this.noticeRepository.save(notice);
 
         return notice;
     }
@@ -87,7 +80,7 @@ public class NoticeService {
         {
             NoticeDTO noticeWeekDTO = new NoticeDTO();
 
-            // 공통 객체 : 모든 경우(ALL) + 팔로우 요청(8)
+            // 공통 객체 : 모든 경우(ALL) + 팔로우 요청(7) + 팔로우 상태 (8)
             noticeWeekDTO.setRequestMember(notice.getRequestMember());
             noticeWeekDTO.setType(notice.getType());
             noticeWeekDTO.setId(notice.getId());
@@ -109,7 +102,7 @@ public class NoticeService {
             // 대댓글 내용 : 댓글 대댓글(4), 댓글 대댓글 좋아요(5)
             noticeWeekDTO.processRecommentContent(noticeCommentMapService.getNoticeRecomment(notice.getId(), notice.getType()).getContent());
 
-            // 미사용중 = 스토리 좋아요 (7), 디엠 왔을 때(9), 디엠 좋아요(10)
+            // 미사용중 = 디엠 왔을 때(9), 디엠 좋아요(10), 스토리 좋아요 (11)
 
             noticeWeekDTOS.add(noticeWeekDTO);
         }
@@ -130,7 +123,7 @@ public class NoticeService {
         {
             NoticeDTO noticeMonthDTO = new NoticeDTO();
 
-            // 공통 객체 : 모든 경우(ALL) + 팔로우 요청(8)
+            // 공통 객체 : 모든 경우(ALL) + 팔로우 요청(7) + 팔로우 상태 (8)
             noticeMonthDTO.setRequestMember(notice.getRequestMember());
             noticeMonthDTO.setType(notice.getType());
             noticeMonthDTO.setId(notice.getId());
@@ -152,7 +145,7 @@ public class NoticeService {
             // 대댓글 내용 : 댓글 대댓글(4), 댓글 대댓글 좋아요(5)
             noticeMonthDTO.processRecommentContent(noticeCommentMapService.getNoticeRecomment(notice.getId(), notice.getType()).getContent());
 
-            // 미사용중 = 스토리 좋아요 (7), 디엠 왔을 때(9), 디엠 좋아요(10)
+            // 미사용중 = 디엠 왔을 때(9), 디엠 좋아요(10), 스토리 좋아요 (11)
 
             noticeMonthDTOS.add(noticeMonthDTO);
         }
@@ -173,7 +166,7 @@ public class NoticeService {
         {
             NoticeDTO noticeMonthDTO = new NoticeDTO();
 
-            // 공통 객체 : 모든 경우(ALL) + 팔로우 요청(8)
+            // 공통 객체 : 모든 경우(ALL) + 팔로우 요청(7) + 팔로우 상태 (8)
             noticeMonthDTO.setRequestMember(notice.getRequestMember());
             noticeMonthDTO.setType(notice.getType());
             noticeMonthDTO.setId(notice.getId());
@@ -195,7 +188,7 @@ public class NoticeService {
             // 대댓글 내용 : 댓글 대댓글(4), 댓글 대댓글 좋아요(5)
             noticeMonthDTO.processRecommentContent(noticeCommentMapService.getNoticeRecomment(notice.getId(), notice.getType()).getContent());
 
-            // 미사용중 = 스토리 좋아요 (7), 디엠 왔을 때(9), 디엠 좋아요(10)
+            // 미사용중 = 디엠 왔을 때(9), 디엠 좋아요(10), 스토리 좋아요 (11)
 
             noticeDueDateDTOS.add(noticeMonthDTO);
         }
@@ -221,15 +214,28 @@ public class NoticeService {
         }
     }
 
+    public List<Notice> checkDMList(Member member) {
+        return this.noticeRepository.findByMemberAndCheckedAndTypeIn(member, false, Arrays.asList(10, 11));
+    }
 
-    public long checkNoticeList(Member member) {
-        List<Notice> uncheckedNotices = this.noticeRepository.findByMemberAndChecked(member, false);
-        return uncheckedNotices.size();
+    public List<Notice> checkNoticeList(Member member) {
+        return this.noticeRepository.findByMemberAndCheckedAndTypeNotIn(member, false, Arrays.asList(10, 11));
     }
 
     @Transactional
-    public void noticeChecking(Member member) {
-        List<Notice> uncheckedNotices = this.noticeRepository.findByMemberAndChecked(member, false);
+    public void noticeChecking(Member member, List<Integer> types) {
+        List<Notice> uncheckedNotices = this.noticeRepository.findByMemberAndCheckedAndTypeNotIn(member, false, types);
+
+        for (Notice notice : uncheckedNotices) {
+            notice.setChecked(true);
+        }
+
+        noticeRepository.saveAll(uncheckedNotices);
+    }
+
+    @Transactional
+    public void noticeDMChecking(Member member, List<Integer> types) {
+        List<Notice> uncheckedNotices = this.noticeRepository.findByMemberAndCheckedAndTypeIn(member, false, types);
 
         for (Notice notice : uncheckedNotices) {
             notice.setChecked(true);
@@ -237,9 +243,29 @@ public class NoticeService {
         noticeRepository.saveAll(uncheckedNotices);
     }
 
-    public void deleteById(Long id)
+    public void deleteNotice(Notice notice)
+    {
+        this.noticeRepository.delete(notice);
+    }
+
+    public void deleteNoticeById(Long id)
     {
         this.noticeRepository.deleteById(id);
+    }
+
+    public void deleteNoticeByMemberAndTarget(Integer type, Member loginMember, Member member) {
+
+        if (type == 7 || type == 8) {
+            Notice existingNotice = this.noticeRepository.findByTypeAndRequestMemberAndMember(type, loginMember, member);
+            if (existingNotice != null) {
+                this.noticeRepository.delete(existingNotice);
+            }
+        }
+
+    }
+
+    public Notice getNoticeByMemberAndTarget(Integer type, Member loginMember, Member member) {
+        return this.noticeRepository.findByTypeAndRequestMemberAndMember(type, loginMember, member);
     }
 
     public Notice getNotice(Long id)

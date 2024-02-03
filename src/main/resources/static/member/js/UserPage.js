@@ -1,11 +1,21 @@
 
 
+const username = document.getElementById('page-username').value;
+const referer = document.getElementById('referer').value;
+const scroll = document.getElementById('scroll').value;
+const loginMember = document.getElementById("loginMemberName").value;
+
+scrollSetting(scroll);
+
+
+debugger;
+if (referer === "detail") {
+    document.getElementById('BoardDetailModal-button').click();
+}
 document.addEventListener('DOMContentLoaded', function() {
-    debugger;
     const images = document.querySelectorAll('.smooth-update');
 
     images.forEach(function(img) {
-        debugger;
         setTimeout(showImg(img),50)
     });
 });
@@ -13,6 +23,13 @@ document.addEventListener('DOMContentLoaded', function() {
 function showImg(img)
 {
     img.style.opacity = 1;
+}
+
+function SaveGroupCreate()
+{
+    var name = document.getElementById('GroupName').value;
+
+    window.location.href = '/saveGroup/create/' + name;
 }
 
 function clickProfilePhotoChange()
@@ -55,30 +72,70 @@ function boardKeep(board)
     document.getElementById("board-keep-form").submit();
 }
 
-function clickFollow()
+function clickBlockCancel()
 {
-    var username = document.getElementById('username').value;
-    var spin = document.getElementById('follow-spin');
-    var texts = document.getElementsByClassName('follow-text');
+    var username = document.getElementById('page-username').value;
 
-    for(var i = 0; i < texts.length; i++)
-    {
-        texts.item(i).textContent='';
-    }
-    spin.classList.remove('visually-hidden');
-
-    debugger;
-    fetch('/member/follow/'+username)
-        .then(response => {
-            return response.json()
-        })
+    fetch('/member/block/cancel/' + username)
+        .then(response => response.json())
         .then(data => {
-            setTimeout(reload,200);
+            reload();
         })
-        .catch(error => console.error('데이터를 받지 못했습니다.',error));
+        .catch(error => {
+            // 에러 처리
+            console.error('Error:', error);
+        });
 }
+
+function clickBlock()
+{
+    var username = document.getElementById('page-username').value;
+
+    fetch('/member/block/' + username)
+        .then(response => response.json())
+        .then(data => {
+            reload();
+        })
+        .catch(error => {
+            // 에러 처리
+            console.error('Error:', error);
+        });
+}
+
 
 function reload()
 {
     window.location.reload();
+}
+
+function reloadNoOption()
+{
+    var currentURL = window.location.href;
+    window.location.href = currentURL.split('?')[0];
+}
+
+function clickShowDetailBoard(id)
+{
+    debugger;
+    var scroll = getScrollPosition();
+    var username = document.getElementById('page-username').value;
+    window.location.href = '/member/page/' + username + '?id=' + id + '&page=detail&scroll=' + scroll;
+}
+
+function getScrollPosition() {
+    if (window.pageYOffset !== undefined) {
+        // 대부분의 브라우저에서 지원하는 방법
+        return window.pageYOffset;
+    } else {
+        // IE 8 및 하위 버전에서는 scrollY 대신 scrollTop을 사용
+        return (document.documentElement || document.body.parentNode || document.body).scrollTop;
+    }
+}
+
+function scrollSetting(scroll) {
+
+    debugger;
+    var objDiv = document.documentElement || document.body;
+
+    objDiv.scrollTop = scroll;
 }

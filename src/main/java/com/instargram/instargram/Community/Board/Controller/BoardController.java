@@ -6,7 +6,6 @@ import com.instargram.instargram.Community.Board.Model.Entity.*;
 import com.instargram.instargram.Community.Board.Model.Form.BoardCreateForm;
 import com.instargram.instargram.Community.Board.Model.Form.BoardUpdateForm;
 import com.instargram.instargram.Community.Board.Service.*;
-import com.instargram.instargram.Community.Comment.Model.Entity.Comment;
 import com.instargram.instargram.Community.HashTag.Model.Entity.HashTag;
 import com.instargram.instargram.Community.HashTag.Service.HashTagService;
 import com.instargram.instargram.Community.Location.Model.DTO.LocationDTO;
@@ -16,16 +15,21 @@ import com.instargram.instargram.Community.Location.Service.LocationService;
 import com.instargram.instargram.Community.SaveGroup.Model.Entity.SaveGroup;
 import com.instargram.instargram.Community.SaveGroup.Service.SaveGroupService;
 import com.instargram.instargram.Data.Image.Image;
+import com.instargram.instargram.Data.Image.ImageDTO;
 import com.instargram.instargram.Data.Image.ImageService;
 import com.instargram.instargram.Data.Video.Video;
 import com.instargram.instargram.Data.Video.VideoService;
 import com.instargram.instargram.Enum_Data;
+import com.instargram.instargram.Member.Model.DTO.MemberDTO;
+import com.instargram.instargram.Member.Model.DTO.UserPageDTO;
 import com.instargram.instargram.Member.Model.Entity.Member;
 import com.instargram.instargram.Member.Service.MemberService;
 import com.instargram.instargram.Notice.Model.Entity.Notice;
 import com.instargram.instargram.Notice.Service.NoticeBoardMapService;
 import com.instargram.instargram.Notice.Service.NoticeService;
-import jakarta.persistence.criteria.CriteriaBuilder;
+import com.instargram.instargram.Story.Model.DTO.StoryDTO;
+import com.instargram.instargram.Story.Model.Entity.Story_Data_Map;
+import com.instargram.instargram.Story.Service.StoryDataMapService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -56,6 +60,7 @@ public class BoardController {
     private final NoticeBoardMapService noticeBoardMapService;
     private final HashTagService hashTagService;
     private final BoardHashTagMapService boardHashTagMapService;
+    private final StoryDataMapService storyDataMapService;
 
     // main
     @GetMapping("/main")
@@ -64,22 +69,89 @@ public class BoardController {
 
         List<Board> memberBoards = this.boardService.getBoardsByMember(member);
         List<Long> followerIdList = this.memberService.getFollowing(member);
-        List<Board> followerBoards = this.boardService.getBoardsByFollowerIds(followerIdList);
+
+        List<Member> followerList = new ArrayList<>();
+        for (Long followerId : followerIdList) {
+            Member follower = this.memberService.getMemberById(followerId);
+            if (follower != null) {
+                followerList.add(follower);
+            }
+        }
+
+        List<Board> followerBoards = new ArrayList<>();
+        for (Member follower : followerList) {
+            List<Board> boards = this.boardService.getBoardsByMember(follower);
+            followerBoards.addAll(boards);
+        }
 
         List<Board> allBoards = new ArrayList<>();
         allBoards.addAll(memberBoards);
         allBoards.addAll(followerBoards);
+    
+        // 컬렉션 
+        // 현재 유저의 컬렉션이 존재하는지 판단하는 코드 개발해야함
 
-        List<Board_Save_Map> boardSaveMaps = this.boardSaveMapService.getSaveGroup(member);
-        model.addAttribute("FeedGroupName" , boardSaveMaps);
+        Story_Data_Map storyDataMap = this.storyDataMapService.hasStory(member);
+        List<Story_Data_Map> storyList = this.storyDataMapService.getStoryList(member);
+        List<Image> imageList = new ArrayList<>();
+        if(storyDataMap == null){
+            model.addAttribute("isMyStory", false);
+            model.addAttribute("storyList", imageList);
+        }else{
+            model.addAttribute("isMyStory", true);
+            for (Story_Data_Map story : storyList) {
+                if (story.getDataType() == 2) {
+                    Long imageId = story.getDataId();
+                    Image image = this.imageService.getImageByID(imageId);
+                    if (image != null) {
+                        imageList.add(image);
+                    }
+                }
+            }
+            model.addAttribute("storyList", imageList);
+        }
+
+        if (!followerList.isEmpty()) {
+            List<MemberDTO> followerDTOList = new ArrayList<>();
+
+            for (Member follower : followerList) {
+                MemberDTO followerDTO = new MemberDTO(follower);
+                List<Story_Data_Map> followerStoryDataList = this.storyDataMapService.getStoryList(follower);
+
+                List<Image> followerImageDTO = new ArrayList<>();
+
+                for (Story_Data_Map story : followerStoryDataList) {
+                    if (story != null && story.getDataType() == 2) {
+                        Long imageId = story.getDataId();
+                        Image image = this.imageService.getImageByID(imageId);
+
+                        if (image != null) {
+                            followerImageDTO.add(image);
+                        }
+                    }
+                }
+                if(followerImageDTO.isEmpty()){
+                    followerDTO.setFollowMemberStory(false);
+                }else{
+                    followerDTO.setImages(followerImageDTO);
+                    followerDTO.setFollowMemberStory(true);
+                }
+                followerDTOList.add(followerDTO);
+            }
+            model.addAttribute("followerStory", followerDTOList);
+        }
 
         List<FeedListDTO> feedList = this.boardDataMapService.getFeed(allBoards);
         FeedDTO selectFeed = (FeedDTO) httpSession.getAttribute("selectFeed");
+        String referer = (String)httpSession.getAttribute("referer");
         if (selectFeed != null) {
             model.addAttribute("selectFeed", selectFeed);
+            model.addAttribute("referer", referer);
             httpSession.removeAttribute("selectFeed");
+            httpSession.removeAttribute("referer");
         }
         model.addAttribute("feedList", feedList);
+        model.addAttribute("saveGroups", saveGroupService.getSaveGroupByMember(member));
         return "Board/board_main";
     }
 
@@ -93,7 +165,6 @@ public class BoardController {
             return "redirect:/main";
         }
         Member member = this.memberService.getMember(principal.getName());
-
 
         // Location
         Location islocation = this.locationService.exists(locationDTO.getLocationId());
@@ -168,7 +239,18 @@ public class BoardController {
 
         FeedDTO selectFeed = this.boardDataMapService.getFeedWithComments(board);
         httpSession.setAttribute("selectFeed", selectFeed);
+        httpSession.setAttribute("referer", "detail");
 
+        return "redirect:/main";
+    }
+
+    @GetMapping("/board/setting/{id}")
+    public String setting(@PathVariable("id") Long id, HttpSession httpSession) {
+        Board board = this.boardService.getBoardById(id);
+
+        FeedDTO selectFeed = this.boardDataMapService.getFeedWithComments(board);
+        httpSession.setAttribute("selectFeed", selectFeed);
+        httpSession.setAttribute("referer", "setting");
         return "redirect:/main";
     }
 
@@ -245,7 +327,6 @@ public class BoardController {
         if (bindingResult.hasErrors()) {
             return "redirect:/main";
         }
-
 
         // targetLocation이 내가 사용했던 장소임. locationForm이 내가 이번에 입력한 것.
         Board board = this.boardService.getBoardById(id);
@@ -355,7 +436,8 @@ public class BoardController {
 
     // board SaveGroup
     @GetMapping("/board/saveGroup/{boardId}")
-    public ResponseEntity<Map<String, Object>> boardSave(@PathVariable("boardId") Long boardId, @RequestParam(value = "saveGroupId", required = false) Long saveGroupId, Principal principal) {
+    public ResponseEntity<Map<String, Object>> boardSave(@PathVariable("boardId") Long boardId,
+                                                         @RequestParam(value = "saveGroupId", required = false) Long saveGroupId, Principal principal) {
         Map<String, Object> result = new HashMap<>();
 
         SaveGroup saveGroup = null;
@@ -422,18 +504,29 @@ public class BoardController {
         return ResponseEntity.ok().body(result);
     }
 
-    @PostMapping("/board/saveFeed/{id}")
-    public ResponseEntity<Map<String, Object>> saveFeed(@PathVariable("id") Long id, @RequestParam(value = "GroupName") String groupName, Principal principal){
+    @GetMapping("/board/saveFeed/{id}")
+    public ResponseEntity<Map<String, Object>> saveFeed(@PathVariable("id") Long id,
+                                                        @RequestParam(value = "GroupName", defaultValue = "") String groupName,
+                                                        @RequestParam(value = "GroupId", defaultValue = "-1") Long groupId,
+                                                        Principal principal) {
         Map<String, Object> result = new HashMap<>();
-
-        SaveGroup saveGroup = this.saveGroupService.create(groupName);
 
         Board board = boardService.getBoardById(id);
         Member member = memberService.getMember(principal.getName());
+        SaveGroup saveGroup;
+        if(groupName.isEmpty())
+        {
+            saveGroup = this.saveGroupService.getSaveGroupById(groupId);
+
+        }
+        else{
+            saveGroup = this.saveGroupService.create(groupName, member);
+
+        }
         this.boardSaveMapService.create(board, member, saveGroup);
         result.put("result", true);
 
+
         return ResponseEntity.ok().body(result);
     }
-
 }

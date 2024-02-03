@@ -27,12 +27,16 @@ inputElement.addEventListener('input', function (event) {
 
                     var div = document.createElement('div');
                     div.classList = 'd-flex align-items-center';
+                    div.style.padding = '10px';
+                    div.style.cursor = 'pointer';
 
                     var div2 = document.createElement('div');
                     div2.style.width = '2rem';
                     div2.style.height = '2rem';
                     div2.style.overflow = 'hidden';
                     div2.style.marginRight = '0.5rem';
+                    div2.style.borderRadius = '50%';
+                    div2.style.border = '1px solid #d5d4d2';
 
                     var img = document.createElement('img');
                     if (member.image == null) {
@@ -163,6 +167,8 @@ hashTagInputElement.addEventListener('input', function () {
 
 function clickFileUpload() {
     var upload = document.getElementById("file-upload");
+    console.log(upload);
+
     upload.click();
 
     upload.addEventListener('change', function () {
@@ -170,6 +176,7 @@ function clickFileUpload() {
         $(firstModal).modal('hide'); // 첫 번째 모달 닫기
 
         var selectedFiles = event.target.files;
+        console.log(selectedFiles);
         let filesArray = [];
         // 선택된 각 파일을 배열에 추가하기
         for (let i = 0; i < selectedFiles.length; i++) {
@@ -193,8 +200,8 @@ function clickFileUpload() {
                 var imageContainer = document.createElement("div");
                 imageContainer.id = "image_container" + i;
                 imageContainer.style.position = "relative";
-                imageContainer.style.width = "55rem";
-                imageContainer.style.height = "50rem";
+                imageContainer.style.width = "734px";
+                imageContainer.style.height = "734px";
 
                 var img = document.createElement("img");
                 img.id = "name" + i;
@@ -266,7 +273,7 @@ textarea.addEventListener('input', function () {
         textarea.value = textarea.value.slice(0, maxLength);
     }
 
-    textCount.textContent = `${textLength}자`;
+    textCount.textContent = `${textLength}`;
 
     if (textLength >= maxLength) {
         textCount.style.color = 'red';
@@ -311,3 +318,7 @@ accessibilitySettingsToggle.addEventListener('click', function () {
         accessibilityexpandArrow.style.display = 'none';
     }
 });
+
+function reloadPage() {
+    setTimeout(() => window.location.reload(), 10);
+}

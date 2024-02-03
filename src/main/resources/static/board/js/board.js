@@ -1,7 +1,19 @@
 $(document).ready(function () {
     $('.popoverLink').popover({
         content: function () {
-            var aa = `<div class="d-flex flex-column" style="padding:0; margin: 0; width: 500px; height: 200px; ">
+            var saveGroups = document.getElementsByName('save-groups');
+
+
+            var groupStr = '';
+
+            for(var i = 0; i < saveGroups.length; i++)
+            {
+                groupStr += '<div>' +
+                    '<div class="saved-group-menu" id="'+saveGroups[i].dataset.id+'">'+saveGroups[i].dataset.name+'</div>'+
+                    '</div>';
+            }
+
+            var popoverStr = `<div class="d-flex flex-column" style="padding:0; margin: 0; width: 500px; height: 200px; ">
                     <div class="d-flex justify-content-between align-items-center p-2">
                         <div class="Collection" style="font-weight: bold; font-size: 1rem;">
                             컬렉션
@@ -12,19 +24,10 @@ $(document).ready(function () {
                     </div>
                     <div class="border-bottom"></div>
                     <div class="d-flex flex-column justify-content-between align-items-center p-3">
-                        <div th:if="${FeedGroupName}"></div>
+                        <div>`+groupStr+`</div>   
                     </div>
                 </div>`;
-
-            aa += `<script th:inline="javascript">
-                const FeedGroupName = /*[[${FeedGroupName}]]*/ [];
-
-                FeedGroupName.forEach(function(item) {
-                    console.log(item);
-                });
-            </script>`;
-
-            return aa;
+            return popoverStr;
         },
         html: true,
         placement: 'top',
@@ -34,6 +37,8 @@ $(document).ready(function () {
         $(this).popover('show');
 
         var boardId = $(this).find('input').data('id');
+        var fileId = document.getElementById("fileId");
+        fileId.value = boardId;
 
         $('.popover').on('mouseleave', function () {
             $(_this).popover('hide');
@@ -45,18 +50,17 @@ $(document).ready(function () {
                     return response.json();
                 })
                 .then(data => {
-                    var fileId = document.getElementById("fileId");
                     if (data.videoName) {
                         $('#collectionModal .file-container').html(`<video controls 
                         src="/resources/${data.videoName}" 
                         class="shadow text-center rounded"
                         style="width: 100px; height: 100px; object-fit: cover;"></video>`);
-                        fileId.value = boardId;
+
                     } else if (data.imageName) {
                         $('#collectionModal .file-container').html(`<img src="/resources/${data.imageName}" 
                         alt="..." class="shadow text-center rounded"
                         style="width: 100px; height: 100px; object-fit: cover;">`);
-                        fileId.value = boardId;
+
                     }
 
                     const myModal = new bootstrap.Modal('#collectionModal', {
@@ -78,6 +82,38 @@ $(document).ready(function () {
         }, 100);
     });
 });
+
+
+$(document).on('click', '.saved-group-menu', function () {
+    
+    // 삭제 동작 수행
+    var id = $(this).attr('id');
+    var name = $(this).text();
+    // Popover 닫기 (선택 사항)
+    clickSaveGroupList(id, name);
+});
+
+function clickSaveGroupList(groupID, name)
+{
+    
+    var id = document.getElementById("fileId").value;
+
+    fetch(`/board/saveFeed/${id}?GroupId=`+groupID)
+        .then(response => response.json())
+        .then(data => {
+            var saved = document.getElementById('saved-svg' + id);
+            var notSave = document.getElementById('not-save-svg' + id);
+            if (data.result) {
+                saved.classList.add('visually-hidden');
+                notSave.classList.remove('visually-hidden');
+                alert(name+`에 저장`);
+            }
+            document.getElementById("GroupName").value = '';
+        })
+        .catch(error => {
+            console.error('Error saving feed:', error);
+        });
+}
 
 function setCommentOptionTarget(clickedElement) {
     console.log('클릭된 요소:', clickedElement);
@@ -132,7 +168,7 @@ function commentPin() {
 
 //댓글 삭제
 function commentDelete() {
-    debugger;
+
     const id = document.getElementById("CommentOptionTargetId").value;
     console.log(id);
     var commentArea = document.getElementById('comment-' + id);
@@ -160,7 +196,7 @@ function commentDelete() {
 
 // 대댓글 삭제
 function recommentDelete() {
-    debugger;
+
     const commetId = document.getElementById("RecommentByCommentOptionTargetId").value;
     console.log(commetId);
     const recommetId = document.getElementById("RecommentOptionTargetId").value;
@@ -254,6 +290,7 @@ function Recomment(commentId, recommentId) {
 
 // main페이지 or 모달에서 댓글/대댓글 작성기능
 function clickCommentBtn() {
+
     const boardID = document.getElementById('boardID').innerText;
     console.log(boardID);
     const commentID = document.getElementById('commentID').innerText;
@@ -697,7 +734,7 @@ function ModalRecommentClickLike(id) {
             var modal_recomment_NotLike = modal_recomment.querySelector('#modal-recomment-not-like-svg' + id);
             console.log(modal_recomment_NotLike);
 
-            debugger;
+        
             if (data.result) {
                 modal_recomment_Liked.classList.add('visually-hidden');
                 modal_recomment_NotLike.classList.remove('visually-hidden');
@@ -755,12 +792,14 @@ function boardSaveGroup() {
         },
         body: JSON.stringify(saveGroupNameData)
     })
-        .then(response => {
-            return response.json();
-        })
+        .then(response => response.json())
         .then(data => {
+            var saved = document.getElementById('saved-svg' + id);
+            var notSave = document.getElementById('not-save-svg' + id);
             if (data.result) {
-                alert("게시글 저장");
+                saved.classList.add('visually-hidden');
+                notSave.classList.remove('visually-hidden');
+                alert(`${saveGroupName}에 저장`);
             }
             document.getElementById("GroupName").value = '';
         })
@@ -771,8 +810,6 @@ function boardSaveGroup() {
             console.error('Error saving feed:', error);
         });
 }
-
-
 
 // 모달에서 게시글 저장
 function ModalclickSaveGroup(id) {
@@ -862,26 +899,45 @@ function reloadPage() {
 // 게시글 내용 일정 길이 넘어가면 더보기.. 버튼 생성 (접기로 조절 가능)
 $(document).ready(function () {
     $(".show-more-btn").each(function () {
+        
         var contentContainer = $(this).prev(".content-container");
-        var buttonText = contentContainer.css("max-height") === "45px" ? "... 더보기" : "접기";
+        var buttonText = contentContainer.hasClass('long-content')?"... 더보기" : "간단히 보기";
 
         $(this).text(buttonText);
 
-        if (contentContainer[0].scrollHeight <= 48) {
+        if (!contentContainer.hasClass('long-content')) {
             $(this).hide();
         }
     });
 
     $(".show-more-btn").click(function () {
+        
         var contentContainer = $(this).prev(".content-container");
 
-        if (contentContainer.css("max-height") === "45px") {
-            contentContainer.css("max-height", "none");
-            $(this).text("접기");
+        if (!contentContainer.hasClass('show')) {
+            contentContainer.addClass('show');
+            contentContainer.text(contentContainer.data('content'));
+            $(this).addClass('visually-hidden');
         } else {
-            contentContainer.css("max-height", "45px");
+            contentContainer.removeClass('show');
+            var dataContent = contentContainer.data('content');
+            var first10Characters = dataContent.substring(0, 10);
+            contentContainer.text(first10Characters);
             $(this).text("... 더보기");
         }
     });
 });
 
+document.addEventListener("DOMContentLoaded", function() {
+    // 페이지 로드 시 스크롤 위치 복원
+    var savedScrollPosition = sessionStorage.getItem("scrollPosition");
+    if (savedScrollPosition) {
+        window.scrollTo(0, savedScrollPosition);
+        sessionStorage.removeItem("scrollPosition");
+    }
+});
+
+function saveScrollPosition() {
+    // 스크롤 위치 저장
+    sessionStorage.setItem("scrollPosition", window.scrollY);
+}

@@ -191,7 +191,7 @@ $(document).ready(function () {
             specificName: specificName
         });
 
-        fetch('/search/favorite/create', {
+        fetch('/search/favorite/createSearch', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json; charset=utf-8',
@@ -200,8 +200,6 @@ $(document).ready(function () {
             body: body
         })
         .then(response => {
-            // 응답 처리 (예: 성공 시 콘솔에 로그 출력)
-            console.log('POST 요청 성공:', response);
         })
         .catch(error => {
             // 오류 처리

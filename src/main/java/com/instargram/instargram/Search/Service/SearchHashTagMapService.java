@@ -20,11 +20,19 @@ public class SearchHashTagMapService {
     private final SearchHashTagMapRepository searchHashTagMapRepository;
 
     public void createSearchFavoriteHashTag(Member requestMember, HashTag hashTag) {
-        SearchHashTagMap searchHashTagMap = new SearchHashTagMap();
-        searchHashTagMap.setCreateDate(LocalDateTime.now());
-        searchHashTagMap.setRequestMember(requestMember);
-        searchHashTagMap.setHashTag(hashTag);
-        this.searchHashTagMapRepository.save(searchHashTagMap);
+
+        SearchHashTagMap existingMap = searchHashTagMapRepository.findByRequestMemberAndHashTag(requestMember, hashTag);
+
+        if (existingMap != null) {
+            existingMap.setCreateDate(LocalDateTime.now());
+            searchHashTagMapRepository.save(existingMap);
+        } else {
+            SearchHashTagMap searchHashTagMap = new SearchHashTagMap();
+            searchHashTagMap.setCreateDate(LocalDateTime.now());
+            searchHashTagMap.setRequestMember(requestMember);
+            searchHashTagMap.setHashTag(hashTag);
+            this.searchHashTagMapRepository.save(searchHashTagMap);
+        }
     }
 
     public List<SearchHashTagMap> getSearchHashTagMapsByMember(Member member) {

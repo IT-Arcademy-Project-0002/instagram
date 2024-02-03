@@ -1,13 +1,19 @@
 package com.instargram.instargram.Member.Service;
 
+import com.instargram.instargram.Community.Board.Model.Entity.Board;
 import com.instargram.instargram.Data.Image.Image;
+import com.instargram.instargram.DataNotFoundException;
+import com.instargram.instargram.Enum_Data;
 import com.instargram.instargram.Member.Model.Entity.Follow_Map;
+import com.instargram.instargram.Member.Model.Entity.Hate_Member_Map;
 import com.instargram.instargram.Member.Model.Entity.Member;
 import com.instargram.instargram.Member.Model.Form.MemberCreateForm;
 import com.instargram.instargram.Member.Model.Repository.FollowMapRepository;
+import com.instargram.instargram.Member.Model.Repository.HateMemberMapRepository;
 import com.instargram.instargram.Member.Model.Repository.MemberRepository;
 import com.instargram.instargram.Notice.Model.Entity.Notice;
 import com.instargram.instargram.Notice.Service.NoticeService;
+import com.instargram.instargram.Story.Service.StoryHighlightMapService;
 import jakarta.annotation.PostConstruct;
 import jakarta.transaction.Transactional;
 import lombok.Builder;
@@ -30,6 +36,9 @@ public class MemberService {
     private final FollowMapService followMapService;
     private final NoticeService noticeService;
     private final FollowMapRepository followMapRepository;
+    private final HateMemberMapRepository hateMemberMapRepository;
+    @Getter
+    private final StoryHighlightMapService storyHighlightMapService;
 
     public Member getMemberByUsername(String id)
     {
@@ -153,25 +162,40 @@ public class MemberService {
 
     public boolean UserFollow(Member loginUser, Member targetUser)
     {
-        if(targetUser.isScope())
+        if(targetUser.isScope()) // 공개 (신청수락 불필요)
         {
-            return followMapService.UserFollow(loginUser, targetUser);
+            return followMapService.UserFollow(noticeService, loginUser, targetUser);
         }
-        else{
+        else{ // 비공개 (신청수락 필요)
             return followMapService.followRequest(noticeService, loginUser, targetUser);
         }
     }
 
+    public void followDelete(Member loginUser, Member targetUser)
+    {
+        Notice notice = noticeService.getNoticeByMemberAndTarget(Enum_Data.FOLLOW_STATE.getNumber(), loginUser, targetUser);
+        followMapService.deleteFollow(notice.getRequestMember(), notice.getMember());
+        noticeService.deleteNotice(notice);
+    }
+
+    public void followDeleteByNotice(Long id)
+    {
+        Notice notice = noticeService.getNotice(id);
+        followMapService.deleteFollow(notice.getRequestMember(), notice.getMember());
+        noticeService.deleteNoticeById(id);
+    }
+
+
     public boolean RequestFollowApply(Member loginUser, Member requestUser)
     {
-        return followMapService.RequestFollowApply(requestUser, loginUser);
+        return followMapService.RequestFollowApply(noticeService, requestUser, loginUser);
     }
 
     public void RequestFollowDelete(Long id)
     {
         Notice notice = noticeService.getNotice(id);
         followMapService.deleteRequestFollow(notice.getRequestMember(), notice.getMember());
-        noticeService.deleteById(id);
+        noticeService.deleteNoticeById(id);
     }
 
     public boolean isFollow(Member loginUser, Member targetUser)
@@ -257,5 +281,61 @@ public class MemberService {
             followingIdList.add(map.getFollowingMember().getId());
         }
         return followingIdList;
+    }
+
+    public Member getMemberById(Long followerId) {
+        Optional<Member> member = this.memberRepository.findById(followerId);
+        if (member.isPresent()) {
+            return member.get();
+        } else {
+            throw new DataNotFoundException("board not found");
+        }
+    }
+
+    public Hate_Member_Map blockMember(String loginUser, String target)
+    {
+        Hate_Member_Map hateMemberMap = new Hate_Member_Map();
+        Member owner = getMember(loginUser);
+        hateMemberMap.setOwner(owner);
+
+        Member hateMember = getMember(target);
+        hateMemberMap.setHateMember(hateMember);
+
+        boolean follow = followMapService.isFollow(owner, hateMember);
+
+        if(follow)
+        {
+            followMapService.deleteFollow(owner, hateMember);
+        }
+
+        follow = followMapService.isFollower(owner, hateMember);
+
+        if(follow)
+        {
+            followMapService.deleteFollow(hateMember, owner);
+        }
+
+        return hateMemberMapRepository.save(hateMemberMap);
+    }
+
+    public void blockCancelMember(String loginUser, String target)
+    {
+        Hate_Member_Map hateMemberMap = getBlockMemberMap(loginUser, target);
+
+        hateMemberMapRepository.delete(hateMemberMap);
+    }
+
+    public Hate_Member_Map getBlockMemberMap(String loginUser, String target)
+    {
+        return hateMemberMapRepository.findByOwnerUsernameAndHateMemberUsername(loginUser, target);
+    }
+    public List<Member> getBlockMembers(String loginUser)
+    {
+        return hateMemberMapRepository.findByOwnerUsername(loginUser).stream().map(Hate_Member_Map::getHateMember).toList();
+    }
+
+    public boolean isBlock(String owner, String target)
+    {
+        return hateMemberMapRepository.existsByOwnerUsernameAndHateMemberUsername(owner, target);
     }
 }

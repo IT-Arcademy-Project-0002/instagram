@@ -54,6 +54,7 @@ public class BoardDTO {
 
         this.boardHashTags = board.getBoardHashTagMaps().stream().map(Board_HashTag_Map::getTag).map(HashTag::getName).collect(Collectors.toList());
         this.boardTagMembers = board.getBoardTagMemberMaps().stream().map(Board_TagMember_Map::getTagMember).map(Member::getUsername).collect(Collectors.toList());
+
         // BoardLikeMemberMap에서 필요한 데이터만 가져와서 저장
         this.boardLikeMemberIds = board.getBoardLikeMemberMaps().stream().map(BoardLikeMemberMap::getLikeMember).map(Member::getId).collect(Collectors.toList());
 

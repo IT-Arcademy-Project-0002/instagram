@@ -1,20 +1,8 @@
 package com.instargram.instargram.Member.Model.Entity;
 
-
-import com.instargram.instargram.Community.Board.Model.Entity.Board;
-import com.instargram.instargram.Community.Board.Model.Entity.BoardLikeMemberMap;
-import com.instargram.instargram.Community.Board.Model.Entity.Board_Save_Map;
-import com.instargram.instargram.Community.Board.Model.Entity.Board_TagMember_Map;
-
-import com.instargram.instargram.Community.Comment.Model.Entity.Comment_Like_Map;
-import com.instargram.instargram.Community.Recomment.Model.Entity.ReComment_Like_Map;
-import com.instargram.instargram.DM.Model.Entity.Message.Message_Member_Map;
-import com.instargram.instargram.DM.Model.Entity.Message.Message_Request_Map;
-import com.instargram.instargram.DM.Model.Entity.Room.Room_Member_Map;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.instargram.instargram.Data.Image.Image;
-import com.instargram.instargram.Notice.Model.Entity.Notice;
 import com.instargram.instargram.Story.Model.Entity.Story_Data_Map;
-import com.instargram.instargram.Story.Model.Entity.Story_Highlight_Map;
 import groovyjarjarantlr4.v4.runtime.misc.NotNull;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -79,11 +67,16 @@ public class Member {
     // 계정 현재 접속 상태 (true : 접속 중 : false : 접속하지 않음)
     private boolean connected;
 
-
-
     // sns 연동 로그인에 사용되는 provider 종류(GOOGLE, NAVER, KAKAO)
     private String provider;
 
     // sns 연동 로그인에 사용되는 provider ID
     private String providerId;
+
+//    // 사용자가 스토리를 업로드 판단 여부 (O : true / X : false)
+//    private boolean Story;
+
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    @JsonIgnoreProperties({"storyDataMaps"})
+    private List<Story_Data_Map> storyDataMaps;
 }

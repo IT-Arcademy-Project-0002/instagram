@@ -1,7 +1,13 @@
 package com.instargram.instargram.Member.Controller;
 
+import com.instargram.instargram.Community.Board.Model.DTO.FeedDTO;
+import com.instargram.instargram.Community.Board.Model.DTO.SavedBoardDTO;
+import com.instargram.instargram.Community.Board.Model.Entity.Board;
+import com.instargram.instargram.Community.Board.Model.Entity.Board_Save_Map;
 import com.instargram.instargram.Community.Board.Service.BoardService;
 import com.instargram.instargram.Community.Board.Service.Board_Data_MapService;
+import com.instargram.instargram.Community.Board.Service.Board_Save_MapService;
+import com.instargram.instargram.Community.SaveGroup.Service.SaveGroupService;
 import com.instargram.instargram.Data.Image.Image;
 import com.instargram.instargram.Data.Image.ImageService;
 import com.instargram.instargram.Enum_Data;
@@ -9,6 +15,7 @@ import com.instargram.instargram.Member.Config.OAuth2.Model.OAuth2UserInfo;
 import com.instargram.instargram.Member.Config.SpringSecurity.MemberSecurityService;
 import com.instargram.instargram.Member.Config.SpringSecurity.PrincipalDetails;
 import com.instargram.instargram.Member.Model.DTO.UserPageDTO;
+import com.instargram.instargram.Member.Model.Entity.Hate_Member_Map;
 import com.instargram.instargram.Member.Model.Entity.Member;
 import com.instargram.instargram.Member.Model.Form.MemberCreateForm;
 import com.instargram.instargram.Member.Service.FollowMapService;
@@ -20,6 +27,7 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.websocket.server.PathParam;
 import lombok.Builder;
 
+import lombok.Getter;
 import org.hibernate.Hibernate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -50,9 +58,10 @@ public class MemberController {
     private final BoardService boardService;
     private final FollowMapService followMapService;
     private final StoryHighlightMapService storyHighlightMapService;
-    private final Board_Data_MapService dataMapService;
+    private final Board_Data_MapService boardDataMapService;
     private final ImageService imageService;
-
+    private final Board_Save_MapService boardSaveMapService;
+    private final SaveGroupService saveGroupService;
     private final AuthenticationManager authenticationManager;
 
     @GetMapping("/login")
@@ -139,19 +148,73 @@ public class MemberController {
     }
 
     @GetMapping("/page/{username}")
-    public String userPage(@PathVariable("username")String username, Model model, Principal principal)
+    public String userPage(@PathVariable("username")String username,
+                           @RequestParam(value = "id", defaultValue = "-1")Long id,
+                           @RequestParam(value = "page", defaultValue = "default")String referer,
+                           @RequestParam(value = "scroll", defaultValue = "0")double scroll,
+                           Model model, Principal principal)
+    {
+        if(referer.equals("detail"))
+        {
+            Board board = this.boardService.getBoardById(id);
+
+            FeedDTO selectFeed = this.boardDataMapService.getFeedWithComments(board);
+            model.addAttribute("selectFeed", selectFeed);
+        }
+
+        model.addAttribute("referer", referer);
+        model.addAttribute("scroll", scroll);
+
+        Member member = memberService.getMember(username);
+        Member loginMember = memberService.getMember(principal.getName());
+
+
+        model.addAttribute("member", member);
+
+        if(memberService.isBlock(username, principal.getName()))
+        {
+            model.addAttribute("blocked", true);
+        }
+        else{
+            model.addAttribute("blocked", false);
+            model.addAttribute("blocking", memberService.isBlock(principal.getName(), username));
+            UserPageDTO userPageDTO = new UserPageDTO(member, loginMember, boardService, memberService.getFollowMapService(), memberService.getStoryHighlightMapService(), boardDataMapService);
+            model.addAttribute("userPageDTO", userPageDTO);
+        }
+        return "Member/UserPage_form";
+    }
+
+
+    @GetMapping("/page/{username}/saved")
+            public String SavedPage(@PathVariable("username")String username, Principal principal, Model model)
     {
         Member member = memberService.getMember(username);
         Member loginMember = memberService.getMember(principal.getName());
 
+
         model.addAttribute("member", member);
 
-        UserPageDTO userPageDTO = new UserPageDTO(member, loginMember, boardService, followMapService, storyHighlightMapService, dataMapService);
-        model.addAttribute("userPageDTO", userPageDTO);
+        if(memberService.isBlock(username, principal.getName()))
+        {
+            model.addAttribute("blocked", true);
+        }
+        else{
+            model.addAttribute("blocked", false);
+            model.addAttribute("blocking", memberService.isBlock(principal.getName(), username));
+            UserPageDTO userPageDTO = new UserPageDTO(member, loginMember, boardService, memberService.getFollowMapService(), memberService.getStoryHighlightMapService(), boardDataMapService);
+            model.addAttribute("userPageDTO", userPageDTO);
+        }
 
-        return "Member/UserPage_form";
+        if(member.getUsername().equals(principal.getName()))
+        {
+            SavedBoardDTO savedBoardDTO = new SavedBoardDTO(member, loginMember,
+                    memberService.getFollowMapService(), memberService.getStoryHighlightMapService(),
+                    boardDataMapService, boardSaveMapService);
+            model.addAttribute("savedBoardDTO", savedBoardDTO);
+        }
+
+        return "Member/UserSaved_form";
     }
-
 
     @PostMapping("/profile/delete")
     public String ProfileImageDelete(Principal principal, @RequestParam(value = "account", defaultValue = "false") boolean account)
@@ -183,6 +246,30 @@ public class MemberController {
         return ResponseEntity.ok().body(result);
     }
 
+    @GetMapping("/follow/deleteByNotice/{id}")
+    public ResponseEntity<Map<String, Object>> followDeleteByNotice(@PathVariable("id")Long id)
+    {
+        // 공개, 비공개에 상관없이 팔로잉 상태에서 버튼을 눌렀을때 무조건 팔로우를 취소하는 콘트롤러가 필요함 (알림창 기준, 알림 id를 이용)
+        Map<String, Object> result = new HashMap<>();
+        this.memberService.followDeleteByNotice(id);
+
+        return ResponseEntity.ok().body(result);
+    }
+
+    @GetMapping("/follow/delete/{username}")
+    public ResponseEntity<Map<String, Object>> followDelete(@PathVariable("username")String username, Principal principal)
+    {
+        // 공개, 비공개에 상관없이 팔로잉 상태에서 버튼을 눌렀을때 무조건 팔로우를 취소하는 콘트롤러가 필요함 (마이페이지 기준, username을 이용)
+        Map<String, Object> result = new HashMap<>();
+        Member loginMember = this.memberService.getMemberByUsername(principal.getName());
+        Member targetMember = this.memberService.getMemberByUsername(username);
+
+        this.memberService.followDelete(loginMember, targetMember);
+
+        return ResponseEntity.ok().body(result);
+    }
+
+
     @GetMapping("/requestFollow/{username}")
     public ResponseEntity<Map<String, Object>> requestFollow(@PathVariable("username")String username, Principal principal)
     {
@@ -201,7 +288,7 @@ public class MemberController {
     public ResponseEntity<Map<String, Object>> requestFollowDelete(@PathVariable("id")Long id, Principal principal)
     {
         Map<String, Object> result = new HashMap<>();
-        memberService.RequestFollowDelete(id);
+        memberService. RequestFollowDelete(id);
 
         return ResponseEntity.ok().body(result);
     }
@@ -273,4 +360,27 @@ public class MemberController {
 
         return ResponseEntity.ok().body(result);
     }
+
+    @GetMapping("/block/{target}")
+    public ResponseEntity<Map<String, Object>> blockMember(@PathVariable("target")String target, Principal principal)
+    {
+        Map<String, Object> result = new HashMap<>();
+
+        result.put("result", memberService.blockMember(principal.getName(), target));
+
+        return ResponseEntity.ok().body(result);
+    }
+
+    @GetMapping("/block/cancel/{target}")
+    public ResponseEntity<Map<String, Object>> blockCancelMember(@PathVariable("target")String target, Principal principal)
+    {
+        Map<String, Object> result = new HashMap<>();
+
+        memberService.blockCancelMember(principal.getName(), target);
+
+        result.put("result", "blockCancel");
+
+        return ResponseEntity.ok().body(result);
+    }
+
 }

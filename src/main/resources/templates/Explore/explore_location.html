@@ -22,9 +22,9 @@
         </div>
         <div class="explore-location-gallery text-center mt-4 mx-auto">
             <div class="row row-cols-3">
-                <div th:each="feedList : ${feedList}"  class="col-4 p-1">
-                    <div class = "hovereffect">
-                        <img th:src="@{|/resources/${feedList.fileDTOS.get(0).getName()}|}" style="width:100%; height:100%;">
+                <div th:each="feedList : ${feedList}"  class="col p-1">
+                    <div class = "hovereffect ratio ratio-1x1">
+                        <img th:src="@{|/resources/${feedList.fileDTOS.get(0).getName()}|}" style="object-fit: cover;">
                         <a th:href="@{|/explore/location/detail/${feedList.board.id}|}">
                             <div class="overlay">
                                 <div class="overlay-content">

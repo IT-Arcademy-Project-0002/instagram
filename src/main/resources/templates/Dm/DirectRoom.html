@@ -980,10 +980,8 @@
                 })
         }
 
-
-        // let socket = new WebSocket("wss://www.igstudy.site/ws/chat");
-        let socket = new WebSocket("ws://localhost:8888/ws/chat");
-
+        // 주석처리 없이 접속환경(http, https, 개발, 배포)에 대응하여 자동으로 웹소켓 객체 생성
+        let socket = new WebSocket(`${window.location.protocol === "https:" ? "wss" : "ws"}://${window.location.hostname}:${window.location.port}/ws/chat`);
 
         socket.onopen = function (e) {
 

@@ -1,6 +1,7 @@
 package com.instargram.instargram.Member.Model.Entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.instargram.instargram.Data.Image.Image;
 import com.instargram.instargram.Story.Model.Entity.Story_Data_Map;
 import groovyjarjarantlr4.v4.runtime.misc.NotNull;
@@ -77,6 +78,6 @@ public class Member {
 //    private boolean Story;
 
     @OneToMany(mappedBy = "owner", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
-    @JsonIgnoreProperties({"storyDataMaps"})
+    @JsonManagedReference
     private List<Story_Data_Map> storyDataMaps;
 }

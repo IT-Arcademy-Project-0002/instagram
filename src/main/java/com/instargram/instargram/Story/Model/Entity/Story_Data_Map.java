@@ -1,5 +1,7 @@
 package com.instargram.instargram.Story.Model.Entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.instargram.instargram.Member.Model.Entity.Member;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -32,5 +34,6 @@ public class Story_Data_Map {
     @ManyToOne
     @JoinColumn(name = "owner_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
+    @JsonBackReference
     private Member owner;
 }

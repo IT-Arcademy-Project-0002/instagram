@@ -244,8 +244,8 @@
 .w908 {
     width: 908px;
 }
-.w1074 {
-    width: 1074px;
+.w2000 {
+    width: 2000px;
 }
 
 .w10r {
@@ -539,11 +539,6 @@
 /* left */
 
 
-.ofc {
-    object-fit: cover;
-}
-
-
 /* hover, active */
 .hfwb:hover {
     font-weight: bold;
@@ -626,13 +621,15 @@
 /* overflow-y */
 
 
-.saved-group
-{
+.ofc {
+    object-fit: cover;
+}
+
+.saved-group {
     background-image: linear-gradient( to top, rgba(38, 38, 38, .6), rgba(255, 255, 255, 0) );
 }
 
-.saved-group:hover
-{
+.saved-group:hover {
     background-image: none;
 }
 

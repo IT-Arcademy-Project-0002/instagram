@@ -494,8 +494,8 @@
                             <!--board list menu-->
                             <div class="d-flex justify-content-center align-items-center h53">
                                 <div class="d-flex">
-                                    <div class="center h54 mgR60 hfcBlack border-top border-dark">
-                                        <a class="center btn pd0 mgL6 fs12 fwb fcGray bn hfcBlack" href="">
+                                    <div class="center h54 mgR60 hfcBlack" th:classappend="${pageType == 'default'}? 'border-top border-dark'">
+                                        <a class="center btn pd0 fs12 fwb fcGray bn hfcBlack" th:href="@{|/member/page/${member.username}|}">
                                             <svg aria-label="" fill="currentColor" height="12" role="img"
                                                  viewBox="0 0 24 24" width="12"><title></title>
                                                 <rect fill="none" height="18" stroke="currentColor"
@@ -522,8 +522,9 @@
                                         </a>
                                     </div>
 
-                                    <div th:if="${member.username == loginMember.username}" class="center h54 mgR60">
-                                        <a class="center btn pd0 mgL6 fs12 fwb fcGray bn hfcBlack"
+                                    <div th:if="${member.username == loginMember.username}" class="center h54 mgR60"
+                                         th:classappend="${pageType == 'saved'}? 'border-top border-dark'">
+                                        <a class="center btn pd0 fs12 fwb fcGray bn hfcBlack"
                                            th:href="@{|/member/page/${member.username}/saved|}">
                                             <svg aria-label="" fill="currentColor" height="12" role="img"
                                                  viewBox="0 0 24 24" width="12"><title></title>
@@ -536,7 +537,7 @@
                                     </div>
 
                                     <div class="center h54">
-                                        <a class="center btn pd0 mgL6 fs12 fwb fcGray bn hfcBlack"
+                                        <a class="center btn pd0 fs12 fwb fcGray bn hfcBlack"
                                            th:href="@{|/member/page/${member.username}/tagged|}">
                                             <svg aria-label="" fill="currentColor" height="12" role="img"
                                                  viewBox="0 0 24 24" width="12"><title></title>
@@ -558,7 +559,7 @@
                             </div>
 
                             <!--board list-->
-                            <div style="height: calc(100vh - 497px);">
+                            <div th:if="${pageType == 'default'}" style="height: calc(100vh - 497px);">
                                 <div class="row row-cols-3 mx-0 p-0">
                                     <div th:each="feed : ${userPageDTO.feeds}" class="col mb-1 p-0">
                                         <div class="d-flex justify-content-center">
@@ -601,6 +602,11 @@
                                         </div>
                                     </div>
                                 </div>
+                            </div>
+
+                            <!--saved group list-->
+                            <div th:if="${pageType == 'saved'}">
+                                <div th:replace="~{Member/UserSaved_form :: savedFormFragment}"></div>
                             </div>
                         </div>
                     </div>

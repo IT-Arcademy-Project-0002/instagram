@@ -44,10 +44,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.security.Principal;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 @Controller
 @Builder
@@ -147,27 +144,35 @@ public class MemberController {
         }
     }
 
-    @GetMapping("/page/{username}")
+    @GetMapping(value = {"/page/{username}/{page-type}", "/page/{username}"})
     public String userPage(@PathVariable("username")String username,
+                           @PathVariable(value = "page-type", required = false) Optional<String> pageType,
                            @RequestParam(value = "id", defaultValue = "-1")Long id,
                            @RequestParam(value = "page", defaultValue = "default")String referer,
                            @RequestParam(value = "scroll", defaultValue = "0")double scroll,
                            Model model, Principal principal)
     {
-        if(referer.equals("detail"))
-        {
-            Board board = this.boardService.getBoardById(id);
+        String pageTypeValue = pageType.orElse("default");
 
-            FeedDTO selectFeed = this.boardDataMapService.getFeedWithComments(board);
-            model.addAttribute("selectFeed", selectFeed);
+        model.addAttribute("pageType", pageTypeValue);
+
+        if(pageTypeValue.equals("default"))
+        {
+            if(referer.equals("detail"))
+            {
+                Board board = this.boardService.getBoardById(id);
+
+                FeedDTO selectFeed = this.boardDataMapService.getFeedWithComments(board);
+                model.addAttribute("selectFeed", selectFeed);
+            }
+
+            model.addAttribute("referer", referer);
+            model.addAttribute("scroll", scroll);
         }
 
-        model.addAttribute("referer", referer);
-        model.addAttribute("scroll", scroll);
 
         Member member = memberService.getMember(username);
         Member loginMember = memberService.getMember(principal.getName());
-
 
         model.addAttribute("member", member);
 
@@ -181,40 +186,53 @@ public class MemberController {
             UserPageDTO userPageDTO = new UserPageDTO(member, loginMember, boardService, memberService.getFollowMapService(), memberService.getStoryHighlightMapService(), boardDataMapService);
             model.addAttribute("userPageDTO", userPageDTO);
         }
+
+
+        if(pageTypeValue.equals("saved"))
+        {
+            if (member.getUsername().equals(principal.getName())) {
+                SavedBoardDTO savedBoardDTO = new SavedBoardDTO(member, loginMember,
+                        memberService.getFollowMapService(), memberService.getStoryHighlightMapService(),
+                        boardDataMapService, boardSaveMapService);
+                model.addAttribute("savedBoardDTO", savedBoardDTO);
+            }
+        }
+
+
         return "Member/UserPage_form";
     }
 
 
-    @GetMapping("/page/{username}/saved")
-            public String SavedPage(@PathVariable("username")String username, Principal principal, Model model)
-    {
-        Member member = memberService.getMember(username);
-        Member loginMember = memberService.getMember(principal.getName());
-
-
-        model.addAttribute("member", member);
-
-        if(memberService.isBlock(username, principal.getName()))
-        {
-            model.addAttribute("blocked", true);
-        }
-        else{
-            model.addAttribute("blocked", false);
-            model.addAttribute("blocking", memberService.isBlock(principal.getName(), username));
-            UserPageDTO userPageDTO = new UserPageDTO(member, loginMember, boardService, memberService.getFollowMapService(), memberService.getStoryHighlightMapService(), boardDataMapService);
-            model.addAttribute("userPageDTO", userPageDTO);
-        }
-
-        if(member.getUsername().equals(principal.getName()))
-        {
-            SavedBoardDTO savedBoardDTO = new SavedBoardDTO(member, loginMember,
-                    memberService.getFollowMapService(), memberService.getStoryHighlightMapService(),
-                    boardDataMapService, boardSaveMapService);
-            model.addAttribute("savedBoardDTO", savedBoardDTO);
-        }
-
-        return "Member/UserSaved_form";
-    }
+//    @GetMapping("/page/{username}/saved")
+//            public String SavedPage(@PathVariable("username")String username, Principal principal, Model model)
+//    {
+//        Member member = memberService.getMember(username);
+//        Member loginMember = memberService.getMember(principal.getName());
+//
+//
+//        model.addAttribute("member", member);
+//
+//        if(memberService.isBlock(username, principal.getName()))
+//        {
+//            model.addAttribute("blocked", true);
+//        }
+//        else{
+//            model.addAttribute("blocked", false);
+//            model.addAttribute("blocking", memberService.isBlock(principal.getName(), username));
+//            UserPageDTO userPageDTO = new UserPageDTO(member, loginMember, boardService, memberService.getFollowMapService(), memberService.getStoryHighlightMapService(), boardDataMapService);
+//            model.addAttribute("userPageDTO", userPageDTO);
+//        }
+//
+//        if(member.getUsername().equals(principal.getName()))
+//        {
+//            SavedBoardDTO savedBoardDTO = new SavedBoardDTO(member, loginMember,
+//                    memberService.getFollowMapService(), memberService.getStoryHighlightMapService(),
+//                    boardDataMapService, boardSaveMapService);
+//            model.addAttribute("savedBoardDTO", savedBoardDTO);
+//        }
+//
+//        return "Member/UserSaved_form";
+//    }
 
     @PostMapping("/profile/delete")
     public String ProfileImageDelete(Principal principal, @RequestParam(value = "account", defaultValue = "false") boolean account)

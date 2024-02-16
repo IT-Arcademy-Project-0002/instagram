@@ -695,8 +695,8 @@
     <!--Board Detail Modal -->
     <div class="modal fade" id="BoardDetailModal" data-bs-backdrop="static"
          data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-xl">
-            <div class="modal-content w1074 br12">
+        <div class="modal-dialog modal-dialog-centered modal-xl" style="max-width: 1200px !important;">
+            <div class="modal-content w1074 w2000 br12">
                 <div class="modal-header pd8">
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
                             onclick="reloadPage()"></button>
@@ -720,7 +720,7 @@
                                     <div class="carousel-inner">
                                         <div th:each="file, iterStat: ${selectFeed.fileDTOS()}">
                                             <div class="carousel-item"
-                                                 style="position: relative; width: 60rem; height: 50rem;"
+                                                 style="position: relative; height: 50rem;"
                                                  th:classappend="${iterStat.index == 0} ? 'active' : ''">
                                                 <!-- 이미지인 경우 -->
                                                 <img th:if="${#strings.endsWith(file.name, '.jpg') or #strings.endsWith(file.name, '.jpeg') or #strings.endsWith(file.name, '.png')}"
@@ -728,7 +728,7 @@
                                                      th:src="@{|/resources/${file.name}|}"
                                                      alt="..."
                                                      class="shadow text-center"
-                                                     style="width: 80%; height:100%; position: absolute; top: 0; left: 0; transform: translate(50,50); object-fit: cover; margin: auto">
+                                                     style="width: 100%; height:100%; position: absolute; top: 0; left: 0; transform: translate(50,50); object-fit: cover; margin: auto">
 
                                                 <!-- 비디오인 경우 -->
                                                 <video th:if="${#strings.endsWith(file.name, '.mp4') or #strings.endsWith(file.name, '.webm') or #strings.endsWith(file.name, '.mov')}"

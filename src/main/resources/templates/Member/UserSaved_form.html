@@ -6,7 +6,7 @@
         </div>
         <a style="color: #0095f6; font-size: 14px; padding-top: 31px; font-weight: bold"
            data-bs-toggle="modal" data-bs-target="#collectionModal">
-            + 새 컬렉션
+            + 새 컬렉션!!!
         </a>
     </div>
     <div style="height: calc(100vh - 497px);">
@@ -60,4 +60,33 @@
             </div>
         </div>
     </div>
+    <!-- collectionModal -->
+    <div class="modal fade" id="collectionModal" tabindex="-1"
+         aria-labelledby="collectionModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="collectionModalLabel">새 컬렉션</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body d-flex flex-column justify-content-center align-items-center"
+                     style="width: 100%; height: 100%;">
+                    <div class="file-container">
+                    </div>
+                    <div class="input-group" style="width: 100%; margin-top: 20px;">
+                        <input type="text" class="form-control" id="GroupName"
+                               name="GroupName">
+                    </div>
+                    <input id="fileId" type="hidden">
+                </div>
+                <div class="modal-footer d-flex justify-content-center p-0"
+                     style="width: 100%;">
+                    <button type="button" class="btn noneBtn btn-link"
+                            onclick="SaveGroupCreate()">저장
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- collectionModal End -->
 </div>
